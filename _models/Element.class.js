@@ -395,8 +395,8 @@ module.exports = class Element {
       let returned = new Element('dl').class(class_list).attrObj(attr_list)
       for (let i in thing) {
         returned.addElements([
-          new Element('dt').class(class_key).attrs(attr_key).addContent(i),
-          new Element('dd').class(class_val).attrs(attr_val).addContent(Element.data(thing[i], options_val)),
+          new Element('dt').class(class_key).attrObj(attr_key).addContent(i),
+          new Element('dd').class(class_val).attrObj(attr_val).addContent(Element.data(thing[i], options_val)),
         ])
       }
       return returned
