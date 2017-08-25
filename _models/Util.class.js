@@ -258,6 +258,7 @@ const DTE = class {
    * FORMATS['j M'      ](new Date()) // returns '5 Aug'
    * FORMATS['M Y'      ](new Date()) // returns 'Aug 2017'
    * FORMATS['M j'      ](new Date()) // returns 'Aug 5'
+   * FORMATS['M j, Y'   ](new Date()) // returns 'Aug 5, 2017'
    * FORMATS['M'        ](new Date()) // returns 'Aug'
    * FORMATS['H:i'      ](new Date()) // returns '21:33'
    * FORMATS['g:ia'     ](new Date()) // returns '9:33pm'
@@ -279,6 +280,7 @@ const DTE = class {
       'j M'      : (date) => `${date.getUTCDate()} ${Util.Date.MONTH_NAMES[date.getUTCMonth()].slice(0,3)}`,
       'M Y'      : (date) => `${Util.Date.MONTH_NAMES[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
       'M j'      : (date) => `${Util.Date.MONTH_NAMES[date.getUTCMonth()].slice(0,3)} ${date.getUTCDate()}`,
+      'M j, Y'   : (date) => `${Util.Date.MONTH_NAMES[date.getUTCMonth()].slice(0,3)} ${date.getUTCDate()}, ${date.getFullYear()}`,
       'M'        : (date) => `${Util.Date.MONTH_NAMES[date.getUTCMonth()].slice(0,3)}`,
       'H:i'      : (date) => `${(date.getHours() < 10) ? '0' : ''}${date.getHours()}:${(date.getMinutes() < 10) ? '0' : ''}${date.getMinutes()}`,
       'g:ia'     : (date) => `${(date.getHours() - 1)%12 + 1}:${(date.getMinutes() < 10) ? '0' : ''}${date.getMinutes()}${(date.getHours() < 12) ? 'am' : 'pm'}`,
