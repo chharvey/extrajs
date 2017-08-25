@@ -399,7 +399,7 @@ module.exports = class Element {
           new Element('dd').class(class_val).attrObj(attr_val).addContent(Element.data(thing[i], options_val)),
         ])
       }
-      return returned
+      return returned.html()
     } else if (Util.Object.typeOf(thing) === 'array') {
       let returned = new Element((options.ordered) ? 'ol' : 'ul').class(class_list).attrObj(attr_list)
       thing.forEach(function (el) {
@@ -407,7 +407,7 @@ module.exports = class Element {
           new Element('li').class(class_val).attrObj(attr_val).addContent(Element.data(el, options_val))
         ])
       })
-      return returned
+      return returned.html()
     } else return thing.toString()
   }
 }
