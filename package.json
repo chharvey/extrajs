@@ -1,0 +1,26 @@
+{
+  "name": "helpers-js",
+  "version": "0.0.0",
+  "description": "Javascript helpers for lazy people.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chharvey/helpers-js.git"
+  },
+  "keywords": [
+    "javascript",
+    "js",
+    "helper",
+    "utility",
+    "native"
+  ],
+  "author": "Chris Harvey <chrisharvey2pi@gmail.com> (https://chharvey.github.io/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chharvey/helpers-js/issues"
+  },
+  "homepage": "https://github.com/chharvey/helpers-js#readme"
+}
