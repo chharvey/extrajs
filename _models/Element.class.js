@@ -392,19 +392,19 @@ module.exports = class Element {
     let options_val = options.options || {}
 
     if (Util.Object.typeOf(thing) === 'object') {
-      let returned = new Element('dl').class(class_list).attrObj(attr_list)
+      let returned = new Element('dl').class(class_list || null).attrObj(attr_list)
       for (let i in thing) {
         returned.addElements([
-          new Element('dt').class(class_key).attrObj(attr_key).addContent(i),
-          new Element('dd').class(class_val).attrObj(attr_val).addContent(Element.data(thing[i], options_val)),
+          new Element('dt').class(class_key || null).attrObj(attr_key).addContent(i),
+          new Element('dd').class(class_val || null).attrObj(attr_val).addContent(Element.data(thing[i], options_val)),
         ])
       }
       return returned.html()
     } else if (Util.Object.typeOf(thing) === 'array') {
-      let returned = new Element((options.ordered) ? 'ol' : 'ul').class(class_list).attrObj(attr_list)
+      let returned = new Element((options.ordered) ? 'ol' : 'ul').class(class_list || null).attrObj(attr_list)
       thing.forEach(function (el) {
         returned.addElements([
-          new Element('li').class(class_val).attrObj(attr_val).addContent(Element.data(el, options_val))
+          new Element('li').class(class_val || null).attrObj(attr_val).addContent(Element.data(el, options_val))
         ])
       })
       return returned.html()
