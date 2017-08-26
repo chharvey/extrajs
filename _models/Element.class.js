@@ -302,15 +302,10 @@ module.exports = class Element {
    * ```js
    * let options = {
    *   ordered: true,
-   *   classes: {
-   *     list:  'o-List',
-   *     value: 'o-List__Item o-List__Value',
-   *     key:   `o-List__Key ${(true) ? 'truthy' : 'falsy' }`,
-   *   },
    *   attributes: {
-   *     list:  { itemscope: '', itemtype: 'Event'},
-   *     value: { itemprop: ((true) ? 'startTime' : 'endTime') },
-   *     key:   { itemprop: `${(true) ? 'name' : 'headline'}` },
+   *     list:  { class: 'o-List', itemscope: '', itemtype: 'Event'},
+   *     value: { class: 'o-List__Item o-List__Value', itemprop: ((true) ? 'startTime' : 'endTime') },
+   *     key:   { class: `o-List__Key ${(true) ? 'truthy' : 'falsy' }`, itemprop: `${(true) ? 'name' : 'headline'}` },
    *   },
    *   options: {
    *     ordered: false,
@@ -340,19 +335,9 @@ module.exports = class Element {
    *       "type": "boolean",
    *       "description": "if the argument is an array, specify `true` to output an <ol> instead of a <ul>"
    *     },
-   *     "classes": {
-   *       "type": "object",
-   *       "description": "an object with string values, describing how to render the output elements’ classes",
-   *       "additionalProperties": false,
-   *       "properties": {
-   *         "list" : { "type": "string", "description": "string of space-separated tokens for the `[class]` attribute of the list (<ul>, <ol>, or <dl>)" },
-   *         "value": { "type": "string", "description": "string of space-separated tokens for the `[class]` attribute of the item or value (<li> or <dd>)" },
-   *         "key"  : { "type": "string", "description": "string of space-separated tokens for the `[class]` attribute of the key (<dt>)" }
-   *       }
-   *     },
    *     "attributes": {
    *       "type": "object",
-   *       "description": "an object, with object or string values, describing how to render the output elements’ attributes",
+   *       "description": "describes how to render the output elements’ attributes",
    *       "additionalProperties": false,
    *       "properties": {
    *         "list" : { "allOf": [{ "$ref": "#/definitions/{Object<string>}" }], "description": "attributes of the list (<ul>, <ol>, or <dl>)" },
@@ -371,11 +356,7 @@ module.exports = class Element {
    * @param  {*} thing the data to mark up
    * @param  {Object} options configurations for the output
    * @param  {boolean} options.ordered if the argument is an array, specify `true` to output an <ol> instead of a <ul>
-   * @param  {Object<string>} options.classes an object with string values, describing how to render the output elements’ classes
-   * @param  {string} options.classes.list  string of space-separated tokens for the `[class]` attribute of the list (<ul>, <ol>, or <dl>)
-   * @param  {string} options.classes.value string of space-separated tokens for the `[class]` attribute of the item or value (<li> or <dd>)
-   * @param  {string} options.classes.key   string of space-separated tokens for the `[class]` attribute of the key (<dt>)
-   * @param  {Object<Object<string>>} options.attributes an object, with object or string values, describing how to render the output elements’ attributes
+   * @param  {Object<Object<string>>} options.attributes describes how to render the output elements’ attributes
    * @param  {(Object<string>)} options.attributes.list  attributes of the list (<ul>, <ol>, or <dl>)
    * @param  {(Object<string>)} options.attributes.value attributes of the item or value (<li> or <dd>)
    * @param  {(Object<string>)} options.attributes.key   attributes of the key (<dt>)
@@ -383,31 +364,30 @@ module.exports = class Element {
    * @return {string} the argument rendered as an HTML element
    */
   static data(thing, options = {}) {
-    let class_list = (options.classes && options.classes.list)  || ''
-    let class_val  = (options.classes && options.classes.value) || ''
-    let class_key  = (options.classes && options.classes.key)   || ''
     let attr_list = (options.attributes && options.attributes.list)  || {}
     let attr_val  = (options.attributes && options.attributes.value) || {}
     let attr_key  = (options.attributes && options.attributes.key)   || {}
     let options_val = options.options || {}
 
     if (Util.Object.typeOf(thing) === 'object') {
-      let returned = new Element('dl').class(class_list || null).attrObj(attr_list)
+      let returned = new Element('dl').attrObj(attr_list)
       for (let i in thing) {
         returned.addElements([
-          new Element('dt').class(class_key || null).attrObj(attr_key).addContent(i),
-          new Element('dd').class(class_val || null).attrObj(attr_val).addContent(Element.data(thing[i], options_val)),
+          new Element('dt').attrObj(attr_key).addContent(i),
+          new Element('dd').attrObj(attr_val).addContent(Element.data(thing[i], options_val)),
         ])
       }
       return returned.html()
-    } else if (Util.Object.typeOf(thing) === 'array') {
-      let returned = new Element((options.ordered) ? 'ol' : 'ul').class(class_list || null).attrObj(attr_list)
+    }
+    if (Util.Object.typeOf(thing) === 'array') {
+      let returned = new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr_list)
       thing.forEach(function (el) {
         returned.addElements([
-          new Element('li').class(class_val || null).attrObj(attr_val).addContent(Element.data(el, options_val))
+          new Element('li').attrObj(attr_val).addContent(Element.data(el, options_val))
         ])
       })
       return returned.html()
-    } else return thing.toString()
+    }
+    return thing.toString()
   }
 }
