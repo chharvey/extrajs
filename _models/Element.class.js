@@ -91,7 +91,7 @@ module.exports = class Element {
    * Examples:
    * ```
    * my_elem.attr('itemscope', '')  // set the boolean `itemscope` attribute
-   * my_elem.attr('itemtype')       // get the value of the `itemtype` attriute
+   * my_elem.attr('itemtype')       // get the value of the `itemtype` attribute (or `undefined` if it had not been set)
    * my_elem.attr('itemprop', null) // remove the `itemprop` attribute
    * ```
    *
@@ -100,9 +100,10 @@ module.exports = class Element {
    * However, it may be simpler to use the methods
    * {@link Element.attrObj()|attrObj()} and {@link Element.attrStr()|attrStr()}.
    *
-   * @param {string}  key the name of the attribute to set or get
+   * @param {string} key the name of the attribute to set or get
    * @param {?*=} value the name of the value to set, or `null` to remove the attribute
-   * @return {(Element|string)=} `this` if setting an attribute, else the value of the attribute specified
+   * @return {(Element|string=)} `this` if setting an attribute, else the value of the attribute specified
+   *                             (or `undefined` if that attribute had not been set)
    */
   attr(key, value) {
     if (value===undefined) return this._attributes[key]
@@ -129,10 +130,10 @@ module.exports = class Element {
    * my_elem.attrObj() // do nothing; return `this`
    * ```
    *
-   * @param  {Object<?string>} attr_obj the attributes object given
+   * @param  {Object<?string>=} attr_obj the attributes object given
    * @return {Element} `this`
    */
-  attrObj(attr_obj) {
+  attrObj(attr_obj = {}) {
     for (let i in attr_obj) { this.attr(i, attr_obj[i]) }
     return this
   }
@@ -149,7 +150,7 @@ module.exports = class Element {
    * my_elem.attrStr('itemprop="name"', 'itemscope=""', 'itemtype="Person"')        // new
    * my_elem.attrStr() // do nothing; return `this`
    * ```
-   * @param  {string} attr_str a string of the format `'attribute="attr value"'`
+   * @param  {string=} attr_str a string of the format `'attribute="attr value"'`
    * @return {Element} `this`
    */
   attrStr(...attr_str) {
@@ -163,6 +164,7 @@ module.exports = class Element {
    * Examples:
    * ```
    * my_elem.id('section1') // set the [id] attribute
+   * my_elem.id(null)       // remove the [id] attribute
    * my_elem.id()           // return the value of [id]
    * ```
    *
@@ -201,10 +203,11 @@ module.exports = class Element {
    * my_elem.addClass()                       // do nothing; return `this`
    * ```
    *
-   * @param  {string} class_str the classname(s) to add, space-separated
+   * @param  {string=} class_str the classname(s) to add, space-separated
    * @return {Element} `this`
    */
-  addClass(class_str) {
+  addClass(class_str = '') {
+    if (class_str === '') return this
     return this.class(`${this.class() || ''} ${class_str}`)
   }
 
@@ -217,10 +220,11 @@ module.exports = class Element {
    * my_elem.removeClass()           // do nothing; return `this`
    * ```
    *
-   * @param  {string} classname classname to remove; must not contain spaces
+   * @param  {string=} classname classname to remove; must not contain spaces
    * @return {Element} `this`
    */
-  removeClass(classname) {
+  removeClass(classname = '') {
+    if (classname === '') return this
     let classes = (this.class() || '').split(' ')
     let index = classes.indexOf(classname)
     if (index >= 0) classes.splice(index, 1)
@@ -287,10 +291,11 @@ module.exports = class Element {
    * my_elem.addStyle()                                     // do nothing; return `this`
    * ```
    *
-   * @param {string} style_str the style(s) to add, as valid CSS
+   * @param {string=} style_str the style(s) to add, as valid CSS
    * @return {Element} `this`
    */
-  addStyle(style_str) {
+  addStyle(style_str = '') {
+    if (style_str === '') return this
     return this.style(`${this.style() || ''}; ${style_str}`)
   }
 
@@ -303,10 +308,10 @@ module.exports = class Element {
    * my_elem.addStyleObj()                                          // do nothing; return `this`
    * ```
    *
-   * @param {Object<string>} style_obj the style(s) to add, as an object
+   * @param {Object<string>=} style_obj the style(s) to add, as an object
    * @return {Element} `this`
    */
-  addStyleObj(style_obj) {
+  addStyleObj(style_obj = {}) {
     return this.addStyle(new Element('html').styleObj(style_obj).style())
     // alternate implementation:
     Object.assign(this.styleObj(), style_obj)
@@ -317,10 +322,10 @@ module.exports = class Element {
 
   /**
    * Remove a single CSS rule from this element’s `style` attribute.
-   * @param  {string} cssprop single CSS property name
+   * @param  {string=} cssprop single CSS property name
    * @return {Element} `this`
    */
-  removeStyleProp(cssprop) {
+  removeStyleProp(cssprop = '') {
     delete this.styleObj()[cssprop]
     return this
   }
