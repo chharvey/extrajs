@@ -89,9 +89,16 @@ module.exports = class Element {
    * If no such attribute exists, `undefined` is returned.
    *
    * Examples:
-   * To set the boolean `itemscope` attribute, call `my_elem.attr('itemscope', '')`.
-   * To get the value of the `itemtype` attriute, call `my_elem.attr('itemtype')`.
-   * To remove the `itemprop` attribute, call `my_elem.attr('itemprop', null)`.
+   * ```
+   * my_elem.attr('itemscope', '')  // set the boolean `itemscope` attribute
+   * my_elem.attr('itemtype')       // get the value of the `itemtype` attriute
+   * my_elem.attr('itemprop', null) // remove the `itemprop` attribute
+   * ```
+   *
+   * This method can be chained, e.g.,
+   * `my_elem.attr('itemscope', '').attr('itemtype').attr('itemprop', null)`.
+   * However, it may be simpler to use the methods
+   * {@link Element.attrObj()|attrObj()} and {@link Element.attrStr()|attrStr()}.
    *
    * @param {string}  key the name of the attribute to set or get
    * @param {?*=} value the name of the value to set, or `null` to remove the attribute
@@ -115,10 +122,11 @@ module.exports = class Element {
    *
    * `my_element.attrObj({ itemprop:null })` removes the `[itemprop]` attribute altogether.
    *
-   * Example:
+   * Examples:
    * ```
    * my_elem.attr('itemprop','name').attr('itemscope','').attr('itemtype':'Person') // old
    * my_elem.attrObj({ itemprop:'name', itemscope:'', itemtype:'Person' })          // new
+   * my_elem.attrObj() // do nothing; return `this`
    * ```
    *
    * @param  {Object<?string>} attr_obj the attributes object given
@@ -135,10 +143,11 @@ module.exports = class Element {
    * Multiple arguments may be provided.
    * This method does not remove attributes.
    *
-   * Example:
+   * Examples:
    * ```
    * my_elem.attr('itemprop','name').attr('itemscope','').attr('itemtype':'Person') // old
    * my_elem.attrStr('itemprop="name"', 'itemscope=""', 'itemtype="Person"')        // new
+   * my_elem.attrStr() // do nothing; return `this`
    * ```
    * @param  {string} attr_str a string of the format `'attribute="attr value"'`
    * @return {Element} `this`
@@ -150,6 +159,13 @@ module.exports = class Element {
 
   /**
    * Shortcut method for setting/getting the `id` attribute of this element.
+   *
+   * Examples:
+   * ```
+   * my_elem.id('section1') // set the [id] attribute
+   * my_elem.id()           // return the value of [id]
+   * ```
+   *
    * @param  {?string=} id_str the value to set for the `id` attribute, or `null` to remove it
    * @return {(Element|string)} `this` if setting the id, else the value of the id
    */
@@ -159,6 +175,14 @@ module.exports = class Element {
 
   /**
    * Shortcut method for setting/getting the `class` attribute of this element.
+   *
+   * Examples:
+   * ```
+   * my_elem.class('o-Object c-Component') // set the [class] attribute
+   * my_elem.class(null)                   // remove the [class] attribute
+   * my_elem.class()                       // return the value of [class]
+   * ```
+   *
    * @param  {?string=} class_str the value to set for the `class` attriubte, or `null` to remove it
    * @return {(Element|string)} `this` if setting the class, else the value of the class
    */
@@ -167,8 +191,16 @@ module.exports = class Element {
   }
 
   /**
-   * Append to this element’s `class` attribute.
-   * When adding classes, use this method instead of {@link Element#class()|Element#class(...)}
+   * Append to this element’s `[class]` attribute.
+   * When adding classes, use this method instead of {@link Element#class()|Element#class(...)},
+   * as the latter will overwrite the `[class]` attribute.
+   *
+   * Examples:
+   * ```
+   * my_elem.addClass('o-Object c-Component') // add to the [class] attribute
+   * my_elem.addClass()                       // do nothing; return `this`
+   * ```
+   *
    * @param  {string} class_str the classname(s) to add, space-separated
    * @return {Element} `this`
    */
@@ -178,6 +210,13 @@ module.exports = class Element {
 
   /**
    * Remove a single token from this element’s `class` attribute.
+   *
+   * Examples:
+   * ```
+   * my_elem.removeClass('o-Object') // remove one class
+   * my_elem.removeClass()           // do nothing; return `this`
+   * ```
+   *
    * @param  {string} classname classname to remove; must not contain spaces
    * @return {Element} `this`
    */
@@ -190,6 +229,14 @@ module.exports = class Element {
 
   /**
    * Shortcut method for setting/getting the `style` attribute of this element.
+   *
+   * Examples:
+   * ```
+   * my_elem.style('background:none; font-weight:bold;') // set the [style] attribute
+   * my_elem.style(null)                                 // remove the [style] attribute
+   * my_elem.style()                                     // return the value of [style]
+   * ```
+   *
    * @param  {?string=} style_str the value to set for the `style` attriubte (as valid CSS), or `null` to remove it
    * @return {(Element|string)} `this` if setting the style, else the value of the style
    */
@@ -200,6 +247,14 @@ module.exports = class Element {
   /**
    * Shortcut method for setting/getting the `style` attribute of this element,
    * where the I/O of this method is an *Object* instead of a string.
+   *
+   * Examples:
+   * ```
+   * my_elem.styleObj({background:'none', 'font-weight':'bold'}) // ses the [style] attribute
+   * my_elem.styleObj(null)                                      // remove the [style] attribute
+   * my_elem.styleObj()                                          // return the value of [style], as an object
+   * ```
+   *
    * @param  {?Object<string>=} style_obj the properties to set for the `style` attribute, or `null` to remove it
    * @return {(Element|Object<string>)} `this` if setting the style, else the value of the style as an object
    */
@@ -225,6 +280,13 @@ module.exports = class Element {
 
   /**
    * Append to this element’s `style` attribute.
+   *
+   * Examples:
+   * ```
+   * my_elem.addStyle('background:none; font-weight:bold;') // add to the [style] attribute
+   * my_elem.addStyle()                                     // do nothing; return `this`
+   * ```
+   *
    * @param {string} style_str the style(s) to add, as valid CSS
    * @return {Element} `this`
    */
@@ -234,6 +296,13 @@ module.exports = class Element {
 
   /**
    * Append to this element’s `style` attribute, using an object as an argument.
+   *
+   * Examples:
+   * ```
+   * my_elem.addStyleObj({background:'none', 'font-weight':'bold'}) // add to the [style] attribute
+   * my_elem.addStyleObj()                                          // do nothing; return `this`
+   * ```
+   *
    * @param {Object<string>} style_obj the style(s) to add, as an object
    * @return {Element} `this`
    */
@@ -292,7 +361,7 @@ module.exports = class Element {
    * NOTE: recursive function.
    *
    * If the argument is an array, then a `<ul>` element is returned, with `<li>` items.
-   * If the argument is a (non-array, non-function) object, then a `<dl>` element is returned, with
+   * If the argument is a (non-array, non-function) object—even an Element object—then a `<dl>` element is returned, with
    * `<dt>` keys and `<dd>` values.
    * Then, each `<li>`, `<dt>`, and `<dd>` contains the result of this function called on that respective datum.
    * If the argument is not an object (or is a function), then it is converted to a string and returned.
@@ -364,9 +433,9 @@ module.exports = class Element {
    * @return {string} the argument rendered as an HTML element
    */
   static data(thing, options = {}) {
-    let attr_list = (options.attributes && options.attributes.list)  || {}
-    let attr_val  = (options.attributes && options.attributes.value) || {}
-    let attr_key  = (options.attributes && options.attributes.key)   || {}
+    let attr_list = options.attributes && options.attributes.list  || {}
+    let attr_val  = options.attributes && options.attributes.value || {}
+    let attr_key  = options.attributes && options.attributes.key   || {}
     let options_val = options.options || {}
 
     switch (Util.Object.typeOf(thing)) {
@@ -378,7 +447,7 @@ module.exports = class Element {
             new Element('dd').attrObj(attr_val).addContent(Element.data(thing[i], options_val)),
           ])
         }
-      return returned.html()
+        return returned.html()
       case 'array':
         return new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr_list)
           .addElements(thing.map((el) =>
