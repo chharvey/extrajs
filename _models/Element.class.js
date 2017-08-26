@@ -428,35 +428,41 @@ module.exports = class Element {
    * ```
    *
    * @param  {*} thing the data to mark up
-   * @param  {Object} options configurations for the output
-   * @param  {boolean} options.ordered if the argument is an array, specify `true` to output an <ol> instead of a <ul>
-   * @param  {Object<Object<string>>} options.attributes describes how to render the output elements’ attributes
-   * @param  {(Object<string>)} options.attributes.list  attributes of the list (<ul>, <ol>, or <dl>)
-   * @param  {(Object<string>)} options.attributes.value attributes of the item or value (<li> or <dd>)
-   * @param  {(Object<string>)} options.attributes.key   attributes of the key (<dt>)
-   * @param  {Object} options.options configurations for nested items/keys/values
+   * @param  {Object=} options configurations for the output
+   * @param  {boolean=} options.ordered if the argument is an array, specify `true` to output an <ol> instead of a <ul>
+   * @param  {Object<Object<string>>=} options.attributes describes how to render the output elements’ attributes
+   * @param  {Object<string>=} options.attributes.list  attributes of the list (<ul>, <ol>, or <dl>)
+   * @param  {Object<string>=} options.attributes.value attributes of the item or value (<li> or <dd>)
+   * @param  {Object<string>=} options.attributes.key   attributes of the key (<dt>)
+   * @param  {Object=} options.options configurations for nested items/keys/values
    * @return {string} the argument rendered as an HTML element
    */
   static data(thing, options = {}) {
-    let attr_list = options.attributes && options.attributes.list  || {}
-    let attr_val  = options.attributes && options.attributes.value || {}
-    let attr_key  = options.attributes && options.attributes.key   || {}
-    let options_val = options.options || {}
+    /**
+     * Configuration attributes for elements.
+     * Avoids TypeErrors (cannot read property of undefined).
+     * @type {Object<Object<string>=>}
+     */
+    let attr = {
+      list: options.attributes && options.attributes.list,
+      val : options.attributes && options.attributes.value,
+      key : options.attributes && options.attributes.key,
+    }
 
     switch (Util.Object.typeOf(thing)) {
       case 'object':
-        let returned = new Element('dl').attrObj(attr_list)
+        let returned = new Element('dl').attrObj(attr.list)
         for (let i in thing) {
           returned.addElements([
-            new Element('dt').attrObj(attr_key).addContent(i),
-            new Element('dd').attrObj(attr_val).addContent(Element.data(thing[i], options_val)),
+            new Element('dt').attrObj(attr.key).addContent(i),
+            new Element('dd').attrObj(attr.val).addContent(Element.data(thing[i], options.options)),
           ])
         }
         return returned.html()
       case 'array':
-        return new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr_list)
+        return new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr.list)
           .addElements(thing.map((el) =>
-            new Element('li').attrObj(attr_val).addContent(Element.data(el, options_val))
+            new Element('li').attrObj(attr.val).addContent(Element.data(el, options.options))
           ))
           .html()
       default:
