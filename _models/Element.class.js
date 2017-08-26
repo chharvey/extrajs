@@ -347,7 +347,7 @@ module.exports = class Element {
    *     },
    *     "options": {
    *       "allOf": [{ "$ref": "#" }],
-   *       "description": "configurations for nested items/keys/values; identical specs as param `options`"
+   *       "description": "configurations for nested items/keys/values"
    *     }
    *   }
    * }
@@ -360,7 +360,7 @@ module.exports = class Element {
    * @param  {(Object<string>)} options.attributes.list  attributes of the list (<ul>, <ol>, or <dl>)
    * @param  {(Object<string>)} options.attributes.value attributes of the item or value (<li> or <dd>)
    * @param  {(Object<string>)} options.attributes.key   attributes of the key (<dt>)
-   * @param  {Object} options.options configurations for nested items/keys/values; identical specs as param `options`
+   * @param  {Object} options.options configurations for nested items/keys/values
    * @return {string} the argument rendered as an HTML element
    */
   static data(thing, options = {}) {
@@ -369,25 +369,24 @@ module.exports = class Element {
     let attr_key  = (options.attributes && options.attributes.key)   || {}
     let options_val = options.options || {}
 
-    if (Util.Object.typeOf(thing) === 'object') {
-      let returned = new Element('dl').attrObj(attr_list)
-      for (let i in thing) {
-        returned.addElements([
-          new Element('dt').attrObj(attr_key).addContent(i),
-          new Element('dd').attrObj(attr_val).addContent(Element.data(thing[i], options_val)),
-        ])
-      }
+    switch (Util.Object.typeOf(thing)) {
+      case 'object':
+        let returned = new Element('dl').attrObj(attr_list)
+        for (let i in thing) {
+          returned.addElements([
+            new Element('dt').attrObj(attr_key).addContent(i),
+            new Element('dd').attrObj(attr_val).addContent(Element.data(thing[i], options_val)),
+          ])
+        }
       return returned.html()
+      case 'array':
+        return new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr_list)
+          .addElements(thing.map((el) =>
+            new Element('li').attrObj(attr_val).addContent(Element.data(el, options_val))
+          ))
+          .html()
+      default:
+        return thing.toString()
     }
-    if (Util.Object.typeOf(thing) === 'array') {
-      let returned = new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr_list)
-      thing.forEach(function (el) {
-        returned.addElements([
-          new Element('li').attrObj(attr_val).addContent(Element.data(el, options_val))
-        ])
-      })
-      return returned.html()
-    }
-    return thing.toString()
   }
 }
