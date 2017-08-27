@@ -236,50 +236,35 @@ module.exports = class Element {
    *
    * Examples:
    * ```
-   * my_elem.style('background:none; font-weight:bold;') // set the [style] attribute
-   * my_elem.style(null)                                 // remove the [style] attribute
-   * my_elem.style()                                     // return the value of [style]
+   * my_elem.style('background:none; font-weight:bold;')      // set the [style] attribute, with a string
+   * my_elem.style({background:'none', 'font-weight':'bold'}) // set the [style] attribute, with an object
+   * my_elem.style(null)                                      // remove the [style] attribute
+   * my_elem.style()                                          // return the value of [style], as a string (or `undefined` if the attribute has not been set)
+   * my_elem.style([])                                        // return the value of [style], as an object
    * ```
    *
-   * @param  {?string=} style_str the value to set for the `style` attriubte (as valid CSS), or `null` to remove it
-   * @return {(Element|string)} `this` if setting the style, else the value of the style
+   * @param  {?(Object<string>|Array|string)=} arg the value to set for the `style` attriubte, or `null` to remove it
+   * @return {(Element|Object<string>|string=)} `this` if setting the style, else the value of the style
    */
-  style(style_str) {
-    return this.attr('style', style_str)
-  }
-
-  /**
-   * Shortcut method for setting/getting the `style` attribute of this element,
-   * where the I/O of this method is an *Object* instead of a string.
-   *
-   * Examples:
-   * ```
-   * my_elem.styleObj({background:'none', 'font-weight':'bold'}) // ses the [style] attribute
-   * my_elem.styleObj(null)                                      // remove the [style] attribute
-   * my_elem.styleObj()                                          // return the value of [style], as an object
-   * ```
-   *
-   * @param  {?Object<string>=} style_obj the properties to set for the `style` attribute, or `null` to remove it
-   * @return {(Element|Object<string>)} `this` if setting the style, else the value of the style as an object
-   */
-  styleObj(style_obj) {
-    if (style_obj !== undefined) {
-      if (style_obj !== null) {
+  style(arg) {
+    return (({
+      object: () => { // set the style with an object
         let css_string = ''
-        for (let i in style_obj) {
-          css_string += `${i}:${style_obj[i]};`
+        for (let i in arg) {
+          css_string += `${i}:${arg[i]};`
         }
-        return this.attr('style', css_string)
-      } else return this.attr('style', null)
-    } else {
-      let css_object = {}
-      ;(this.attr('style') || '').split(';').map((rule) => rule.split(':')).forEach(function (rule_arr) {
-        // rule_arr[0] == css property
-        // rule_arr[1] == css value
-        if (rule_arr[0] && rule_arr[1]) css_object[rule_arr[0]] = rule_arr[1]
-      })
-      return css_object
-    }
+        return this.style(css_string)
+      },
+      array: () => { // get the style as an object
+        let css_object = {}
+        ;(this.attr('style') || '').split(';').map((rule) => rule.split(':')).forEach(function (rule_arr) {
+          // rule_arr[0] == css property
+          // rule_arr[1] == css value
+          if (rule_arr[0] && rule_arr[1]) css_object[rule_arr[0]] = rule_arr[1]
+        })
+        return css_object
+      },
+    })[Util.Object.typeOf(arg)] || (() => this.attr('style', arg)))()
   }
 
   /**
@@ -287,37 +272,21 @@ module.exports = class Element {
    *
    * Examples:
    * ```
-   * my_elem.addStyle('background:none; font-weight:bold;') // add to the [style] attribute
-   * my_elem.addStyle()                                     // do nothing; return `this`
+   * my_elem.addStyle('background:none; font-weight:bold;')      // add to the [style] attribute
+   * my_elem.addStyle({background:'none', 'font-weight':'bold'}) // add to the [style] attribute
+   * my_elem.addStyle()                                          // do nothing; return `this`
    * ```
    *
-   * @param {string=} style_str the style(s) to add, as valid CSS
+   * @param {(Object<string>|string)=} arg the style(s) to add, as valid CSS
    * @return {Element} `this`
    */
-  addStyle(style_str = '') {
-    if (style_str === '') return this
-    return this.style(`${this.style() || ''}; ${style_str}`)
-  }
-
-  /**
-   * Append to this element’s `style` attribute, using an object as an argument.
-   *
-   * Examples:
-   * ```
-   * my_elem.addStyleObj({background:'none', 'font-weight':'bold'}) // add to the [style] attribute
-   * my_elem.addStyleObj()                                          // do nothing; return `this`
-   * ```
-   *
-   * @param {Object<string>=} style_obj the style(s) to add, as an object
-   * @return {Element} `this`
-   */
-  addStyleObj(style_obj = {}) {
-    return this.addStyle(new Element('html').styleObj(style_obj).style())
-    // alternate implementation:
-    Object.assign(this.styleObj(), style_obj)
-    return this
-    // even another implementation, if you prefer a "pure" (nondestructive) function:
-    return this.styleObj(Object.assign({}, this.styleObj(), style_obj))
+  addStyle(arg = '') {
+    if (arg === '') return this
+    return ({
+      string: () => this.style(`${this.style() || ''}; ${arg}`),
+      object: () => this.addStyle(new Element('html').style(arg).style()),
+      // object: () => this.style(Object.assign({}, this.style([]), arg)), // overwrites css properties if necessary
+    })[Util.Object.typeOf(arg)]()
   }
 
   /**
@@ -448,9 +417,8 @@ module.exports = class Element {
       val : options.attributes && options.attributes.value,
       key : options.attributes && options.attributes.key,
     }
-
-    switch (Util.Object.typeOf(thing)) {
-      case 'object':
+    return (({
+      object: () => {
         let returned = new Element('dl').attrObj(attr.list)
         for (let i in thing) {
           returned.addElements([
@@ -459,14 +427,12 @@ module.exports = class Element {
           ])
         }
         return returned.html()
-      case 'array':
-        return new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr.list)
+      },
+      array: () => new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr.list)
           .addElements(thing.map((el) =>
             new Element('li').attrObj(attr.val).addContent(Element.data(el, options.options))
           ))
-          .html()
-      default:
-        return thing.toString()
-    }
+          .html(),
+    })[Util.Object.typeOf(thing)] || (() => thing.toString()))()
   }
 }
