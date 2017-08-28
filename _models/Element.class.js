@@ -332,6 +332,9 @@ module.exports = class Element {
    * Mark up data using an HTML element.
    * NOTE: recursive function.
    *
+   * First and foremost, if the argument is an `Element` object, then this function returns
+   * that object’s `.html()` value (with any added attributes specified by the options below).
+   * Otherwise,
    * If the argument is an array, then a `<ul>` element is returned, with `<li>` items.
    * If the argument is a (non-array, non-function) object—even an Element object—then a `<dl>` element is returned, with
    * `<dt>` keys and `<dd>` values.
@@ -416,6 +419,15 @@ module.exports = class Element {
       key : options.attributes && options.attributes.key,
     }
     if (Util.Object.typeOf(thing) !== 'object' && Util.Object.typeOf(thing) !== 'array') return thing.toString()
+    if (thing instanceof Element) {
+      const _class = thing.class()
+      const _style = thing.style()
+      return thing
+        .attrObj(attr.list) // may overwrite thing.class() & thing.style()
+        .addClass(_class)
+        .addStyle(_style)
+        .html()
+    }
     return ({
       object: () => {
         let returned = new Element('dl').attrObj(attr.list)
