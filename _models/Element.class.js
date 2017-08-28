@@ -47,6 +47,15 @@ module.exports = class Element {
     return out
   }
 
+  /**
+   * Represents a set of CSS rules for an element.
+   * Private class for internal computations.
+   * @see Style
+   * @private
+   * @type {class}
+   */
+  static get _Style() { return Style }
+
 
 
   /**
@@ -185,7 +194,7 @@ module.exports = class Element {
    * my_elem.class()                       // return the value of [class]
    * ```
    *
-   * @param  {?string=} class_str the value to set for the `class` attriubte, or `null` to remove it
+   * @param  {?string=} class_str the value to set for the `class` attribute, or `null` to remove it
    * @return {(Element|string)} `this` if setting the class, else the value of the class
    */
   class(class_str) {
@@ -243,32 +252,21 @@ module.exports = class Element {
    * my_elem.style([])                                        // return the value of [style], as an object
    * ```
    *
-   * @param  {?(Object<string>|Array|string)=} arg the value to set for the `style` attriubte, or `null` to remove it
+   * @param  {?(Object<string>|Array|string)=} arg the value to set for the `style` attribute, or `null` to remove it
    * @return {(Element|Object<string>|string=)} `this` if setting the style, else the value of the style
    */
   style(arg) {
-    return (({
-      object: () => { // set the style with an object
-        let css_string = ''
-        for (let i in arg) {
-          css_string += `${i}:${arg[i]};`
-        }
-        return this.style(css_string)
-      },
-      array: () => { // get the style as an object
-        let css_object = {}
-        ;(this.attr('style') || '').split(';').map((rule) => rule.split(':')).forEach(function (rule_arr) {
-          // rule_arr[0] == css property
-          // rule_arr[1] == css value
-          if (rule_arr[0] && rule_arr[1]) css_object[rule_arr[0]] = rule_arr[1]
-        })
-        return css_object
-      },
-    })[Util.Object.typeOf(arg)] || (() => this.attr('style', arg)))()
+    if (!arg) return this.attr('style', arg)
+    return ({
+      object: () => this.attr('style', new Element._Style(arg).toString()),  // set the style with an object
+      string: () => this.style(new Element._Style(arg).toObject()),          // set the style with a string
+      array : () => new Element._Style(this.attr('style') || '').toObject(), // get the style as an object
+    })[Util.Object.typeOf(arg)]()
   }
 
   /**
-   * Append to this element’s `style` attribute.
+   * Append to this element’s `style` attribute,
+   * overwriting duplicate CSS properties.
    *
    * Examples:
    * ```
@@ -283,9 +281,8 @@ module.exports = class Element {
   addStyle(arg = '') {
     if (arg === '') return this
     return ({
-      string: () => this.style(`${this.style() || ''}; ${arg}`),
-      object: () => this.addStyle(new Element('html').style(arg).style()),
-      // object: () => this.style(Object.assign({}, this.style([]), arg)), // overwrites css properties if necessary
+      object: () => this.style(Object.assign({}, this.style([]), arg)),
+      string: () => this.addStyle(new Element._Style(arg).toObject()) ,
     })[Util.Object.typeOf(arg)]()
   }
 
@@ -295,8 +292,9 @@ module.exports = class Element {
    * @return {Element} `this`
    */
   removeStyleProp(cssprop = '') {
-    delete this.styleObj()[cssprop]
-    return this
+    let css_obj = this.style([])
+    delete css_obj[cssprop]
+    return this.style(css_obj)
   }
 
   /**
@@ -417,7 +415,8 @@ module.exports = class Element {
       val : options.attributes && options.attributes.value,
       key : options.attributes && options.attributes.key,
     }
-    return (({
+    if (Util.Object.typeOf(thing) !== 'object' && Util.Object.typeOf(thing) !== 'array') return thing.toString()
+    return ({
       object: () => {
         let returned = new Element('dl').attrObj(attr.list)
         for (let i in thing) {
@@ -433,6 +432,76 @@ module.exports = class Element {
             new Element('li').attrObj(attr.val).addContent(Element.data(el, options.options))
           ))
           .html(),
-    })[Util.Object.typeOf(thing)] || (() => thing.toString()))()
+    })[Util.Object.typeOf(thing)]()
+  }
+}
+
+class Style {
+  /**
+   * Construct a new Style object.
+   * @param {(Object<string>|string)=} rules the object or string containing css property-value pairs
+   */
+  constructor(rules = {}) {
+    let css_object = rules
+    if (Util.Object.typeOf(rules) === 'string') {
+      css_object = {}
+      rules.split(';').map((r) => r.split(':')).forEach(function (rule_arr) {
+        rule_arr[0] = rule_arr[0] && rule_arr[0].trim() // css property
+        rule_arr[1] = rule_arr[1] && rule_arr[1].trim() // css value
+        if (rule_arr[0] && rule_arr[1]) css_object[rule_arr[0]] = rule_arr[1]
+      })
+    }
+    /** @private */ this._obj = css_object
+  }
+
+  /**
+   * Set a CSS property, or override one if it exists.
+   * The argument for the value must be a string.
+   * @param {string} property the property to set
+   * @param {string} value the value to set
+   * @return {Style} `this`
+   */
+  set(property, value) {
+    this._obj[property] = value
+    return this
+  }
+
+  /**
+   * Get the value of the given CSS property, or `undefined` if it does not exist.
+   * @param  {string} property the property to get
+   * @return {string=} the value of the specified property
+   */
+  get(property) {
+    return this._obj[property]
+  }
+
+  /**
+   * Convert this style into a string.
+   * @return {string} a valid CSS string containing property-value pairs.
+   */
+  toString() {
+    let css_string = ''
+    for (let i in this._obj) {
+      css_string += `${i}:${this._obj[i]};`
+    }
+    return css_string
+  }
+
+  /**
+   * Return a shallow clone of this style’s CSS object.
+   * The returned value may be modified without affecting this object.
+   * Example:
+   * ```js
+   * let a = new Style({ 'font-weight': 'bold' })
+   * let obj = a.toObject
+   * obj['font-style'] = 'italic'
+   * let b = new Style(obj)
+   * a.toString() // 'font-weight:bold;'
+   * b.toString() // 'font-weight:bold;font-style:italic;'
+   * ```
+   * @return {Object<string>} a shallow clone of `this._obj`
+   */
+  toObject() {
+    return Object.assign({}, this._obj)
   }
 }
