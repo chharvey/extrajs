@@ -42,7 +42,7 @@ module.exports = class Element {
   _attributeString() {
     let out = ''
     for (let i in this._attributes) {
-      if (this._attributes[i]!==undefined) out += ` ${i}="${this._attributes[i].trim()}"`
+      if (this._attributes[i]!==undefined) out += ` ${i}="${this._attributes[i]}"`
     }
     return out
   }
@@ -117,7 +117,7 @@ module.exports = class Element {
   attr(key, value) {
     if (value===undefined) return this._attributes[key]
     if (value === null) delete this._attributes[key]
-    else                this._attributes[key] = `${value}`
+    else                this._attributes[key] = `${value}`.trim()
     return this
   }
 
@@ -199,6 +199,7 @@ module.exports = class Element {
    * @return {(Element|string)} `this` if setting the class, else the value of the class
    */
   class(class_str) {
+    if (typeof class_str === 'string' && class_str.trim() === '') return this.class(null)
     return this.attr('class', class_str)
   }
 
@@ -257,9 +258,9 @@ module.exports = class Element {
    * @return {(Element|Object<string>|string=)} `this` if setting the style, else the value of the style
    */
   style(arg) {
-    if (!arg) return this.attr('style', arg)
-    if (Object.getOwnPropertyNames(arg).length === 0 /* arg ≈≈ {} */) return this.style(null)
-    // if (Util.Object.is(arg, {})) return this.style(null)
+    if (arg === undefined || arg === null) return this.attr('style', arg)
+    if (Object.getOwnPropertyNames(arg).length === 0 /* arg ≈≈ {} */ || arg === '') return this.style(null)
+    // if (Util.Object.is(arg, {}) || arg === '') return this.style(null)
     return ({
       object: () => this.attr('style', new Element._Style(arg).toString()),  // set the style with an object
       string: () => this.style(new Element._Style(arg).toObject()),          // set the style with a string
