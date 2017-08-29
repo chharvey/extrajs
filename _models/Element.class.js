@@ -42,7 +42,7 @@ module.exports = class Element {
   _attributeString() {
     let out = ''
     for (let i in this._attributes) {
-      if (this._attributes[i]!==undefined) out += ` ${i}="${this._attributes[i]}"`
+      if (this._attributes[i]!==undefined) out += ` ${i}="${this._attributes[i].trim()}"`
     }
     return out
   }
@@ -116,7 +116,8 @@ module.exports = class Element {
    */
   attr(key, value) {
     if (value===undefined) return this._attributes[key]
-    this._attributes[key] = (value===null) ? undefined : `${value}` // convert to string without Object#toString()
+    if (value === null) delete this._attributes[key]
+    else                this._attributes[key] = `${value}`
     return this
   }
 
@@ -357,6 +358,27 @@ module.exports = class Element {
    * }
    * ```
    *
+   * If an Element object is given, that element’s specific attributes take precedence,
+   * overwriting those given by the options, with the exception of `[class]` and `[style]`:
+   * these attributes are added to those in the options.
+   * ```js
+   * Element.data(new Element('a').class('c-Link--mod').style({
+   *   color: 'blue',
+   *   'text-decoration': 'none',
+   * }).attr('rel','external'), {
+   *   attributes: { list: {
+   *     class: 'c-Link',
+   *     style: 'background: pink; text-decoration: underline;',
+   *     href : '//eg.com',
+   *     rel  : 'nofollow',
+   *   } }
+   * })
+   * // returns `<a
+   * //   class="c-Link c-Link--mod"
+   * //   style="background:pink;text-decoration:none;color:blue"
+   * //   rel="external" href="//eg.com"></a>`
+   * ```
+   *
    * This is the formal schema for the `options` parameter:
    * ```json
    * {
@@ -420,26 +442,27 @@ module.exports = class Element {
     }
     if (Util.Object.typeOf(thing) !== 'object' && Util.Object.typeOf(thing) !== 'array') return thing.toString()
     if (thing instanceof Element) {
-      const _class = thing.class()
-      const _style = thing.style()
+      for (let i in attr.list) {
+        if (i !== 'class' && i !== 'style' && !thing.attr(i)) thing.attr(i, attr.list[i])
+      }
       return thing
-        .attrObj(attr.list) // may overwrite thing.class() & thing.style()
-        .addClass(_class)
-        .addStyle(_style)
+        .class(`${attr.list && attr.list.class || ''} ${thing.class() || ''}`)
+        .style(`${attr.list && attr.list.style}; ${thing.style()}`)
         .html()
     }
     return ({
       object: () => {
-        let returned = new Element('dl').attrObj(attr.list)
+        let out = new Element('dl').attrObj(attr.list)
         for (let i in thing) {
-          returned.addElements([
+          out.addElements([
             new Element('dt').attrObj(attr.key).addContent(i),
             new Element('dd').attrObj(attr.val).addContent(Element.data(thing[i], options.options)),
           ])
         }
-        return returned.html()
+        return out.html()
       },
-      array: () => new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr.list)
+      array: () =>
+        new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr.list)
           .addElements(thing.map((el) =>
             new Element('li').attrObj(attr.val).addContent(Element.data(el, options.options))
           ))
