@@ -258,8 +258,7 @@ module.exports = class Element {
    */
   style(arg) {
     if (!arg) return this.attr('style', arg)
-    if (Object.getOwnPropertyNames(arg).length === 0 /* arg ≈≈ {} */) return this.style(null)
-    // if (Util.Object.is(arg, {})) return this.style(null)
+    if (Util.Object.is(arg, {})) return this.style(null)
     return ({
       object: () => this.attr('style', new Element._Style(arg).toString()),  // set the style with an object
       string: () => this.style(new Element._Style(arg).toObject()),          // set the style with a string

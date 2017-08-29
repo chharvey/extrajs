@@ -48,6 +48,38 @@ const OBJ = class {
   }
 
   /**
+   * Test whether two objects are “the same”,
+   * using `Util.Object.is()`equality, recursively, on corresponding object values.
+   * The base case for non-object values is `Object.is()`.
+   *
+   * “The same” means “replaceable”, that is,
+   * for any deterministic function: `fn(obj1)` would return the same result as `fn(obj2)` if and only if
+   * `Util.Object.is(obj1, obj2)`.
+   *
+   * NOTE: WARNING: recursive function. infinite loop possible.
+   *
+   * @param  {Object}  obj1 the first object
+   * @param  {Object}  obj2 the second object
+   * @return {boolean} `true` if corresponding elements are the same (via `Util.Object.is()`)
+   */
+  static is(obj1, obj2) {
+    if (Object.is(obj1, obj2) || Util.Array.is(obj1, obj2)) return true
+    if (OBJ.typeOf(obj1) !== 'object' || OBJ.typeOf(obj2) !== 'object') return false
+    if (Object.getOwnPropertyNames(obj1).length !== Object.getOwnPropertyNames(obj2).length) return false
+    if (
+      Object.getOwnPropertyNames(obj1).some((key) => !Object.getOwnPropertyNames(obj2).includes(key))
+      ||
+      Object.getOwnPropertyNames(obj2).some((key) => !Object.getOwnPropertyNames(obj1).includes(key))
+    ) return false
+    let out = true
+    for (let i in obj1) {
+      // out &&= Util.Object.is(obj1[i], obj2[i]) // IDEA
+      out = out && Util.Object.is(obj1[i], obj2[i])
+    }
+    return out
+  }
+
+  /**
    * Deep freeze an object, and return the result.
    * If an array or object is passed,
    * Recursively call `Object.freeze()` on every property and sub-property of the given parameter.
@@ -142,21 +174,28 @@ const OBJ = class {
 
 const ARR = class {
   /**
-   * Test whether two arrays are the same,
-   * using `Object.is()` equality on corresponding entries.
+   * Test whether two arrays are “the same”,
+   * using {@link Util.Object.is()} equality on corresponding entries.
+   *
+   * “The same” means “replaceable”, that is,
+   * for any deterministic function: `fn(arr1)` would return the same result as `fn(arr2)`
+   * if and only if `Util.Array.is(arr1, arr2)`.
+   *
+   * This method returns the same result as `Util.Object.is()`, but is simply faster for arrays.
+   *
    * @param  {Array} arr1 the first array
    * @param  {Array} arr2 the second array
-   * @return {boolean} `true` if corresponding elements are the same (via `Object.is()`)
+   * @return {boolean} `true` if corresponding elements are the same (via `Util.Object.is()`)
    */
   static is(arr1, arr2) {
+    if (Object.is(arr1, arr2)) return true
     if (Util.Object.typeOf(arr1) !== 'array' || Util.Object.typeOf(arr2) !== 'array') return false
     if (arr1.length !== arr2.length) return false
-    let result = true
-    for (let i = 0; i < arr1.length; i++) {
-      // result &&= Object.is(arr1[i], arr2[i]) // IDEA
-      result = result && Object.is(arr1[i], arr2[i])
+    let out = true
+    for (let i = 0; (i < arr1.length && out === true); i++) {
+      out = Util.Object.is(arr1[i], arr2[i])
     }
-    return result
+    return out
   }
 
   /**
