@@ -47,6 +47,15 @@ module.exports = class Element {
     return out
   }
 
+  /**
+   * Represents a set of CSS rules for an element.
+   * Private class for internal computations.
+   * @see Style
+   * @private
+   * @type {class}
+   */
+  static get _Style() { return Style }
+
 
 
   /**
@@ -89,17 +98,26 @@ module.exports = class Element {
    * If no such attribute exists, `undefined` is returned.
    *
    * Examples:
-   * To set the boolean `itemscope` attribute, call `my_elem.attr('itemscope', '')`.
-   * To get the value of the `itemtype` attriute, call `my_elem.attr('itemtype')`.
-   * To remove the `itemprop` attribute, call `my_elem.attr('itemprop', null)`.
+   * ```
+   * my_elem.attr('itemscope', '')  // set the boolean `itemscope` attribute
+   * my_elem.attr('itemtype')       // get the value of the `itemtype` attribute (or `undefined` if it had not been set)
+   * my_elem.attr('itemprop', null) // remove the `itemprop` attribute
+   * ```
    *
-   * @param {string}  key the name of the attribute to set or get
+   * This method can be chained, e.g.,
+   * `my_elem.attr('itemscope', '').attr('itemtype').attr('itemprop', null)`.
+   * However, it may be simpler to use the methods
+   * {@link Element.attrObj()|attrObj()} and {@link Element.attrStr()|attrStr()}.
+   *
+   * @param {string} key the name of the attribute to set or get
    * @param {?*=} value the name of the value to set, or `null` to remove the attribute
-   * @return {(Element|string)=} `this` if setting an attribute, else the value of the attribute specified
+   * @return {(Element|string=)} `this` if setting an attribute, else the value of the attribute specified
+   *                             (or `undefined` if that attribute had not been set)
    */
   attr(key, value) {
     if (value===undefined) return this._attributes[key]
-    this._attributes[key] = (value===null) ? undefined : `${value}` // convert to string without Object#toString()
+    if (value === null) delete this._attributes[key]
+    else                this._attributes[key] = `${value}`.trim()
     return this
   }
 
@@ -115,16 +133,17 @@ module.exports = class Element {
    *
    * `my_element.attrObj({ itemprop:null })` removes the `[itemprop]` attribute altogether.
    *
-   * Example:
+   * Examples:
    * ```
    * my_elem.attr('itemprop','name').attr('itemscope','').attr('itemtype':'Person') // old
    * my_elem.attrObj({ itemprop:'name', itemscope:'', itemtype:'Person' })          // new
+   * my_elem.attrObj() // do nothing; return `this`
    * ```
    *
-   * @param  {Object<?string>} attr_obj the attributes object given
+   * @param  {Object<?string>=} attr_obj the attributes object given
    * @return {Element} `this`
    */
-  attrObj(attr_obj) {
+  attrObj(attr_obj = {}) {
     for (let i in attr_obj) { this.attr(i, attr_obj[i]) }
     return this
   }
@@ -135,12 +154,13 @@ module.exports = class Element {
    * Multiple arguments may be provided.
    * This method does not remove attributes.
    *
-   * Example:
+   * Examples:
    * ```
    * my_elem.attr('itemprop','name').attr('itemscope','').attr('itemtype':'Person') // old
    * my_elem.attrStr('itemprop="name"', 'itemscope=""', 'itemtype="Person"')        // new
+   * my_elem.attrStr() // do nothing; return `this`
    * ```
-   * @param  {string} attr_str a string of the format `'attribute="attr value"'`
+   * @param  {string=} attr_str a string of the format `'attribute="attr value"'`
    * @return {Element} `this`
    */
   attrStr(...attr_str) {
@@ -150,6 +170,14 @@ module.exports = class Element {
 
   /**
    * Shortcut method for setting/getting the `id` attribute of this element.
+   *
+   * Examples:
+   * ```
+   * my_elem.id('section1') // set the [id] attribute
+   * my_elem.id(null)       // remove the [id] attribute
+   * my_elem.id()           // return the value of [id]
+   * ```
+   *
    * @param  {?string=} id_str the value to set for the `id` attribute, or `null` to remove it
    * @return {(Element|string)} `this` if setting the id, else the value of the id
    */
@@ -159,29 +187,55 @@ module.exports = class Element {
 
   /**
    * Shortcut method for setting/getting the `class` attribute of this element.
-   * @param  {?string=} class_str the value to set for the `class` attriubte, or `null` to remove it
+   *
+   * Examples:
+   * ```
+   * my_elem.class('o-Object c-Component') // set the [class] attribute
+   * my_elem.class(null)                   // remove the [class] attribute
+   * my_elem.class()                       // return the value of [class]
+   * ```
+   *
+   * @param  {?string=} class_str the value to set for the `class` attribute, or `null` to remove it
    * @return {(Element|string)} `this` if setting the class, else the value of the class
    */
   class(class_str) {
+    if (typeof class_str === 'string' && class_str.trim() === '') return this.class(null)
     return this.attr('class', class_str)
   }
 
   /**
-   * Append to this element’s `class` attribute.
-   * When adding classes, use this method instead of {@link Element#class()|Element#class(...)}
-   * @param  {string} class_str the classname(s) to add, space-separated
+   * Append to this element’s `[class]` attribute.
+   * When adding classes, use this method instead of {@link Element#class()|Element#class(...)},
+   * as the latter will overwrite the `[class]` attribute.
+   *
+   * Examples:
+   * ```
+   * my_elem.addClass('o-Object c-Component') // add to the [class] attribute
+   * my_elem.addClass()                       // do nothing; return `this`
+   * ```
+   *
+   * @param  {string=} class_str the classname(s) to add, space-separated
    * @return {Element} `this`
    */
-  addClass(class_str) {
+  addClass(class_str = '') {
+    if (class_str === '') return this
     return this.class(`${this.class() || ''} ${class_str}`)
   }
 
   /**
    * Remove a single token from this element’s `class` attribute.
-   * @param  {string} classname classname to remove; must not contain spaces
+   *
+   * Examples:
+   * ```
+   * my_elem.removeClass('o-Object') // remove one class
+   * my_elem.removeClass()           // do nothing; return `this`
+   * ```
+   *
+   * @param  {string=} classname classname to remove; must not contain spaces
    * @return {Element} `this`
    */
-  removeClass(classname) {
+  removeClass(classname = '') {
+    if (classname === '') return this
     let classes = (this.class() || '').split(' ')
     let index = classes.indexOf(classname)
     if (index >= 0) classes.splice(index, 1)
@@ -190,70 +244,61 @@ module.exports = class Element {
 
   /**
    * Shortcut method for setting/getting the `style` attribute of this element.
-   * @param  {?string=} style_str the value to set for the `style` attriubte (as valid CSS), or `null` to remove it
-   * @return {(Element|string)} `this` if setting the style, else the value of the style
+   *
+   * Examples:
+   * ```
+   * my_elem.style('background:none; font-weight:bold;')      // set the [style] attribute, with a string
+   * my_elem.style({background:'none', 'font-weight':'bold'}) // set the [style] attribute, with an object
+   * my_elem.style(null)                                      // remove the [style] attribute
+   * my_elem.style()                                          // return the value of [style], as a string (or `undefined` if the attribute has not been set)
+   * my_elem.style([])                                        // return the value of [style], as an object
+   * ```
+   *
+   * @param  {?(Object<string>|Array|string)=} arg the value to set for the `style` attribute, or `null` to remove it
+   * @return {(Element|Object<string>|string=)} `this` if setting the style, else the value of the style
    */
-  style(style_str) {
-    return this.attr('style', style_str)
+  style(arg) {
+    if (arg === undefined || arg === null) return this.attr('style', arg)
+    if (Object.getOwnPropertyNames(arg).length === 0 /* arg ≈≈ {} */ || arg === '') return this.style(null)
+    // if (Util.Object.is(arg, {}) || arg === '') return this.style(null)
+    return ({
+      object: () => this.attr('style', new Element._Style(arg).toString()),  // set the style with an object
+      string: () => this.style(new Element._Style(arg).toObject()),          // set the style with a string
+      array : () => new Element._Style(this.attr('style') || '').toObject(), // get the style as an object
+    })[Util.Object.typeOf(arg)]()
   }
 
   /**
-   * Shortcut method for setting/getting the `style` attribute of this element,
-   * where the I/O of this method is an *Object* instead of a string.
-   * @param  {?Object<string>=} style_obj the properties to set for the `style` attribute, or `null` to remove it
-   * @return {(Element|Object<string>)} `this` if setting the style, else the value of the style as an object
-   */
-  styleObj(style_obj) {
-    if (style_obj !== undefined) {
-      if (style_obj !== null) {
-        let css_string = ''
-        for (let i in style_obj) {
-          css_string += `${i}:${style_obj[i]};`
-        }
-        return this.attr('style', css_string)
-      } else return this.attr('style', null)
-    } else {
-      let css_object = {}
-      ;(this.attr('style') || '').split(';').map((rule) => rule.split(':')).forEach(function (rule_arr) {
-        // rule_arr[0] == css property
-        // rule_arr[1] == css value
-        if (rule_arr[0] && rule_arr[1]) css_object[rule_arr[0]] = rule_arr[1]
-      })
-      return css_object
-    }
-  }
-
-  /**
-   * Append to this element’s `style` attribute.
-   * @param {string} style_str the style(s) to add, as valid CSS
+   * Append to this element’s `style` attribute,
+   * overwriting duplicate CSS properties.
+   *
+   * Examples:
+   * ```
+   * my_elem.addStyle('background:none; font-weight:bold;')      // add to the [style] attribute
+   * my_elem.addStyle({background:'none', 'font-weight':'bold'}) // add to the [style] attribute
+   * my_elem.addStyle()                                          // do nothing; return `this`
+   * ```
+   *
+   * @param {(Object<string>|string)=} arg the style(s) to add, as valid CSS
    * @return {Element} `this`
    */
-  addStyle(style_str) {
-    return this.style(`${this.style() || ''}; ${style_str}`)
-  }
-
-  /**
-   * Append to this element’s `style` attribute, using an object as an argument.
-   * @param {Object<string>} style_obj the style(s) to add, as an object
-   * @return {Element} `this`
-   */
-  addStyleObj(style_obj) {
-    return this.addStyle(new Element('html').styleObj(style_obj).style())
-    // alternate implementation:
-    Object.assign(this.styleObj(), style_obj)
-    return this
-    // even another implementation, if you prefer a "pure" (nondestructive) function:
-    return this.styleObj(Object.assign({}, this.styleObj(), style_obj))
+  addStyle(arg = '') {
+    if (arg === '') return this
+    return ({
+      object: () => this.style(Object.assign({}, this.style([]), arg)),
+      string: () => this.addStyle(new Element._Style(arg).toObject()) ,
+    })[Util.Object.typeOf(arg)]()
   }
 
   /**
    * Remove a single CSS rule from this element’s `style` attribute.
-   * @param  {string} cssprop single CSS property name
+   * @param  {string=} cssprop single CSS property name
    * @return {Element} `this`
    */
-  removeStyleProp(cssprop) {
-    delete this.styleObj()[cssprop]
-    return this
+  removeStyleProp(cssprop = '') {
+    let css_obj = this.style([])
+    delete css_obj[cssprop]
+    return this.style(css_obj)
   }
 
   /**
@@ -291,8 +336,11 @@ module.exports = class Element {
    * Mark up data using an HTML element.
    * NOTE: recursive function.
    *
+   * First and foremost, if the argument is an `Element` object, then this function returns
+   * that object’s `.html()` value (with any added attributes specified by the options below).
+   * Otherwise,
    * If the argument is an array, then a `<ul>` element is returned, with `<li>` items.
-   * If the argument is a (non-array, non-function) object, then a `<dl>` element is returned, with
+   * If the argument is a (non-array, non-function) object—even an Element object—then a `<dl>` element is returned, with
    * `<dt>` keys and `<dd>` values.
    * Then, each `<li>`, `<dt>`, and `<dd>` contains the result of this function called on that respective datum.
    * If the argument is not an object (or is a function), then it is converted to a string and returned.
@@ -302,20 +350,36 @@ module.exports = class Element {
    * ```js
    * let options = {
    *   ordered: true,
-   *   classes: {
-   *     list:  'o-List',
-   *     value: 'o-List__Item o-List__Value',
-   *     key:   `o-List__Key ${(true) ? 'truthy' : 'falsy' }`,
-   *   },
    *   attributes: {
-   *     list:  { itemscope: '', itemtype: 'Event'},
-   *     value: { itemprop: ((true) ? 'startTime' : 'endTime') },
-   *     key:   { itemprop: `${(true) ? 'name' : 'headline'}` },
+   *     list:  { class: 'o-List', itemscope: '', itemtype: 'Event'},
+   *     value: { class: 'o-List__Item o-List__Value', itemprop: ((true) ? 'startTime' : 'endTime') },
+   *     key:   { class: `o-List__Key ${(true) ? 'truthy' : 'falsy' }`, itemprop: `${(true) ? 'name' : 'headline'}` },
    *   },
    *   options: {
    *     ordered: false,
    *   },
    * }
+   * ```
+   *
+   * If an Element object is given, that element’s specific attributes take precedence,
+   * overwriting those given by the options, with the exception of `[class]` and `[style]`:
+   * these attributes are added to those in the options.
+   * ```js
+   * Element.data(new Element('a').class('c-Link--mod').style({
+   *   color: 'blue',
+   *   'text-decoration': 'none',
+   * }).attr('rel','external'), {
+   *   attributes: { list: {
+   *     class: 'c-Link',
+   *     style: 'background: pink; text-decoration: underline;',
+   *     href : '//eg.com',
+   *     rel  : 'nofollow',
+   *   } }
+   * })
+   * // returns `<a
+   * //   class="c-Link c-Link--mod"
+   * //   style="background:pink;text-decoration:none;color:blue"
+   * //   rel="external" href="//eg.com"></a>`
    * ```
    *
    * This is the formal schema for the `options` parameter:
@@ -340,19 +404,9 @@ module.exports = class Element {
    *       "type": "boolean",
    *       "description": "if the argument is an array, specify `true` to output an <ol> instead of a <ul>"
    *     },
-   *     "classes": {
-   *       "type": "object",
-   *       "description": "an object with string values, describing how to render the output elements’ classes",
-   *       "additionalProperties": false,
-   *       "properties": {
-   *         "list" : { "type": "string", "description": "string of space-separated tokens for the `[class]` attribute of the list (<ul>, <ol>, or <dl>)" },
-   *         "value": { "type": "string", "description": "string of space-separated tokens for the `[class]` attribute of the item or value (<li> or <dd>)" },
-   *         "key"  : { "type": "string", "description": "string of space-separated tokens for the `[class]` attribute of the key (<dt>)" }
-   *       }
-   *     },
    *     "attributes": {
    *       "type": "object",
-   *       "description": "an object, with object or string values, describing how to render the output elements’ attributes",
+   *       "description": "describes how to render the output elements’ attributes",
    *       "additionalProperties": false,
    *       "properties": {
    *         "list" : { "allOf": [{ "$ref": "#/definitions/{Object<string>}" }], "description": "attributes of the list (<ul>, <ol>, or <dl>)" },
@@ -362,52 +416,130 @@ module.exports = class Element {
    *     },
    *     "options": {
    *       "allOf": [{ "$ref": "#" }],
-   *       "description": "configurations for nested items/keys/values; identical specs as param `options`"
+   *       "description": "configurations for nested items/keys/values"
    *     }
    *   }
    * }
    * ```
    *
    * @param  {*} thing the data to mark up
-   * @param  {Object} options configurations for the output
-   * @param  {boolean} options.ordered if the argument is an array, specify `true` to output an <ol> instead of a <ul>
-   * @param  {Object<string>} options.classes an object with string values, describing how to render the output elements’ classes
-   * @param  {string} options.classes.list  string of space-separated tokens for the `[class]` attribute of the list (<ul>, <ol>, or <dl>)
-   * @param  {string} options.classes.value string of space-separated tokens for the `[class]` attribute of the item or value (<li> or <dd>)
-   * @param  {string} options.classes.key   string of space-separated tokens for the `[class]` attribute of the key (<dt>)
-   * @param  {Object<Object<string>>} options.attributes an object, with object or string values, describing how to render the output elements’ attributes
-   * @param  {(Object<string>)} options.attributes.list  attributes of the list (<ul>, <ol>, or <dl>)
-   * @param  {(Object<string>)} options.attributes.value attributes of the item or value (<li> or <dd>)
-   * @param  {(Object<string>)} options.attributes.key   attributes of the key (<dt>)
-   * @param  {Object} options.options configurations for nested items/keys/values; identical specs as param `options`
+   * @param  {Object=} options configurations for the output
+   * @param  {boolean=} options.ordered if the argument is an array, specify `true` to output an <ol> instead of a <ul>
+   * @param  {Object<Object<string>>=} options.attributes describes how to render the output elements’ attributes
+   * @param  {Object<string>=} options.attributes.list  attributes of the list (<ul>, <ol>, or <dl>)
+   * @param  {Object<string>=} options.attributes.value attributes of the item or value (<li> or <dd>)
+   * @param  {Object<string>=} options.attributes.key   attributes of the key (<dt>)
+   * @param  {Object=} options.options configurations for nested items/keys/values
    * @return {string} the argument rendered as an HTML element
    */
   static data(thing, options = {}) {
-    let class_list = (options.classes && options.classes.list)  || ''
-    let class_val  = (options.classes && options.classes.value) || ''
-    let class_key  = (options.classes && options.classes.key)   || ''
-    let attr_list = (options.attributes && options.attributes.list)  || {}
-    let attr_val  = (options.attributes && options.attributes.value) || {}
-    let attr_key  = (options.attributes && options.attributes.key)   || {}
-    let options_val = options.options || {}
-
-    if (Util.Object.typeOf(thing) === 'object') {
-      let returned = new Element('dl').class(class_list).attrObj(attr_list)
-      for (let i in thing) {
-        returned.addElements([
-          new Element('dt').class(class_key).attrs(attr_key).addContent(i),
-          new Element('dd').class(class_val).attrs(attr_val).addContent(Element.data(thing[i], options_val)),
-        ])
+    /**
+     * Configuration attributes for elements.
+     * Avoids TypeErrors (cannot read property of undefined).
+     * @type {Object<Object<string>=>}
+     */
+    let attr = {
+      list: options.attributes && options.attributes.list,
+      val : options.attributes && options.attributes.value,
+      key : options.attributes && options.attributes.key,
+    }
+    if (Util.Object.typeOf(thing) !== 'object' && Util.Object.typeOf(thing) !== 'array') return thing.toString()
+    if (thing instanceof Element) {
+      for (let i in attr.list) {
+        if (i !== 'class' && i !== 'style' && !thing.attr(i)) thing.attr(i, attr.list[i])
       }
-      return returned
-    } else if (Util.Object.typeOf(thing) === 'array') {
-      let returned = new Element((options.ordered) ? 'ol' : 'ul').class(class_list).attrObj(attr_list)
-      thing.forEach(function (el) {
-        returned.addElements([
-          new Element('li').class(class_val).attrObj(attr_val).addContent(Element.data(el, options_val))
-        ])
+      return thing
+        .class(`${attr.list && attr.list.class || ''} ${thing.class() || ''}`)
+        .style(`${attr.list && attr.list.style}; ${thing.style()}`)
+        .html()
+    }
+    return ({
+      object: () => {
+        let out = new Element('dl').attrObj(attr.list)
+        for (let i in thing) {
+          out.addElements([
+            new Element('dt').attrObj(attr.key).addContent(i),
+            new Element('dd').attrObj(attr.val).addContent(Element.data(thing[i], options.options)),
+          ])
+        }
+        return out.html()
+      },
+      array: () =>
+        new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr.list)
+          .addElements(thing.map((el) =>
+            new Element('li').attrObj(attr.val).addContent(Element.data(el, options.options))
+          ))
+          .html(),
+    })[Util.Object.typeOf(thing)]()
+  }
+}
+
+class Style {
+  /**
+   * Construct a new Style object.
+   * @param {(Object<string>|string)=} rules the object or string containing css property-value pairs
+   */
+  constructor(rules = {}) {
+    let css_object = rules
+    if (Util.Object.typeOf(rules) === 'string') {
+      css_object = {}
+      rules.split(';').map((r) => r.split(':')).forEach(function (rule_arr) {
+        rule_arr[0] = rule_arr[0] && rule_arr[0].trim() // css property
+        rule_arr[1] = rule_arr[1] && rule_arr[1].trim() // css value
+        if (rule_arr[0] && rule_arr[1]) css_object[rule_arr[0]] = rule_arr[1]
       })
-      return returned
-    } else return thing.toString()
+    }
+    /** @private */ this._obj = css_object
+  }
+
+  /**
+   * Set a CSS property, or override one if it exists.
+   * The argument for the value must be a string.
+   * @param {string} property the property to set
+   * @param {string} value the value to set
+   * @return {Style} `this`
+   */
+  set(property, value) {
+    this._obj[property] = value
+    return this
+  }
+
+  /**
+   * Get the value of the given CSS property, or `undefined` if it does not exist.
+   * @param  {string} property the property to get
+   * @return {string=} the value of the specified property
+   */
+  get(property) {
+    return this._obj[property]
+  }
+
+  /**
+   * Convert this style into a string.
+   * @return {string} a valid CSS string containing property-value pairs.
+   */
+  toString() {
+    let css_string = ''
+    for (let i in this._obj) {
+      css_string += `${i}:${this._obj[i]};`
+    }
+    return css_string
+  }
+
+  /**
+   * Return a shallow clone of this style’s CSS object.
+   * The returned value may be modified without affecting this object.
+   * Example:
+   * ```js
+   * let a = new Style({ 'font-weight': 'bold' })
+   * let obj = a.toObject
+   * obj['font-style'] = 'italic'
+   * let b = new Style(obj)
+   * a.toString() // 'font-weight:bold;'
+   * b.toString() // 'font-weight:bold;font-style:italic;'
+   * ```
+   * @return {Object<string>} a shallow clone of `this._obj`
+   */
+  toObject() {
+    return Object.assign({}, this._obj)
   }
 }

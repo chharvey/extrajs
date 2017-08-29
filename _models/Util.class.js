@@ -19,17 +19,18 @@ const OBJ = class {
    */
   static typeOf(thing) {
     let type = typeof thing
-    if (type === 'object') {
+    switch (type) {
+      case 'object':
       if (thing === null)       return 'null'
       if (Array.isArray(thing)) return 'array'
       return type // 'object'
-    }
-    if (type === 'number') {
+      case 'number':
       if (Number.isNaN(thing))     return 'NaN'
       if (!Number.isFinite(thing)) return 'infinite'
       return type // 'number'
-    }
+      default:
     return type // 'undefined', 'boolean', 'string', 'function'
+    }
   }
 
   /**
@@ -57,14 +58,17 @@ const OBJ = class {
    */
   static freezeDeep(thing) {
     Object.freeze(thing)
-    if (OBJ.typeOf(thing) === 'array') {
+    switch (OBJ.typeOf(thing)) {
+      case 'array':
       for (let val of thing) {
         if (!Object.isFrozen(val)) OBJ.freezeDeep(val)
       }
-    } else if (OBJ.typeOf(thing) === 'object') {
+      break;
+      case 'object':
       for (let key in thing) {
         if (!Object.isFrozen(thing[key])) OBJ.freezeDeep(thing[key])
       }
+      break;
     }
     return thing
   }
@@ -121,17 +125,20 @@ const OBJ = class {
    */
   static cloneDeep(thing) {
     let result;
-    if (OBJ.typeOf(thing) === 'array') {
+    switch (OBJ.typeOf(thing)) {
+      case 'array':
       result = []
       for (let val of thing) {
         result.push(OBJ.cloneDeep(val))
       }
-    } else if (OBJ.typeOf(thing) === 'object') {
+      break;
+      case 'object':
       result = {}
       for (let key in thing) {
         result[key] = OBJ.cloneDeep(thing[key])
       }
-    } else {
+      break;
+      default:
       result = thing
     }
     return result
@@ -173,15 +180,16 @@ const ARR = class {
    * @return {Array} an array
    */
   static toArray(arg, database={}) {
-    if (Util.Object.typeOf(arg) === 'array') {
+    switch (Util.Object.typeOf(arg)) {
+      case 'array':
       return arg
-    } else if (Util.Object.typeOf(arg) === 'number') {
+      case 'number':
       let array = []
       for (let n = 1; n <= arg; n++) { array.push(n) }
       return array
-    } else if (Util.Object.typeOf(arg) === 'string') {
+      case 'string':
       return Util.Array.toArray(database[arg], database)
-    } else {
+      default:
       return []
     }
   }
@@ -258,6 +266,7 @@ const DTE = class {
    * FORMATS['j M'      ](new Date()) // returns '5 Aug'
    * FORMATS['M Y'      ](new Date()) // returns 'Aug 2017'
    * FORMATS['M j'      ](new Date()) // returns 'Aug 5'
+   * FORMATS['M j, Y'   ](new Date()) // returns 'Aug 5, 2017'
    * FORMATS['M'        ](new Date()) // returns 'Aug'
    * FORMATS['H:i'      ](new Date()) // returns '21:33'
    * FORMATS['g:ia'     ](new Date()) // returns '9:33pm'
@@ -279,6 +288,7 @@ const DTE = class {
       'j M'      : (date) => `${date.getUTCDate()} ${Util.Date.MONTH_NAMES[date.getUTCMonth()].slice(0,3)}`,
       'M Y'      : (date) => `${Util.Date.MONTH_NAMES[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
       'M j'      : (date) => `${Util.Date.MONTH_NAMES[date.getUTCMonth()].slice(0,3)} ${date.getUTCDate()}`,
+      'M j, Y'   : (date) => `${Util.Date.MONTH_NAMES[date.getUTCMonth()].slice(0,3)} ${date.getUTCDate()}, ${date.getFullYear()}`,
       'M'        : (date) => `${Util.Date.MONTH_NAMES[date.getUTCMonth()].slice(0,3)}`,
       'H:i'      : (date) => `${(date.getHours() < 10) ? '0' : ''}${date.getHours()}:${(date.getMinutes() < 10) ? '0' : ''}${date.getMinutes()}`,
       'g:ia'     : (date) => `${(date.getHours() - 1)%12 + 1}:${(date.getMinutes() < 10) ? '0' : ''}${date.getMinutes()}${(date.getHours() < 12) ? 'am' : 'pm'}`,
