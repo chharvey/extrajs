@@ -7,12 +7,35 @@ var Util = require('./Util.class.js')
 module.exports = class Element {
   /**
    * Construct a new Element object.
+   *
+   * By default, the parameter `is_void` is true for “Void Elements” as in
+   * the HTML specification (and thus the argument need not be explicilty provided).
+   * Otherwise, `is_void` is false by default, unless explicitly specified.
+   *
+   * @see https://www.w3.org/TR/html/syntax.html#void-elements
    * @param {string} name the immutable name of the tag
    * @param {boolean=} is_void `true` if this element is void (has no closing tag)
    */
   constructor(name, is_void = false) {
     /** @private @final */ this._NAME = name
-    /** @private @final */ this._VOID = is_void
+    /** @private @final */ this._VOID = is_void || [
+      'area',
+      'base',
+      'br',
+      'col',
+      'embed',
+      'hr',
+      'img',
+      'input',
+      'keygen',
+      'link',
+      'menuitem',
+      'meta',
+      'param',
+      'source',
+      'track',
+      'wbr',
+    ].includes(name)
 
     /**
      * All the HTML attributes of this element.
