@@ -17,7 +17,6 @@ module.exports = class ARRAY {
    */
   static is(arr1, arr2) {
     if (Object.is(arr1, arr2)) return true
-    if (OBJECT.typeOf(arr1) !== 'array' || OBJECT.typeOf(arr2) !== 'array') return false
     if (arr1.length !== arr2.length) return false
     let returned = true
     for (let i = 0; (i < arr1.length && returned === true); i++) {

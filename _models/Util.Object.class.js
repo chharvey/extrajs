@@ -49,37 +49,37 @@ module.exports = class OBJECT {
   }
 
   /**
-   * Test whether two objects are “the same”,
+   * Test whether two things are “the same”,
    * using this function recursively on corresponding object values.
    * The base case for non-object values is `Object.is()`.
    *
    * “The same” means “replaceable”, that is,
-   * for any deterministic function: `fn(obj1)` would return the same result as `fn(obj2)` if and only if
-   * `Util.Object.is(obj1, obj2)`.
+   * for any deterministic function: `fn(a)` would return the same result as `fn(b)` if and only if
+   * `Util.Object.is(a, b)`.
    *
    * This function is less strict than `Object.is()`.
    * If both arguments are arrays, it is faster to use {@link Util.Array.is()}.
    *
    * NOTE: WARNING: recursive function. infinite loop possible.
    *
-   * @param  {Object}  obj1 the first object
-   * @param  {Object}  obj2 the second object
+   * @param  {*} a the first  thing
+   * @param  {*} b the second thing
    * @return {boolean} `true` if corresponding elements are the same, or replaceable
    */
-  static is(obj1, obj2) {
+  static is(a, b) {
     var ARRAY = require('./Util.Array.class.js')
-    if (Object.is(obj1, obj2) || ARRAY.is(obj1, obj2)) return true
-    if (OBJECT.typeOf(obj1) !== 'object' || OBJECT.typeOf(obj2) !== 'object') return false
-    if (Object.getOwnPropertyNames(obj1).length !== Object.getOwnPropertyNames(obj2).length) return false
+    if (Object.is(a, b) || ARRAY.is(a, b)) return true
+    if (OBJECT.typeOf(a) !== 'object' || OBJECT.typeOf(b) !== 'object') return false // not parameter validation; but speedy return
+    if (Object.getOwnPropertyNames(a).length !== Object.getOwnPropertyNames(b).length) return false
     if (
-      Object.getOwnPropertyNames(obj1).some((key) => !Object.getOwnPropertyNames(obj2).includes(key))
+      Object.getOwnPropertyNames(a).some((key) => !Object.getOwnPropertyNames(b).includes(key))
       ||
-      Object.getOwnPropertyNames(obj2).some((key) => !Object.getOwnPropertyNames(obj1).includes(key))
+      Object.getOwnPropertyNames(b).some((key) => !Object.getOwnPropertyNames(a).includes(key))
     ) return false
     let returned = true
-    for (let i in obj1) {
-      // returned &&= OBJECT.is(obj1[i], obj2[i]) // IDEA
-      returned = returned && OBJECT.is(obj1[i], obj2[i])
+    for (let i in a) {
+      // returned &&= OBJECT.is(a[i], b[i]) // IDEA
+      returned = returned && OBJECT.is(a[i], b[i])
     }
     return returned
   }
