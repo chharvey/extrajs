@@ -281,7 +281,7 @@ const DTE = class {
      */
     function leadingZero(n) { return `${(n < 10) ? '0' : ''}${n}` }
     return {
-      'Y-m-d'    : (date) => `${date.getFullYear()}-${date.getUTCMonth()+1}-${leadingZero(date.getUTCDate())}`,
+      'Y-m-d'    : (date) => `${date.getFullYear()}-${leadingZero(date.getUTCMonth()+1)}-${leadingZero(date.getUTCDate())}`,
       'j M Y'    : (date) => `${date.getUTCDate()} ${Util.Date.MONTH_NAMES[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
       'd F Y'    : (date) => `${leadingZero(date.getUTCDate())} ${Util.Date.MONTH_NAMES[date.getUTCMonth()]} ${date.getFullYear()}`,
       'l, j F, Y': (date) => `${Util.Date.DAY_NAMES[date.getUTCDay()]}, ${date.getUTCDate()} ${Util.Date.MONTH_NAMES[date.getUTCMonth()]}, ${date.getFullYear()}`,
