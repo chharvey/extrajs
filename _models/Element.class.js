@@ -50,11 +50,10 @@ module.exports = class Element {
   /**
    * Represents a set of CSS rules for an element.
    * Private class for internal computations.
-   * @see Style
    * @private
    * @type {class}
    */
-  static get _Style() { return Style }
+  static get _Style() { return STYLE }
 
 
 
@@ -474,7 +473,7 @@ module.exports = class Element {
   }
 }
 
-class Style {
+const STYLE = class {
   /**
    * Construct a new Style object.
    * @param {(Object<string>|string)=} rules the object or string containing css property-value pairs
