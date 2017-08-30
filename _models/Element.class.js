@@ -63,21 +63,20 @@ module.exports = class Element {
    * @return {string} string containing key-value pairs
    */
   _attributeString() {
-    let out = ''
+    let returned = ''
     for (let i in this._attributes) {
-      if (this._attributes[i]!==undefined) out += ` ${i}="${this._attributes[i]}"`
+      if (this._attributes[i]!==undefined) returned += ` ${i}="${this._attributes[i]}"`
     }
-    return out
+    return returned
   }
 
   /**
    * Represents a set of CSS rules for an element.
    * Private class for internal computations.
-   * @see Style
    * @private
    * @type {class}
    */
-  static get _Style() { return Style }
+  static get _Style() { return STYLE }
 
 
 
@@ -477,14 +476,14 @@ module.exports = class Element {
     }
     return ({
       object: () => {
-        let out = new Element('dl').attrObj(attr.list)
+        let returned = new Element('dl').attrObj(attr.list)
         for (let i in thing) {
-          out.addElements([
+          returned.addElements([
             new Element('dt').attrObj(attr.key).addContent(i),
             new Element('dd').attrObj(attr.val).addContent(Element.data(thing[i], options.options)),
           ])
         }
-        return out.html()
+        return returned.html()
       },
       array: () =>
         new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr.list)
@@ -496,7 +495,7 @@ module.exports = class Element {
   }
 }
 
-class Style {
+const STYLE = class {
   /**
    * Construct a new Style object.
    * @param {(Object<string>|string)=} rules the object or string containing css property-value pairs

@@ -64,7 +64,7 @@ module.exports = class DATE {
      */
     function leadingZero(n) { return `${(n < 10) ? '0' : ''}${n}` }
     return {
-      'Y-m-d'    : (date) => `${date.getFullYear()}-${date.getUTCMonth()+1}-${leadingZero(date.getUTCDate())}`,
+      'Y-m-d'    : (date) => `${date.getFullYear()}-${leadingZero(date.getUTCMonth()+1)}-${leadingZero(date.getUTCDate())}`,
       'j M Y'    : (date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
       'd F Y'    : (date) => `${leadingZero(date.getUTCDate())} ${MONTHS[date.getUTCMonth()]} ${date.getFullYear()}`,
       'l, j F, Y': (date) => `${DATE.DAY_NAMES[date.getUTCDay()]}, ${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}, ${date.getFullYear()}`,
