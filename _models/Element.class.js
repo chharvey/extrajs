@@ -40,11 +40,11 @@ module.exports = class Element {
    * @return {string} string containing key-value pairs
    */
   _attributeString() {
-    let out = ''
+    let returned = ''
     for (let i in this._attributes) {
-      if (this._attributes[i]!==undefined) out += ` ${i}="${this._attributes[i]}"`
+      if (this._attributes[i]!==undefined) returned += ` ${i}="${this._attributes[i]}"`
     }
-    return out
+    return returned
   }
 
   /**
@@ -454,14 +454,14 @@ module.exports = class Element {
     }
     return ({
       object: () => {
-        let out = new Element('dl').attrObj(attr.list)
+        let returned = new Element('dl').attrObj(attr.list)
         for (let i in thing) {
-          out.addElements([
+          returned.addElements([
             new Element('dt').attrObj(attr.key).addContent(i),
             new Element('dd').attrObj(attr.val).addContent(Element.data(thing[i], options.options)),
           ])
         }
-        return out.html()
+        return returned.html()
       },
       array: () =>
         new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr.list)
