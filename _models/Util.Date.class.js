@@ -37,25 +37,25 @@ module.exports = class DATE {
   }
 
   /**
-   * Date formatting functions.
-   *
-   * Readable examples:
-   * ```
-   * FORMATS['Y-m-d'    ](new Date()) // returns '2017-08-05'
-   * FORMATS['j M Y'    ](new Date()) // returns '5 Aug 2017'
-   * FORMATS['d F Y'    ](new Date()) // returns '05 August 2017'
-   * FORMATS['l, j F, Y'](new Date()) // returns 'Friday, 5 August, 2017'
-   * FORMATS['j M'      ](new Date()) // returns '5 Aug'
-   * FORMATS['M Y'      ](new Date()) // returns 'Aug 2017'
-   * FORMATS['M j'      ](new Date()) // returns 'Aug 5'
-   * FORMATS['M j, Y'   ](new Date()) // returns 'Aug 5, 2017'
-   * FORMATS['M'        ](new Date()) // returns 'Aug'
-   * FORMATS['H:i'      ](new Date()) // returns '21:33'
-   * FORMATS['g:ia'     ](new Date()) // returns '9:33pm'
-   * ```
-   * @type {Object<function(Date):string>}
+   * Format a date, using PHP-based formatting options.
+   * The following options are supported (with examples):
+   * - 'Y-m-d'     : '2017-08-05'
+   * - 'j M Y'     : '5 Aug 2017'
+   * - 'd F Y'     : '05 August 2017'
+   * - 'l, j F, Y' : 'Friday, 5 August, 2017'
+   * - 'j M'       : '5 Aug'
+   * - 'M Y'       : 'Aug 2017'
+   * - 'M j'       : 'Aug 5'
+   * - 'M j, Y'    : 'Aug 5, 2017'
+   * - 'M'         : 'Aug'
+   * - 'H:i'       : '21:33'
+   * - 'g:ia'      : '9:33pm'
+   * @see http://php.net/manual/en/function.date.php
+   * @param  {Date} date the date to format
+   * @param  {string} format one of the enumerated options listed in the description
+   * @return {string} a string representing the given date in the given format
    */
-  static get FORMATS() {
+  static format(date, format) {
     const MONTHS = DATE.MONTH_NAMES
     /**
      * Convert a positive number to a string, adding a leading zero if and only if it is less than 10.
@@ -63,7 +63,7 @@ module.exports = class DATE {
      * @return {string} that number as a string, possibly prepended with '0'
      */
     function leadingZero(n) { return `${(n < 10) ? '0' : ''}${n}` }
-    return {
+    return ({
       'Y-m-d'    : (date) => `${date.getFullYear()}-${leadingZero(date.getUTCMonth()+1)}-${leadingZero(date.getUTCDate())}`,
       'j M Y'    : (date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
       'd F Y'    : (date) => `${leadingZero(date.getUTCDate())} ${MONTHS[date.getUTCMonth()]} ${date.getFullYear()}`,
@@ -75,6 +75,6 @@ module.exports = class DATE {
       'M'        : (date) => `${MONTHS[date.getUTCMonth()].slice(0,3)}`,
       'H:i'      : (date) => `${(date.getHours() < 10) ? '0' : ''}${date.getHours()}:${(date.getMinutes() < 10) ? '0' : ''}${date.getMinutes()}`,
       'g:ia'     : (date) => `${(date.getHours() - 1)%12 + 1}:${(date.getMinutes() < 10) ? '0' : ''}${date.getMinutes()}${(date.getHours() < 12) ? 'am' : 'pm'}`,
-    }
+    })[format](date)
   }
 }
