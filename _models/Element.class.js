@@ -336,10 +336,14 @@ module.exports = class Element {
 
   /**
    * Add elements as children of this element.
-   * @param {Array<Element>} elems array of Element objects to add
+   * @param {Array<?Element>} elems array of Element objects to add
    */
   addElements(elems) {
-    return this.addContent(elems.map((el) => el.html()).join(''))
+    return this.addContent(
+      elems
+        .filter((el) => el !== null)
+        .map((el) => el.html()).join('')
+    )
   }
 
   /**
