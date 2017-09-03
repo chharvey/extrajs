@@ -103,10 +103,21 @@ module.exports = class Element {
 
 
   /**
+   * NOTE: TYPE DEFINITION
+   * A type to provide as an argument for setting/removing an attribute.
+   * - {string}            - set the attribute to the string value
+   * - {function():string} - set the attribute to the result of calling the function on `this`
+   * - {null}              - remove the attribute altogether
+   * @type {?(string|function():string)} AttrValue
+   */
+  /**
    * Set or get an attribute of this element.
    *
    * If a key *and* value are provided, then the attribute name (the key)
    * will be created (or modified if it already exists), and it will be assigned the value given.
+   *
+   * The value, if provided, must be a string equal to the attribute value,
+   * or a function called on this element that returns a string.
    *
    * There is one exception: If a key *and* value are provided, and the value is the primitive `null`,
    * then the attribute is removed from this element.
@@ -121,9 +132,11 @@ module.exports = class Element {
    *
    * Examples:
    * ```
+   * my_elem.attr('itemtype', 'HTMLElement') // set the `itemtype` attribute
    * my_elem.attr('itemscope', '')  // set the boolean `itemscope` attribute
    * my_elem.attr('itemtype')       // get the value of the `itemtype` attribute (or `undefined` if it had not been set)
    * my_elem.attr('itemprop', null) // remove the `itemprop` attribute
+   * my_elem.attr('data-id', function () { return this.id() }) // set the `data-id` attribute equal to this element’s ID
    * ```
    *
    * This method can be chained, e.g.,
@@ -132,14 +145,23 @@ module.exports = class Element {
    * {@link Element.attrObj()|attrObj()} and {@link Element.attrStr()|attrStr()}.
    *
    * @param {string} key the name of the attribute to set or get
-   * @param {?*=} value the name of the value to set, or `null` to remove the attribute
+   * @param {AttrValue=} value the value to set, or `undefined` (or not provided) to get the value
    * @return {(Element|string=)} `this` if setting an attribute, else the value of the attribute specified
    *                             (or `undefined` if that attribute had not been set)
    */
   attr(key, value) {
-    if (value===undefined) return this._attributes[key]
-    if (value === null) delete this._attributes[key]
-    else                this._attributes[key] = `${value}`.trim()
+    if (value === undefined) return this._attributes[key]
+    switch (Util.Object.typeOf(value)) {
+      case 'null':
+        delete this._attributes[key]
+        break;
+      case 'function':
+        this._attributes[key] = value.call(this).trim()
+        break;
+      default:
+        this._attributes[key] = value.trim()
+        break;
+    }
     return this
   }
 
@@ -162,7 +184,7 @@ module.exports = class Element {
    * my_elem.attrObj() // do nothing; return `this`
    * ```
    *
-   * @param  {Object<?string>=} attr_obj the attributes object given
+   * @param  {Object<AttrValue>=} attr_obj the attributes object given
    * @return {Element} `this`
    */
   attrObj(attr_obj = {}) {
@@ -196,15 +218,16 @@ module.exports = class Element {
    * Examples:
    * ```
    * my_elem.id('section1') // set the [id] attribute
+   * my_elem.id(function () { return this.attr('data-id') }) // set the [id] attribute using a function
    * my_elem.id(null)       // remove the [id] attribute
    * my_elem.id()           // return the value of [id]
    * ```
    *
-   * @param  {?string=} id_str the value to set for the `id` attribute, or `null` to remove it
-   * @return {(Element|string)} `this` if setting the id, else the value of the id
+   * @param  {AttrValue=} id the value to set for the `id` attribute
+   * @return {(Element|string)} `this` if setting the ID, else the value of the ID
    */
-  id(id_str) {
-    return this.attr('id', id_str)
+  id(id) {
+    return this.attr('id', id)
   }
 
   /**
@@ -217,12 +240,12 @@ module.exports = class Element {
    * my_elem.class()                       // return the value of [class]
    * ```
    *
-   * @param  {?string=} class_str the value to set for the `class` attribute, or `null` to remove it
+   * @param  {AttrValue=} classs the value to set for the `class` attribute
    * @return {(Element|string)} `this` if setting the class, else the value of the class
    */
-  class(class_str) {
-    if (typeof class_str === 'string' && class_str.trim() === '') return this.class(null)
-    return this.attr('class', class_str)
+  class(classs) {
+    if (typeof classs === 'string' && classs.trim() === '') return this.class(null)
+    return this.attr('class', classs)
   }
 
   /**
@@ -271,12 +294,13 @@ module.exports = class Element {
    * ```
    * my_elem.style('background:none; font-weight:bold;')      // set the [style] attribute, with a string
    * my_elem.style({background:'none', 'font-weight':'bold'}) // set the [style] attribute, with an object
+   * my_elem.style(function () { return 'background:none; font-weight:bold;' }) // set the [style] attribute, with a function: the function must return a string
    * my_elem.style(null)                                      // remove the [style] attribute
    * my_elem.style()                                          // return the value of [style], as a string (or `undefined` if the attribute has not been set)
    * my_elem.style([])                                        // return the value of [style], as an object
    * ```
    *
-   * @param  {?(Object<string>|Array|string)=} arg the value to set for the `style` attribute, or `null` to remove it
+   * @param  {(AttrValue|Object<string>|Array)=} arg the value to set for the `style` attribute
    * @return {(Element|Object<string>|string=)} `this` if setting the style, else the value of the style
    */
   style(arg) {
@@ -285,6 +309,7 @@ module.exports = class Element {
     return ({
       object: () => this.attr('style', new Element._Style(arg).toString()),  // set the style with an object
       string: () => this.style(new Element._Style(arg).toObject()),          // set the style with a string
+      function: () => this.style(new Element._Style(arg.call(this)).toObject()), // set the style with a function
       array : () => new Element._Style(this.attr('style') || '').toObject(), // get the style as an object
     })[Util.Object.typeOf(arg)]()
   }
