@@ -111,46 +111,64 @@ module.exports = class Element {
    * @type {?(string|function():string)} AttrValue
    */
   /**
-   * Set or get an attribute of this element.
+   * Set or get attributes of this element.
    *
-   * If a key *and* value are provided, then the attribute name (the key)
-   * will be created (or modified if it already exists), and it will be assigned the value given.
+   * If a string key is provided, then it represents the attribute name to set, get, or remove.
+   * In this case if a non-null value is provided, the attribute will be created (or modified if it already exists),
+   * and it will be assigned the value given.
+   * The value must be a string equal to the attribute value,
+   * or a function called on this element that returns such a string.
    *
-   * The value, if provided, must be a string equal to the attribute value,
-   * or a function called on this element that returns a string.
+   * If a string key and `null` value are provided,
+   * then the attribute (identified by the key) is removed from this element.
    *
-   * There is one exception: If a key *and* value are provided, and the value is the primitive `null`,
-   * then the attribute is removed from this element.
-   * (Thus it is impossible to assign the primitive value `null` to an attribute.
-   * To approximate this, provide the string `'null'`.)
-   *
-   * If the attribute is a **boolean attribute** and is present, provide the empty string `''` as the value.
-   *
-   * If only a key is provided and the value is not provided, then this method will return
+   * If only a string key is provided and the value is not provided, then this method returns
    * the value of this element’s attribute named by the given key.
    * If no such attribute exists, `undefined` is returned.
    *
+   * If an *object* key is provided, then no value argument may be provided.
+   * The object must have values of the {@link Element.AttrValue} type;
+   * thus for each key-value pair in the object, this method assigns corresponding
+   * attributes. You may use this method with a single object argument to set and/or remove
+   * multiple attributes (using `null` to remove).
+   *
+   * If no key or value are provided, this method does nothing and returns `this`.
+   *
    * Examples:
    * ```
-   * my_elem.attr('itemtype', 'HTMLElement') // set the `itemtype` attribute
-   * my_elem.attr('itemscope', '')  // set the boolean `itemscope` attribute
-   * my_elem.attr('itemtype')       // get the value of the `itemtype` attribute (or `undefined` if it had not been set)
-   * my_elem.attr('itemprop', null) // remove the `itemprop` attribute
-   * my_elem.attr('data-id', function () { return this.id() }) // set the `data-id` attribute equal to this element’s ID
+   * my_elem.attr('itemtype', 'HTMLElement')                   // set the `[itemtype]` attribute
+   * my_elem.attr('itemscope', '')                             // set the boolean `[itemscope]` attribute
+   * my_elem.attr('itemtype')                                  // get the value of the `[itemtype]` attribute (or `undefined` if it had not been set)
+   * my_elem.attr('itemprop', null)                            // remove the `[itemprop]` attribute
+   * my_elem.attr('data-id', function () { return this.id() }) // set the `[data-id]` attribute equal to this element’s ID
+   * my_elem.attr({                                            // set/remove multiple attributes all at once
+   *   itemprop : 'name',
+   *   itemscope: '',
+   *   itemtype : 'Person',
+   *   'data-id': null, // remove the `[data-id]` attribute
+   * })
+   * my_elem.attrObj()                                         // do nothing; return `this`
    * ```
    *
-   * This method can be chained, e.g.,
-   * `my_elem.attr('itemscope', '').attr('itemtype').attr('itemprop', null)`.
-   * However, it may be simpler to use the methods
-   * {@link Element.attrObj()|attrObj()} and {@link Element.attrStr()|attrStr()}.
+   * Notes:
+   * - If the attribute is a **boolean attribute** and is present (such as [`checked=""`]), provide the empty string `''` as the value.
+   * - Since this method returns `this`, it can be chained, e.g.,
+   *   `my_elem.attr('itemscope', '').attr('itemtype','Thing').attr('itemprop', null)`.
+   *   However, it may be simpler to use an object argument:
+   *   `my_elem.attr({ itemscope:'', itemtype:'Thing', itemprop:null })`.
+   *   Note you can also use the method {@link Element#attrStr()|attrStr()}
+   *   if you have strings and are not removing any attributes:
+   *   `my_elem.attrStr('itemscope=""', 'itemtype="Thing"')`.
    *
-   * @param {string} key the name of the attribute to set or get
+   * @param {(string|Object<AttrValue>=)} key the name of the attribute to set or get; or if using an object, an AttrValue type
    * @param {AttrValue=} value the value to set, or `undefined` (or not provided) to get the value
    * @return {(Element|string=)} `this` if setting an attribute, else the value of the attribute specified
    *                             (or `undefined` if that attribute had not been set)
    */
-  attr(key, value) {
-    if (value === undefined) return this._attributes[key]
+  attr(key = '', value) {
+    if (Util.Object.typeOf(key) === 'object') {
+      return this.attrObj(key) // TODO remove #attrObj() method
+    }
     switch (Util.Object.typeOf(value)) {
       case 'null':
         delete this._attributes[key]
@@ -159,6 +177,8 @@ module.exports = class Element {
         this._attributes[key] = value.call(this).trim()
         break;
       default:
+        if (key.trim() === '') return this
+        if (value === undefined) return this._attributes[key]
         this._attributes[key] = value.trim()
         break;
     }
@@ -280,6 +300,7 @@ module.exports = class Element {
    * @return {Element} `this`
    */
   removeClass(classname = '') {
+    classname = classname.trim()
     if (classname === '') return this
     let classes = (this.class() || '').split(' ')
     let index = classes.indexOf(classname)
