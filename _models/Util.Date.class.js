@@ -50,6 +50,7 @@ module.exports = class DATE {
    * - 'M'         : 'Aug'
    * - 'H:i'       : '21:33'
    * - 'g:ia'      : '9:33pm'
+   * - 'default'   : '2017-08-06T01:33:00.000Z' (`date.toISOString()`)
    * @see http://php.net/manual/en/function.date.php
    * @param  {Date} date the date to format
    * @param  {string} format one of the enumerated options listed in the description
@@ -63,7 +64,7 @@ module.exports = class DATE {
      * @return {string} that number as a string, possibly prepended with '0'
      */
     function leadingZero(n) { return `${(n < 10) ? '0' : ''}${n}` }
-    return ({
+    let returned = {
       'Y-m-d'    : (date) => `${date.getFullYear()}-${leadingZero(date.getUTCMonth()+1)}-${leadingZero(date.getUTCDate())}`,
       'j M Y'    : (date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
       'd F Y'    : (date) => `${leadingZero(date.getUTCDate())} ${MONTHS[date.getUTCMonth()]} ${date.getFullYear()}`,
@@ -75,6 +76,8 @@ module.exports = class DATE {
       'M'        : (date) => `${MONTHS[date.getUTCMonth()].slice(0,3)}`,
       'H:i'      : (date) => `${(date.getHours() < 10) ? '0' : ''}${date.getHours()}:${(date.getMinutes() < 10) ? '0' : ''}${date.getMinutes()}`,
       'g:ia'     : (date) => `${(date.getHours() - 1)%12 + 1}:${(date.getMinutes() < 10) ? '0' : ''}${date.getMinutes()}${(date.getHours() < 12) ? 'am' : 'pm'}`,
-    })[format](date)
+      default    : (date) => date.toISOString(),
+    }
+    return (returned[format] || returned.default).call(null, date)
   }
 }

@@ -19,18 +19,22 @@ module.exports = class OBJECT {
    */
   static typeOf(thing) {
     let type = typeof thing
-    switch (type) {
-      case 'object':
+    let returned = {
+      object: function () {
         if (thing === null)       return 'null'
         if (Array.isArray(thing)) return 'array'
         return type // 'object'
-      case 'number':
+      },
+      number: function () {
         if (Number.isNaN(thing))     return 'NaN'
         if (!Number.isFinite(thing)) return 'infinite'
         return type // 'number'
-      default:
+      },
+      default: function () {
         return type // 'undefined', 'boolean', 'string', 'function'
+      },
     }
+    return (returned[type] || returned.default).call(null)
   }
 
   /**
@@ -94,18 +98,20 @@ module.exports = class OBJECT {
    */
   static freezeDeep(thing) {
     Object.freeze(thing)
-    switch (OBJECT.typeOf(thing)) {
-      case 'array':
-        for (let val of thing) {
+    let action = {
+      array: function () {
+        thing.forEach(function (val) {
           if (!Object.isFrozen(val)) OBJECT.freezeDeep(val)
-        }
-        break;
-      case 'object':
+        })
+      },
+      object: function () {
         for (let key in thing) {
           if (!Object.isFrozen(thing[key])) OBJECT.freezeDeep(thing[key])
         }
-        break;
+      },
+      default: function () {},
     }
+    ;(action[OBJECT.typeOf(thing)] || action.default).call(null)
     return thing
   }
 
@@ -160,23 +166,25 @@ module.exports = class OBJECT {
    * @return {*} an exact copy of the given value, but with nothing equal via `==` (unless the value given is primitive)
    */
   static cloneDeep(thing) {
-    let returned;
-    switch (OBJECT.typeOf(thing)) {
-      case 'array':
-        returned = []
-        for (let val of thing) {
-          result.push(OBJECT.cloneDeep(val))
-        }
-        break;
-      case 'object':
-        returned = {}
+    let returned = {
+      array: function () {
+        let returned = []
+        thing.forEach(function (val) {
+          returned.push(OBJECT.cloneDeep(val))
+        })
+        return returned
+      },
+      object: function () {
+        let returned = {}
         for (let key in thing) {
           returned[key] = OBJECT.cloneDeep(thing[key])
         }
-        break;
-      default:
-        returned = thing
+        return returned
+      },
+      default: function () {
+        return thing
+      },
     }
-    return returned
+    return (returned[OBJECT.typeOf(thing)] || returned.default).call(null)
   }
 }

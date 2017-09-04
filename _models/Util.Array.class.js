@@ -34,23 +34,28 @@ module.exports = class ARRAY {
    *   If the value of that property *is* a string, then *that* string is checked, and so on,
    *   until an array or number is found. If no entry is found, an empty array is returned.
    *   The default database is an empty object `{}`.
-   * @param  {(number|Array|string)} arg the argument to convert
+   * @param  {*} arg the argument to convert
    * @param  {!Object=} database a database to check against
    * @return {Array} an array
    */
   static toArray(arg, database = {}) {
-    switch (OBJECT.typeOf(arg)) {
-      case 'array':
+    let returned = {
+      array: function () {
         return arg
-      case 'number':
+      },
+      number: function () {
         let array = []
         for (let n = 1; n <= arg; n++) { array.push(n) }
         return array
-      case 'string':
+      },
+      string: function () {
         return ARRAY.toArray(database[arg], database)
-      default:
+      },
+      default: function () {
         return []
+      },
     }
+    return (returned[OBJECT.typeOf(arg)] || returned.default).call(null)
   }
 
   /**

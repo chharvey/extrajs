@@ -166,21 +166,21 @@ module.exports = class Element {
    *                             (or `undefined` if that attribute had not been set)
    */
   attr(key = '', value) {
-    if (Util.Object.typeOf(key) === 'object') {
-      return this.attrObj(key) // TODO remove #attrObj() method
-    }
-    switch (Util.Object.typeOf(value)) {
-      case 'null':
-        delete this._attributes[key]
+    // REVIEW: object lookups too complicated here; using standard switches
+    switch (Util.Object.typeOf(key)) {
+      case 'string':
+        if (key.trim() !== '') {
+          switch (Util.Object.typeOf(value)) {
+            case 'string'   : this._attributes[key] = value.trim(); break;
+            case 'function' : this._attributes[key] = value.call(this).trim(); break;
+            case 'null'     : delete this._attributes[key]; break;
+            case 'undefined': return this._attributes[key]; break;
+            default: throw new TypeError('Provided value must be a string, function, null, or undefined.')
+          }
+        }
         break;
-      case 'function':
-        this._attributes[key] = value.call(this).trim()
-        break;
-      default:
-        if (key.trim() === '') return this
-        if (value === undefined) return this._attributes[key]
-        this._attributes[key] = value.trim()
-        break;
+      case 'object': return this.attrObj(key) // TODO remove #attrObj() method
+      default      : throw new TypeError('Provided key must be a string or object.')
     }
     return this
   }
@@ -325,14 +325,18 @@ module.exports = class Element {
    * @return {(Element|Object<string>|string=)} `this` if setting the style, else the value of the style
    */
   style(arg) {
-    if (arg === undefined || arg === null) return this.attr('style', arg)
+    if (arg === undefined || arg === null) return this.attr('style', arg) // NOTE faster than object lookup
     if (Util.Object.is(arg, {}) || arg === '') return this.style(null)
-    return ({
-      object: () => this.attr('style', new Element._Style(arg).toString()),  // set the style with an object
-      string: () => this.style(new Element._Style(arg).toObject()),          // set the style with a string
-      function: () => this.style(new Element._Style(arg.call(this)).toObject()), // set the style with a function
-      array : () => new Element._Style(this.attr('style') || '').toObject(), // get the style as an object
-    })[Util.Object.typeOf(arg)]()
+    let returned = {
+      object   : function () { return this.attr('style', new Element._Style(arg).toString())    }, // set the style with an object
+      string   : function () { return this.style(new Element._Style(arg).toObject())            }, // set the style with a string
+      function : function () { return this.style(new Element._Style(arg.call(this)).toObject()) }, // set the style with a function
+      array    : function () { return new Element._Style(this.attr('style') || '').toObject()   }, // get the style as an object
+      // null     : function () { return this.attr('style', null     ) },                             // remove the style attribute
+      // undefined: function () { return this.attr('style', undefined) },                             // get the style as a string, or `undefined`
+      default  : function () { throw new TypeError('Provided argument must be a string, function, null, object, array, or undefined.') },
+    }
+    return (returned[Util.Object.typeOf(arg)] || returned.default).call(this)
   }
 
   /**
@@ -351,10 +355,12 @@ module.exports = class Element {
    */
   addStyle(arg = '') {
     if (arg === '') return this
-    return ({
-      object: () => this.style(Object.assign({}, this.style([]), arg)),
-      string: () => this.addStyle(new Element._Style(arg).toObject()) ,
-    })[Util.Object.typeOf(arg)]()
+    let returned = {
+      object : function () { return this.style(Object.assign({}, this.style([]), arg)) },
+      string : function () { return this.addStyle(new Element._Style(arg).toObject())  },
+      default: function () { throw new TypeError('Provided argument must be an object or string.') },
+    }
+    return (returned[Util.Object.typeOf(arg)] || returned.default).call(this)
   }
 
   /**
@@ -524,7 +530,9 @@ module.exports = class Element {
       val : options.attributes && options.attributes.value,
       key : options.attributes && options.attributes.key,
     }
-    if (Util.Object.typeOf(thing) !== 'object' && Util.Object.typeOf(thing) !== 'array') return thing.toString()
+    let returned = {
+      object: function () {
+        // REVIEW indentation
     if (thing instanceof Element) {
       for (let i in attr.list) {
         if (i !== 'class' && i !== 'style' && !thing.attr(i)) thing.attr(i, attr.list[i])
@@ -534,8 +542,6 @@ module.exports = class Element {
         .style(`${attr.list && attr.list.style}; ${thing.style()}`)
         .html()
     }
-    return ({
-      object: () => {
         let returned = new Element('dl').attrObj(attr.list)
         for (let i in thing) {
           returned.addElements([
@@ -545,13 +551,18 @@ module.exports = class Element {
         }
         return returned.html()
       },
-      array: () =>
-        new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr.list)
+      array: function () {
+        return new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr.list)
           .addElements(thing.map((el) =>
             new Element('li').attrObj(attr.val).addContent(Element.data(el, options.options))
           ))
-          .html(),
-    })[Util.Object.typeOf(thing)]()
+          .html()
+      },
+      default: function () {
+        return thing.toString()
+      },
+    }
+    return (returned[Util.Object.typeOf(thing)] || returned.default).call(null)
   }
 }
 
