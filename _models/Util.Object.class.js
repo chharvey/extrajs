@@ -72,7 +72,8 @@ module.exports = class OBJECT {
    */
   static is(a, b) {
     var ARRAY = require('./Util.Array.class.js')
-    if (Object.is(a, b) || ARRAY.is(a, b)) return true
+    if (Object.is(a, b)) return true
+    if (OBJECT.typeOf(a) === 'array' && OBJECT.typeOf(b) === 'array' && ARRAY.is(a, b)) return true
     if (OBJECT.typeOf(a) !== 'object' || OBJECT.typeOf(b) !== 'object') return false // not parameter validation; but speedy return
     if (Object.getOwnPropertyNames(a).length !== Object.getOwnPropertyNames(b).length) return false
     if (

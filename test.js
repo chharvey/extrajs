@@ -1,4 +1,5 @@
 var Util    = require('./index.js').Util
+var Element = require('./index.js').Element
 
 
 function util_Object_typeOf() {
@@ -75,6 +76,12 @@ function util_Object_typeOfNumber() {
   }
 }
 
+function util_Object_is() {
+  console.log(
+    Util.Object.is({ background: 'none', 'font-weight': 'bold' }, {})
+  )
+}
+
 function util_Date_format() {
   console.log([
     'Y-m-d'    ,
@@ -92,6 +99,20 @@ function util_Date_format() {
   ].map((f) => Util.Date.format(new Date(), f)))
 }
 
+function element_style() {
+  let x = new Element('span')
+
+  let str = 'background:none; font-weight:bold;'
+  let obj = {
+    background   : 'none',
+    'font-weight': 'bold',
+  }
+
+  console.log(x.style(str))
+}
+
 // util_Object_typeOf();
 // util_Object_typeOfNumber();
-util_Date_format();
+// util_Object_is();
+// util_Date_format();
+// element_style();
