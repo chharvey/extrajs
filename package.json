@@ -1,6 +1,6 @@
 {
   "name": "helpers-js",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Javascript helpers for lazy people.",
   "main": "index.js",
   "scripts": {
