@@ -7,12 +7,35 @@ var Util = require('./Util.class.js')
 module.exports = class Element {
   /**
    * Construct a new Element object.
+   *
+   * By default, the parameter `is_void` is true for “Void Elements” as in
+   * the HTML specification (and thus the argument need not be explicilty provided).
+   * Otherwise, `is_void` is false by default, unless explicitly specified.
+   *
+   * @see https://www.w3.org/TR/html/syntax.html#void-elements
    * @param {string} name the immutable name of the tag
    * @param {boolean=} is_void `true` if this element is void (has no closing tag)
    */
   constructor(name, is_void = false) {
     /** @private @final */ this._NAME = name
-    /** @private @final */ this._VOID = is_void
+    /** @private @final */ this._VOID = is_void || [
+      'area',
+      'base',
+      'br',
+      'col',
+      'embed',
+      'hr',
+      'img',
+      'input',
+      'keygen',
+      'link',
+      'menuitem',
+      'meta',
+      'param',
+      'source',
+      'track',
+      'wbr',
+    ].includes(name)
 
     /**
      * All the HTML attributes of this element.
@@ -40,21 +63,20 @@ module.exports = class Element {
    * @return {string} string containing key-value pairs
    */
   _attributeString() {
-    let out = ''
+    let returned = ''
     for (let i in this._attributes) {
-      if (this._attributes[i]!==undefined) out += ` ${i}="${this._attributes[i]}"`
+      if (this._attributes[i]!==undefined) returned += ` ${i}="${this._attributes[i]}"`
     }
-    return out
+    return returned
   }
 
   /**
    * Represents a set of CSS rules for an element.
    * Private class for internal computations.
-   * @see Style
    * @private
    * @type {class}
    */
-  static get _Style() { return Style }
+  static get _Style() { return STYLE }
 
 
 
@@ -81,43 +103,85 @@ module.exports = class Element {
 
 
   /**
-   * Set or get an attribute of this element.
+   * NOTE: TYPE DEFINITION
+   * A type to provide as an argument for setting/removing an attribute.
+   * - {string}            - set the attribute to the string value
+   * - {function():string} - set the attribute to the result of calling the function on `this`
+   * - {null}              - remove the attribute altogether
+   * @type {?(string|function():string)} AttrValue
+   */
+  /**
+   * Set or get attributes of this element.
    *
-   * If a key *and* value are provided, then the attribute name (the key)
-   * will be created (or modified if it already exists), and it will be assigned the value given.
+   * If a string key is provided, then it represents the attribute name to set, get, or remove.
+   * In this case if a non-null value is provided, the attribute will be created (or modified if it already exists),
+   * and it will be assigned the value given.
+   * The value must be a string equal to the attribute value,
+   * or a function called on this element that returns such a string.
    *
-   * There is one exception: If a key *and* value are provided, and the value is the primitive `null`,
-   * then the attribute is removed from this element.
-   * (Thus it is impossible to assign the primitive value `null` to an attribute.
-   * To approximate this, provide the string `'null'`.)
+   * If a string key and `null` value are provided,
+   * then the attribute (identified by the key) is removed from this element.
    *
-   * If the attribute is a **boolean attribute** and is present, provide the empty string `''` as the value.
-   *
-   * If only a key is provided and the value is not provided, then this method will return
+   * If only a string key is provided and the value is not provided, then this method returns
    * the value of this element’s attribute named by the given key.
    * If no such attribute exists, `undefined` is returned.
    *
+   * If an *object* key is provided, then no value argument may be provided.
+   * The object must have values of the {@link Element.AttrValue} type;
+   * thus for each key-value pair in the object, this method assigns corresponding
+   * attributes. You may use this method with a single object argument to set and/or remove
+   * multiple attributes (using `null` to remove).
+   *
+   * If no key or value are provided, this method does nothing and returns `this`.
+   *
    * Examples:
    * ```
-   * my_elem.attr('itemscope', '')  // set the boolean `itemscope` attribute
-   * my_elem.attr('itemtype')       // get the value of the `itemtype` attribute (or `undefined` if it had not been set)
-   * my_elem.attr('itemprop', null) // remove the `itemprop` attribute
+   * my_elem.attr('itemtype', 'HTMLElement')                   // set the `[itemtype]` attribute
+   * my_elem.attr('itemscope', '')                             // set the boolean `[itemscope]` attribute
+   * my_elem.attr('itemtype')                                  // get the value of the `[itemtype]` attribute (or `undefined` if it had not been set)
+   * my_elem.attr('itemprop', null)                            // remove the `[itemprop]` attribute
+   * my_elem.attr('data-id', function () { return this.id() }) // set the `[data-id]` attribute equal to this element’s ID
+   * my_elem.attr({                                            // set/remove multiple attributes all at once
+   *   itemprop : 'name',
+   *   itemscope: '',
+   *   itemtype : 'Person',
+   *   'data-id': null, // remove the `[data-id]` attribute
+   * })
+   * my_elem.attrObj()                                         // do nothing; return `this`
    * ```
    *
-   * This method can be chained, e.g.,
-   * `my_elem.attr('itemscope', '').attr('itemtype').attr('itemprop', null)`.
-   * However, it may be simpler to use the methods
-   * {@link Element.attrObj()|attrObj()} and {@link Element.attrStr()|attrStr()}.
+   * Notes:
+   * - If the attribute is a **boolean attribute** and is present (such as [`checked=""`]), provide the empty string `''` as the value.
+   * - Since this method returns `this`, it can be chained, e.g.,
+   *   `my_elem.attr('itemscope', '').attr('itemtype','Thing').attr('itemprop', null)`.
+   *   However, it may be simpler to use an object argument:
+   *   `my_elem.attr({ itemscope:'', itemtype:'Thing', itemprop:null })`.
+   *   Note you can also use the method {@link Element#attrStr()|attrStr()}
+   *   if you have strings and are not removing any attributes:
+   *   `my_elem.attrStr('itemscope=""', 'itemtype="Thing"')`.
    *
-   * @param {string} key the name of the attribute to set or get
-   * @param {?*=} value the name of the value to set, or `null` to remove the attribute
+   * @param {(string|Object<AttrValue>=)} key the name of the attribute to set or get; or if using an object, an AttrValue type
+   * @param {AttrValue=} value the value to set, or `undefined` (or not provided) to get the value
    * @return {(Element|string=)} `this` if setting an attribute, else the value of the attribute specified
    *                             (or `undefined` if that attribute had not been set)
    */
-  attr(key, value) {
-    if (value===undefined) return this._attributes[key]
-    if (value === null) delete this._attributes[key]
-    else                this._attributes[key] = `${value}`.trim()
+  attr(key = '', value) {
+    // REVIEW: object lookups too complicated here; using standard switches
+    switch (Util.Object.typeOf(key)) {
+      case 'string':
+        if (key.trim() !== '') {
+          switch (Util.Object.typeOf(value)) {
+            case 'string'   : this._attributes[key] = value.trim(); break;
+            case 'function' : this._attributes[key] = value.call(this).trim(); break;
+            case 'null'     : delete this._attributes[key]; break;
+            case 'undefined': return this._attributes[key]; break;
+            default: throw new TypeError('Provided value must be a string, function, null, or undefined.')
+          }
+        }
+        break;
+      case 'object': return this.attrObj(key) // TODO remove #attrObj() method
+      default      : throw new TypeError('Provided key must be a string or object.')
+    }
     return this
   }
 
@@ -140,7 +204,7 @@ module.exports = class Element {
    * my_elem.attrObj() // do nothing; return `this`
    * ```
    *
-   * @param  {Object<?string>=} attr_obj the attributes object given
+   * @param  {Object<AttrValue>=} attr_obj the attributes object given
    * @return {Element} `this`
    */
   attrObj(attr_obj = {}) {
@@ -174,15 +238,16 @@ module.exports = class Element {
    * Examples:
    * ```
    * my_elem.id('section1') // set the [id] attribute
+   * my_elem.id(function () { return this.attr('data-id') }) // set the [id] attribute using a function
    * my_elem.id(null)       // remove the [id] attribute
    * my_elem.id()           // return the value of [id]
    * ```
    *
-   * @param  {?string=} id_str the value to set for the `id` attribute, or `null` to remove it
-   * @return {(Element|string)} `this` if setting the id, else the value of the id
+   * @param  {AttrValue=} id the value to set for the `id` attribute
+   * @return {(Element|string)} `this` if setting the ID, else the value of the ID
    */
-  id(id_str) {
-    return this.attr('id', id_str)
+  id(id) {
+    return this.attr('id', id)
   }
 
   /**
@@ -195,12 +260,12 @@ module.exports = class Element {
    * my_elem.class()                       // return the value of [class]
    * ```
    *
-   * @param  {?string=} class_str the value to set for the `class` attribute, or `null` to remove it
+   * @param  {AttrValue=} classs the value to set for the `class` attribute
    * @return {(Element|string)} `this` if setting the class, else the value of the class
    */
-  class(class_str) {
-    if (typeof class_str === 'string' && class_str.trim() === '') return this.class(null)
-    return this.attr('class', class_str)
+  class(classs) {
+    if (typeof classs === 'string' && classs.trim() === '') return this.class(null)
+    return this.attr('class', classs)
   }
 
   /**
@@ -235,6 +300,7 @@ module.exports = class Element {
    * @return {Element} `this`
    */
   removeClass(classname = '') {
+    classname = classname.trim()
     if (classname === '') return this
     let classes = (this.class() || '').split(' ')
     let index = classes.indexOf(classname)
@@ -249,23 +315,28 @@ module.exports = class Element {
    * ```
    * my_elem.style('background:none; font-weight:bold;')      // set the [style] attribute, with a string
    * my_elem.style({background:'none', 'font-weight':'bold'}) // set the [style] attribute, with an object
+   * my_elem.style(function () { return 'background:none; font-weight:bold;' }) // set the [style] attribute, with a function: the function must return a string
    * my_elem.style(null)                                      // remove the [style] attribute
    * my_elem.style()                                          // return the value of [style], as a string (or `undefined` if the attribute has not been set)
    * my_elem.style([])                                        // return the value of [style], as an object
    * ```
    *
-   * @param  {?(Object<string>|Array|string)=} arg the value to set for the `style` attribute, or `null` to remove it
+   * @param  {(AttrValue|Object<string>|Array)=} arg the value to set for the `style` attribute
    * @return {(Element|Object<string>|string=)} `this` if setting the style, else the value of the style
    */
   style(arg) {
-    if (arg === undefined || arg === null) return this.attr('style', arg)
-    if (Object.getOwnPropertyNames(arg).length === 0 /* arg ≈≈ {} */ || arg === '') return this.style(null)
-    // if (Util.Object.is(arg, {}) || arg === '') return this.style(null)
-    return ({
-      object: () => this.attr('style', new Element._Style(arg).toString()),  // set the style with an object
-      string: () => this.style(new Element._Style(arg).toObject()),          // set the style with a string
-      array : () => new Element._Style(this.attr('style') || '').toObject(), // get the style as an object
-    })[Util.Object.typeOf(arg)]()
+    if (arg === undefined || arg === null) return this.attr('style', arg) // NOTE faster than object lookup
+    if (Util.Object.is(arg, {}) || arg === '') return this.style(null)
+    let returned = {
+      object   : function () { return this.attr('style', new Element._Style(arg).toString())    }, // set the style with an object
+      string   : function () { return this.style(new Element._Style(arg).toObject())            }, // set the style with a string
+      function : function () { return this.style(new Element._Style(arg.call(this)).toObject()) }, // set the style with a function
+      array    : function () { return new Element._Style(this.attr('style') || '').toObject()   }, // get the style as an object
+      // null     : function () { return this.attr('style', null     ) },                             // remove the style attribute
+      // undefined: function () { return this.attr('style', undefined) },                             // get the style as a string, or `undefined`
+      default  : function () { throw new TypeError('Provided argument must be a string, function, null, object, array, or undefined.') },
+    }
+    return (returned[Util.Object.typeOf(arg)] || returned.default).call(this)
   }
 
   /**
@@ -284,10 +355,12 @@ module.exports = class Element {
    */
   addStyle(arg = '') {
     if (arg === '') return this
-    return ({
-      object: () => this.style(Object.assign({}, this.style([]), arg)),
-      string: () => this.addStyle(new Element._Style(arg).toObject()) ,
-    })[Util.Object.typeOf(arg)]()
+    let returned = {
+      object : function () { return this.style(Object.assign({}, this.style([]), arg)) },
+      string : function () { return this.addStyle(new Element._Style(arg).toObject())  },
+      default: function () { throw new TypeError('Provided argument must be an object or string.') },
+    }
+    return (returned[Util.Object.typeOf(arg)] || returned.default).call(this)
   }
 
   /**
@@ -315,10 +388,14 @@ module.exports = class Element {
 
   /**
    * Add elements as children of this element.
-   * @param {Array<Element>} elems array of Element objects to add
+   * @param {Array<?Element>} elems array of Element objects to add
    */
   addElements(elems) {
-    return this.addContent(elems.map((el) => el.html()).join(''))
+    return this.addContent(
+      elems
+        .filter((el) => el !== null)
+        .map((el) => el.html()).join('')
+    )
   }
 
   /**
@@ -331,6 +408,16 @@ module.exports = class Element {
   }
 
 
+
+  /**
+   * Simple shortcut function to concatenate elements.
+   * This method calls `.html()` on each argument and concatenates the strings.
+   * @param  {Element} elements one or more elements to output
+   * @return {string} the combined HTML output of all the arguments
+   */
+  static concat(...elements) {
+    return elements.map((el) => el.html()).join('')
+  }
 
   /**
    * Mark up data using an HTML element.
@@ -443,7 +530,9 @@ module.exports = class Element {
       val : options.attributes && options.attributes.value,
       key : options.attributes && options.attributes.key,
     }
-    if (Util.Object.typeOf(thing) !== 'object' && Util.Object.typeOf(thing) !== 'array') return thing.toString()
+    let returned = {
+      object: function () {
+        // REVIEW indentation
     if (thing instanceof Element) {
       for (let i in attr.list) {
         if (i !== 'class' && i !== 'style' && !thing.attr(i)) thing.attr(i, attr.list[i])
@@ -453,28 +542,31 @@ module.exports = class Element {
         .style(`${attr.list && attr.list.style}; ${thing.style()}`)
         .html()
     }
-    return ({
-      object: () => {
-        let out = new Element('dl').attrObj(attr.list)
+        let returned = new Element('dl').attrObj(attr.list)
         for (let i in thing) {
-          out.addElements([
+          returned.addElements([
             new Element('dt').attrObj(attr.key).addContent(i),
             new Element('dd').attrObj(attr.val).addContent(Element.data(thing[i], options.options)),
           ])
         }
-        return out.html()
+        return returned.html()
       },
-      array: () =>
-        new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr.list)
+      array: function () {
+        return new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr.list)
           .addElements(thing.map((el) =>
             new Element('li').attrObj(attr.val).addContent(Element.data(el, options.options))
           ))
-          .html(),
-    })[Util.Object.typeOf(thing)]()
+          .html()
+      },
+      default: function () {
+        return thing.toString()
+      },
+    }
+    return (returned[Util.Object.typeOf(thing)] || returned.default).call(null)
   }
 }
 
-class Style {
+const STYLE = class {
   /**
    * Construct a new Style object.
    * @param {(Object<string>|string)=} rules the object or string containing css property-value pairs
