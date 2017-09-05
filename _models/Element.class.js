@@ -161,7 +161,7 @@ module.exports = class Element {
    *   `my_elem.attrStr('itemscope=""', 'itemtype="Thing"')`.
    *
    * @param {(string|Object<AttrValue>=)} key the name of the attribute to set or get; or if using an object, an AttrValue type
-   * @param {AttrValue=} value the value to set, or `undefined` (or not provided) to get the value
+   * @param {(AttrValue|number|boolean)=} value the value to set, or `undefined` (or not provided) to get the value
    * @return {(Element|string=)} `this` if setting an attribute, else the value of the attribute specified
    *                             (or `undefined` if that attribute had not been set)
    */
@@ -172,10 +172,14 @@ module.exports = class Element {
         if (key.trim() !== '') {
           switch (Util.Object.typeOf(value)) {
             case 'string'   : this._attributes[key] = value.trim(); break;
+            case 'number'   : /* fallthrough */
+            case 'infinite' : /* fallthrough */
+            case 'boolean'  : this._attributes[key] = `${value}`; break;
             case 'function' : this._attributes[key] = value.call(this).trim(); break;
             case 'null'     : delete this._attributes[key]; break;
             case 'undefined': return this._attributes[key]; break;
-            default: throw new TypeError('Provided value must be a string, function, null, or undefined.')
+            case 'NaN'      : throw new TypeError('Provided value cannot be NaN.')
+            default: throw new TypeError('Provided value must be a string, number, boolean, function, null, or undefined.')
           }
         }
         break;
