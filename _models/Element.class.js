@@ -416,11 +416,13 @@ module.exports = class Element {
   /**
    * Simple shortcut function to concatenate elements.
    * This method calls `.html()` on each argument and concatenates the strings.
-   * @param  {Element} elements one or more elements to output
+   * @param  {?Element} elements one or more elements to output
    * @return {string} the combined HTML output of all the arguments
    */
   static concat(...elements) {
-    return elements.map((el) => el.html()).join('')
+    return elements
+      .filter((el) => el !== null)
+      .map((el) => el.html()).join('')
   }
 
   /**
