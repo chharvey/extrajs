@@ -415,11 +415,15 @@ module.exports = class Element {
 
   /**
    * Simple shortcut function to concatenate elements.
-   * This method calls `.html()` on each argument and concatenates the strings.
-   * @param  {?Element} elements one or more elements to output
-   * @return {string} the combined HTML output of all the arguments
+   * This method calls `.html()` on each argument and concatenates the strings,
+   * or, if a single array is given, does the same to each entry in the array.
+   * `null` is allowed as an argument (or as an entry in the array).
+   * If an array is given, only one array is allowed.
+   * @param  {?Element|Array<?Element>} elements one or more elements to output, or an array of elements
+   * @return {string} the combined HTML output of all the arguments/array entries
    */
   static concat(...elements) {
+    if (Util.Object.typeOf(elements[0]) === 'array') return Element.concat.call(null, ...elements[0]) // same as Element.concat.apply(null, elements[0])
     return elements
       .filter((el) => el !== null)
       .map((el) => el.html()).join('')

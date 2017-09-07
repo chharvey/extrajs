@@ -111,8 +111,44 @@ function element_style() {
   console.log(x.style(str))
 }
 
+function element_concat() {
+  console.log(
+    `concatenate arguments`,
+    Element.concat(
+      new Element('em'),
+      new Element('strong'),
+      new Element('mark')
+    )
+  )
+  console.log(
+    `concatenate null arguments`,
+    Element.concat(
+      new Element('em'),
+      null,
+      new Element('mark')
+    )
+  )
+  console.log(
+    `concatenate array`,
+    Element.concat([
+      new Element('em'),
+      new Element('strong'),
+      new Element('mark'),
+    ])
+  )
+  console.log(
+    `concatenate array with null entry`,
+    Element.concat([
+      new Element('em'),
+      null,
+      new Element('mark'),
+    ])
+  )
+}
+
 // util_Object_typeOf();
 // util_Object_typeOfNumber();
 // util_Object_is();
 // util_Date_format();
 // element_style();
+// element_concat();
