@@ -486,15 +486,6 @@ module.exports = class Element {
    *   "title": "@param options",
    *   "type": "object",
    *   "description": "configurations for the output",
-   *   "definitions": {
-   *     "{Object<string>}": {
-   *       "type": "object",
-   *       "additionalProperties": false,
-   *       "patternproperties": {
-   *         "*": { "type": "string" }
-   *       }
-   *     }
-   *   },
    *   "additionalProperties": false,
    *   "properties": {
    *     "ordered": {
@@ -506,9 +497,9 @@ module.exports = class Element {
    *       "description": "describes how to render the output elements’ attributes",
    *       "additionalProperties": false,
    *       "properties": {
-   *         "list" : { "allOf": [{ "$ref": "#/definitions/{Object<string>}" }], "description": "attributes of the list (<ul>, <ol>, or <dl>)" },
-   *         "value": { "allOf": [{ "$ref": "#/definitions/{Object<string>}" }], "description": "attributes of the item or value (<li> or <dd>)" },
-   *         "key"  : { "allOf": [{ "$ref": "#/definitions/{Object<string>}" }], "description": "attributes of the key (<dt>)" }
+   *         "list" : { "type": "object", "additionalProperties": { "type": "string" }, "description": "attributes of the list (<ul>, <ol>, or <dl>)" },
+   *         "value": { "type": "object", "additionalProperties": { "type": "string" }, "description": "attributes of the item or value (<li> or <dd>)" },
+   *         "key"  : { "type": "object", "additionalProperties": { "type": "string" }, "description": "attributes of the key (<dt>)" }
    *       }
    *     },
    *     "options": {
