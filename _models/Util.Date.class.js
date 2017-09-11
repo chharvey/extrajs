@@ -37,6 +37,17 @@ module.exports = class DATE {
   }
 
   /**
+   * Return whether two dates occur on the same day.
+   * That is, if 'YYYY-MM-DD' of date1 equals 'YYYY-MM-DD' of date2.
+   * @param  {Date} date1 the first date
+   * @param  {Date} date2 the second date
+   * @return {boolean} `true` iff both dates have the same year, same month, *and* same day (date of the month)
+   */
+  static sameDate(date1, date2) {
+    return date1.toISOString().slice(0,10) === date2.toISOString().slice(0,10)
+  }
+
+  /**
    * Format a date, using PHP-based formatting options.
    * The following options are supported (with examples):
    * - 'Y-m-d'     : '2017-08-05'
