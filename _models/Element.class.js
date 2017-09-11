@@ -95,6 +95,14 @@ module.exports = class Element {
   get isVoid() { return this._VOID }
 
   /**
+   * Return a (shallow/deep) clone of this element’s attributes object.
+   * The key-value pairs of the object returned correspond to
+   * the attribute-value pairs of this element.
+   * @return {Object<string>} an object containing the attribute-value pairs of this element
+   */
+  get attributes() { return Util.Object.cloneDeep(this._attributes) }
+
+  /**
    * Return the contents of this element.
    * @return {?string} this element’s contents, or `null` if this is a void element
    */

@@ -102,17 +102,23 @@ function util_Date_format() {
 function element_attr() {
   let x = new Element('span')
   console.log(`new Element:\t`, x.html())
-  x.attr('attr1','val1')
+  x = x.attr('attr1','val1')
   console.log(`set attr1="val1":\t`, x.html())
-  x.attr('attr1')
-  console.log(`get attr1:\t`, x.attr('attr1'))
-  x.attr('attr2','')
+  let y = x.attr('attr1')
+  console.log(`get attr1:\t`, y)
+  x = x.attr('attr2','')
   console.log(`set attr2="":\t`, x.html())
-  x.attr('attr2',null)
+  x = x.attr('attr2',null)
   console.log(`remove attr2:\t`, x.html())
-  x.attr('attr3',function () { return this.attr('attr1') })
+  x = x.attr('attr3',function () { return this.attr('attr1') })
   console.log(`set attr3 to value of attr1:\t`, x.html())
-  x.attr({
+  try {
+    x = x.attr()
+    console.log(`provide no args to #attr():\t`, x.html())
+  } catch (e) {
+    console.log(`failed to call #attr() with no args: ${e}:\t`)
+  }
+  x = x.attr({
     attr1withobj: 'string',
     attr2withobj: 42,
     attr3withobj: true,
@@ -120,17 +126,28 @@ function element_attr() {
     attr2: null,
   })
   console.log(`set/remove multiple attributes of multiple types:\t`, x.html())
-  x.attr({})
+  x = x.attr({})
   console.log(`pass empty object to #attr():\t`, x.html())
   try {
-    x.attr('trying-NaN',NaN)
+    let myvar; // undefined
+    x = x.attr({
+      undefinedattriute: myvar
+    })
+    console.log(`pass undefined as obj value to #attr():\t`, x.html())
+  } catch (e) {
+    console.log(`failed to pass undefined in object to #attr(): ${e}:\t`)
+  }
+  try {
+    x = x.attr('trying-NaN',NaN)
   } catch (e) {
     console.log(`failed to pass NaN to #attr(): ${e}:\t`, x.html())
   }
-  x.attr('ternary1', (true) ? 'true' : null)
+  x = x.attr('ternary1', (true) ? 'true' : null)
   console.log(`set attributes with ternary:\t`, x.html())
-  x.attr('ternary2', (false) ? 'true' : null)
+  x = x.attr('ternary2', (false) ? 'true' : null)
   console.log(`remove attributes with ternary:\t`, x.html())
+
+  console.log(`get all attriutes in object form:\t`, x.attributes)
 }
 
 function element_style() {
