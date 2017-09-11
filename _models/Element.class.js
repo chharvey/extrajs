@@ -147,7 +147,7 @@ module.exports = class Element {
    *   itemtype : 'Person',
    *   'data-id': null, // remove the `[data-id]` attribute
    * })
-   * my_elem.attrObj()                                         // do nothing; return `this`
+   * my_elem.attr()                                            // do nothing; return `this`
    * ```
    *
    * Notes:
@@ -177,42 +177,15 @@ module.exports = class Element {
             case 'boolean'  : this._attributes[key] = `${value}`; break;
             case 'function' : this._attributes[key] = value.call(this).trim(); break;
             case 'null'     : delete this._attributes[key]; break;
-            case 'undefined': return this._attributes[key]; break;
+            case 'undefined': return this._attributes[key];
             case 'NaN'      : throw new TypeError('Provided value cannot be NaN.')
             default: throw new TypeError('Provided value must be a string, number, boolean, function, null, or undefined.')
           }
         }
         break;
-      case 'object': return this.attrObj(key) // TODO remove #attrObj() method
+      case 'object': for (let i in key) { this.attr(i, key[i]) }; return this;
       default      : throw new TypeError('Provided key must be a string or object.')
     }
-    return this
-  }
-
-  /**
-   * Set/remove multiple attributes at once, providing an attributes object.
-   *
-   * The argument must be an object who has string or null values. No values may be `undefined`.
-   * The values of the argument act just like the `value` parameter in {@link Element#attr()}.
-   * For example:
-   *
-   * `my_element.attrObj({ itemprop:'name' })` sets the attribute `[itemprop="name"]` on this element.
-   * If the `[itemprop]` attribute already exists, it will be overriden to the value `"name"`.
-   *
-   * `my_element.attrObj({ itemprop:null })` removes the `[itemprop]` attribute altogether.
-   *
-   * Examples:
-   * ```
-   * my_elem.attr('itemprop','name').attr('itemscope','').attr('itemtype':'Person') // old
-   * my_elem.attrObj({ itemprop:'name', itemscope:'', itemtype:'Person' })          // new
-   * my_elem.attrObj() // do nothing; return `this`
-   * ```
-   *
-   * @param  {Object<AttrValue>=} attr_obj the attributes object given
-   * @return {Element} `this`
-   */
-  attrObj(attr_obj = {}) {
-    for (let i in attr_obj) { this.attr(i, attr_obj[i]) }
     return this
   }
 
@@ -543,19 +516,19 @@ module.exports = class Element {
         .style(`${attr.list && attr.list.style}; ${thing.style()}`)
         .html()
     }
-        let returned = new Element('dl').attrObj(attr.list)
+        let returned = new Element('dl').attr(attr.list)
         for (let i in thing) {
           returned.addElements([
-            new Element('dt').attrObj(attr.key).addContent(i),
-            new Element('dd').attrObj(attr.val).addContent(Element.data(thing[i], options.options)),
+            new Element('dt').attr(attr.key).addContent(i),
+            new Element('dd').attr(attr.val).addContent(Element.data(thing[i], options.options)),
           ])
         }
         return returned.html()
       },
       array: function () {
-        return new Element((options.ordered) ? 'ol' : 'ul').attrObj(attr.list)
+        return new Element((options.ordered) ? 'ol' : 'ul').attr(attr.list)
           .addElements(thing.map((el) =>
-            new Element('li').attrObj(attr.val).addContent(Element.data(el, options.options))
+            new Element('li').attr(attr.val).addContent(Element.data(el, options.options))
           ))
           .html()
       },
