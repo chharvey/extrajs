@@ -162,6 +162,50 @@ function element_style() {
   console.log(x.style(str))
 }
 
+function element_data() {
+  let x = new Element('span')
+  try {
+    x = x.data('foo','bar')
+    console.log(`x.data('foo','bar'):\t`, x.html())
+  } catch (e) {
+    console.log(`failed to set #data('foo','bar'): ${e}:\t`)
+  }
+  try {
+    let y = x.data('foo')
+    console.log(`x.data('foo'):\t`, y)
+  } catch (e) {
+    console.log(`failed to get #data('foo'): ${e}:\t`)
+  }
+  try {
+    let u;
+    z = x.data('foo',u)
+    console.log(`x.data('foo',undefined):\t`, z)
+  } catch (e) {
+    console.log(`failed to set #data('foo',undefined): ${e}:\t`)
+  }
+  try {
+    x = x.data('baz', function () { return this.data('foo') })
+    console.log(`x.data('baz', <function>):\t`, x.html())
+  } catch (e) {
+    console.log(`failed to set #data('baz',<function>): ${e}:\t`)
+  }
+  try {
+    x = x.data('foo', null)
+    console.log(`x.data('foo', null):\t`, x.html())
+  } catch (e) {
+    console.log(`failed to remove with #data('foo',null): ${e}:\t`)
+  }
+  try {
+    a = x.data()
+    console.log(`x.data():\t`, a)
+  } catch (e) {
+    console.log(`failed to call #data() with no args: ${e}:\t`)
+  }
+  let s = new Element('span')
+  console.log(x.dataset)
+  console.log(s.dataset)
+}
+
 function element_concat() {
   console.log(
     `concatenate arguments`,
@@ -203,4 +247,5 @@ function element_concat() {
 // util_Date_format();
 // element_attr();
 // element_style();
+// element_data();
 // element_concat();

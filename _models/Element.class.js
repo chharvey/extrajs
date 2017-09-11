@@ -112,7 +112,7 @@ module.exports = class Element {
 
   /**
    * NOTE: TYPE DEFINITION
-   * A type to provide as an argument for setting/removing an attribute.
+   * A type to provide as a value argument for setting/removing an attribute.
    * - {string}            - set the attribute to the string value
    * - {function():string} - set the attribute to the result of calling the function on `this`
    * - {null}              - remove the attribute altogether
@@ -169,7 +169,7 @@ module.exports = class Element {
    *   `my_elem.attrStr('itemscope=""', 'itemtype="Thing"')`.
    *
    * @param {(string|Object<AttrValue>=)} key the name of the attribute to set or get; or if using an object, an AttrValue type
-   * @param {(AttrValue|number|boolean)=} value the value to set, or `undefined` (or not provided) to get the value
+   * @param {(AttrValue|number|boolean)=} value the value to set, or `null` to remove the value, or `undefined` (or not provided) to get it
    * @return {(Element|string=)} `this` if setting an attribute, else the value of the attribute specified
    *                             (or `undefined` if that attribute had not been set)
    */
@@ -357,6 +357,37 @@ module.exports = class Element {
     let css_obj = this.style([])
     delete css_obj[cssprop]
     return this.style(css_obj)
+  }
+
+  /**
+   * Set/get/remove a `[data-*]` custom attribute with a name and a value.
+   * Shorthand method for <code>this.attr(`data-${name}`, value)</code>.
+   * @param  {string} name  the suffix of the `[data-*]` attribute
+   * @param  {AttrValue=} value the value to assign to the attribute, or `null` to remove it
+   * @return {(Element|string=)} `this` if setting an attribute, else the value of the attribute specified
+   *                             (or `undefined` if that attribute had not been set)
+   */
+  data(name, value) {
+    return this.attr(`data-${name}`, value)
+  }
+
+  /**
+   * Return an object containing all the `[data-*]` attribute-value pairs of this element.
+   * Note that the keys of this object do not contain the string `'data-'`.
+   * Example:
+   * ```
+   * my_elem.html()     // returns '<span data-foo="bar" data-baz="qux" fizz="buzz"></span>'
+   * my_elem.attributes // returns { 'data-foo':'bar', 'data-baz':'qux', fizz:'buzz' }
+   * my_elem.dataset    // returns { foo:'bar', baz:'qux' }
+   * ```
+   * @return {Object<string>} an object containing keys and values corresponing to this element’s `[data-*]` custom attributes
+   */
+  get dataset() {
+    let returned = {}
+    for (let i in this._attributes) {
+      if (i.slice(0,5) === 'data-') returned[i.slice(5)] = this._attributes[i]
+    }
+    return returned
   }
 
   /**
