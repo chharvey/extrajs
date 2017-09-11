@@ -161,7 +161,7 @@ module.exports = class Element {
    *   `my_elem.attrStr('itemscope=""', 'itemtype="Thing"')`.
    *
    * @param {(string|Object<AttrValue>=)} key the name of the attribute to set or get; or if using an object, an AttrValue type
-   * @param {AttrValue=} value the value to set, or `undefined` (or not provided) to get the value
+   * @param {(AttrValue|number|boolean)=} value the value to set, or `undefined` (or not provided) to get the value
    * @return {(Element|string=)} `this` if setting an attribute, else the value of the attribute specified
    *                             (or `undefined` if that attribute had not been set)
    */
@@ -172,10 +172,14 @@ module.exports = class Element {
         if (key.trim() !== '') {
           switch (Util.Object.typeOf(value)) {
             case 'string'   : this._attributes[key] = value.trim(); break;
+            case 'number'   : /* fallthrough */
+            case 'infinite' : /* fallthrough */
+            case 'boolean'  : this._attributes[key] = `${value}`; break;
             case 'function' : this._attributes[key] = value.call(this).trim(); break;
             case 'null'     : delete this._attributes[key]; break;
             case 'undefined': return this._attributes[key]; break;
-            default: throw new TypeError('Provided value must be a string, function, null, or undefined.')
+            case 'NaN'      : throw new TypeError('Provided value cannot be NaN.')
+            default: throw new TypeError('Provided value must be a string, number, boolean, function, null, or undefined.')
           }
         }
         break;
@@ -411,12 +415,18 @@ module.exports = class Element {
 
   /**
    * Simple shortcut function to concatenate elements.
-   * This method calls `.html()` on each argument and concatenates the strings.
-   * @param  {Element} elements one or more elements to output
-   * @return {string} the combined HTML output of all the arguments
+   * This method calls `.html()` on each argument and concatenates the strings,
+   * or, if a single array is given, does the same to each entry in the array.
+   * `null` is allowed as an argument (or as an entry in the array).
+   * If an array is given, only one array is allowed.
+   * @param  {?Element|Array<?Element>} elements one or more elements to output, or an array of elements
+   * @return {string} the combined HTML output of all the arguments/array entries
    */
   static concat(...elements) {
-    return elements.map((el) => el.html()).join('')
+    if (Util.Object.typeOf(elements[0]) === 'array') return Element.concat.call(null, ...elements[0]) // same as Element.concat.apply(null, elements[0])
+    return elements
+      .filter((el) => el !== null)
+      .map((el) => el.html()).join('')
   }
 
   /**
@@ -476,15 +486,6 @@ module.exports = class Element {
    *   "title": "@param options",
    *   "type": "object",
    *   "description": "configurations for the output",
-   *   "definitions": {
-   *     "{Object<string>}": {
-   *       "type": "object",
-   *       "additionalProperties": false,
-   *       "patternproperties": {
-   *         "*": { "type": "string" }
-   *       }
-   *     }
-   *   },
    *   "additionalProperties": false,
    *   "properties": {
    *     "ordered": {
@@ -496,9 +497,9 @@ module.exports = class Element {
    *       "description": "describes how to render the output elements’ attributes",
    *       "additionalProperties": false,
    *       "properties": {
-   *         "list" : { "allOf": [{ "$ref": "#/definitions/{Object<string>}" }], "description": "attributes of the list (<ul>, <ol>, or <dl>)" },
-   *         "value": { "allOf": [{ "$ref": "#/definitions/{Object<string>}" }], "description": "attributes of the item or value (<li> or <dd>)" },
-   *         "key"  : { "allOf": [{ "$ref": "#/definitions/{Object<string>}" }], "description": "attributes of the key (<dt>)" }
+   *         "list" : { "type": "object", "additionalProperties": { "type": "string" }, "description": "attributes of the list (<ul>, <ol>, or <dl>)" },
+   *         "value": { "type": "object", "additionalProperties": { "type": "string" }, "description": "attributes of the item or value (<li> or <dd>)" },
+   *         "key"  : { "type": "object", "additionalProperties": { "type": "string" }, "description": "attributes of the key (<dt>)" }
    *       }
    *     },
    *     "options": {
