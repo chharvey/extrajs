@@ -40,9 +40,9 @@ module.exports = class Element {
     /**
      * All the HTML attributes of this element.
      * @private
-     * @type {Object<string>}
+     * @type {ObjectString}
      */
-    this._attributes = {}
+    this._attributes = new ObjectString()
 
     /**
      * The contents of this element.
@@ -54,21 +54,6 @@ module.exports = class Element {
   }
 
 
-
-  /**
-   * Render this element’s attributes as a string.
-   * The string is returned in the following format:
-   * ` attr1="val1" attr2="val2" attr3="val3"`
-   * @private
-   * @return {string} string containing key-value pairs
-   */
-  _attributeString() {
-    let returned = ''
-    for (let i in this._attributes) {
-      if (this._attributes[i]!==undefined) returned += ` ${i}="${this._attributes[i]}"`
-    }
-    return returned
-  }
 
   /**
    * Represents a set of CSS rules for an element.
@@ -94,13 +79,13 @@ module.exports = class Element {
    */
   get isVoid() { return this._VOID }
 
-  /**
-   * Return a (shallow/deep) clone of this element’s attributes object.
-   * The key-value pairs of the object returned correspond to
-   * the attribute-value pairs of this element.
-   * @return {Object<string>} an object containing the attribute-value pairs of this element
-   */
-  get attributes() { return Util.Object.cloneDeep(this._attributes) }
+  // /**
+  //  * Return this element’s attributes object.
+  //  * The key-value pairs of the object returned correspond to
+  //  * the attribute-value pairs of this element.
+  //  * @return {ObjectString} an object containing the attribute-value pairs of this element
+  //  */
+  // get attributes() { return this._attributes }
 
   /**
    * Return the contents of this element.
@@ -114,33 +99,32 @@ module.exports = class Element {
    * NOTE: TYPE DEFINITION
    * A type to provide as a value argument for setting/removing an attribute.
    * - {string}            - set the attribute to the string value
+   * - {number}            - set the attribute to the number converted to a string; may not be `NaN`
+   * - {boolean}           - set the attribute to the boolean converted to a string
    * - {function():string} - set the attribute to the result of calling the function on `this`
    * - {null}              - remove the attribute altogether
-   * @type {?(string|function():string)} AttrValue
+   * @type {?(string|number|boolean|function():string)} AttrValue
    */
   /**
    * Set or get attributes of this element.
    *
-   * If a string key is provided, then it represents the attribute name to set, get, or remove.
-   * In this case if a non-null value is provided, the attribute will be created (or modified if it already exists),
-   * and it will be assigned the value given.
-   * The value must be a string equal to the attribute value,
-   * or a function called on this element that returns such a string.
+   * If the key given is a string, and the value is a non-null {@link AttrValue} type,
+   * then the attribute will be set (or modified) with the result of the value.
    *
-   * If a string key and `null` value are provided,
-   * then the attribute (identified by the key) is removed from this element.
+   * If the key is a string and the value is `null,`
+   * then the attribute identified by the key is removed from this element.
    *
-   * If only a string key is provided and the value is not provided, then this method returns
-   * the value of this element’s attribute named by the given key.
+   * If the key is a string and the value is not provided (or `undefined`),
+   * then this method returns the value of the attribute identified by the key.
    * If no such attribute exists, `undefined` is returned.
    *
    * If an *object* key is provided, then no value argument may be provided.
-   * The object must have values of the {@link Element.AttrValue} type;
+   * The object must have values of the {@link AttrValue} type;
    * thus for each key-value pair in the object, this method assigns corresponding
    * attributes. You may use this method with a single object argument to set and/or remove
    * multiple attributes (using `null` to remove).
    *
-   * If no key or value are provided, this method does nothing and returns `this`.
+   * If no arguments are provided, or if the key is `''`, this method does nothing and returns `this`.
    *
    * Examples:
    * ```
@@ -168,8 +152,8 @@ module.exports = class Element {
    *   if you have strings and are not removing any attributes:
    *   `my_elem.attrStr('itemscope=""', 'itemtype="Thing"')`.
    *
-   * @param {(string|Object<AttrValue>=)} key the name of the attribute to set or get; or if using an object, an AttrValue type
-   * @param {(AttrValue|number|boolean)=} value the value to set, or `null` to remove the value, or `undefined` (or not provided) to get it
+   * @param {(string|Object<AttrValue>)=} key the name of the attribute to set or get; or an object with AttrValue type values
+   * @param {AttrValue=} value the value to set, or `null` to remove the value, or `undefined` (or not provided) to get it
    * @return {(Element|string=)} `this` if setting an attribute, else the value of the attribute specified
    *                             (or `undefined` if that attribute had not been set)
    */
@@ -177,21 +161,20 @@ module.exports = class Element {
     // REVIEW: object lookups too complicated here; using standard switches
     switch (Util.Object.typeOf(key)) {
       case 'string':
-        if (key.trim() !== '') {
-          switch (Util.Object.typeOf(value)) {
-            case 'string'   : this._attributes[key] = value.trim(); break;
-            case 'number'   : /* fallthrough */
-            case 'infinite' : /* fallthrough */
-            case 'boolean'  : this._attributes[key] = `${value}`; break;
-            case 'function' : this._attributes[key] = value.call(this).trim(); break;
-            case 'null'     : delete this._attributes[key]; break;
-            case 'undefined': return this._attributes[key];
-            case 'NaN'      : throw new TypeError('Provided value cannot be NaN.')
-            default: throw new TypeError('Provided value must be a string, number, boolean, function, null, or undefined.')
-          }
+        if (key.trim() === '') break;
+        switch (Util.Object.typeOf(value)) {
+          case 'function' : this._attributes.setFn(key, value, this); break;
+          case 'null'     : this._attributes.delete(key); break;
+          case 'undefined': return this._attributes.get(key);
+          case 'boolean'  : /* fallthrough */
+          case 'number'   : /* fallthrough */
+          case 'infinite' : /* fallthrough */
+          case 'NaN'      : /* fallthrough */
+          case 'string'   : /* fallthrough */
+          default         : this._attributes.set(key, value); break;
         }
         break;
-      case 'object': for (let i in key) { this.attr(i, key[i]) }; return this;
+      case 'object': for (let i in key) { this.attr(i, key[i]) }; break;
       default      : throw new TypeError('Provided key must be a string or object.')
     }
     return this
@@ -384,8 +367,8 @@ module.exports = class Element {
    */
   get dataset() {
     let returned = {}
-    for (let i in this._attributes) {
-      if (i.slice(0,5) === 'data-') returned[i.slice(5)] = this._attributes[i]
+    for (let i in this._attributes.data) {
+      if (i.slice(0,5) === 'data-') returned[i.slice(5)] = this._attributes.data[i]
     }
     return returned
   }
@@ -419,8 +402,8 @@ module.exports = class Element {
    * @return {string} an HTML string representing this element
    */
   html() {
-    if (this.isVoid) return `<${this.name}${this._attributeString()}/>`
-    return `<${this.name}${this._attributeString()}>${this.contents}</${this.name}>`
+    if (this.isVoid) return `<${this.name}${this._attributes.toAttrString()}/>`
+    return `<${this.name}${this._attributes.toAttrString()}>${this.contents}</${this.name}>`
   }
 
 
