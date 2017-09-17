@@ -45,6 +45,13 @@ module.exports = class Element {
     this._attributes = new ObjectString()
 
     /**
+     * All the CSS styles of this element.
+     * @private
+     * @type {ObjectString}
+     */
+    this._style = new ObjectString()
+
+    /**
      * The contents of this element.
      * If this is a void element, it must have no contents, and its tag must be self-closing.
      * @private
@@ -52,16 +59,6 @@ module.exports = class Element {
      */
     this._contents = (this._VOID) ? null : ''
   }
-
-
-
-  /**
-   * Represents a set of CSS rules for an element.
-   * Private class for internal computations.
-   * @private
-   * @type {class}
-   */
-  static get _Style() { return STYLE }
 
 
 
@@ -83,9 +80,17 @@ module.exports = class Element {
   //  * Return this element’s attributes object.
   //  * The key-value pairs of the object returned correspond to
   //  * the attribute-value pairs of this element.
-  //  * @return {ObjectString} an object containing the attribute-value pairs of this element
+  //  * @return {Object<string>} an object containing the attribute-value pairs of this element
   //  */
-  // get attributes() { return this._attributes }
+  // get attributes() { return this._attributes.data }
+
+  // /**
+  //  * Return this element’s styles object.
+  //  * The key-value pairs of the object returned correspond to
+  //  * the property-value pairs of this element’s css.
+  //  * @return {Object<string>} an object containing the property-value pairs of this element’s css
+  //  */
+  // get css() { return this._style.data }
 
   /**
    * Return the contents of this element.
@@ -286,23 +291,23 @@ module.exports = class Element {
    * my_elem.style(function () { return 'background:none; font-weight:bold;' }) // set the [style] attribute, with a function: the function must return a string
    * my_elem.style(null)                                      // remove the [style] attribute
    * my_elem.style()                                          // return the value of [style], as a string (or `undefined` if the attribute has not been set)
-   * my_elem.style([])                                        // return the value of [style], as an object
    * ```
    *
-   * @param  {(AttrValue|Object<string>|Array)=} arg the value to set for the `style` attribute
+   * @param  {(AttrValue|Object<string>)=} arg the value to set for the `style` attribute; not a number or boolean though
    * @return {(Element|Object<string>|string=)} `this` if setting the style, else the value of the style
    */
   style(arg) {
-    if (arg === undefined || arg === null) return this.attr('style', arg) // NOTE faster than object lookup
+    if (['number','infinite','boolean'].includes(Util.Object.typeOf(arg))) throw new Error('Provided argument cannot be a number or boolean.')
     if (Util.Object.is(arg, {}) || arg === '') return this.style(null)
     let returned = {
-      object   : function () { return this.attr('style', new Element._Style(arg).toString())    }, // set the style with an object
-      string   : function () { return this.style(new Element._Style(arg).toObject())            }, // set the style with a string
-      function : function () { return this.style(new Element._Style(arg.call(this)).toObject()) }, // set the style with a function
-      array    : function () { return new Element._Style(this.attr('style') || '').toObject()   }, // get the style as an object
-      // null     : function () { return this.attr('style', null     ) },                             // remove the style attribute
-      // undefined: function () { return this.attr('style', undefined) },                             // get the style as a string, or `undefined`
-      default  : function () { throw new TypeError('Provided argument must be a string, function, null, object, array, or undefined.') },
+      object: function () {
+        this._style = new ObjectString(arg)
+        return this.attr('style', this._style.toCssString())
+      },
+      string: function () {
+        return this.style(ObjectString.fromCssString(arg).data)
+      },
+      default: function () { return this.attr('style', arg) },
     }
     return (returned[Util.Object.typeOf(arg)] || returned.default).call(this)
   }
@@ -559,75 +564,5 @@ module.exports = class Element {
       },
     }
     return (returned[Util.Object.typeOf(thing)] || returned.default).call(null)
-  }
-}
-
-const STYLE = class {
-  /**
-   * Construct a new Style object.
-   * @param {(Object<string>|string)=} rules the object or string containing css property-value pairs
-   */
-  constructor(rules = {}) {
-    let css_object = rules
-    if (Util.Object.typeOf(rules) === 'string') {
-      css_object = {}
-      rules.split(';').map((r) => r.split(':')).forEach(function (rule_arr) {
-        rule_arr[0] = rule_arr[0] && rule_arr[0].trim() // css property
-        rule_arr[1] = rule_arr[1] && rule_arr[1].trim() // css value
-        if (rule_arr[0] && rule_arr[1]) css_object[rule_arr[0]] = rule_arr[1]
-      })
-    }
-    /** @private */ this._obj = css_object
-  }
-
-  /**
-   * Set a CSS property, or override one if it exists.
-   * The argument for the value must be a string.
-   * @param {string} property the property to set
-   * @param {string} value the value to set
-   * @return {Style} `this`
-   */
-  set(property, value) {
-    this._obj[property] = value
-    return this
-  }
-
-  /**
-   * Get the value of the given CSS property, or `undefined` if it does not exist.
-   * @param  {string} property the property to get
-   * @return {string=} the value of the specified property
-   */
-  get(property) {
-    return this._obj[property]
-  }
-
-  /**
-   * Convert this style into a string.
-   * @return {string} a valid CSS string containing property-value pairs.
-   */
-  toString() {
-    let css_string = ''
-    for (let i in this._obj) {
-      css_string += `${i}:${this._obj[i]};`
-    }
-    return css_string
-  }
-
-  /**
-   * Return a shallow clone of this style’s CSS object.
-   * The returned value may be modified without affecting this object.
-   * Example:
-   * ```js
-   * let a = new Style({ 'font-weight': 'bold' })
-   * let obj = a.toObject
-   * obj['font-style'] = 'italic'
-   * let b = new Style(obj)
-   * a.toString() // 'font-weight:bold;'
-   * b.toString() // 'font-weight:bold;font-style:italic;'
-   * ```
-   * @return {Object<string>} a shallow clone of `this._obj`
-   */
-  toObject() {
-    return Object.assign({}, this._obj)
   }
 }
