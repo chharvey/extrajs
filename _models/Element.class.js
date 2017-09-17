@@ -90,7 +90,7 @@ module.exports = class Element {
   //  * the property-value pairs of this element’s css.
   //  * @return {Object<string>} an object containing the property-value pairs of this element’s css
   //  */
-  // get css() { return this._style.data }
+  // get styles() { return this._style.data }
 
   /**
    * Return the contents of this element.
@@ -123,7 +123,7 @@ module.exports = class Element {
    * then this method returns the value of the attribute identified by the key.
    * If no such attribute exists, `undefined` is returned.
    *
-   * If an *object* key is provided, then no value argument may be provided.
+   * If an object key is provided, then no value argument may be provided.
    * The object must have values of the {@link AttrValue} type;
    * thus for each key-value pair in the object, this method assigns corresponding
    * attributes. You may use this method with a single object argument to set and/or remove
@@ -137,7 +137,7 @@ module.exports = class Element {
    * my_elem.attr('itemscope', '')                             // set the boolean `[itemscope]` attribute
    * my_elem.attr('itemtype')                                  // get the value of the `[itemtype]` attribute (or `undefined` if it had not been set)
    * my_elem.attr('itemprop', null)                            // remove the `[itemprop]` attribute
-   * my_elem.attr('data-id', function () { return this.id() }) // set the `[data-id]` attribute equal to this element’s ID
+   * my_elem.attr('data-id', function () { return this.id() }) // set the `[data-id]` attribute to this element’s ID
    * my_elem.attr({                                            // set/remove multiple attributes all at once
    *   itemprop : 'name',
    *   itemscope: '',
@@ -157,7 +157,7 @@ module.exports = class Element {
    *   if you have strings and are not removing any attributes:
    *   `my_elem.attrStr('itemscope=""', 'itemtype="Thing"')`.
    *
-   * @param {(string|Object<AttrValue>)=} key the name of the attribute to set or get; or an object with AttrValue type values
+   * @param {(string|Object<AttrValue>)=} key the name of the attribute to set or get, or an object with AttrValue type values
    * @param {AttrValue=} value the value to set, or `null` to remove the value, or `undefined` (or not provided) to get it
    * @return {(Element|string=)} `this` if setting an attribute, else the value of the attribute specified
    *                             (or `undefined` if that attribute had not been set)
@@ -171,11 +171,11 @@ module.exports = class Element {
           case 'function' : this._attributes.setFn(key, value, this); break;
           case 'null'     : this._attributes.delete(key); break;
           case 'undefined': return this._attributes.get(key);
+          case 'string'   : /* fallthrough */
           case 'boolean'  : /* fallthrough */
           case 'number'   : /* fallthrough */
           case 'infinite' : /* fallthrough */
           case 'NaN'      : /* fallthrough */
-          case 'string'   : /* fallthrough */
           default         : this._attributes.set(key, value); break;
         }
         break;
@@ -307,44 +307,77 @@ module.exports = class Element {
       string: function () {
         return this.style(ObjectString.fromCssString(arg).data)
       },
-      default: function () { return this.attr('style', arg) },
+      default: function () { return this.attr('style', arg) }, // function, null, undefined
     }
     return (returned[Util.Object.typeOf(arg)] || returned.default).call(this)
   }
 
   /**
-   * Append to this element’s `style` attribute,
-   * overwriting duplicate CSS properties.
+   * Set or get css properties of this element’s inline styles (`[style]` attribute).
+   *
+   * If the key given is a string, and the value is a non-null {@link AttrValue} type,
+   * then the property will be set (or modified) with the result of the value.
+   *
+   * If the key is a string and the value is `null,` or if the value is `''` (CHANGED!),
+   * then the property identified by the key is removed from this element’s css.
+   *
+   * If the key is a string and the value is not provided (or `undefined`),
+   * then this method returns the value of the property identified by the key.
+   * If no such property exists, `undefined` is returned.
+   * (NOTE that css properties default to the `unset` value---either `inherit` or `initial`,
+   * depending on whether the property is inherited or not.)
+   *
+   * If an object key is provided, then no value argument may be provided.
+   * The object must have values of the {@link AttrValue} type;
+   * thus for each key-value pair in the object, this method assigns corresponding
+   * css properties. You may use this method with a single object argument to set and/or remove
+   * multiple properties (using `null` to remove).
+   *
+   * If no arguments are provided, or if the key is `''`, this method does nothing and returns `this`.
    *
    * Examples:
    * ```
-   * my_elem.addStyle('background:none; font-weight:bold;')      // add to the [style] attribute
-   * my_elem.addStyle({background:'none', 'font-weight':'bold'}) // add to the [style] attribute
-   * my_elem.addStyle()                                          // do nothing; return `this`
+   * my_elem.css('background', 'red')                       // set the `background` property
+   * my_elem.css('font-weight', '')                         // remove the `font-weight` property
+   * my_elem.css('text-align')                              // get the value of the `text-align` property (or `undefined` if it had not been set)
+   * my_elem.css('font-weight', null)                       // remove the `font-weight` property
+   * my_elem.css('color', function () { return this.id() }) // set the `color` property to this element’s ID
+   * my_elem.css({                                          // set/remove multiple attributes all at once
+   *   background  : 'red',
+   *   margin      : '1rem',
+   *   opacity     : 0.5,
+   *   visibility  : null, // remove the `visibility` property
+   *   'text-align': '',   // remove the `text-align` property
+   * })
+   * my_elem.css()                                          // do nothing; return `this`
    * ```
    *
-   * @param {(Object<string>|string)=} arg the style(s) to add, as valid CSS
-   * @return {Element} `this`
+   * @param {(string|Object<AttrValue>)=} prop the name of the css property to set or get, or an object with AttrValue type values
+   * @param {AttrValue=} value the value to set, or `null` to remove the value, or `undefined` (or not provided) to get it
+   * @return {(Element|string=)} `this` if setting a property, else the value of the property specified
+   *                             (or `undefined` if that property had not been set)
    */
-  addStyle(arg = '') {
-    if (arg === '') return this
-    let returned = {
-      object : function () { return this.style(Object.assign({}, this.style([]), arg)) },
-      string : function () { return this.addStyle(new Element._Style(arg).toObject())  },
-      default: function () { throw new TypeError('Provided argument must be an object or string.') },
+  css(prop = '', value) {
+    // REVIEW: object lookups too complicated here; using standard switches
+    switch (Util.Object.typeOf(prop)) {
+      case 'string':
+        if (prop.trim() === '') break;
+        switch (Util.Object.typeOf(value)) {
+          case 'function' : this._style.setFn(prop, value, this); break;
+          case 'null'     : this._style.delete(prop); break;
+          case 'undefined': return this._style.get(prop);
+          case 'string'   : if (value.trim() === '') return this.css(prop, null);
+          case 'boolean'  : /* fallthrough */
+          case 'number'   : /* fallthrough */
+          case 'infinite' : /* fallthrough */
+          case 'NaN'      : /* fallthrough */
+          default         : this._style.set(prop, value); break;
+        }
+        break;
+      case 'object': for (let i in prop) { this.css(i, prop[i]) }; break;
+      default      : throw new TypeError('Provided property must be a string or object.')
     }
-    return (returned[Util.Object.typeOf(arg)] || returned.default).call(this)
-  }
-
-  /**
-   * Remove a single CSS rule from this element’s `style` attribute.
-   * @param  {string=} cssprop single CSS property name
-   * @return {Element} `this`
-   */
-  removeStyleProp(cssprop = '') {
-    let css_obj = this.style([])
-    delete css_obj[cssprop]
-    return this.style(css_obj)
+    return this.attr('style', this._style.toCssString())
   }
 
   /**
