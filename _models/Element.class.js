@@ -1,4 +1,5 @@
 var Util = require('./Util.class.js')
+var ObjectString = require('./ObjectString.class.js')
 
 /**
  * Represents an HTML element.
@@ -45,13 +46,6 @@ module.exports = class Element {
     this._attributes = new ObjectString()
 
     /**
-     * All the CSS styles of this element.
-     * @private
-     * @type {ObjectString}
-     */
-    this._style = new ObjectString()
-
-    /**
      * The contents of this element.
      * If this is a void element, it must have no contents, and its tag must be self-closing.
      * @private
@@ -76,27 +70,48 @@ module.exports = class Element {
    */
   get isVoid() { return this._VOID }
 
-  // /**
-  //  * Return this element’s attributes object.
-  //  * The key-value pairs of the object returned correspond to
-  //  * the attribute-value pairs of this element.
-  //  * @return {Object<string>} an object containing the attribute-value pairs of this element
-  //  */
-  // get attributes() { return this._attributes.data }
-
-  // /**
-  //  * Return this element’s styles object.
-  //  * The key-value pairs of the object returned correspond to
-  //  * the property-value pairs of this element’s css.
-  //  * @return {Object<string>} an object containing the property-value pairs of this element’s css
-  //  */
-  // get styles() { return this._style.data }
+  /**
+   * Return this element’s attributes object.
+   * The key-value pairs of the object returned correspond to
+   * the attribute-value pairs of this element.
+   * @return {Object<string>} an object containing the attribute-value pairs of this element
+   */
+  get attributes() { return this._attributes.data }
 
   /**
    * Return the contents of this element.
    * @return {?string} this element’s contents, or `null` if this is a void element
    */
   get contents() { return this._contents }
+
+  /**
+   * Return this element’s styles object.
+   * The key-value pairs of the object returned correspond to
+   * the property-value pairs of this element’s css.
+   * @return {Object<string>} an object containing the property-value pairs of this element’s css
+   */
+  get styles() {
+    return ObjectString.fromCssString(this.style()).data
+  }
+
+  /**
+   * Return an object containing all the `[data-*]` attribute-value pairs of this element.
+   * Note that the keys of this object do not contain the string `'data-'`.
+   * Example:
+   * ```js
+   * my_elem.html()     // returns '<span data-foo="bar" data-baz="qux" fizz="buzz"></span>'
+   * my_elem.attributes // returns { 'data-foo':'bar', 'data-baz':'qux', fizz:'buzz' }
+   * my_elem.dataset    // returns { foo:'bar', baz:'qux' }
+   * ```
+   * @return {Object<string>} an object containing keys and values corresponing to this element’s `[data-*]` custom attributes
+   */
+  get dataset() {
+    let returned = new ObjectString()
+    for (let i in this._attributes.data) {
+      if (i.slice(0,5) === 'data-') returned.set(i.slice(5), this._attributes.data[i])
+    }
+    return returned.data
+  }
 
 
 
@@ -301,8 +316,7 @@ module.exports = class Element {
     if (Util.Object.is(arg, {}) || arg === '') return this.style(null)
     let returned = {
       object: function () {
-        this._style = new ObjectString(arg)
-        return this.attr('style', this._style.toCssString())
+        return this.attr('style', new ObjectString(arg).toCssString())
       },
       string: function () {
         return this.style(ObjectString.fromCssString(arg).data)
@@ -362,22 +376,24 @@ module.exports = class Element {
     switch (Util.Object.typeOf(prop)) {
       case 'string':
         if (prop.trim() === '') break;
+        let style_obj = ObjectString.fromCssString(this.style())
         switch (Util.Object.typeOf(value)) {
-          case 'function' : this._style.setFn(prop, value, this); break;
-          case 'null'     : this._style.delete(prop); break;
-          case 'undefined': return this._style.get(prop);
+          case 'function' : style_obj.setFn(prop, value, this); break;
+          case 'null'     : style_obj.delete(prop); break;
+          case 'undefined': return style_obj.get(prop);
           case 'string'   : if (value.trim() === '') return this.css(prop, null);
           case 'boolean'  : /* fallthrough */
           case 'number'   : /* fallthrough */
           case 'infinite' : /* fallthrough */
           case 'NaN'      : /* fallthrough */
-          default         : this._style.set(prop, value); break;
+          default         : style_obj.set(prop, value); break;
         }
-        break;
+        return this.attr('style', style_obj.toCssString())
       case 'object': for (let i in prop) { this.css(i, prop[i]) }; break;
       default      : throw new TypeError('Provided property must be a string or object.')
+      return this
     }
-    return this.attr('style', this._style.toCssString())
+
   }
 
   /**
@@ -390,25 +406,6 @@ module.exports = class Element {
    */
   data(name, value) {
     return this.attr(`data-${name}`, value)
-  }
-
-  /**
-   * Return an object containing all the `[data-*]` attribute-value pairs of this element.
-   * Note that the keys of this object do not contain the string `'data-'`.
-   * Example:
-   * ```
-   * my_elem.html()     // returns '<span data-foo="bar" data-baz="qux" fizz="buzz"></span>'
-   * my_elem.attributes // returns { 'data-foo':'bar', 'data-baz':'qux', fizz:'buzz' }
-   * my_elem.dataset    // returns { foo:'bar', baz:'qux' }
-   * ```
-   * @return {Object<string>} an object containing keys and values corresponing to this element’s `[data-*]` custom attributes
-   */
-  get dataset() {
-    let returned = {}
-    for (let i in this._attributes.data) {
-      if (i.slice(0,5) === 'data-') returned[i.slice(5)] = this._attributes.data[i]
-    }
-    return returned
   }
 
   /**
