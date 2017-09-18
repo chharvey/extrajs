@@ -82,6 +82,15 @@ function util_Object_is() {
   )
 }
 
+function util_Object_cloneDeep() {
+  let x = { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
+  let y = Util.Object.cloneDeep(x)
+  console.log(`x: ${x}`)
+  console.log(`y: ${y}`)
+  console.log(`x===y: ${x===y}`)
+  console.log(`Util.Object.is(x,y): ${Util.Object.is(x,y)}`)
+}
+
 function util_Date_format() {
   console.log([
     'Y-m-d'    ,
@@ -97,6 +106,26 @@ function util_Date_format() {
     'g:ia'     ,
     'default'  ,
   ].map((f) => Util.Date.format(new Date(), f)))
+}
+
+function element() {
+  let x = new Element('span')
+  console.log(x)
+  console.log(x.html())
+  console.log(x.name)
+  console.log(x.isVoid)
+  console.log(x.attributes)
+  console.log(x.styles)
+  console.log(x.dataset)
+  console.log(x.contents)
+
+  try {
+    let y = new Element('meta').addContents('hello world')
+    console.log(y.html())
+  } catch (e) {
+    console.log(`Failed to add contents to a void element.`)
+  }
+
 }
 
 function element_attr() {
@@ -152,14 +181,48 @@ function element_attr() {
 
 function element_style() {
   let x = new Element('span')
+  let y = new Element('strong')
+  let z = new Element('em')
+  let w = new Element('small')
 
   let str = 'background:none; font-weight:bold;'
   let obj = {
     background   : 'none',
     'font-weight': 'bold',
   }
+  let fn = function () {
+    return `content: ${this.name.slice(1)};`
+  }
 
-  console.log(x.style(str))
+  console.log(x.style(str).html())
+  console.log(y.style(obj).html())
+  console.log(z.style(fn).html())
+  console.log(w.style(str).style(obj).style(fn).style(null).html())
+  console.log(z.styles)
+}
+
+function element_css() {
+  let x = new Element('span')
+  let y = new Element('strong')
+  let z = new Element('em')
+  let w = new Element('small')
+
+  let str = 'background:none; font-weight:bold;'
+  let obj = {
+    color       : 'blue',
+    'font-style': 'itlaic',
+  }
+  let fn = function () {
+    return this.name.slice(1)
+  }
+
+  console.log(x.style(str).styles)
+  console.log(x.css('opacity', .3).styles)
+  console.log(x.css('background',null).styles)
+  console.log(x.css('content',fn).styles)
+  console.log(x.css('font-weight'))
+  console.log(x.css(obj).styles)
+  console.log(x.css())
 }
 
 function element_data() {
@@ -244,8 +307,11 @@ function element_concat() {
 // util_Object_typeOf();
 // util_Object_typeOfNumber();
 // util_Object_is();
+// util_Object_cloneDeep();
 // util_Date_format();
+// element();
 // element_attr();
 // element_style();
+// element_css();
 // element_data();
 // element_concat();
