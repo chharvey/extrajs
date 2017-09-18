@@ -91,7 +91,7 @@ module.exports = class Element {
    * @return {Object<string>} an object containing the property-value pairs of this element’s css
    */
   get styles() {
-    return ObjectString.fromCssString(this.style()).data
+    return ObjectString.fromCssString(this.style() || '').data
   }
 
   /**
@@ -186,15 +186,10 @@ module.exports = class Element {
           case 'function' : this._attributes.setFn(key, value, this); break;
           case 'null'     : this._attributes.delete(key); break;
           case 'undefined': return this._attributes.get(key);
-          case 'string'   : /* fallthrough */
-          case 'boolean'  : /* fallthrough */
-          case 'number'   : /* fallthrough */
-          case 'infinite' : /* fallthrough */
-          case 'NaN'      : /* fallthrough */
-          default         : this._attributes.set(key, value); break;
+          default         : this._attributes.set(key, value); break; // string, boolean, number, infinite, NaN
         }
         break;
-      case 'object': for (let i in key) { this.attr(i, key[i]) }; break;
+      case 'object': for (let i in key) this.attr(i, key[i]); break;
       default      : throw new TypeError('Provided key must be a string or object.')
     }
     return this
@@ -232,7 +227,7 @@ module.exports = class Element {
    * ```
    *
    * @param  {AttrValue=} id the value to set for the `id` attribute
-   * @return {(Element|string)} `this` if setting the ID, else the value of the ID
+   * @return {(Element|string=)} `this` if setting the ID, else the value of the ID (or `undefined` if not set)
    */
   id(id) {
     return this.attr('id', id)
@@ -249,7 +244,7 @@ module.exports = class Element {
    * ```
    *
    * @param  {AttrValue=} classs the value to set for the `class` attribute
-   * @return {(Element|string)} `this` if setting the class, else the value of the class
+   * @return {(Element|string=)} `this` if setting the class, else the value of the class (or `undefined` if not set)
    */
   class(classs) {
     if (typeof classs === 'string' && classs.trim() === '') return this.class(null)
@@ -309,7 +304,7 @@ module.exports = class Element {
    * ```
    *
    * @param  {(AttrValue|Object<string>)=} arg the value to set for the `style` attribute; not a number or boolean though
-   * @return {(Element|Object<string>|string=)} `this` if setting the style, else the value of the style
+   * @return {(Element|Object<string>|string=)} `this` if setting the style, else the value of the style (or `undefined` if not set)
    */
   style(arg) {
     if (['number','infinite','boolean'].includes(Util.Object.typeOf(arg))) throw new Error('Provided argument cannot be a number or boolean.')
@@ -382,18 +377,13 @@ module.exports = class Element {
           case 'null'     : style_obj.delete(prop); break;
           case 'undefined': return style_obj.get(prop);
           case 'string'   : if (value.trim() === '') return this.css(prop, null);
-          case 'boolean'  : /* fallthrough */
-          case 'number'   : /* fallthrough */
-          case 'infinite' : /* fallthrough */
-          case 'NaN'      : /* fallthrough */
-          default         : style_obj.set(prop, value); break;
+          default         : style_obj.set(prop, value); break; // boolean, number, infinite, NaN
         }
         return this.attr('style', style_obj.toCssString())
-      case 'object': for (let i in prop) { this.css(i, prop[i]) }; break;
+      case 'object': for (let i in prop) this.css(i, prop[i]); break;
       default      : throw new TypeError('Provided property must be a string or object.')
-      return this
     }
-
+    return this
   }
 
   /**

@@ -3,6 +3,7 @@ var Util = require('./Util.class.js')
 /**
  * An Object that contains string values only.
  * Equivalent to @type {Object<string>}, with some added restrictions and methods.
+ * @private
  * @module
  */
 module.exports = class ObjectString {

@@ -123,6 +123,9 @@ module.exports = class OBJECT {
    * The returned result is an object seemingly identical to the given parameter, except that
    * corresponding properties are not "equal" in the sense of `==` or `===`, unless they are primitive values.
    * Else, the original argument is returned.
+   * In other words,a clone deep is “replaceable” with its original object, and thus would be
+   * “the same” in the sense of `Util.Object.is()`.
+   *
    * **NOTE WARNING: infinite loop possible!**
    *
    * This method provides a deeper clone than `Object.assign()`: whereas `Object.assign()` only
