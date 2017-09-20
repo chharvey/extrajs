@@ -1,6 +1,6 @@
 {
   "name": "extrajs",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Javascript helpers for lazy people.",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chharvey/helpers-js.git"
+    "url": "git+https://github.com/chharvey/extrajs.git"
   },
   "keywords": [
     "javascript",
@@ -20,7 +20,7 @@
   "author": "Chris Harvey <chrisharvey2pi@gmail.com> (https://chharvey.github.io/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/chharvey/helpers-js/issues"
+    "url": "https://github.com/chharvey/extrajs/issues"
   },
-  "homepage": "https://github.com/chharvey/helpers-js#readme"
+  "homepage": "https://github.com/chharvey/extrajs#readme"
 }

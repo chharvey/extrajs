@@ -1,2 +1,2 @@
-# helpers-js
+# extrajs
 Javascript helpers for lazy people.
