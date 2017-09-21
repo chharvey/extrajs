@@ -1,3 +1,10 @@
+console.warn(`
+  WARNING: \`Element.class\` is DEPRECATED!
+  It has been moved to another repository. To install, run the following command:
+  $ npm install extrajs-element
+  This class will be removed on Version 1.0.
+`)
+
 var Util = require('./Util.class.js')
 var ObjectString = require('./ObjectString.class.js')
 
