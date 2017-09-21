@@ -1,3 +1,9 @@
+console.warn(`
+  WARNING: \`Tree.class\` is OBSOLETE!
+  Use at your own risk.
+  This class will be removed on Version 1.0.
+`)
+
 var Util = require('./Util.class.js')
 var Mapp = require('./Mapp.class.js')
 
