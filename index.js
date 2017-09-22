@@ -1,6 +1,6 @@
-module.exports = {
-  Util: require('./_models/Util.class.js'),
-  Element: require('./_models/Element.class.js'),
-  Mapp: require('./_models/Mapp.class.js'),
-  // Tree: require('./_models/Tree.class.js'),
-}
+const Util   = require('./src/Util.class.js')
+Util.Element = require('./src/Element.class.js') // CHANGED DEPRECATED
+Util.Mapp    = require('./src/Mapp.class.js') // CHANGED OBSOLETE
+Util.Tree    = require('./src/Tree.class.js') // CHANGED OBSOLETE
+
+module.exports = Util

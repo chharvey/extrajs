@@ -1,3 +1,10 @@
+console.warn(`
+  (${__filename})
+  WARNING: \`Mapp.class\` is OBSOLETE!
+  Use at your own risk.
+  This class will be removed on Version 1.0.
+`)
+
 /**
  * `Mapp` is a slightly different implementation of the ES6 `Map` class.
  * It encapsulates an array of variable length, whose elements are each

@@ -3,17 +3,17 @@ var OBJECT = require('./Util.Object.class.js')
 module.exports = class ARRAY {
   /**
    * Test whether two arrays are “the same”,
-   * using {@link Util.Object.is()} equality on corresponding entries.
+   * using {@link xjs.Object.is()} equality on corresponding entries.
    *
    * “The same” means “replaceable”, that is,
    * for any deterministic function: `fn(arr1)` would return the same result as `fn(arr2)`
-   * if and only if `Util.Array.is(arr1, arr2)`.
+   * if and only if `xjs.Array.is(arr1, arr2)`.
    *
-   * This method returns the same result as `Util.Object.is()`, but is simply faster for arrays.
+   * This method returns the same result as `xjs.Object.is()`, but is simply faster for arrays.
    *
    * @param  {Array} arr1 the first array
    * @param  {Array} arr2 the second array
-   * @return {boolean} `true` if corresponding elements are the same (via `Util.Object.is()`)
+   * @return {boolean} `true` if corresponding elements are the same (via `xjs.Object.is()`)
    */
   static is(arr1, arr2) {
     if (Object.is(arr1, arr2)) return true

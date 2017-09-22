@@ -8,8 +8,8 @@ module.exports = class OBJECT {
    * var x;          // declare `x`
    * typeof x;       // 'undefined'
    * typeof y;       // 'undefined'
-   * Util.typeOf(x); // 'undefined'
-   * Util.typeOf(y); // Uncaught ReferenceError: y is not defined
+   * xjs.typeOf(x);  // 'undefined'
+   * xjs.typeOf(y);  // Uncaught ReferenceError: y is not defined
    * ```
    * Credit to @zaggino.
    *
@@ -59,10 +59,10 @@ module.exports = class OBJECT {
    *
    * “The same” means “replaceable”, that is,
    * for any deterministic function: `fn(a)` would return the same result as `fn(b)` if and only if
-   * `Util.Object.is(a, b)`.
+   * `xjs.Object.is(a, b)`.
    *
    * This function is less strict than `Object.is()`.
-   * If both arguments are arrays, it is faster to use {@link Util.Array.is()}.
+   * If both arguments are arrays, it is faster to use {@link xjs.Array.is()}.
    *
    * NOTE: WARNING: recursive function. infinite loop possible.
    *
@@ -124,7 +124,7 @@ module.exports = class OBJECT {
    * corresponding properties are not "equal" in the sense of `==` or `===`, unless they are primitive values.
    * Else, the original argument is returned.
    * In other words,a clone deep is “replaceable” with its original object, and thus would be
-   * “the same” in the sense of `Util.Object.is()`.
+   * “the same” in the sense of `xjs.Object.is()`.
    *
    * **NOTE WARNING: infinite loop possible!**
    *
@@ -150,8 +150,8 @@ module.exports = class OBJECT {
    * console.log(y) // returns { first: 'one', second: 2, third: ['one', 2, { v:[3] }] }
    * console.log(x) // returns { first: 1, second: { value: 2 }, third: ['one', 2, { v:[3] }] }
    *
-   * // Util.cloneDeep x into y:
-   * var z = Util.cloneDeep(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', {v:3}] }
+   * // xjs.cloneDeep x into y:
+   * var z = xjs.cloneDeep(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', {v:3}] }
    *
    * // as with Object.assign, you can reassign properties of `z` without affecting `x`:
    * z.first  = 'one'

@@ -1,3 +1,9 @@
+console.warn(`
+  (${__filename})
+  WARNING: \`ObjectString.class\` is DEPRECATED!
+  This class will be removed on Version 1.0.
+`)
+
 var Util = require('./Util.class.js')
 
 /**
