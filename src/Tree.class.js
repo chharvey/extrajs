@@ -1,4 +1,5 @@
 console.warn(`
+  (${__filename})
   WARNING: \`Tree.class\` is OBSOLETE!
   Use at your own risk.
   This class will be removed on Version 1.0.
