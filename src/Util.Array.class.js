@@ -1,6 +1,10 @@
-var OBJECT = require('./Util.Object.class.js')
-
-module.exports = class ARRAY {
+/**
+ * Additional static members for the Array class.
+ * Does not extend the native Array class.
+ * @namespace
+ * @module
+ */
+module.exports = {
   /**
    * Test whether two arrays are “the same”,
    * using {@link xjs.Object.is()} equality on corresponding entries.
@@ -15,15 +19,16 @@ module.exports = class ARRAY {
    * @param  {Array} arr2 the second array
    * @return {boolean} `true` if corresponding elements are the same (via `xjs.Object.is()`)
    */
-  static is(arr1, arr2) {
+  is: function (arr1, arr2) {
+    let xjs = { Object: require('./Util.Object.class.js') }
     if (Object.is(arr1, arr2)) return true
     if (arr1.length !== arr2.length) return false
     let returned = true
     for (let i = 0; (i < arr1.length && returned === true); i++) {
-      returned = OBJECT.is(arr1[i], arr2[i])
+      returned = xjs.Object.is(arr1[i], arr2[i])
     }
     return returned
-  }
+  },
 
   /**
    * “Convert” an array, number, or string into an array. (Doesn’t really convert.)
@@ -38,7 +43,8 @@ module.exports = class ARRAY {
    * @param  {!Object=} database a database to check against
    * @return {Array} an array
    */
-  static toArray(arg, database = {}) {
+  toArray: function (arg, database = {}) {
+    let xjs = { Object: require('./Util.Object.class.js') }
     let returned = {
       array: function () {
         return arg
@@ -49,14 +55,14 @@ module.exports = class ARRAY {
         return array
       },
       string: function () {
-        return ARRAY.toArray(database[arg], database)
+        return this.toArray(database[arg], database)
       },
       default: function () {
         return []
       },
     }
-    return (returned[OBJECT.typeOf(arg)] || returned.default).call(null)
-  }
+    return (returned[xjs.Object.typeOf(arg)] || returned.default).call(this)
+  },
 
   /**
    * Make a copy of an array, and then remove duplicate entries.
@@ -67,7 +73,7 @@ module.exports = class ARRAY {
    * @param  {function(*,*):boolean=} comparator a function comparing elements in the array
    * @return {Array} a new array, with duplicates removed
    */
-  static removeDuplicates(arr, comparator = Object.is) {
+  removeDuplicates: function (arr, comparator = Object.is) {
     let returned = arr.slice()
     for (let i = 0; i < returned.length; i++) {
       for (let j = i+1; j < returned.length; j++) {
@@ -75,5 +81,5 @@ module.exports = class ARRAY {
       }
     }
     return returned
-  }
+  },
 }

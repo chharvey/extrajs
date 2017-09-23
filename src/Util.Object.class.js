@@ -1,4 +1,10 @@
-module.exports = class OBJECT {
+/**
+ * Additional static members for the Object class.
+ * Does not extend the native Object class.
+ * @namespace
+ * @module
+ */
+module.exports = {
   /**
    * Return the type of a thing.
    * Similar to the `typeof` primitive operator, but more refined.
@@ -17,7 +23,7 @@ module.exports = class OBJECT {
    * @param  {*} thing anything
    * @return {string} the type of the thing
    */
-  static typeOf(thing) {
+  typeOf: function (thing) {
     let type = typeof thing
     let returned = {
       object: function () {
@@ -35,7 +41,7 @@ module.exports = class OBJECT {
       },
     }
     return (returned[type] || returned.default).call(null)
-  }
+  },
 
   /**
    * Specify the type of number given.
@@ -46,11 +52,11 @@ module.exports = class OBJECT {
    * @param  {number} num the given number
    * @return {string} one of the strings described above
    */
-  static typeOfNumber(num) {
-    if (OBJECT.typeOf(num) === 'number') {
+  typeOfNumber: function (num) {
+    if (this.typeOf(num) === 'number') {
       return (Number.isInteger(num)) ? 'integer' : 'float'
     } else throw new RangeError('The number is not finite.')
-  }
+  },
 
   /**
    * Test whether two things are “the same”,
@@ -70,11 +76,11 @@ module.exports = class OBJECT {
    * @param  {*} b the second thing
    * @return {boolean} `true` if corresponding elements are the same, or replaceable
    */
-  static is(a, b) {
-    var ARRAY = require('./Util.Array.class.js')
+  is: function (a, b) {
+    let xjs = { Array: require('./Util.Array.class.js') }
     if (Object.is(a, b)) return true
-    if (OBJECT.typeOf(a) === 'array' && OBJECT.typeOf(b) === 'array' && ARRAY.is(a, b)) return true
-    if (OBJECT.typeOf(a) !== 'object' || OBJECT.typeOf(b) !== 'object') return false // not parameter validation; but speedy return
+    if (this.typeOf(a) === 'array' && this.typeOf(b) === 'array' && xjs.Array.is(a, b)) return true
+    if (this.typeOf(a) !== 'object' || this.typeOf(b) !== 'object') return false // not parameter validation; but speedy return
     if (Object.getOwnPropertyNames(a).length !== Object.getOwnPropertyNames(b).length) return false
     if (
       Object.getOwnPropertyNames(a).some((key) => !Object.getOwnPropertyNames(b).includes(key))
@@ -84,10 +90,10 @@ module.exports = class OBJECT {
     let returned = true
     for (let i in a) {
       // returned &&= OBJECT.is(a[i], b[i]) // IDEA
-      returned = returned && OBJECT.is(a[i], b[i])
+      returned = returned && this.is(a[i], b[i])
     }
     return returned
-  }
+  },
 
   /**
    * Deep freeze an object, and return the result.
@@ -97,24 +103,25 @@ module.exports = class OBJECT {
    * @param  {*} thing any value to freeze
    * @return {*} the returned value, with everything frozen
    */
-  static freezeDeep(thing) {
+  freezeDeep: function (thing) {
+    // NOTE: `this` in  a static method refers to this class (the object literal)
     Object.freeze(thing)
     let action = {
       array: function () {
         thing.forEach(function (val) {
-          if (!Object.isFrozen(val)) OBJECT.freezeDeep(val)
-        })
+          if (!Object.isFrozen(val)) this.freezeDeep(val)
+        }, this)
       },
       object: function () {
         for (let key in thing) {
-          if (!Object.isFrozen(thing[key])) OBJECT.freezeDeep(thing[key])
+          if (!Object.isFrozen(thing[key])) this.freezeDeep(thing[key])
         }
       },
       default: function () {},
     }
-    ;(action[OBJECT.typeOf(thing)] || action.default).call(null)
+    ;(action[this.typeOf(thing)] || action.default).call(this)
     return thing
-  }
+  },
 
   /**
    * Deep clone an object, and return the result.
@@ -169,19 +176,19 @@ module.exports = class OBJECT {
    * @param  {*} obj any value to clone
    * @return {*} an exact copy of the given value, but with nothing equal via `==` (unless the value given is primitive)
    */
-  static cloneDeep(thing) {
+  cloneDeep: function (thing) {
     let returned = {
       array: function () {
         let returned = []
         thing.forEach(function (val) {
-          returned.push(OBJECT.cloneDeep(val))
-        })
+          returned.push(this.cloneDeep(val))
+        }, this)
         return returned
       },
       object: function () {
         let returned = {}
         for (let key in thing) {
-          returned[key] = OBJECT.cloneDeep(thing[key])
+          returned[key] = this.cloneDeep(thing[key])
         }
         return returned
       },
@@ -189,6 +196,6 @@ module.exports = class OBJECT {
         return thing
       },
     }
-    return (returned[OBJECT.typeOf(thing)] || returned.default).call(null)
-  }
+    return (returned[this.typeOf(thing)] || returned.default).call(this)
+  },
 }
