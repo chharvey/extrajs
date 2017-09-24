@@ -1,11 +1,11 @@
-const xjs = { Object: require('./Object.class.js') }
+const xjs = {}
+xjs.Object = require('./Object.class.js')
 
 /**
  * Additional static members for the native Array class.
  * Does not extend the native Array class.
- * @class xjs.Array
  */
-module.exports = xjs.Array = class {
+xjs.Array = class {
   /** @private */ constructor() {}
 
   /**
@@ -84,3 +84,5 @@ module.exports = xjs.Array = class {
     return returned
   }
 }
+
+module.exports = xjs.Array

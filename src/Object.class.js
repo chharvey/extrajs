@@ -3,9 +3,8 @@ const xjs = {}
 /**
  * Additional static members for the native Object class.
  * Does not extend the native Object class.
- * @class xjs.Object
  */
-module.exports = xjs.Object = class {
+xjs.Object = class {
   /** @private */ constructor() {}
 
   /**
@@ -65,7 +64,6 @@ module.exports = xjs.Object = class {
    * @return {boolean} `true` if corresponding elements are the same, or replaceable
    */
   static is(a, b) {
-    // const xjs = { Array: require('./Array.class.js') }
     xjs.Array = require('./Array.class.js')
     if (Object.is(a, b)) return true
     if (xjs.Object.typeOf(a) === 'array' && xjs.Object.typeOf(b) === 'array') return xjs.Array.is(a, b)
@@ -189,3 +187,5 @@ module.exports = xjs.Object = class {
     return (returned[xjs.Object.typeOf(thing)] || returned.default).call(null)
   }
 }
+
+module.exports = xjs.Object

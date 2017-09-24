@@ -3,9 +3,8 @@ const xjs = {}
 /**
  * Additional static members for the native Date class.
  * Does not extend the native Date class.
- * @class xjs.Date
  */
-module.exports = xjs.Date = class {
+xjs.Date = class {
   /** @private */ constructor() {}
 
   /**
@@ -80,6 +79,7 @@ module.exports = xjs.Date = class {
     const MONTHS = xjs.Date.MONTH_NAMES
     /**
      * Convert a positive number to a string, adding a leading zero if and only if it is less than 10.
+     * @private
      * @param  {number} n any positive number
      * @return {string} that number as a string, possibly prepended with '0'
      */
@@ -101,3 +101,5 @@ module.exports = xjs.Date = class {
     return (returned[format] || returned.default).call(null, date)
   }
 }
+
+module.exports = xjs.Date
