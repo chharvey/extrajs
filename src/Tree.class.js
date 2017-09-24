@@ -5,7 +5,10 @@ console.warn(`
   This class will be removed on Version 1.0.
 `)
 
-var Util = require('./Util.class.js')
+var Util = {}
+Util.Object = require('./Object.class.js')
+Util.Array = require('./Array.class.js')
+Util.Date = require('./Date.class.js')
 var Mapp = require('./Mapp.class.js')
 
 /**

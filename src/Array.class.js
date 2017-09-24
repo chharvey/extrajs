@@ -20,7 +20,7 @@ module.exports = {
    * @return {boolean} `true` if corresponding elements are the same (via `xjs.Object.is()`)
    */
   is: function (arr1, arr2) {
-    let xjs = { Object: require('./Util.Object.class.js') }
+    let xjs = { Object: require('./Object.class.js') }
     if (Object.is(arr1, arr2)) return true
     if (arr1.length !== arr2.length) return false
     let returned = true
@@ -44,7 +44,7 @@ module.exports = {
    * @return {Array} an array
    */
   toArray: function (arg, database = {}) {
-    let xjs = { Object: require('./Util.Object.class.js') }
+    let xjs = { Object: require('./Object.class.js') }
     let returned = {
       array: function () {
         return arg

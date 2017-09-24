@@ -77,7 +77,7 @@ module.exports = {
    * @return {boolean} `true` if corresponding elements are the same, or replaceable
    */
   is: function (a, b) {
-    let xjs = { Array: require('./Util.Array.class.js') }
+    let xjs = { Array: require('./Array.class.js') }
     if (Object.is(a, b)) return true
     if (this.typeOf(a) === 'array' && this.typeOf(b) === 'array' && xjs.Array.is(a, b)) return true
     if (this.typeOf(a) !== 'object' || this.typeOf(b) !== 'object') return false // not parameter validation; but speedy return
