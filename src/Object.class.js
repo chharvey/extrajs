@@ -77,22 +77,24 @@ module.exports = {
    * @return {boolean} `true` if corresponding elements are the same, or replaceable
    */
   is: function (a, b) {
-    let xjs = { Array: require('./Array.class.js') }
+    const xjs = { Array: require('./Array.class.js') }
     if (Object.is(a, b)) return true
-    if (this.typeOf(a) === 'array' && this.typeOf(b) === 'array' && xjs.Array.is(a, b)) return true
-    if (this.typeOf(a) !== 'object' || this.typeOf(b) !== 'object') return false // not parameter validation; but speedy return
-    if (Object.getOwnPropertyNames(a).length !== Object.getOwnPropertyNames(b).length) return false
-    if (
-      Object.getOwnPropertyNames(a).some((key) => !Object.getOwnPropertyNames(b).includes(key))
-      ||
-      Object.getOwnPropertyNames(b).some((key) => !Object.getOwnPropertyNames(a).includes(key))
-    ) return false
-    let returned = true
-    for (let i in a) {
-      // returned &&= OBJECT.is(a[i], b[i]) // IDEA
-      returned = returned && this.is(a[i], b[i])
-    }
-    return returned
+    if (this.typeOf(a) === 'array' && this.typeOf(b) === 'array') return xjs.Array.is(a, b)
+    return (
+      this.typeof(a) === 'object' && this.typeof(b) === 'object' // both must be objects
+      && Object.getOwnPropertyNames(a).length === Object.getOwnPropertyNames(b).length // both must have the same number of own properties
+      && Object.getOwnPropertyNames(a).every((key) => Object.getOwnPropertyNames(b).includes(key)) // `b` must own every property in `a`
+      // && Object.getOwnPropertyNames(b).every((key) => Object.getOwnPropertyNames(a).includes(key)) // `a` must own every property in `b` // unnecessary if they have the same length
+      // finally, compare all the values
+      && (function () {
+        let r = true
+        for (let i in a) {
+          // r &&= this.is(a[i], b[i]) // IDEA
+          r = r && this.is(a[i], b[i])
+        }
+        return r
+      }).call(this)
+    )
   },
 
   /**
