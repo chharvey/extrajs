@@ -1,10 +1,13 @@
+const xjs = { Object: require('./Object.class.js') }
+
 /**
- * Additional static members for the Array class.
+ * Additional static members for the native Array class.
  * Does not extend the native Array class.
- * @namespace
- * @module
+ * @class xjs.Array
  */
-module.exports = {
+module.exports = xjs.Array = class {
+  /** @private */ constructor() {}
+
   /**
    * Test whether two arrays are “the same”,
    * using {@link xjs.Object.is()} equality on corresponding entries.
@@ -19,8 +22,7 @@ module.exports = {
    * @param  {Array} arr2 the second array
    * @return {boolean} `true` if corresponding elements are the same (via `xjs.Object.is()`)
    */
-  is: function (arr1, arr2) {
-    const xjs = { Object: require('./Object.class.js') }
+  static is(arr1, arr2) {
     if (Object.is(arr1, arr2)) return true
     if (arr1.length !== arr2.length) return false
     let returned = true
@@ -28,7 +30,7 @@ module.exports = {
       returned = xjs.Object.is(arr1[i], arr2[i])
     }
     return returned
-  },
+  }
 
   /**
    * “Convert” an array, number, or string into an array. (Doesn’t really convert.)
@@ -43,8 +45,7 @@ module.exports = {
    * @param  {!Object=} database a database to check against
    * @return {Array} an array
    */
-  toArray: function (arg, database = {}) {
-    const xjs = { Object: require('./Object.class.js') }
+  static toArray(arg, database = {}) {
     let returned = {
       array: function () {
         return arg
@@ -55,14 +56,14 @@ module.exports = {
         return array
       },
       string: function () {
-        return this.toArray(database[arg], database)
+        return xjs.Array.toArray(database[arg], database)
       },
       default: function () {
         return []
       },
     }
-    return (returned[xjs.Object.typeOf(arg)] || returned.default).call(this)
-  },
+    return (returned[xjs.Object.typeOf(arg)] || returned.default).call(null)
+  }
 
   /**
    * Make a copy of an array, and then remove duplicate entries.
@@ -73,7 +74,7 @@ module.exports = {
    * @param  {function(*,*):boolean=} comparator a function comparing elements in the array
    * @return {Array} a new array, with duplicates removed
    */
-  removeDuplicates: function (arr, comparator = Object.is) {
+  static removeDuplicates(arr, comparator = Object.is) {
     let returned = arr.slice()
     for (let i = 0; i < returned.length; i++) {
       for (let j = i+1; j < returned.length; j++) {
@@ -81,5 +82,5 @@ module.exports = {
       }
     }
     return returned
-  },
+  }
 }

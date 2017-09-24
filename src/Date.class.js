@@ -1,15 +1,19 @@
+const xjs = {}
+
 /**
- * Additional static members for the Date class.
+ * Additional static members for the native Date class.
  * Does not extend the native Date class.
- * @namespace
- * @module
+ * @class xjs.Date
  */
-module.exports = {
+module.exports = xjs.Date = class {
+  /** @private */ constructor() {}
+
   /**
    * List of full month names in English.
    * @type {Array<string>}
    */
-  MONTH_NAMES: [
+  static get MONTH_NAMES() {
+    return [
       'January',
       'February',
       'March',
@@ -22,13 +26,15 @@ module.exports = {
       'October',
       'November',
       'December',
-  ],
+    ]
+  }
 
   /**
    * List of full day names in English.
    * @type {Array<string>}
    */
-  DAY_NAMES: [
+  static get DAY_NAMES() {
+    return [
       'Sundary',
       'Monday',
       'Tuesday',
@@ -36,7 +42,8 @@ module.exports = {
       'Thursday',
       'Friday',
       'Saturday',
-  ],
+    ]
+  }
 
   /**
    * Return whether two dates occur on the same day.
@@ -45,9 +52,9 @@ module.exports = {
    * @param  {Date} date2 the second date
    * @return {boolean} `true` iff both dates have the same year, same month, *and* same day (date of the month)
    */
-  sameDate: function (date1, date2) {
+  static sameDate(date1, date2) {
     return date1.toISOString().slice(0,10) === date2.toISOString().slice(0,10)
-  },
+  }
 
   /**
    * Format a date, using PHP-based formatting options.
@@ -69,8 +76,8 @@ module.exports = {
    * @param  {string} format one of the enumerated options listed in the description
    * @return {string} a string representing the given date in the given format
    */
-  format: function (date, format) {
-    const MONTHS = this.MONTH_NAMES
+  static format(date, format) {
+    const MONTHS = xjs.Date.MONTH_NAMES
     /**
      * Convert a positive number to a string, adding a leading zero if and only if it is less than 10.
      * @param  {number} n any positive number
@@ -81,7 +88,7 @@ module.exports = {
       'Y-m-d'    : (date) => `${date.getFullYear()}-${leadingZero(date.getUTCMonth()+1)}-${leadingZero(date.getUTCDate())}`,
       'j M Y'    : (date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
       'd F Y'    : (date) => `${leadingZero(date.getUTCDate())} ${MONTHS[date.getUTCMonth()]} ${date.getFullYear()}`,
-      'l, j F, Y': (date) => `${this.DAY_NAMES[date.getUTCDay()]}, ${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}, ${date.getFullYear()}`,
+      'l, j F, Y': (date) => `${xjs.Date.DAY_NAMES[date.getUTCDay()]}, ${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}, ${date.getFullYear()}`,
       'j M'      : (date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)}`,
       'M Y'      : (date) => `${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
       'M j'      : (date) => `${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getUTCDate()}`,
@@ -92,5 +99,5 @@ module.exports = {
       default    : (date) => date.toISOString(),
     }
     return (returned[format] || returned.default).call(null, date)
-  },
+  }
 }

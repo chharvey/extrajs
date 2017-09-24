@@ -1,10 +1,13 @@
+const xjs = {}
+
 /**
- * Additional static members for the Number class.
+ * Additional static members for the native Number class.
  * Does not extend the native Number class.
- * @namespace
- * @module
+ * @class xjs.Number
  */
-module.exports = {
+module.exports = xjs.Number = class {
+  /** @private */ constructor() {}
+
   /**
    * Specify the type of number given.
    * If the number is finite, return one of the following strings:
@@ -15,10 +18,10 @@ module.exports = {
    * @return {string} one of the strings described above
    * @throws {RangeError} if the given arguemnt was not a finite number
    */
-  typeOf: function (num) {
+  static typeOf(num) {
     const xjs = { Object: require('./Object.class.js') }
     if (xjs.Object.typeOf(num) === 'number') {
       return (Number.isInteger(num)) ? 'integer' : 'float'
     } else throw new RangeError('Argument must be a finite number.')
-  },
+  }
 }

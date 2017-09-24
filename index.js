@@ -1,34 +1,25 @@
 /**
  * Extra JS utilites and helpers.
- * @namespace
- * @module
+ * @namespace xjs
  */
 module.exports = {
   /**
-   * Additional static members for the Object class.
-   * Does not extend the native Object class.
-   * @namespace
+   * @see xjs.Object
    */
   Object: require('./src/Object.class.js'),
 
   /**
-   * Additional static members for the Number class.
-   * Does not extend the native Number class.
-   * @namespace
+   * @see xjs.Number
    */
   Number: require('./src/Number.class.js'),
 
   /**
-   * Additional static members for the Array class.
-   * Does not extend the native Array class.
-   * @namespace
+   * @see xjs.Array
    */
   Array: require('./src/Array.class.js'),
 
   /**
-   * Additional static members for the Date class.
-   * Does not extend the native Date class.
-   * @namespace
+   * @see xjs.Date
    */
   Date: require('./src/Date.class.js'),
 
