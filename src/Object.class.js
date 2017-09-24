@@ -44,21 +44,6 @@ module.exports = {
   },
 
   /**
-   * Specify the type of number given.
-   * If the number is finite, return one of the following strings:
-   * - `'integer'` : the number is an integer, that is, `num % 1 === 0`
-   * - `'float'`   : the number is not an integer
-   * Else, throw a RangeError (the argument is of the correct type but does not qualify).
-   * @param  {number} num the given number
-   * @return {string} one of the strings described above
-   */
-  typeOfNumber: function (num) {
-    if (this.typeOf(num) === 'number') {
-      return (Number.isInteger(num)) ? 'integer' : 'float'
-    } else throw new RangeError('The number is not finite.')
-  },
-
-  /**
    * Test whether two things are “the same”,
    * using this function recursively on corresponding object values.
    * The base case for non-object values is `Object.is()`.

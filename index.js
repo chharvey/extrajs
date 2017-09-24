@@ -12,6 +12,13 @@ module.exports = {
   Object: require('./src/Object.class.js'),
 
   /**
+   * Additional static members for the Number class.
+   * Does not extend the native Number class.
+   * @namespace
+   */
+  Number: require('./src/Number.class.js'),
+
+  /**
    * Additional static members for the Array class.
    * Does not extend the native Array class.
    * @namespace
