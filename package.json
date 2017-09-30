@@ -24,8 +24,7 @@
   },
   "homepage": "https://github.com/chharvey/extrajs#readme",
   "devDependencies": {
-    "documentation": "^5.3.2",
     "gulp": "^3.9.1",
-    "gulp-documentation": "^3.2.1"
+    "gulp-jsdoc3": "^1.0.1"
   }
 }
