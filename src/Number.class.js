@@ -4,6 +4,7 @@ xjs.Object = require('./Object.class.js')
 /**
  * Additional static members for the native Number class.
  * Does not extend the native Number class.
+ * @namespace
  */
 xjs.Number = class {
   /** @private */ constructor() {}

@@ -3,6 +3,7 @@ const xjs = {}
 /**
  * Additional static members for the native Object class.
  * Does not extend the native Object class.
+ * @namespace
  */
 xjs.Object = class {
   /** @private */ constructor() {}

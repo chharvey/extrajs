@@ -3,6 +3,7 @@ const xjs = {}
 /**
  * Additional static members for the native Date class.
  * Does not extend the native Date class.
+ * @namespace
  */
 xjs.Date = class {
   /** @private */ constructor() {}

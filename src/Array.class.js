@@ -4,6 +4,7 @@ xjs.Object = require('./Object.class.js')
 /**
  * Additional static members for the native Array class.
  * Does not extend the native Array class.
+ * @namespace
  */
 xjs.Array = class {
   /** @private */ constructor() {}
