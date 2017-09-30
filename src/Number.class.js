@@ -14,6 +14,7 @@ xjs.Number = class {
    * - `'integer'` : the number is an integer, that is, `num % 1 === 0`
    * - `'float'`   : the number is not an integer
    * Else, throw a RangeError (the argument is of the correct type but does not qualify).
+   * @stability STABLE
    * @param  {number} num the given number
    * @return {string} one of the strings described above
    * @throws {RangeError} if the given arguemnt was not a finite number

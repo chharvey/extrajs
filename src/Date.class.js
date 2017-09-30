@@ -9,6 +9,7 @@ xjs.Date = class {
 
   /**
    * List of full month names in English.
+   * @stability LOCKED
    * @type {Array<string>}
    */
   static get MONTH_NAMES() {
@@ -30,6 +31,7 @@ xjs.Date = class {
 
   /**
    * List of full day names in English.
+   * @stability LOCKED
    * @type {Array<string>}
    */
   static get DAY_NAMES() {
@@ -47,6 +49,7 @@ xjs.Date = class {
   /**
    * Return whether two dates occur on the same day.
    * That is, if 'YYYY-MM-DD' of date1 equals 'YYYY-MM-DD' of date2.
+   * @stability STABLE
    * @param  {Date} date1 the first date
    * @param  {Date} date2 the second date
    * @return {boolean} `true` iff both dates have the same year, same month, *and* same day (date of the month)
@@ -69,7 +72,8 @@ xjs.Date = class {
    * - 'M'         : 'Aug'
    * - 'H:i'       : '21:33'
    * - 'g:ia'      : '9:33pm'
-   * - 'default'   : '2017-08-06T01:33:00.000Z' (`date.toISOString()`)
+   * - 'default'   : '2017-08-06T01:33:00.000Z' ({@link Date#toISOString})
+   * @stability STABLE
    * @see http://php.net/manual/en/function.date.php
    * @param  {Date} date the date to format
    * @param  {string} format one of the enumerated options listed in the description
@@ -79,7 +83,6 @@ xjs.Date = class {
     const MONTHS = xjs.Date.MONTH_NAMES
     /**
      * Convert a positive number to a string, adding a leading zero if and only if it is less than 10.
-     * @private
      * @param  {number} n any positive number
      * @return {string} that number as a string, possibly prepended with '0'
      */
