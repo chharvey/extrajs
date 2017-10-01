@@ -3,6 +3,7 @@ const xjs = {}
 /**
  * Additional static members for the native Object class.
  * Does not extend the native Object class.
+ * @namespace
  */
 xjs.Object = class {
   /** @private */ constructor() {}
@@ -12,7 +13,7 @@ xjs.Object = class {
    * Similar to the `typeof` primitive operator, but more refined.
    *
    * NOTE! passing undeclared variables will throw a `ReferenceError`!
-   * ```
+   * ```js
    * var x;          // declare `x`
    * typeof x;       // 'undefined'
    * typeof y;       // 'undefined'
@@ -21,6 +22,7 @@ xjs.Object = class {
    * ```
    * Credit to @zaggino.
    *
+   * @stability STABLE
    * @see https://github.com/zaggino/z-schema/blob/bddb0b25daa0c96119e84b121d7306b1a7871594/src/Utils.js#L12
    * @param  {*} thing anything
    * @return {string} the type of the thing
@@ -55,10 +57,11 @@ xjs.Object = class {
    * `xjs.Object.is(a, b)`.
    *
    * This function is less strict than `Object.is()`.
-   * If both arguments are arrays, it is faster to use {@link xjs.Array.is()}.
+   * If both arguments are arrays, it is faster to use {@link xjs.Array.is}.
    *
    * NOTE: WARNING: recursive function. infinite loop possible.
    *
+   * @stability STABLE
    * @param  {*} a the first  thing
    * @param  {*} b the second thing
    * @return {boolean} `true` if corresponding elements are the same, or replaceable
@@ -89,6 +92,7 @@ xjs.Object = class {
    * If an array or object is passed,
    * Recursively call `Object.freeze()` on every property and sub-property of the given parameter.
    * Else, return the given argument.
+   * @stability EXPERIMENTAL
    * @param  {*} thing any value to freeze
    * @return {*} the returned value, with everything frozen
    */
@@ -115,18 +119,16 @@ xjs.Object = class {
    * Deep clone an object, and return the result.
    * If an array or object is passed,
    * This method is recursively called, cloning properties and sub-properties of the given parameter.
-   * The returned result is an object seemingly identical to the given parameter, except that
-   * corresponding properties are not "equal" in the sense of `==` or `===`, unless they are primitive values.
-   * Else, the original argument is returned.
-   * In other words,a clone deep is “replaceable” with its original object, and thus would be
-   * “the same” in the sense of `xjs.Object.is()`.
+   * The returned result is an object, that when passed with the original as arguments of {@link xjs.Object.is},
+   * `true` would be returned. The new object would be “replaceable” with its cloner.
+   * If a primitive value is passed, the original argument is returned.
    *
    * **NOTE WARNING: infinite loop possible!**
    *
    * This method provides a deeper clone than `Object.assign()`: whereas `Object.assign()` only
    * copies the top-level properties, this method recursively clones into all sub-levels.
    *
-   * // ==== Example ====
+   * ```js
    * var x = { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
    *
    * // Object.assign x into y:
@@ -160,8 +162,10 @@ xjs.Object = class {
    * z.third[2].v  = [3]
    * console.log(z) // returns { first: 'one', second: 2, third: ['one', 2, { v:[3] }] }
    * console.log(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
+   * ```
    *
-   * @param  {*} obj any value to clone
+   * @stability EXPERIMENTAL
+   * @param  {*} thing any value to clone
    * @return {*} an exact copy of the given value, but with nothing equal via `==` (unless the value given is primitive)
    */
   static cloneDeep(thing) {

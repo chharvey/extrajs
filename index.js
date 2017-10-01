@@ -1,6 +1,6 @@
 /**
  * Extra JS utilites and helpers.
- * @module xjs
+ * @namespace xjs
  */
 module.exports = {
   Object: require('./src/Object.class.js'),

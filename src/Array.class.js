@@ -4,13 +4,14 @@ xjs.Object = require('./Object.class.js')
 /**
  * Additional static members for the native Array class.
  * Does not extend the native Array class.
+ * @namespace
  */
 xjs.Array = class {
   /** @private */ constructor() {}
 
   /**
    * Test whether two arrays are “the same”,
-   * using {@link xjs.Object.is()} equality on corresponding entries.
+   * using {@link xjs.Object.is} equality on corresponding entries.
    *
    * “The same” means “replaceable”, that is,
    * for any deterministic function: `fn(arr1)` would return the same result as `fn(arr2)`
@@ -18,6 +19,7 @@ xjs.Array = class {
    *
    * This method returns the same result as `xjs.Object.is()`, but is simply faster for arrays.
    *
+   * @stability STABLE
    * @param  {Array} arr1 the first array
    * @param  {Array} arr2 the second array
    * @return {boolean} `true` if corresponding elements are the same (via `xjs.Object.is()`)
@@ -41,6 +43,7 @@ xjs.Array = class {
    *   If the value of that property *is* a string, then *that* string is checked, and so on,
    *   until an array or number is found. If no entry is found, an empty array is returned.
    *   The default database is an empty object `{}`.
+   * @stability EXPERIMENTAL
    * @param  {*} arg the argument to convert
    * @param  {!Object=} database a database to check against
    * @return {Array} an array
@@ -70,8 +73,9 @@ xjs.Array = class {
    * "Duplicate entries" are entries that considered "the same" by
    * the provided comparator function, or if none is given, `Object.is()`.
    * Only duplicate entries are removed; the order of non-duplicates is preserved.
+   * @stability STABLE
    * @param  {Array} arr an array to use
-   * @param  {function(*,*):boolean=} comparator a function comparing elements in the array
+   * @param  {(function(*,*):boolean)=} comparator a function comparing elements in the array
    * @return {Array} a new array, with duplicates removed
    */
   static removeDuplicates(arr, comparator = Object.is) {

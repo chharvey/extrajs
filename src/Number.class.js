@@ -4,6 +4,7 @@ xjs.Object = require('./Object.class.js')
 /**
  * Additional static members for the native Number class.
  * Does not extend the native Number class.
+ * @namespace
  */
 xjs.Number = class {
   /** @private */ constructor() {}
@@ -14,6 +15,7 @@ xjs.Number = class {
    * - `'integer'` : the number is an integer, that is, `num % 1 === 0`
    * - `'float'`   : the number is not an integer
    * Else, throw a RangeError (the argument is of the correct type but does not qualify).
+   * @stability STABLE
    * @param  {number} num the given number
    * @return {string} one of the strings described above
    * @throws {RangeError} if the given arguemnt was not a finite number
