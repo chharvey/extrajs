@@ -1,6 +1,10 @@
-const Util   = require('./src/Util.class.js')
-Util.Element = require('./src/Element.class.js') // CHANGED DEPRECATED
-Util.Mapp    = require('./src/Mapp.class.js') // CHANGED OBSOLETE
-Util.Tree    = require('./src/Tree.class.js') // CHANGED OBSOLETE
-
-module.exports = Util
+/**
+ * Extra JS utilites and helpers.
+ * @namespace xjs
+ */
+module.exports = {
+  Object: require('./src/Object.class.js'),
+  Number: require('./src/Number.class.js'),
+  Array: require('./src/Array.class.js'),
+  Date: require('./src/Date.class.js'),
+}

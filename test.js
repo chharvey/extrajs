@@ -1,7 +1,7 @@
 var xjs = require('./index.js')
 
 
-function util_Object_typeOf() {
+function object_typeOf() {
   console.log(`The following should print 'null':`)
   console.log(
     xjs.Object.typeOf(null)
@@ -49,39 +49,22 @@ function util_Object_typeOf() {
   )
 }
 
-function util_Object_typeOfNumber() {
-  console.log(`The following should print 'integer':`)
-  console.log(
-    xjs.Object.typeOfNumber(42)
-  )
-  console.log(`The following should print 'float':`)
-  console.log(
-    xjs.Object.typeOfNumber(42.21)
-  )
-  console.log(`The following should throw a RangeError:`)
-  try {
-    console.log(
-      xjs.Object.typeOfNumber(Infinity)
-    )
-  } catch (e) {
-    console.log(`an error was thrown: "${e}"`)
-  }
-  try {
-    console.log(
-      xjs.Object.typeOfNumber(NaN)
-    )
-  } catch (e) {
-    console.log(`an error was thrown: "${e}"`)
-  }
-}
-
-function util_Object_is() {
+function object_is() {
   console.log(
     xjs.Object.is({ background: 'none', 'font-weight': 'bold' }, {})
   )
 }
 
-function util_Object_cloneDeep() {
+function object_freezeDeep() {
+  let x = { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
+  let y = xjs.Object.freezeDeep(x)
+  console.log(`x: ${x}`)
+  console.log(`y: ${y}`)
+  console.log(`x===y: ${x===y}`)
+  console.log(`xjs.Object.is(x,y): ${xjs.Object.is(x,y)}`)
+}
+
+function object_cloneDeep() {
   let x = { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
   let y = xjs.Object.cloneDeep(x)
   console.log(`x: ${x}`)
@@ -90,7 +73,54 @@ function util_Object_cloneDeep() {
   console.log(`xjs.Object.is(x,y): ${xjs.Object.is(x,y)}`)
 }
 
-function util_Date_format() {
+function number_typeOf() {
+  console.log(`The following should print 'integer':`)
+  console.log(
+    xjs.Number.typeOf(42),
+    xjs.Number.typeOf(-42),
+    xjs.Number.typeOf(0),
+    xjs.Number.typeOf(-0),
+    xjs.Number.typeOf(24.00),
+    xjs.Number.typeOf(-24.00)
+  )
+  console.log(`The following should print 'float':`)
+  console.log(
+    xjs.Number.typeOf(42.24),
+    xjs.Number.typeOf(-42.24)
+  )
+  console.log(`The following should throw a RangeError:`)
+  try {
+    console.log(
+      xjs.Number.typeOf(Infinity)
+    )
+  } catch (e) {
+    console.log(`an error was thrown: "${e}"`)
+  }
+  try {
+    console.log(
+      xjs.Number.typeOf(NaN)
+    )
+  } catch (e) {
+    console.log(`an error was thrown: "${e}"`)
+  }
+}
+
+function array_is() {
+  console.log(xjs.Array.is(
+    [1, 'two', [3, 'three'], { v: 4, val: 'four' }, [5, 'five']],
+    [1, 'two', [3, 'three'], { v: 4, val: 'four' }, [5, 'five']]
+  ))
+  console.log(xjs.Array.is(
+    [1, 'two', [3, 'three'], { v: 4, val: 'four' }, [5, 'five']],
+    [1, 'two', [3, 'three'], { v: 4, val: 'four' }, [5, 'five'], [6, 'six', [6,'six'], { six: 6 }]]
+  ))
+  console.log(xjs.Array.is(
+    [1, 'two', { value: 3 }, ['four']],
+    [['four'], 1, 'two', { value: 3 }]
+  ))
+}
+
+function date_format() {
   console.log([
     'Y-m-d'    ,
     'j M Y'    ,
@@ -107,8 +137,10 @@ function util_Date_format() {
   ].map((f) => xjs.Date.format(new Date(), f)))
 }
 
-// util_Object_typeOf();
-// util_Object_typeOfNumber();
-// util_Object_is();
-// util_Object_cloneDeep();
-// util_Date_format();
+// object_typeOf();
+// object_is();
+// object_freezeDeep();
+// object_cloneDeep();
+// number_typeOf();
+// array_is();
+// date_format();

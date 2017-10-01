@@ -1,10 +1,19 @@
-module.exports = class OBJECT {
+const xjs = {}
+
+/**
+ * Additional static members for the native Object class.
+ * Does not extend the native Object class.
+ * @namespace
+ */
+xjs.Object = class {
+  /** @private */ constructor() {}
+
   /**
    * Return the type of a thing.
    * Similar to the `typeof` primitive operator, but more refined.
    *
    * NOTE! passing undeclared variables will throw a `ReferenceError`!
-   * ```
+   * ```js
    * var x;          // declare `x`
    * typeof x;       // 'undefined'
    * typeof y;       // 'undefined'
@@ -13,6 +22,7 @@ module.exports = class OBJECT {
    * ```
    * Credit to @zaggino.
    *
+   * @stability STABLE
    * @see https://github.com/zaggino/z-schema/blob/bddb0b25daa0c96119e84b121d7306b1a7871594/src/Utils.js#L12
    * @param  {*} thing anything
    * @return {string} the type of the thing
@@ -38,21 +48,6 @@ module.exports = class OBJECT {
   }
 
   /**
-   * Specify the type of number given.
-   * If the number is finite, return one of the following strings:
-   * - `'integer'` : the number is an integer, that is, `num % 1 === 0`
-   * - `'float'`   : the number is not an integer
-   * Else, throw a RangeError (the argument is of the correct type but does not qualify).
-   * @param  {number} num the given number
-   * @return {string} one of the strings described above
-   */
-  static typeOfNumber(num) {
-    if (OBJECT.typeOf(num) === 'number') {
-      return (Number.isInteger(num)) ? 'integer' : 'float'
-    } else throw new RangeError('The number is not finite.')
-  }
-
-  /**
    * Test whether two things are “the same”,
    * using this function recursively on corresponding object values.
    * The base case for non-object values is `Object.is()`.
@@ -62,31 +57,34 @@ module.exports = class OBJECT {
    * `xjs.Object.is(a, b)`.
    *
    * This function is less strict than `Object.is()`.
-   * If both arguments are arrays, it is faster to use {@link xjs.Array.is()}.
+   * If both arguments are arrays, it is faster to use {@link xjs.Array.is}.
    *
    * NOTE: WARNING: recursive function. infinite loop possible.
    *
+   * @stability STABLE
    * @param  {*} a the first  thing
    * @param  {*} b the second thing
    * @return {boolean} `true` if corresponding elements are the same, or replaceable
    */
   static is(a, b) {
-    var ARRAY = require('./Util.Array.class.js')
+    xjs.Array = require('./Array.class.js')
     if (Object.is(a, b)) return true
-    if (OBJECT.typeOf(a) === 'array' && OBJECT.typeOf(b) === 'array' && ARRAY.is(a, b)) return true
-    if (OBJECT.typeOf(a) !== 'object' || OBJECT.typeOf(b) !== 'object') return false // not parameter validation; but speedy return
-    if (Object.getOwnPropertyNames(a).length !== Object.getOwnPropertyNames(b).length) return false
-    if (
-      Object.getOwnPropertyNames(a).some((key) => !Object.getOwnPropertyNames(b).includes(key))
-      ||
-      Object.getOwnPropertyNames(b).some((key) => !Object.getOwnPropertyNames(a).includes(key))
-    ) return false
-    let returned = true
-    for (let i in a) {
-      // returned &&= OBJECT.is(a[i], b[i]) // IDEA
-      returned = returned && OBJECT.is(a[i], b[i])
-    }
-    return returned
+    if (xjs.Object.typeOf(a) === 'array' && xjs.Object.typeOf(b) === 'array') return xjs.Array.is(a, b)
+    return (
+      xjs.Object.typeOf(a) === 'object' && xjs.Object.typeOf(b) === 'object' // both must be objects
+      && Object.getOwnPropertyNames(a).length === Object.getOwnPropertyNames(b).length // both must have the same number of own properties
+      && Object.getOwnPropertyNames(a).every((key) => Object.getOwnPropertyNames(b).includes(key)) // `b` must own every property in `a`
+      // && Object.getOwnPropertyNames(b).every((key) => Object.getOwnPropertyNames(a).includes(key)) // `a` must own every property in `b` // unnecessary if they have the same length
+      // finally, compare all the values
+      && (function () {
+        let r = true
+        for (let i in a) {
+          // r &&= xjs.Object.is(a[i], b[i]) // IDEA
+          r = r && xjs.Object.is(a[i], b[i])
+        }
+        return r
+      })()
+    )
   }
 
   /**
@@ -94,6 +92,7 @@ module.exports = class OBJECT {
    * If an array or object is passed,
    * Recursively call `Object.freeze()` on every property and sub-property of the given parameter.
    * Else, return the given argument.
+   * @stability EXPERIMENTAL
    * @param  {*} thing any value to freeze
    * @return {*} the returned value, with everything frozen
    */
@@ -102,17 +101,17 @@ module.exports = class OBJECT {
     let action = {
       array: function () {
         thing.forEach(function (val) {
-          if (!Object.isFrozen(val)) OBJECT.freezeDeep(val)
+          if (!Object.isFrozen(val)) xjs.Object.freezeDeep(val)
         })
       },
       object: function () {
         for (let key in thing) {
-          if (!Object.isFrozen(thing[key])) OBJECT.freezeDeep(thing[key])
+          if (!Object.isFrozen(thing[key])) xjs.Object.freezeDeep(thing[key])
         }
       },
       default: function () {},
     }
-    ;(action[OBJECT.typeOf(thing)] || action.default).call(null)
+    ;(action[xjs.Object.typeOf(thing)] || action.default).call(null)
     return thing
   }
 
@@ -120,18 +119,16 @@ module.exports = class OBJECT {
    * Deep clone an object, and return the result.
    * If an array or object is passed,
    * This method is recursively called, cloning properties and sub-properties of the given parameter.
-   * The returned result is an object seemingly identical to the given parameter, except that
-   * corresponding properties are not "equal" in the sense of `==` or `===`, unless they are primitive values.
-   * Else, the original argument is returned.
-   * In other words,a clone deep is “replaceable” with its original object, and thus would be
-   * “the same” in the sense of `xjs.Object.is()`.
+   * The returned result is an object, that when passed with the original as arguments of {@link xjs.Object.is},
+   * `true` would be returned. The new object would be “replaceable” with its cloner.
+   * If a primitive value is passed, the original argument is returned.
    *
    * **NOTE WARNING: infinite loop possible!**
    *
    * This method provides a deeper clone than `Object.assign()`: whereas `Object.assign()` only
    * copies the top-level properties, this method recursively clones into all sub-levels.
    *
-   * // ==== Example ====
+   * ```js
    * var x = { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
    *
    * // Object.assign x into y:
@@ -165,8 +162,10 @@ module.exports = class OBJECT {
    * z.third[2].v  = [3]
    * console.log(z) // returns { first: 'one', second: 2, third: ['one', 2, { v:[3] }] }
    * console.log(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
+   * ```
    *
-   * @param  {*} obj any value to clone
+   * @stability EXPERIMENTAL
+   * @param  {*} thing any value to clone
    * @return {*} an exact copy of the given value, but with nothing equal via `==` (unless the value given is primitive)
    */
   static cloneDeep(thing) {
@@ -174,14 +173,14 @@ module.exports = class OBJECT {
       array: function () {
         let returned = []
         thing.forEach(function (val) {
-          returned.push(OBJECT.cloneDeep(val))
+          returned.push(xjs.Object.cloneDeep(val))
         })
         return returned
       },
       object: function () {
         let returned = {}
         for (let key in thing) {
-          returned[key] = OBJECT.cloneDeep(thing[key])
+          returned[key] = xjs.Object.cloneDeep(thing[key])
         }
         return returned
       },
@@ -189,6 +188,8 @@ module.exports = class OBJECT {
         return thing
       },
     }
-    return (returned[OBJECT.typeOf(thing)] || returned.default).call(null)
+    return (returned[xjs.Object.typeOf(thing)] || returned.default).call(null)
   }
 }
+
+module.exports = xjs.Object
