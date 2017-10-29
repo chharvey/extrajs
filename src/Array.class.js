@@ -40,6 +40,40 @@ xjs.Array = class {
   }
 
   /**
+   * @summary Test whether an array is a subarray of another array.
+   * @description This method acts like {@link String#includes}, testing whether
+   * the elements in the smaller array appear consecutively and in the same order as in the larger array.
+   * In other words, if `{@link xjs.Array.is}(larger.slice(a,b), smaller)` (for some integers a and b),
+   * then this method returns `true`.
+   *
+   * Examples:
+   * ```js
+   * 'twofoursix'.includes('wofo')===true
+   * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], ['w','o',4,'o'])===true
+   * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], ['o','u'])===true
+   * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], [6,'o','u','r'])===false // not in the same order
+   * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], [2,4,6])===false // not consecutive
+   * ```
+   *
+   * @version EXPERIMENTAL
+   * @param   {Array}  larger  the larger array, to test against
+   * @param   {Array}  smaller the smaller array, to test
+   * @returns {boolean} `true` if `smaller` is a subarray of `larger`
+   * @throws  {RangeError} if the second array is larger than the first
+   */
+  static contains(larger, smaller) {
+    if (smaller.length > larger.length) throw new RangeError('Smaller array cannot have a greater length than larger array.')
+    if (xjs.Array.is(smaller, [])) return true
+    let returned = false
+    for (let i = 0; i < larger.length; i++) {
+      if (xjs.Object.is(smaller[0], larger[i])) {
+        returned = returned || xjs.Array.is(larger.slice(i, i+smaller.length), smaller)
+      }
+    }
+    return returned
+  }
+
+  /**
    * @summary “Convert” an array, number, or string into an array. (Doesn’t really convert.)
    * @description
    * - If the argument is an array, it is returned unchanged.
