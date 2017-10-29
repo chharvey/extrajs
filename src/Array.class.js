@@ -29,9 +29,13 @@ xjs.Array = class {
     if (Object.is(arr1, arr2)) return true
     if (arr1.length !== arr2.length) return false
     let returned = true
-    for (let i = 0; (i < arr1.length && returned === true); i++) {
+    for (let i = 0; i < arr1.length && returned === true; i++) {
       returned = xjs.Object.is(arr1[i], arr2[i])
     }
+    // slower:
+    // for (let i = 0; (i < arr1.length); i++) {
+    //   returned = returned && xjs.Object.is(arr1[i], arr2[i])
+    // }
     return returned
   }
 
