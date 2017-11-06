@@ -48,6 +48,22 @@ xjs.Object = class {
   }
 
   /**
+   * @summary Return the name of an object’s constructing class or function.
+   * @description This method reveals the most specific class that the native `instanceof` operator would reveal.
+   * This method can be passed either complex values (objects, arrays, functions) or primitive values.
+   * Technically, primitives do not have constructing functions, but they can be wrapped with object constructors.
+   * For example, calling `instanceOf(3)` will return `Number`, even though `3` was not constructed via the `Number` class.
+   * @version EXPERIMENTAL
+   * @param   {*} thing anything except `null` or `undefined`
+   * @returns {string} the name of the constructing function
+   * @throws  {TypeError} if `null` or `undefined` is passed
+   */
+  static instanceOf(thing) {
+    if (thing === null || thing === undefined) throw new TypeError(`\`${thing}\` does not have a construtor.`)
+    return thing.__proto__.constructor.name
+  }
+
+  /**
    * @summary Test whether two things are “the same”.
    * @description This function acts **recursively** on corresponding object values,
    * where the base case (for non-object values) is `Object.is()`.
