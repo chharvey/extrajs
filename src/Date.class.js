@@ -1,16 +1,16 @@
 const xjs = {}
 
 /**
- * Additional static members for the native Date class.
- * Does not extend the native Date class.
+ * @summary Additional static members for the native Date class.
+ * @description Does not extend the native Date class.
  * @namespace
  */
 xjs.Date = class {
   /** @private */ constructor() {}
 
   /**
-   * List of full month names in English.
-   * @stability LOCKED
+   * @summary List of full month names in English.
+   * @version LOCKED
    * @type {Array<string>}
    */
   static get MONTH_NAMES() {
@@ -31,8 +31,8 @@ xjs.Date = class {
   }
 
   /**
-   * List of full day names in English.
-   * @stability LOCKED
+   * @summary List of full day names in English.
+   * @version LOCKED
    * @type {Array<string>}
    */
   static get DAY_NAMES() {
@@ -48,20 +48,20 @@ xjs.Date = class {
   }
 
   /**
-   * Return whether two dates occur on the same day.
-   * That is, if 'YYYY-MM-DD' of date1 equals 'YYYY-MM-DD' of date2.
-   * @stability STABLE
-   * @param  {Date} date1 the first date
-   * @param  {Date} date2 the second date
-   * @return {boolean} `true` iff both dates have the same year, same month, *and* same day (date of the month)
+   * @summary Return whether two dates occur on the same day.
+   * @description That is, if 'YYYY-MM-DD' of date1 equals 'YYYY-MM-DD' of date2.
+   * @version STABLE
+   * @param   {Date} date1 the first date
+   * @param   {Date} date2 the second date
+   * @returns {boolean} `true` iff both dates have the same year, same month, *and* same day (date of the month)
    */
   static sameDate(date1, date2) {
     return date1.toISOString().slice(0,10) === date2.toISOString().slice(0,10)
   }
 
   /**
-   * Format a date, using PHP-based formatting options.
-   * The following options are supported (with examples):
+   * @summary Format a date, using PHP-based formatting options.
+   * @description The following options are supported (with examples):
    * - 'Y-m-d'     : '2017-08-05'
    * - 'j M Y'     : '5 Aug 2017'
    * - 'd F Y'     : '05 August 2017'
@@ -74,11 +74,11 @@ xjs.Date = class {
    * - 'H:i'       : '21:33'
    * - 'g:ia'      : '9:33pm'
    * - 'default'   : '2017-08-06T01:33:00.000Z' ({@link Date#toISOString})
-   * @stability STABLE
+   * @version STABLE
    * @see http://php.net/manual/en/function.date.php
-   * @param  {Date} date the date to format
-   * @param  {string} format one of the enumerated options listed in the description
-   * @return {string} a string representing the given date in the given format
+   * @param   {Date} date the date to format
+   * @param   {string} format one of the enumerated options listed in the description
+   * @returns {string} a string representing the given date in the given format
    */
   static format(date, format) {
     const MONTHS = xjs.Date.MONTH_NAMES
