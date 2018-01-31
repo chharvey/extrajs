@@ -104,6 +104,7 @@ xjs.Date = class {
       'g:ia'     : (date) => `${(date.getHours() - 1)%12 + 1}:${(date.getMinutes() < 10) ? '0' : ''}${date.getMinutes()}${(date.getHours() < 12) ? 'am' : 'pm'}`,
       default    : (date) => date.toISOString(),
     }
+    if (!returned[format]) console.warn(new ReferenceError(`Warning: Date format \`${format}\` not supported.`))
     return (returned[format] || returned.default).call(null, date)
   }
 }
