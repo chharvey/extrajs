@@ -16,21 +16,19 @@ xjs.String = class {
    * @summary Convert a thing into a string.
    * @description If the argument is an array, it is joined.
    * If it is an object, `JSON.stringify` is called on it.
-   * This method calls `.toString()` on everything else, except `null` and `undefined` (see param notes below).
+   * This method calls `.toString()` on everything else, except `null` and `undefined`,
+   * which are converted to the strings `'null'` and `'undefined'` respectively.
    * Useful for JSON objects where the value could be a single string or an array of strings.
    * @param   {*} thing anything to convert
-   * @param   {boolean=} truthy defines how to handle `null` and `undefined`:
-   *                            if `true`, they are converted to `'null'` and `'undefined'` respectively;
-   *                            else, they are converted to the empty string `''`
    * @returns {string} a string version of the argument
    */
-  static stringify(thing, truthy = false) {
+  static stringify(thing) {
     const returned = {
       'array'    : function (arg) { return arg.join('') },
       'object'   : function (arg) { return JSON.stringify(arg) },
       'string'   : function (arg) { return arg },
-      'null'     : function (arg) { return (truthy) ? 'null'      : '' },
-      'undefined': function (arg) { return (truthy) ? 'undefined' : '' },
+      'null'     : function (arg) { return 'null'      },
+      'undefined': function (arg) { return 'undefined' },
       default(arg) { return arg.toString() },
     }
     return (returned[xjs.Object.typeOf(thing)] || returned.default).call(null, thing)
