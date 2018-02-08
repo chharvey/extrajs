@@ -159,6 +159,18 @@ function date_format() {
   ].map((f) => xjs.Date.format(new Date(), f)))
 }
 
+function string_stringify() {
+  console.log([
+    ['abc', 'def'],
+    'ghi',
+    123,
+    null,
+    undefined,
+    { an: 'object' },
+    function () { return "a function" },
+  ].map((el) => xjs.String.stringify(el)))
+}
+
 // object_typeOf();
 // object_is();
 // object_freezeDeep();
@@ -167,3 +179,4 @@ function date_format() {
 // array_is();
 // array_contains();
 // date_format();
+// string_stringify();

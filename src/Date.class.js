@@ -6,7 +6,10 @@ const xjs = {}
  * @namespace
  */
 xjs.Date = class {
-  /** @private */ constructor() {}
+  /**
+   * @private
+   */
+  constructor() {}
 
   /**
    * @summary List of full month names in English.
