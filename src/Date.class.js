@@ -63,6 +63,25 @@ xjs.Date = class {
   }
 
   /**
+   * @summary Return the percentage of the day that has passed at the given time.
+   * @description For example:
+   * - `00:00` => 0.00
+   * - `06:00` => 0.25
+   * - `12:00` => 0.50
+   * - `18:00` => 0.75
+   * @version EXPERIMENTAL
+   * @param   {Date} date a Date object
+   * @returns {number} the proportion
+   */
+  static timeProportion(date) {
+    let millis  =  date.getMilliseconds()       / 1000
+    let seconds = (date.getSeconds() + millis)  / 60
+    let minutes = (date.getMinutes() + seconds) / 60
+    let hours   = (date.getHours  () + minutes) / 24
+    return hours
+  }
+
+  /**
    * @summary Format a date, using PHP-based formatting options.
    * @description The following options are supported (with examples):
    * - 'Y-m-d'     : '2017-08-05'
