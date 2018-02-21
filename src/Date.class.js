@@ -14,7 +14,7 @@ xjs.Date = class {
   /**
    * @summary List of full month names in English.
    * @version LOCKED
-   * @type {Array<string>}
+   * @constant {Array<string>}
    */
   static get MONTH_NAMES() {
     return [
@@ -36,7 +36,7 @@ xjs.Date = class {
   /**
    * @summary List of full day names in English.
    * @version LOCKED
-   * @type {Array<string>}
+   * @constant {Array<string>}
    */
   static get DAY_NAMES() {
     return [
