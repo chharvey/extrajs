@@ -6,7 +6,10 @@ const xjs = {}
  * @namespace
  */
 xjs.Object = class {
-  /** @private */ constructor() {}
+  /**
+   * @private
+   */
+  constructor() {}
 
   /**
    * @summary Return the type of a thing.

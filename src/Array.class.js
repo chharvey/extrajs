@@ -7,7 +7,10 @@ xjs.Object = require('./Object.class.js')
  * @namespace
  */
 xjs.Array = class {
-  /** @private */ constructor() {}
+  /**
+   * @private
+   */
+  constructor() {}
 
   /**
    * @summary Test whether two arrays are “the same”.

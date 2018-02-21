@@ -7,7 +7,10 @@ xjs.Object = require('./Object.class.js')
  * @namespace
  */
 xjs.Number = class {
-  /** @private */ constructor() {}
+  /**
+   * @private
+   */
+  constructor() {}
 
   /**
    * @summary Specify the type of number given.

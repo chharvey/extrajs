@@ -6,12 +6,15 @@ const xjs = {}
  * @namespace
  */
 xjs.Date = class {
-  /** @private */ constructor() {}
+  /**
+   * @private
+   */
+  constructor() {}
 
   /**
    * @summary List of full month names in English.
    * @version LOCKED
-   * @type {Array<string>}
+   * @constant {Array<string>}
    */
   static get MONTH_NAMES() {
     return [
@@ -33,7 +36,7 @@ xjs.Date = class {
   /**
    * @summary List of full day names in English.
    * @version LOCKED
-   * @type {Array<string>}
+   * @constant {Array<string>}
    */
   static get DAY_NAMES() {
     return [
@@ -60,6 +63,25 @@ xjs.Date = class {
   }
 
   /**
+   * @summary Return the percentage of the day that has passed at the given time.
+   * @description For example:
+   * - `00:00` => 0.00
+   * - `06:00` => 0.25
+   * - `12:00` => 0.50
+   * - `18:00` => 0.75
+   * @version EXPERIMENTAL
+   * @param   {Date} date a Date object
+   * @returns {number} the proportion
+   */
+  static timeProportion(date) {
+    let millis  =  date.getUTCMilliseconds()       / 1000
+    let seconds = (date.getUTCSeconds() + millis)  / 60
+    let minutes = (date.getUTCMinutes() + seconds) / 60
+    let hours   = (date.getUTCHours  () + minutes) / 24
+    return hours
+  }
+
+  /**
    * @summary Format a date, using PHP-based formatting options.
    * @description The following options are supported (with examples):
    * - 'Y-m-d'     : '2017-08-05'
@@ -70,6 +92,7 @@ xjs.Date = class {
    * - 'M Y'       : 'Aug 2017'
    * - 'M j'       : 'Aug 5'
    * - 'M j, Y'    : 'Aug 5, 2017'
+   * - 'F j, Y'    : 'August 5, 2017'
    * - 'M'         : 'Aug'
    * - 'H:i'       : '21:33'
    * - 'g:ia'      : '9:33pm'
@@ -97,11 +120,13 @@ xjs.Date = class {
       'M Y'      : (date) => `${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
       'M j'      : (date) => `${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getUTCDate()}`,
       'M j, Y'   : (date) => `${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getUTCDate()}, ${date.getFullYear()}`,
+      'F j, Y'   : (date) => `${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getFullYear()}`,
       'M'        : (date) => `${MONTHS[date.getUTCMonth()].slice(0,3)}`,
-      'H:i'      : (date) => `${(date.getHours() < 10) ? '0' : ''}${date.getHours()}:${(date.getMinutes() < 10) ? '0' : ''}${date.getMinutes()}`,
-      'g:ia'     : (date) => `${(date.getHours() - 1)%12 + 1}:${(date.getMinutes() < 10) ? '0' : ''}${date.getMinutes()}${(date.getHours() < 12) ? 'am' : 'pm'}`,
+      'H:i'      : (date) => `${(date.getUTCHours() < 10) ? '0' : ''}${date.getUTCHours()}:${(date.getUTCMinutes() < 10) ? '0' : ''}${date.getUTCMinutes()}`,
+      'g:ia'     : (date) => `${(date.getUTCHours() - 1)%12 + 1}:${(date.getUTCMinutes() < 10) ? '0' : ''}${date.getUTCMinutes()}${(date.getUTCHours() < 12) ? 'am' : 'pm'}`,
       default    : (date) => date.toISOString(),
     }
+    if (!returned[format]) console.warn(new ReferenceError(`Warning: Date format \`${format}\` not supported.`))
     return (returned[format] || returned.default).call(null, date)
   }
 }
