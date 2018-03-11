@@ -1,5 +1,6 @@
-const xjs = {}
-xjs.Object = require('./Object.class.js')
+const xjs = {
+  Object: require('./Object.class.js'),
+}
 
 /**
  * @summary Additional static members for the native Number class.
