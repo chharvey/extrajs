@@ -32,18 +32,18 @@ xjs.Object = class {
    */
   static typeOf(thing) {
     let type = typeof thing
-    let returned = {
-      object: function () {
+    const returned = {
+      'object': () => {
         if (thing === null)       return 'null'
         if (Array.isArray(thing)) return 'array'
         return type // 'object'
       },
-      number: function () {
+      'number': () => {
         if (Number.isNaN(thing))     return 'NaN'
         if (!Number.isFinite(thing)) return 'infinite'
         return type // 'number'
       },
-      default: function () {
+      default() {
         return type // 'undefined', 'boolean', 'string', 'function'
       },
     }
@@ -116,17 +116,17 @@ xjs.Object = class {
   static freezeDeep(thing) {
     Object.freeze(thing)
     let action = {
-      array: function () {
+      'array': () => {
         thing.forEach(function (val) {
           if (!Object.isFrozen(val)) xjs.Object.freezeDeep(val)
         })
       },
-      object: function () {
+      'object': () => {
         for (let key in thing) {
           if (!Object.isFrozen(thing[key])) xjs.Object.freezeDeep(thing[key])
         }
       },
-      default: function () {},
+      default() {},
     }
     ;(action[xjs.Object.typeOf(thing)] || action.default).call(null)
     return thing
@@ -185,21 +185,21 @@ xjs.Object = class {
    */
   static cloneDeep(thing) {
     let returned = {
-      array: function () {
+      'array': () => {
         let returned = []
         thing.forEach(function (val) {
           returned.push(xjs.Object.cloneDeep(val))
         })
         return returned
       },
-      object: function () {
+      'object': () => {
         let returned = {}
         for (let key in thing) {
           returned[key] = xjs.Object.cloneDeep(thing[key])
         }
         return returned
       },
-      default: function () {
+      default() {
         return thing
       },
     }

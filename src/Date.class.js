@@ -111,7 +111,7 @@ xjs.Date = class {
      * @return {string} that number as a string, possibly prepended with '0'
      */
     function leadingZero(n) { return `${(n < 10) ? '0' : ''}${n}` }
-    let returned = {
+    const returned = {
       'Y-m-d'    : (date) => `${date.getFullYear()}-${leadingZero(date.getUTCMonth()+1)}-${leadingZero(date.getUTCDate())}`,
       'j M Y'    : (date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
       'd F Y'    : (date) => `${leadingZero(date.getUTCDate())} ${MONTHS[date.getUTCMonth()]} ${date.getFullYear()}`,
@@ -124,7 +124,7 @@ xjs.Date = class {
       'M'        : (date) => `${MONTHS[date.getUTCMonth()].slice(0,3)}`,
       'H:i'      : (date) => `${(date.getUTCHours() < 10) ? '0' : ''}${date.getUTCHours()}:${(date.getUTCMinutes() < 10) ? '0' : ''}${date.getUTCMinutes()}`,
       'g:ia'     : (date) => `${(date.getUTCHours() - 1)%12 + 1}:${(date.getUTCMinutes() < 10) ? '0' : ''}${date.getUTCMinutes()}${(date.getUTCHours() < 12) ? 'am' : 'pm'}`,
-      default    : (date) => date.toISOString(),
+      default(date) { return date.toISOString() },
     }
     if (!returned[format]) console.warn(new ReferenceError(`Warning: Date format \`${format}\` not supported.`))
     return (returned[format] || returned.default).call(null, date)

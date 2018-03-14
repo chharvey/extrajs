@@ -25,11 +25,11 @@ xjs.String = class {
    */
   static stringify(thing) {
     const returned = {
-      'array'    : function (arg) { return arg.join('') },
-      'object'   : function (arg) { return JSON.stringify(arg) },
-      'string'   : function (arg) { return arg },
-      'null'     : function (arg) { return 'null'      },
-      'undefined': function (arg) { return 'undefined' },
+      'array'    : (arg) => arg.join(''),
+      'object'   : (arg) => JSON.stringify(arg),
+      'string'   : (arg) => arg,
+      'null'     : (arg) => 'null',
+      'undefined': (arg) => 'undefined',
       default(arg) { return arg.toString() },
     }
     return (returned[xjs.Object.typeOf(thing)] || returned.default).call(null, thing)
