@@ -30,17 +30,12 @@ xjs.Array = class {
    * @returns {boolean} `true` if corresponding elements are the same (via `xjs.Object.is()`)
    */
   static is(arr1, arr2) {
-    if (Object.is(arr1, arr2)) return true
+    if (arr1 === arr2) return true
     if (arr1.length !== arr2.length) return false
-    let returned = true
-    for (let i = 0; i < arr1.length && returned === true; i++) {
-      returned = xjs.Object.is(arr1[i], arr2[i])
+    for (let i = 0; i < arr1.length; i++) {
+      if (!xjs.Object.is(arr1[i], arr2[i])) return false
     }
-    // slower:
-    // for (let i = 0; (i < arr1.length); i++) {
-    //   returned = returned && xjs.Object.is(arr1[i], arr2[i])
-    // }
-    return returned
+    return true
   }
 
   /**

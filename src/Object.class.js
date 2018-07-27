@@ -85,23 +85,20 @@ xjs.Object = class {
    */
   static is(a, b) {
     xjs.Array = require('./Array.class.js')
-    if (Object.is(a, b)) return true
+    if (a === b || Object.is(a,b)) return true
     if (xjs.Object.typeOf(a) === 'array' && xjs.Object.typeOf(b) === 'array') return xjs.Array.is(a, b)
-    return (
-      xjs.Object.typeOf(a) === 'object' && xjs.Object.typeOf(b) === 'object' // both must be objects
-      && Object.getOwnPropertyNames(a).length === Object.getOwnPropertyNames(b).length // both must have the same number of own properties
-      && Object.getOwnPropertyNames(a).every((key) => Object.getOwnPropertyNames(b).includes(key)) // `b` must own every property in `a`
-      // && Object.getOwnPropertyNames(b).every((key) => Object.getOwnPropertyNames(a).includes(key)) // `a` must own every property in `b` // unnecessary if they have the same length
-      // finally, compare all the values
-      && (function () {
-        let r = true
-        for (let i in a) {
-          // r &&= xjs.Object.is(a[i], b[i]) // IDEA
-          r = r && xjs.Object.is(a[i], b[i])
-        }
-        return r
-      })()
-    )
+    // both must be objects
+    if (xjs.Object.typeOf(a) !== 'object' || xjs.Object.typeOf(b) !== 'object') return false
+    // both must have the same number of own properties
+    if (Object.getOwnPropertyNames(a).length !== Object.getOwnPropertyNames(b).length) return false
+    // `b` must own every property in `a`
+    if (!Object.getOwnPropertyNames(a).every((key) => Object.getOwnPropertyNames(b).includes(key))) return false
+    // `a` must own every property in `b` // NOTE unnecessary if they have the same length
+    // if (!Object.getOwnPropertyNames(b).every((key) => Object.getOwnPropertyNames(a).includes(key))) return false
+    for (let i in a) {
+      if (!xjs.Object.is(a[i], b[i])) return false
+    }
+    return true
   }
 
   /**
