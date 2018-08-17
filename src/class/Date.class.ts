@@ -91,7 +91,7 @@ export default class xjs_Date {
      * @param  {number} n any positive number
      * @return {string} that number as a string, possibly prepended with '0'
      */
-    function leadingZero(n) { return `${(n < 10) ? '0' : ''}${n}` }
+    function leadingZero(n: number): string { return `${(n < 10) ? '0' : ''}${n}` }
     const switch_: { [index: string]: (arg: Date) => string } = {
       'Y-m-d'    : (date) => `${date.getFullYear()}-${leadingZero(date.getUTCMonth()+1)}-${leadingZero(date.getUTCDate())}`,
       'j M Y'    : (date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,

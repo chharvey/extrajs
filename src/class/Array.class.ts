@@ -64,6 +64,7 @@ export default class xjs_Array {
   }
 
   /**
+   * @deprecated XXX:DEPRECATED
    * @summary “Convert” an array, number, or string into an array. (Doesn’t really convert.)
    * @description
    * - If the argument is an array, it is returned unchanged.
@@ -77,10 +78,10 @@ export default class xjs_Array {
    * @param   database a database to check against
    * @returns an array
    */
-  static toArray(arg: unknown[]|number|string, database: object = {}): unknown[] {
+  static toArray(arg: any, database: object = {}): any[] {
     const switch_: { [index: string]: () => unknown[] } = {
       'array': () => {
-        return arg
+        return arg as any[]
       },
       'number': () => {
         let array = []
@@ -88,7 +89,8 @@ export default class xjs_Array {
         return array
       },
       'string': () => {
-        return xjs_Array.toArray(database[arg], database)
+        let check = (database as { [index: string]: unknown })[arg]
+        return xjs_Array.toArray(check, database)
       },
       default() {
         return []
@@ -106,7 +108,7 @@ export default class xjs_Array {
    * @param   comparator a function comparing elements in the array
    * @returns a new array, with duplicates removed
    */
-  static removeDuplicates<T>(arr: T[], comparator: (unknown, unknown) => boolean = Object.is): T[] {
+  static removeDuplicates<T>(arr: T[], comparator: (a: unknown, b: unknown) => boolean = Object.is): T[] {
     const returned = arr.slice()
     for (let i = 0; i < returned.length; i++) {
       for (let j = i+1; j < returned.length; j++) {

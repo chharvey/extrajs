@@ -30,8 +30,8 @@ export default class xjs_Object {
         return type // 'object'
       },
       'number': () => {
-        if (Number.isNaN(thing))     return 'NaN'
-        if (!Number.isFinite(thing)) return 'infinite'
+        if (Number.isNaN(thing as number))     return 'NaN'
+        if (!Number.isFinite(thing as number)) return 'infinite'
         return type // 'number'
       },
       default() {
@@ -53,7 +53,7 @@ export default class xjs_Object {
    */
   static instanceOf(thing: unknown): string {
     if (thing === null || thing === undefined) throw new TypeError(`\`${thing}\` does not have a construtor.`)
-    return thing.__proto__.constructor.name
+    return (thing as any).__proto__.constructor.name
   }
 
   /**
@@ -75,7 +75,7 @@ export default class xjs_Object {
   static is(a: unknown, b: unknown): boolean {
     const xjs_Array = require('./Array.class.js') // relative to dist
     if (a === b || Object.is(a,b)) return true
-    if (xjs_Object.typeOf(a) === 'array' && xjs_Object.typeOf(b) === 'array') return xjs_Array.is(a, b)
+    if (xjs_Object.typeOf(a) === 'array' && xjs_Object.typeOf(b) === 'array') return xjs_Array.is(a as unknown[], b as unknown[])
     // both must be objects
     if (xjs_Object.typeOf(a) !== 'object' || xjs_Object.typeOf(b) !== 'object') return false
     // both must have the same number of own properties
@@ -84,8 +84,10 @@ export default class xjs_Object {
     if (!Object.getOwnPropertyNames(a).every((key) => Object.getOwnPropertyNames(b).includes(key))) return false
     // `a` must own every property in `b` // NOTE unnecessary if they have the same length
     // if (!Object.getOwnPropertyNames(b).every((key) => Object.getOwnPropertyNames(a).includes(key))) return false
-    for (let i in a) {
-      if (!xjs_Object.is(a[i], b[i])) return false
+    for (let i in a as object) {
+      let ai: unknown = (a as { [key: string]: unknown })[i]
+      let bi: unknown = (b as { [key: string]: unknown })[i]
+      if (!xjs_Object.is(ai, bi)) return false
     }
     return true
   }
@@ -98,11 +100,11 @@ export default class xjs_Object {
    * @param   thing any value to freeze
    * @returns the given value, with everything frozen
    */
-  static freezeDeep<T>(thing: T): T {
+  static freezeDeep(thing: any): any {
     Object.freeze(thing)
     const action: { [index: string]: () => void } = {
       'array': () => {
-        thing.forEach((val) => {
+        ;(thing as unknown[]).forEach((val) => {
           if (!Object.isFrozen(val)) xjs_Object.freezeDeep(val)
         })
       },
@@ -167,17 +169,17 @@ export default class xjs_Object {
    * @param   thing any value to clone
    * @returns an exact copy of the given value, but with nothing equal via `==` (unless the value given is primitive)
    */
-  static cloneDeep<T>(thing: T): T {
-    const switch_: { [index: string]: () => T } = {
+  static cloneDeep(thing: any): any {
+    const switch_: { [index: string]: () => unknown } = {
       'array': () => {
-        const returned: T = []
-        thing.forEach((val) => {
+        const returned: any[] = []
+        ;(thing as unknown[]).forEach((val) => {
           returned.push(xjs_Object.cloneDeep(val))
         })
         return returned
       },
       'object': () => {
-        const returned: T = {}
+        const returned: { [index: string]: unknown } = {}
         for (let key in thing) {
           returned[key] = xjs_Object.cloneDeep(thing[key])
         }
