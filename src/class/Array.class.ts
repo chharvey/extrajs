@@ -4,14 +4,8 @@ import xjs_Object from './Object.class'
 /**
  * @summary Additional static members for the native Array class.
  * @description Does not extend the native Array class.
- * @namespace
  */
 export default class xjs_Array {
-  /**
-   * @private
-   */
-  constructor() {}
-
   /**
    * @summary Test whether two arrays are “the same”.
    * @description This function uses {@link xjs_Object.is} equality on corresponding entries,
@@ -23,7 +17,6 @@ export default class xjs_Array {
    *
    * This method returns the same result as {@link xjs_Object.is}, but is simply faster for arrays.
    *
-   * @version STABLE
    * @param   {Array} arr1 the first array
    * @param   {Array} arr2 the second array
    * @returns {boolean} `true` if corresponding elements are the same (via `xjs.Object.is()`)
@@ -53,7 +46,6 @@ export default class xjs_Array {
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], [2,4,6])===false // not consecutive
    * ```
    *
-   * @version EXPERIMENTAL
    * @param   {Array}  larger  the larger array, to test against
    * @param   {Array}  smaller the smaller array, to test
    * @returns {boolean} `true` if `smaller` is a subarray of `larger`
@@ -81,7 +73,6 @@ export default class xjs_Array {
    *   If the value of that property *is* a string, then *that* string is checked, and so on,
    *   until an array or number is found. If no entry is found, an empty array is returned.
    *   The default database is an empty object `{}`.
-   * @version EXPERIMENTAL
    * @param   {*} arg the argument to convert
    * @param   {!Object=} database a database to check against
    * @returns {Array} an array
@@ -111,18 +102,20 @@ export default class xjs_Array {
    * @description "Duplicate entries" are entries that considered "the same" by
    * the provided comparator function, or if none is given, `Object.is()`.
    * Only duplicate entries are removed; the order of non-duplicates is preserved.
-   * @version STABLE
    * @param   {Array} arr an array to use
    * @param   {(function(*,*):boolean)=} comparator a function comparing elements in the array
    * @returns {Array} a new array, with duplicates removed
    */
   static removeDuplicates(arr, comparator = Object.is) {
-    let returned = arr.slice()
+    const returned = arr.slice()
     for (let i = 0; i < returned.length; i++) {
       for (let j = i+1; j < returned.length; j++) {
-        if (comparator.call(null, returned[i], returned[j])) returned.splice(j, 1)
+        if (comparator(returned[i], returned[j])) returned.splice(j, 1)
       }
     }
     return returned
   }
+
+
+  private constructor() {}
 }

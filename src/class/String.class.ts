@@ -4,14 +4,8 @@ import xjs_Object from './Object.class'
 /**
  * @summary Additional static members for the native String class.
  * @description Does not extend the native String class.
- * @namespace
  */
 export default class xjs_String {
-  /**
-   * @private
-   */
-  constructor() {}
-
   /**
    * @summary Convert a thing into a string.
    * @description If the argument is an array, it is joined.
@@ -33,4 +27,7 @@ export default class xjs_String {
     }
     return (returned[xjs_Object.typeOf(thing)] || returned.default).call(null, thing)
   }
+
+
+  private constructor() {}
 }

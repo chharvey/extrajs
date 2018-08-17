@@ -1,21 +1,12 @@
 /**
  * @summary Additional static members for the native Date class.
  * @description Does not extend the native Date class.
- * @namespace
  */
 export default class xjs_Date {
   /**
-   * @private
-   */
-  constructor() {}
-
-  /**
    * @summary List of full month names in English.
-   * @version LOCKED
-   * @constant {Array<string>}
    */
-  static get MONTH_NAMES() {
-    return [
+  static readonly MONTH_NAMES = [
       'January',
       'February',
       'March',
@@ -29,15 +20,11 @@ export default class xjs_Date {
       'November',
       'December',
     ]
-  }
 
   /**
    * @summary List of full day names in English.
-   * @version LOCKED
-   * @constant {Array<string>}
    */
-  static get DAY_NAMES() {
-    return [
+  static readonly DAY_NAMES = [
       'Sundary',
       'Monday',
       'Tuesday',
@@ -46,12 +33,10 @@ export default class xjs_Date {
       'Friday',
       'Saturday',
     ]
-  }
 
   /**
    * @summary Return whether two dates occur on the same day.
    * @description That is, if 'YYYY-MM-DD' of date1 equals 'YYYY-MM-DD' of date2.
-   * @version STABLE
    * @param   {Date} date1 the first date
    * @param   {Date} date2 the second date
    * @returns {boolean} `true` iff both dates have the same year, same month, *and* same day (date of the month)
@@ -67,7 +52,6 @@ export default class xjs_Date {
    * - `06:00` => 0.25
    * - `12:00` => 0.50
    * - `18:00` => 0.75
-   * @version EXPERIMENTAL
    * @param   {Date} date a Date object
    * @returns {number} the proportion
    */
@@ -95,7 +79,6 @@ export default class xjs_Date {
    * - 'H:i'       : '21:33'
    * - 'g:ia'      : '9:33pm'
    * - 'default'   : '2017-08-06T01:33:00.000Z' ({@link Date#toISOString})
-   * @version STABLE
    * @see http://php.net/manual/en/function.date.php
    * @param   {Date} date the date to format
    * @param   {string} format one of the enumerated options listed in the description
@@ -127,4 +110,7 @@ export default class xjs_Date {
     if (!returned[format]) console.warn(new ReferenceError(`Warning: Date format \`${format}\` not supported.`))
     return (returned[format] || returned.default).call(null, date)
   }
+
+
+  private constructor() {}
 }

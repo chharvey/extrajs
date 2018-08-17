@@ -1,14 +1,8 @@
 /**
  * @summary Additional static members for the native Object class.
  * @description Does not extend the native Object class.
- * @namespace
  */
 export default class xjs_Object {
-  /**
-   * @private
-   */
-  constructor() {}
-
   /**
    * @summary Return the type of a thing.
    * @description Similar to the `typeof` primitive operator, but more refined.
@@ -23,7 +17,6 @@ export default class xjs_Object {
    * ```
    * Credit to @zaggino.
    *
-   * @version STABLE
    * @see https://github.com/zaggino/z-schema/blob/bddb0b25daa0c96119e84b121d7306b1a7871594/src/Utils.js#L12
    * @param   {*} thing anything
    * @returns {string} the type of the thing
@@ -54,7 +47,6 @@ export default class xjs_Object {
    * This method can be passed either complex values (objects, arrays, functions) or primitive values.
    * Technically, primitives do not have constructing functions, but they can be wrapped with object constructors.
    * For example, calling `instanceOf(3)` will return `Number`, even though `3` was not constructed via the `Number` class.
-   * @version EXPERIMENTAL
    * @param   {*} thing anything except `null` or `undefined`
    * @returns {string} the name of the constructing function
    * @throws  {TypeError} if `null` or `undefined` is passed
@@ -76,7 +68,6 @@ export default class xjs_Object {
    * This function is less strict than {@link Object.is}.
    * If both arguments are arrays, it is faster to use {@link xjs_Array.is}.
    *
-   * @version STABLE
    * @param   {*} a the first  thing
    * @param   {*} b the second thing
    * @returns {boolean} `true` if corresponding elements are the same, or replaceable
@@ -104,7 +95,6 @@ export default class xjs_Object {
    * @description If an array or object is passed,
    * **Recursively** call {@link Object.freeze} on every property and sub-property of the given parameter.
    * Else, return the given argument.
-   * @version EXPERIMENTAL
    * @param   {*} thing any value to freeze
    * @returns {*} the returned value, with everything frozen
    */
@@ -174,7 +164,6 @@ export default class xjs_Object {
    * console.log(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
    * ```
    *
-   * @version EXPERIMENTAL
    * @param   {*} thing any value to clone
    * @returns {*} an exact copy of the given value, but with nothing equal via `==` (unless the value given is primitive)
    */
@@ -200,4 +189,7 @@ export default class xjs_Object {
     }
     return (returned[xjs_Object.typeOf(thing)] || returned.default).call(null)
   }
+
+
+  private constructor() {}
 }
