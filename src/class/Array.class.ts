@@ -8,26 +8,41 @@ import xjs_Object from './Object.class'
 export default class xjs_Array {
   /**
    * @summary Test whether two arrays are “the same”.
-   * @description This function uses {@link xjs_Object.is} equality on corresponding entries,
-   * testing replaceability.
-   *
-   * “The same” means “replaceable”, that is,
-   * for any deterministic function: `fn(arr1)` would return the same result as `fn(arr2)`
-   * if and only if `xjs.Array.is(arr1, arr2)`.
-   *
-   * This method returns the same result as {@link xjs_Object.is}, but is simply faster for arrays.
-   *
+   * @description Shortcut of {@link xjs_Object.is} for arrays.
    * @param   arr1 the first array
    * @param   arr2 the second array
    * @returns Are corresponding elements the same (via `xjs.Object.is()`)?
    */
-  static is<T, U>(arr1: T[], arr2: U[]): boolean {
+  static is(arr1: unknown[], arr2: unknown[]): boolean {
     if (arr1 === arr2) return true
     if (arr1.length !== arr2.length) return false
     for (let i = 0; i < arr1.length; i++) {
       if (!xjs_Object.is(arr1[i], arr2[i])) return false
     }
     return true
+  }
+
+  /**
+   * @summary Deep freeze an array, and return the result.
+   * @description Shortcut of {@link xjs_Object.freezeDeep} for arrays.
+   * *Note: This function is impure, modifying the given argument.*
+   * @param   arr the array to freeze
+   * @returns the given array, with everything frozen
+   */
+  static freezeDeep<T>(arr: T[]): T[] {
+    Object.freeze(arr)
+    arr.forEach((el) => { if (!Object.isFrozen(el)) xjs_Object.freezeDeep(el) })
+    return arr
+  }
+
+  /**
+   * @summary Deep clone an array, and return the result.
+   * @description Shortcut of {@link xjs_Object.cloneDeep} for arrays.
+   * @param   arr the array to clone
+   * @returns an exact copy of the given array
+   */
+  static cloneDeep<T>(arr: T[]): T[] {
+    return arr.map((el) => xjs_Object.cloneDeep(el))
   }
 
   /**

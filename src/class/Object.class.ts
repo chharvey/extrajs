@@ -1,3 +1,6 @@
+import xjs_Array from './Array.class'
+
+
 /**
  * @summary Additional static members for the native Object class.
  * @description Does not extend the native Object class.
@@ -94,28 +97,22 @@ export default class xjs_Object {
 
   /**
    * @summary Deep freeze an object, and return the result.
-   * @description If an array or object is passed,
+   * @description *Note: This function is impure, modifying the given argument.*
+   * If an array or object is passed,
    * **Recursively** call {@link Object.freeze} on every property and sub-property of the given parameter.
    * Else, return the given argument.
    * @param   thing any value to freeze
    * @returns the given value, with everything frozen
    */
-  static freezeDeep(thing: any): any {
+  static freezeDeep<T>(thing: T): T {
+    const xjs_Array = require('./Array.class.js') // relative to dist
+    if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.freezeDeep(thing as unknown as unknown[]) as unknown as T // BUG https://stackoverflow.com/a/18736071/
     Object.freeze(thing)
-    const action: { [index: string]: () => void } = {
-      'array': () => {
-        ;(thing as unknown[]).forEach((val) => {
-          if (!Object.isFrozen(val)) xjs_Object.freezeDeep(val)
-        })
-      },
-      'object': () => {
+    if (xjs_Object.typeOf(thing) === 'object') {
         for (let key in thing) {
           if (!Object.isFrozen(thing[key])) xjs_Object.freezeDeep(thing[key])
         }
-      },
-      default() {},
     }
-    ;(action[xjs_Object.typeOf(thing)] || action.default)()
     return thing
   }
 
@@ -169,27 +166,18 @@ export default class xjs_Object {
    * @param   thing any value to clone
    * @returns an exact copy of the given value, but with nothing equal via `==` (unless the value given is primitive)
    */
-  static cloneDeep(thing: any): any {
-    const switch_: { [index: string]: () => unknown } = {
-      'array': () => {
-        const returned: any[] = []
-        ;(thing as unknown[]).forEach((val) => {
-          returned.push(xjs_Object.cloneDeep(val))
-        })
-        return returned
-      },
-      'object': () => {
+  static cloneDeep<T>(thing: T): T {
+    const xjs_Array = require('./Array.class.js') // relative to dist
+    if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.cloneDeep(thing as unknown as unknown[]) as unknown as T // BUG https://stackoverflow.com/a/18736071/
+    if (xjs_Object.typeOf(thing) === 'object') {
         const returned: { [index: string]: unknown } = {}
         for (let key in thing) {
           returned[key] = xjs_Object.cloneDeep(thing[key])
         }
-        return returned
-      },
-      default() {
+      return returned as T
+    } else {
         return thing
-      },
     }
-    return (switch_[xjs_Object.typeOf(thing)] || switch_.default)()
   }
 
 
