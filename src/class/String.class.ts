@@ -1,13 +1,12 @@
-const xjs = {
-  Object: require('./Object.class.js'),
-}
+import xjs_Object from './Object.class'
+
 
 /**
  * @summary Additional static members for the native String class.
  * @description Does not extend the native String class.
  * @namespace
  */
-xjs.String = class {
+export default class xjs_String {
   /**
    * @private
    */
@@ -32,8 +31,6 @@ xjs.String = class {
       'undefined': (arg) => 'undefined',
       default(arg) { return arg.toString() },
     }
-    return (returned[xjs.Object.typeOf(thing)] || returned.default).call(null, thing)
+    return (returned[xjs_Object.typeOf(thing)] || returned.default).call(null, thing)
   }
 }
-
-module.exports = xjs.String

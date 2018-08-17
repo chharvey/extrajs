@@ -1,11 +1,9 @@
-const xjs = {}
-
 /**
  * @summary Additional static members for the native Object class.
  * @description Does not extend the native Object class.
  * @namespace
  */
-xjs.Object = class {
+export default class xjs_Object {
   /**
    * @private
    */
@@ -76,7 +74,7 @@ xjs.Object = class {
    * `xjs.Object.is(a, b)`.
    *
    * This function is less strict than {@link Object.is}.
-   * If both arguments are arrays, it is faster to use {@link xjs.Array.is}.
+   * If both arguments are arrays, it is faster to use {@link xjs_Array.is}.
    *
    * @version STABLE
    * @param   {*} a the first  thing
@@ -84,11 +82,11 @@ xjs.Object = class {
    * @returns {boolean} `true` if corresponding elements are the same, or replaceable
    */
   static is(a, b) {
-    xjs.Array = require('./Array.class.js')
+    const xjs_Array = require('./Array.class.js') // relative to dist
     if (a === b || Object.is(a,b)) return true
-    if (xjs.Object.typeOf(a) === 'array' && xjs.Object.typeOf(b) === 'array') return xjs.Array.is(a, b)
+    if (xjs_Object.typeOf(a) === 'array' && xjs_Object.typeOf(b) === 'array') return xjs_Array.is(a, b)
     // both must be objects
-    if (xjs.Object.typeOf(a) !== 'object' || xjs.Object.typeOf(b) !== 'object') return false
+    if (xjs_Object.typeOf(a) !== 'object' || xjs_Object.typeOf(b) !== 'object') return false
     // both must have the same number of own properties
     if (Object.getOwnPropertyNames(a).length !== Object.getOwnPropertyNames(b).length) return false
     // `b` must own every property in `a`
@@ -96,7 +94,7 @@ xjs.Object = class {
     // `a` must own every property in `b` // NOTE unnecessary if they have the same length
     // if (!Object.getOwnPropertyNames(b).every((key) => Object.getOwnPropertyNames(a).includes(key))) return false
     for (let i in a) {
-      if (!xjs.Object.is(a[i], b[i])) return false
+      if (!xjs_Object.is(a[i], b[i])) return false
     }
     return true
   }
@@ -115,17 +113,17 @@ xjs.Object = class {
     let action = {
       'array': () => {
         thing.forEach(function (val) {
-          if (!Object.isFrozen(val)) xjs.Object.freezeDeep(val)
+          if (!Object.isFrozen(val)) xjs_Object.freezeDeep(val)
         })
       },
       'object': () => {
         for (let key in thing) {
-          if (!Object.isFrozen(thing[key])) xjs.Object.freezeDeep(thing[key])
+          if (!Object.isFrozen(thing[key])) xjs_Object.freezeDeep(thing[key])
         }
       },
       default() {},
     }
-    ;(action[xjs.Object.typeOf(thing)] || action.default).call(null)
+    ;(action[xjs_Object.typeOf(thing)] || action.default).call(null)
     return thing
   }
 
@@ -133,7 +131,7 @@ xjs.Object = class {
    * @summary Deep clone an object, and return the result.
    * @description If an array or object is passed,
    * This method is **recursively** called, cloning properties and sub-properties of the given parameter.
-   * The returned result is an object, that when passed with the original as arguments of {@link xjs.Object.is},
+   * The returned result is an object, that when passed with the original as arguments of {@link xjs_Object.is},
    * `true` would be returned. The new object would be “replaceable” with its cloner.
    * If a primitive value is passed, the original argument is returned.
    *
@@ -159,8 +157,8 @@ xjs.Object = class {
    * console.log(y) // returns { first: 'one', second: 2, third: ['one', 2, { v:[3] }] }
    * console.log(x) // returns { first: 1, second: { value: 2 }, third: ['one', 2, { v:[3] }] }
    *
-   * // xjs.cloneDeep x into y:
-   * var z = xjs.cloneDeep(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', {v:3}] }
+   * // xjs.Object.cloneDeep x into y:
+   * var z = xjs.Object.cloneDeep(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', {v:3}] }
    *
    * // as with Object.assign, you can reassign properties of `z` without affecting `x`:
    * z.first  = 'one'
@@ -185,14 +183,14 @@ xjs.Object = class {
       'array': () => {
         let returned = []
         thing.forEach(function (val) {
-          returned.push(xjs.Object.cloneDeep(val))
+          returned.push(xjs_Object.cloneDeep(val))
         })
         return returned
       },
       'object': () => {
         let returned = {}
         for (let key in thing) {
-          returned[key] = xjs.Object.cloneDeep(thing[key])
+          returned[key] = xjs_Object.cloneDeep(thing[key])
         }
         return returned
       },
@@ -200,8 +198,6 @@ xjs.Object = class {
         return thing
       },
     }
-    return (returned[xjs.Object.typeOf(thing)] || returned.default).call(null)
+    return (returned[xjs_Object.typeOf(thing)] || returned.default).call(null)
   }
 }
-
-module.exports = xjs.Object

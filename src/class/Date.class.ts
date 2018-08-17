@@ -1,11 +1,9 @@
-const xjs = {}
-
 /**
  * @summary Additional static members for the native Date class.
  * @description Does not extend the native Date class.
  * @namespace
  */
-xjs.Date = class {
+export default class xjs_Date {
   /**
    * @private
    */
@@ -104,7 +102,7 @@ xjs.Date = class {
    * @returns {string} a string representing the given date in the given format
    */
   static format(date, format) {
-    const MONTHS = xjs.Date.MONTH_NAMES
+    const MONTHS = xjs_Date.MONTH_NAMES
     /**
      * Convert a positive number to a string, adding a leading zero if and only if it is less than 10.
      * @param  {number} n any positive number
@@ -115,7 +113,7 @@ xjs.Date = class {
       'Y-m-d'    : (date) => `${date.getFullYear()}-${leadingZero(date.getUTCMonth()+1)}-${leadingZero(date.getUTCDate())}`,
       'j M Y'    : (date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
       'd F Y'    : (date) => `${leadingZero(date.getUTCDate())} ${MONTHS[date.getUTCMonth()]} ${date.getFullYear()}`,
-      'l, j F, Y': (date) => `${xjs.Date.DAY_NAMES[date.getUTCDay()]}, ${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}, ${date.getFullYear()}`,
+      'l, j F, Y': (date) => `${xjs_Date.DAY_NAMES[date.getUTCDay()]}, ${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}, ${date.getFullYear()}`,
       'j M'      : (date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)}`,
       'M Y'      : (date) => `${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
       'M j'      : (date) => `${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getUTCDate()}`,
@@ -130,5 +128,3 @@ xjs.Date = class {
     return (returned[format] || returned.default).call(null, date)
   }
 }
-
-module.exports = xjs.Date

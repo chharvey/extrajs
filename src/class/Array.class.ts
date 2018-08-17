@@ -1,13 +1,12 @@
-const xjs = {
-  Object: require('./Object.class.js'),
-}
+import xjs_Object from './Object.class'
+
 
 /**
  * @summary Additional static members for the native Array class.
  * @description Does not extend the native Array class.
  * @namespace
  */
-xjs.Array = class {
+export default class xjs_Array {
   /**
    * @private
    */
@@ -15,14 +14,14 @@ xjs.Array = class {
 
   /**
    * @summary Test whether two arrays are “the same”.
-   * @description This function uses {@link xjs.Object.is} equality on corresponding entries,
+   * @description This function uses {@link xjs_Object.is} equality on corresponding entries,
    * testing replaceability.
    *
    * “The same” means “replaceable”, that is,
    * for any deterministic function: `fn(arr1)` would return the same result as `fn(arr2)`
    * if and only if `xjs.Array.is(arr1, arr2)`.
    *
-   * This method returns the same result as {@link xjs.Object.is}, but is simply faster for arrays.
+   * This method returns the same result as {@link xjs_Object.is}, but is simply faster for arrays.
    *
    * @version STABLE
    * @param   {Array} arr1 the first array
@@ -33,7 +32,7 @@ xjs.Array = class {
     if (arr1 === arr2) return true
     if (arr1.length !== arr2.length) return false
     for (let i = 0; i < arr1.length; i++) {
-      if (!xjs.Object.is(arr1[i], arr2[i])) return false
+      if (!xjs_Object.is(arr1[i], arr2[i])) return false
     }
     return true
   }
@@ -42,7 +41,7 @@ xjs.Array = class {
    * @summary Test whether an array is a subarray of another array.
    * @description This method acts like {@link String#includes}, testing whether
    * the elements in the smaller array appear consecutively and in the same order as in the larger array.
-   * In other words, if `{@link xjs.Array.is}(larger.slice(a,b), smaller)` (for some integers a and b),
+   * In other words, if `{@link xjs_Array.is}(larger.slice(a,b), smaller)` (for some integers a and b),
    * then this method returns `true`.
    *
    * Examples:
@@ -62,11 +61,11 @@ xjs.Array = class {
    */
   static contains(larger, smaller) {
     if (smaller.length > larger.length) throw new RangeError('Smaller array cannot have a greater length than larger array.')
-    if (xjs.Array.is(smaller, [])) return true
+    if (xjs_Array.is(smaller, [])) return true
     let returned = false
     for (let i = 0; i < larger.length; i++) {
-      if (xjs.Object.is(smaller[0], larger[i])) {
-        returned = returned || xjs.Array.is(larger.slice(i, i+smaller.length), smaller)
+      if (xjs_Object.is(smaller[0], larger[i])) {
+        returned = returned || xjs_Array.is(larger.slice(i, i+smaller.length), smaller)
       }
     }
     return returned
@@ -98,13 +97,13 @@ xjs.Array = class {
         return array
       },
       string: function () {
-        return xjs.Array.toArray(database[arg], database)
+        return xjs_Array.toArray(database[arg], database)
       },
       default: function () {
         return []
       },
     }
-    return (returned[xjs.Object.typeOf(arg)] || returned.default).call(null)
+    return (returned[xjs_Object.typeOf(arg)] || returned.default).call(null)
   }
 
   /**
@@ -127,5 +126,3 @@ xjs.Array = class {
     return returned
   }
 }
-
-module.exports = xjs.Array
