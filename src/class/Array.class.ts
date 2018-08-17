@@ -17,11 +17,11 @@ export default class xjs_Array {
    *
    * This method returns the same result as {@link xjs_Object.is}, but is simply faster for arrays.
    *
-   * @param   {Array} arr1 the first array
-   * @param   {Array} arr2 the second array
-   * @returns {boolean} `true` if corresponding elements are the same (via `xjs.Object.is()`)
+   * @param   arr1 the first array
+   * @param   arr2 the second array
+   * @returns Are corresponding elements the same (via `xjs.Object.is()`)?
    */
-  static is(arr1, arr2) {
+  static is<T>(arr1: T[], arr2: T[]): boolean {
     if (arr1 === arr2) return true
     if (arr1.length !== arr2.length) return false
     for (let i = 0; i < arr1.length; i++) {
@@ -46,12 +46,12 @@ export default class xjs_Array {
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], [2,4,6])===false // not consecutive
    * ```
    *
-   * @param   {Array}  larger  the larger array, to test against
-   * @param   {Array}  smaller the smaller array, to test
-   * @returns {boolean} `true` if `smaller` is a subarray of `larger`
+   * @param   larger  the larger array, to test against
+   * @param   smaller the smaller array, to test
+   * @returns Is `smaller` a subarray of `larger`?
    * @throws  {RangeError} if the second array is larger than the first
    */
-  static contains(larger, smaller) {
+  static contains<T>(larger: T[], smaller: T[]): boolean {
     if (smaller.length > larger.length) throw new RangeError('Smaller array cannot have a greater length than larger array.')
     if (xjs_Array.is(smaller, [])) return true
     let returned = false
@@ -73,11 +73,11 @@ export default class xjs_Array {
    *   If the value of that property *is* a string, then *that* string is checked, and so on,
    *   until an array or number is found. If no entry is found, an empty array is returned.
    *   The default database is an empty object `{}`.
-   * @param   {*} arg the argument to convert
-   * @param   {!Object=} database a database to check against
-   * @returns {Array} an array
+   * @param   arg the argument to convert
+   * @param   database a database to check against
+   * @returns an array
    */
-  static toArray(arg, database = {}) {
+  static toArray(arg: unknown[]|number|string, database: object = {}): unknown[] {
     let returned = {
       array: function () {
         return arg
@@ -102,11 +102,11 @@ export default class xjs_Array {
    * @description "Duplicate entries" are entries that considered "the same" by
    * the provided comparator function, or if none is given, `Object.is()`.
    * Only duplicate entries are removed; the order of non-duplicates is preserved.
-   * @param   {Array} arr an array to use
-   * @param   {(function(*,*):boolean)=} comparator a function comparing elements in the array
-   * @returns {Array} a new array, with duplicates removed
+   * @param   arr an array to use
+   * @param   comparator a function comparing elements in the array
+   * @returns a new array, with duplicates removed
    */
-  static removeDuplicates(arr, comparator = Object.is) {
+  static removeDuplicates<T>(arr: T[], comparator: (unknown, unknown) => boolean = Object.is): T[] {
     const returned = arr.slice()
     for (let i = 0; i < returned.length; i++) {
       for (let j = i+1; j < returned.length; j++) {

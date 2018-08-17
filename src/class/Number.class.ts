@@ -12,11 +12,11 @@ export default class xjs_Number {
    * - `'integer'` : the number is an integer, that is, `num % 1 === 0`
    * - `'float'`   : the number is not an integer
    * Else, throw a `RangeError` (the argument is of the correct type but does not qualify).
-   * @param   {number} num the given number
-   * @returns {string} one of the strings described above
+   * @param   num the given number
+   * @returns one of the strings described above
    * @throws  {RangeError} if the given arguemnt was not a finite number
    */
-  static typeOf(num) {
+  static typeOf(num: number): string {
     if (xjs_Object.typeOf(num) === 'number') {
       return (Number.isInteger(num)) ? 'integer' : 'float'
     } else throw new RangeError('Argument must be a finite number.')

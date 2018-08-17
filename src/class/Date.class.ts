@@ -37,11 +37,11 @@ export default class xjs_Date {
   /**
    * @summary Return whether two dates occur on the same day.
    * @description That is, if 'YYYY-MM-DD' of date1 equals 'YYYY-MM-DD' of date2.
-   * @param   {Date} date1 the first date
-   * @param   {Date} date2 the second date
-   * @returns {boolean} `true` iff both dates have the same year, same month, *and* same day (date of the month)
+   * @param   date1 the first date
+   * @param   date2 the second date
+   * @returns Do both dates have the same year, same month, *and* same day (date of the month)?
    */
-  static sameDate(date1, date2) {
+  static sameDate(date1: Date, date2: Date): boolean {
     return date1.toISOString().slice(0,10) === date2.toISOString().slice(0,10)
   }
 
@@ -52,10 +52,10 @@ export default class xjs_Date {
    * - `06:00` => 0.25
    * - `12:00` => 0.50
    * - `18:00` => 0.75
-   * @param   {Date} date a Date object
-   * @returns {number} the proportion
+   * @param   date a Date object
+   * @returns the proportion
    */
-  static timeProportion(date) {
+  static timeProportion(date: Date): number {
     let millis  =  date.getUTCMilliseconds()       / 1000
     let seconds = (date.getUTCSeconds() + millis)  / 60
     let minutes = (date.getUTCMinutes() + seconds) / 60
@@ -80,11 +80,11 @@ export default class xjs_Date {
    * - 'g:ia'      : '9:33pm'
    * - 'default'   : '2017-08-06T01:33:00.000Z' ({@link Date#toISOString})
    * @see http://php.net/manual/en/function.date.php
-   * @param   {Date} date the date to format
-   * @param   {string} format one of the enumerated options listed in the description
-   * @returns {string} a string representing the given date in the given format
+   * @param   date the date to format
+   * @param   format one of the enumerated options listed in the description
+   * @returns a string representing the given date in the given format
    */
-  static format(date, format) {
+  static format(date: Date, format: string): string {
     const MONTHS = xjs_Date.MONTH_NAMES
     /**
      * Convert a positive number to a string, adding a leading zero if and only if it is less than 10.

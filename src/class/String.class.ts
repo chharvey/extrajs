@@ -13,10 +13,10 @@ export default class xjs_String {
    * This method calls `.toString()` on everything else, except `null` and `undefined`,
    * which are converted to the strings `'null'` and `'undefined'` respectively.
    * Useful for JSON objects where the value could be a single string or an array of strings.
-   * @param   {*} thing anything to convert
-   * @returns {string} a string version of the argument
+   * @param   thing anything to convert
+   * @returns a string version of the argument
    */
-  static stringify(thing) {
+  static stringify(thing: unknown): string {
     const returned = {
       'array'    : (arg) => arg.join(''),
       'object'   : (arg) => JSON.stringify(arg),

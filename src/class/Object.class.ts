@@ -18,10 +18,10 @@ export default class xjs_Object {
    * Credit to @zaggino.
    *
    * @see https://github.com/zaggino/z-schema/blob/bddb0b25daa0c96119e84b121d7306b1a7871594/src/Utils.js#L12
-   * @param   {*} thing anything
-   * @returns {string} the type of the thing
+   * @param   thing anything
+   * @returns the type of the thing
    */
-  static typeOf(thing) {
+  static typeOf(thing: unknown): string {
     let type = typeof thing
     const returned = {
       'object': () => {
@@ -47,11 +47,11 @@ export default class xjs_Object {
    * This method can be passed either complex values (objects, arrays, functions) or primitive values.
    * Technically, primitives do not have constructing functions, but they can be wrapped with object constructors.
    * For example, calling `instanceOf(3)` will return `Number`, even though `3` was not constructed via the `Number` class.
-   * @param   {*} thing anything except `null` or `undefined`
-   * @returns {string} the name of the constructing function
+   * @param   thing anything except `null` or `undefined`
+   * @returns the name of the constructing function
    * @throws  {TypeError} if `null` or `undefined` is passed
    */
-  static instanceOf(thing) {
+  static instanceOf(thing: unknown): string {
     if (thing === null || thing === undefined) throw new TypeError(`\`${thing}\` does not have a construtor.`)
     return thing.__proto__.constructor.name
   }
@@ -68,11 +68,11 @@ export default class xjs_Object {
    * This function is less strict than {@link Object.is}.
    * If both arguments are arrays, it is faster to use {@link xjs_Array.is}.
    *
-   * @param   {*} a the first  thing
-   * @param   {*} b the second thing
-   * @returns {boolean} `true` if corresponding elements are the same, or replaceable
+   * @param   a the first  thing
+   * @param   b the second thing
+   * @returns Are corresponding elements the same, i.e. replaceable?
    */
-  static is(a, b) {
+  static is(a: unknown, b: unknown): boolean {
     const xjs_Array = require('./Array.class.js') // relative to dist
     if (a === b || Object.is(a,b)) return true
     if (xjs_Object.typeOf(a) === 'array' && xjs_Object.typeOf(b) === 'array') return xjs_Array.is(a, b)
@@ -95,10 +95,10 @@ export default class xjs_Object {
    * @description If an array or object is passed,
    * **Recursively** call {@link Object.freeze} on every property and sub-property of the given parameter.
    * Else, return the given argument.
-   * @param   {*} thing any value to freeze
-   * @returns {*} the returned value, with everything frozen
+   * @param   thing any value to freeze
+   * @returns the returned value, with everything frozen
    */
-  static freezeDeep(thing) {
+  static freezeDeep<T>(thing: T): T {
     Object.freeze(thing)
     let action = {
       'array': () => {
@@ -164,10 +164,10 @@ export default class xjs_Object {
    * console.log(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
    * ```
    *
-   * @param   {*} thing any value to clone
-   * @returns {*} an exact copy of the given value, but with nothing equal via `==` (unless the value given is primitive)
+   * @param   thing any value to clone
+   * @returns an exact copy of the given value, but with nothing equal via `==` (unless the value given is primitive)
    */
-  static cloneDeep(thing) {
+  static cloneDeep<T>(thing: T): T {
     let returned = {
       'array': () => {
         let returned = []
