@@ -17,15 +17,15 @@ export default class xjs_String {
    * @returns a string version of the argument
    */
   static stringify(thing: unknown): string {
-    const returned = {
+    const switch_: { [index: string]: (arg: unknown) => string } = {
       'array'    : (arg) => arg.join(''),
       'object'   : (arg) => JSON.stringify(arg),
-      'string'   : (arg) => arg,
+      'string'   : (arg) => arg as string,
       'null'     : (arg) => 'null',
       'undefined': (arg) => 'undefined',
       default(arg) { return arg.toString() },
     }
-    return (returned[xjs_Object.typeOf(thing)] || returned.default).call(null, thing)
+    return (switch_[xjs_Object.typeOf(thing)] || switch_.default)(thing)
   }
 
 

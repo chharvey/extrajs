@@ -22,8 +22,8 @@ export default class xjs_Object {
    * @returns the type of the thing
    */
   static typeOf(thing: unknown): string {
-    let type = typeof thing
-    const returned = {
+    let type: string = typeof thing
+    const switch_: { [index: string]: () => string } = {
       'object': () => {
         if (thing === null)       return 'null'
         if (Array.isArray(thing)) return 'array'
@@ -38,7 +38,7 @@ export default class xjs_Object {
         return type // 'undefined', 'boolean', 'string', 'function'
       },
     }
-    return (returned[type] || returned.default).call(null)
+    return (switch_[type] || switch_.default)()
   }
 
   /**
@@ -96,13 +96,13 @@ export default class xjs_Object {
    * **Recursively** call {@link Object.freeze} on every property and sub-property of the given parameter.
    * Else, return the given argument.
    * @param   thing any value to freeze
-   * @returns the returned value, with everything frozen
+   * @returns the given value, with everything frozen
    */
   static freezeDeep<T>(thing: T): T {
     Object.freeze(thing)
-    let action = {
+    const action: { [index: string]: () => void } = {
       'array': () => {
-        thing.forEach(function (val) {
+        thing.forEach((val) => {
           if (!Object.isFrozen(val)) xjs_Object.freezeDeep(val)
         })
       },
@@ -113,7 +113,7 @@ export default class xjs_Object {
       },
       default() {},
     }
-    ;(action[xjs_Object.typeOf(thing)] || action.default).call(null)
+    ;(action[xjs_Object.typeOf(thing)] || action.default)()
     return thing
   }
 
@@ -168,16 +168,16 @@ export default class xjs_Object {
    * @returns an exact copy of the given value, but with nothing equal via `==` (unless the value given is primitive)
    */
   static cloneDeep<T>(thing: T): T {
-    let returned = {
+    const switch_: { [index: string]: () => T } = {
       'array': () => {
-        let returned = []
-        thing.forEach(function (val) {
+        const returned: T = []
+        thing.forEach((val) => {
           returned.push(xjs_Object.cloneDeep(val))
         })
         return returned
       },
       'object': () => {
-        let returned = {}
+        const returned: T = {}
         for (let key in thing) {
           returned[key] = xjs_Object.cloneDeep(thing[key])
         }
@@ -187,7 +187,7 @@ export default class xjs_Object {
         return thing
       },
     }
-    return (returned[xjs_Object.typeOf(thing)] || returned.default).call(null)
+    return (switch_[xjs_Object.typeOf(thing)] || switch_.default)()
   }
 
 

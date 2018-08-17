@@ -78,23 +78,23 @@ export default class xjs_Array {
    * @returns an array
    */
   static toArray(arg: unknown[]|number|string, database: object = {}): unknown[] {
-    let returned = {
-      array: function () {
+    const switch_: { [index: string]: () => unknown[] } = {
+      'array': () => {
         return arg
       },
-      number: function () {
+      'number': () => {
         let array = []
         for (let n = 1; n <= arg; n++) { array.push(n) }
         return array
       },
-      string: function () {
+      'string': () => {
         return xjs_Array.toArray(database[arg], database)
       },
-      default: function () {
+      default() {
         return []
       },
     }
-    return (returned[xjs_Object.typeOf(arg)] || returned.default).call(null)
+    return (switch_[xjs_Object.typeOf(arg)] || switch_.default)()
   }
 
   /**
