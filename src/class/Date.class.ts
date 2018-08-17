@@ -1,23 +1,12 @@
-const xjs = {}
-
 /**
  * @summary Additional static members for the native Date class.
  * @description Does not extend the native Date class.
- * @namespace
  */
-xjs.Date = class {
-  /**
-   * @private
-   */
-  constructor() {}
-
+export default class xjs_Date {
   /**
    * @summary List of full month names in English.
-   * @version LOCKED
-   * @constant {Array<string>}
    */
-  static get MONTH_NAMES() {
-    return [
+  static readonly MONTH_NAMES = [
       'January',
       'February',
       'March',
@@ -31,15 +20,11 @@ xjs.Date = class {
       'November',
       'December',
     ]
-  }
 
   /**
    * @summary List of full day names in English.
-   * @version LOCKED
-   * @constant {Array<string>}
    */
-  static get DAY_NAMES() {
-    return [
+  static readonly DAY_NAMES = [
       'Sundary',
       'Monday',
       'Tuesday',
@@ -48,17 +33,15 @@ xjs.Date = class {
       'Friday',
       'Saturday',
     ]
-  }
 
   /**
    * @summary Return whether two dates occur on the same day.
    * @description That is, if 'YYYY-MM-DD' of date1 equals 'YYYY-MM-DD' of date2.
-   * @version STABLE
-   * @param   {Date} date1 the first date
-   * @param   {Date} date2 the second date
-   * @returns {boolean} `true` iff both dates have the same year, same month, *and* same day (date of the month)
+   * @param   date1 the first date
+   * @param   date2 the second date
+   * @returns Do both dates have the same year, same month, *and* same day (date of the month)?
    */
-  static sameDate(date1, date2) {
+  static sameDate(date1: Date, date2: Date): boolean {
     return date1.toISOString().slice(0,10) === date2.toISOString().slice(0,10)
   }
 
@@ -69,11 +52,10 @@ xjs.Date = class {
    * - `06:00` => 0.25
    * - `12:00` => 0.50
    * - `18:00` => 0.75
-   * @version EXPERIMENTAL
-   * @param   {Date} date a Date object
-   * @returns {number} the proportion
+   * @param   date a Date object
+   * @returns the proportion
    */
-  static timeProportion(date) {
+  static timeProportion(date: Date): number {
     let millis  =  date.getUTCMilliseconds()       / 1000
     let seconds = (date.getUTCSeconds() + millis)  / 60
     let minutes = (date.getUTCMinutes() + seconds) / 60
@@ -97,25 +79,24 @@ xjs.Date = class {
    * - 'H:i'       : '21:33'
    * - 'g:ia'      : '9:33pm'
    * - 'default'   : '2017-08-06T01:33:00.000Z' ({@link Date#toISOString})
-   * @version STABLE
    * @see http://php.net/manual/en/function.date.php
-   * @param   {Date} date the date to format
-   * @param   {string} format one of the enumerated options listed in the description
-   * @returns {string} a string representing the given date in the given format
+   * @param   date the date to format
+   * @param   format one of the enumerated options listed in the description
+   * @returns a string representing the given date in the given format
    */
-  static format(date, format) {
-    const MONTHS = xjs.Date.MONTH_NAMES
+  static format(date: Date, format: string): string {
+    const MONTHS = xjs_Date.MONTH_NAMES
     /**
      * Convert a positive number to a string, adding a leading zero if and only if it is less than 10.
      * @param  {number} n any positive number
      * @return {string} that number as a string, possibly prepended with '0'
      */
-    function leadingZero(n) { return `${(n < 10) ? '0' : ''}${n}` }
-    const returned = {
+    function leadingZero(n: number): string { return `${(n < 10) ? '0' : ''}${n}` }
+    const switch_: { [index: string]: (arg: Date) => string } = {
       'Y-m-d'    : (date) => `${date.getFullYear()}-${leadingZero(date.getUTCMonth()+1)}-${leadingZero(date.getUTCDate())}`,
       'j M Y'    : (date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
       'd F Y'    : (date) => `${leadingZero(date.getUTCDate())} ${MONTHS[date.getUTCMonth()]} ${date.getFullYear()}`,
-      'l, j F, Y': (date) => `${xjs.Date.DAY_NAMES[date.getUTCDay()]}, ${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}, ${date.getFullYear()}`,
+      'l, j F, Y': (date) => `${xjs_Date.DAY_NAMES[date.getUTCDay()]}, ${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}, ${date.getFullYear()}`,
       'j M'      : (date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)}`,
       'M Y'      : (date) => `${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
       'M j'      : (date) => `${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getUTCDate()}`,
@@ -126,9 +107,10 @@ xjs.Date = class {
       'g:ia'     : (date) => `${(date.getUTCHours() - 1)%12 + 1}:${(date.getUTCMinutes() < 10) ? '0' : ''}${date.getUTCMinutes()}${(date.getUTCHours() < 12) ? 'am' : 'pm'}`,
       default(date) { return date.toISOString() },
     }
-    if (!returned[format]) console.warn(new ReferenceError(`Warning: Date format \`${format}\` not supported.`))
-    return (returned[format] || returned.default).call(null, date)
+    if (!switch_[format]) console.warn(new ReferenceError(`Warning: Date format \`${format}\` not supported.`))
+    return (switch_[format] || switch_.default)(date)
   }
-}
 
-module.exports = xjs.Date
+
+  private constructor() {}
+}
