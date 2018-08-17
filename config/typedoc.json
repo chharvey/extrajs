@@ -1,0 +1,8 @@
+{
+  "target": "es6",
+  "module": "commonjs",
+  "mode"  : "file",
+  "name"  : "extrajs-dom",
+  "out"   : "./docs/api/",
+  "ignoreCompilerErrors": true
+}
