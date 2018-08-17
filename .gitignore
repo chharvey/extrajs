@@ -57,6 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+# Generated build files
+dist/
 
-# generated documentation
-docs/api/
+# Generated documentation & style guides
+docs/api
