@@ -8,7 +8,9 @@ import xjs_Object from './Object.class'
 export default class xjs_Array {
   /**
    * @summary Test whether two arrays are “the same”.
-   * @description This function uses {@link xjs_Object.is} equality on corresponding entries,
+   * @description This function uses
+   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is}
+   * equality on corresponding entries,
    * testing replaceability.
    *
    * “The same” means “replaceable”, that is,
@@ -19,7 +21,7 @@ export default class xjs_Array {
    *
    * @param   arr1 the first array
    * @param   arr2 the second array
-   * @returns Are corresponding elements the same (via `xjs.Object.is()`)?
+   * @returns Are corresponding elements the same (via {@link xjs_Object.is})?
    */
   static is<T>(arr1: T[], arr2: T[]): boolean {
     if (arr1 === arr2) return true
@@ -32,19 +34,19 @@ export default class xjs_Array {
 
   /**
    * @summary Test whether an array is a subarray of another array.
-   * @description This method acts like {@link String#includes}, testing whether
+   * @description This method acts like
+   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes|String#includes},
+   * testing whether
    * the elements in the smaller array appear consecutively and in the same order as in the larger array.
    * In other words, if `{@link xjs_Array.is}(larger.slice(a,b), smaller)` (for some integers a and b),
    * then this method returns `true`.
    *
-   * Examples:
-   * ```js
+   * @example
    * 'twofoursix'.includes('wofo')===true
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], ['w','o',4,'o'])===true
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], ['o','u'])===true
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], [6,'o','u','r'])===false // not in the same order
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], [2,4,6])===false // not consecutive
-   * ```
    *
    * @param   larger  the larger array, to test against
    * @param   smaller the smaller array, to test
@@ -102,16 +104,17 @@ export default class xjs_Array {
   /**
    * @summary Make a copy of an array, and then remove duplicate entries.
    * @description "Duplicate entries" are entries that considered "the same" by
-   * the provided comparator function, or if none is given, `Object.is()`.
+   * the provided comparator function, or if none is given,
+   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is}.
    * Only duplicate entries are removed; the order of non-duplicates is preserved.
    * @param   arr an array to use
    * @param   comparator a function comparing elements in the array
    * @returns a new array, with duplicates removed
    */
-  static removeDuplicates<T>(arr: T[], comparator: (a: unknown, b: unknown) => boolean = Object.is): T[] {
-    const returned = arr.slice()
+  static removeDuplicates<T>(arr: T[], comparator: (a: T, b: T) => boolean = Object.is): T[] {
+    const returned: T[] = arr.slice()
     for (let i = 0; i < returned.length; i++) {
-      for (let j = i+1; j < returned.length; j++) {
+      for (let j = i + 1; j < returned.length; j++) {
         if (comparator(returned[i], returned[j])) returned.splice(j, 1)
       }
     }
