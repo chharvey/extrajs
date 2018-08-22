@@ -1,0 +1,8 @@
+# Generated build files
+!dist/
+
+# Output of 'npm pack'
+*.tgz
+
+# Generated documentation & style guides
+docs/api/

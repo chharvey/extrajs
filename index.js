@@ -1,11 +1,10 @@
 /**
  * Extra JS utilites and helpers.
- * @namespace xjs
  */
 module.exports = {
-  Object: require('./src/Object.class.js'),
-  Number: require('./src/Number.class.js'),
-  Date: require('./src/Date.class.js'),
-  String: require('./src/String.class.js'),
-  Array: require('./src/Array.class.js'),
+  Object : require('./dist/class/Object.class.js').default,
+  Number : require('./dist/class/Number.class.js').default,
+  Date   : require('./dist/class/Date.class.js').default,
+  String : require('./dist/class/String.class.js').default,
+  Array  : require('./dist/class/Array.class.js').default,
 }

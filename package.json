@@ -1,9 +1,11 @@
 {
   "name": "extrajs",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "Javascript helpers for lazy people.",
   "main": "index.js",
   "scripts": {
+    "build": "gulp build",
+    "prepublishOnly": "npm run build",
     "test": "node test/index.js"
   },
   "repository": {
@@ -25,6 +27,9 @@
   "homepage": "https://github.com/chharvey/extrajs#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-jsdoc3": "^1.0.1"
+    "gulp-typedoc": "^2.2.0",
+    "gulp-typescript": "^5.0.0-alpha.3",
+    "typedoc": "^0.12.0",
+    "typescript": "^3.0.1"
   }
 }
