@@ -1,6 +1,3 @@
-/**
- * Extra JS utilites and helpers.
- */
 module.exports = {
   Object : require('./dist/class/Object.class.js').default,
   Number : require('./dist/class/Number.class.js').default,
