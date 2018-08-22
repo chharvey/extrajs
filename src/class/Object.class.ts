@@ -9,16 +9,16 @@ export default class xjs_Object {
   /**
    * @summary Return the type of a thing.
    * @description Similar to the `typeof` primitive operator, but more refined.
+   * Credit to {@link https://github.com/zaggino/|@zaggino}.
    *
-   * NOTE! passing undeclared variables will throw a `ReferenceError`!
-   * ```js
+   * Note! passing undeclared variables will throw a `ReferenceError`!
+   *
+   * @example
    * var x;          // declare `x`
    * typeof x;       // 'undefined'
    * typeof y;       // 'undefined'
    * xjs.typeOf(x);  // 'undefined'
    * xjs.typeOf(y);  // Uncaught ReferenceError: y is not defined
-   * ```
-   * Credit to @zaggino.
    *
    * @see https://github.com/zaggino/z-schema/blob/bddb0b25daa0c96119e84b121d7306b1a7871594/src/Utils.js#L12
    * @param   thing anything
@@ -61,14 +61,20 @@ export default class xjs_Object {
 
   /**
    * @summary Test whether two things are “the same”.
-   * @description This function acts **recursively** on corresponding object values,
+   * @description
+   * This function uses
+   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is}
+   * equality on corresponding entries, testing replaceability.
+   *
+   * This function acts **recursively** on corresponding object values,
    * where the base case (for non-object values) is `Object.is()`.
    *
    * “The same” means “replaceable”, that is,
    * for any deterministic function: `fn(a)` would return the same result as `fn(b)` if and only if
    * `xjs.Object.is(a, b)`.
    *
-   * This function is less strict than {@link Object.is}.
+   * This function is less strict than
+   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is}.
    * If both arguments are arrays, it is faster to use {@link xjs_Array.is}.
    *
    * @param   a the first  thing
@@ -99,8 +105,11 @@ export default class xjs_Object {
    * @summary Deep freeze an object, and return the result.
    * @description *Note: This function is impure, modifying the given argument.*
    * If an array or object is passed,
-   * **Recursively** call {@link Object.freeze} on every property and sub-property of the given parameter.
+   * **Recursively** call
+   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze|Object.freeze}
+   * on every property and sub-property of the given parameter.
    * Else, return the given argument.
+   * If the argument is an array, it is faster to use {@link xjs_Array.freezeDeep}.
    * @param   thing any value to freeze
    * @returns the given value, with everything frozen
    */
@@ -120,14 +129,16 @@ export default class xjs_Object {
    * @summary Deep clone an object, and return the result.
    * @description If an array or object is passed,
    * This method is **recursively** called, cloning properties and sub-properties of the given parameter.
-   * The returned result is an object, that when passed with the original as arguments of {@link xjs_Object.is},
+   * The returned result is an object, that when passed with the original as arguments of
+   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is},
    * `true` would be returned. The new object would be “replaceable” with its cloner.
    * If a primitive value is passed, the original argument is returned.
+   * If the argument is an array, it is faster to use {@link xjs_Array.cloneDeep}.
    *
    * This method provides a deeper clone than `Object.assign()`: whereas `Object.assign()` only
    * copies the top-level properties, this method recursively clones into all sub-levels.
    *
-   * ```js
+   * @example
    * var x = { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
    *
    * // Object.assign x into y:
@@ -161,10 +172,9 @@ export default class xjs_Object {
    * z.third[2].v  = [3]
    * console.log(z) // returns { first: 'one', second: 2, third: ['one', 2, { v:[3] }] }
    * console.log(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
-   * ```
    *
    * @param   thing any value to clone
-   * @returns an exact copy of the given value, but with nothing equal via `==` (unless the value given is primitive)
+   * @returns an exact copy of the given value, but with nothing equal via `===` (unless the value given is primitive)
    */
   static cloneDeep<T>(thing: T): T {
     const xjs_Array = require('./Array.class.js') // relative to dist

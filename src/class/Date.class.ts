@@ -35,11 +35,11 @@ export default class xjs_Date {
     ]
 
   /**
-   * @summary Return whether two dates occur on the same day.
-   * @description That is, if 'YYYY-MM-DD' of date1 equals 'YYYY-MM-DD' of date2.
+   * @summary Return whether two dates occur on the same 24-hour day.
+   * @description That is, if both dates have the same year, same month, *and* same day (date of the month).
    * @param   date1 the first date
    * @param   date2 the second date
-   * @returns Do both dates have the same year, same month, *and* same day (date of the month)?
+   * @returns Does 'YYYY-MM-DD' of `date1` equal 'YYYY-MM-DD' of `date2`?
    */
   static sameDate(date1: Date, date2: Date): boolean {
     return date1.toISOString().slice(0,10) === date2.toISOString().slice(0,10)
@@ -78,7 +78,7 @@ export default class xjs_Date {
    * - 'M'         : 'Aug'
    * - 'H:i'       : '21:33'
    * - 'g:ia'      : '9:33pm'
-   * - 'default'   : '2017-08-06T01:33:00.000Z' ({@link Date#toISOString})
+   * - 'default'   : '2017-08-06T01:33:00.000Z' ({@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString|Date#toISOString})
    * @see http://php.net/manual/en/function.date.php
    * @param   date the date to format
    * @param   format one of the enumerated options listed in the description
@@ -87,9 +87,10 @@ export default class xjs_Date {
   static format(date: Date, format: string): string {
     const MONTHS = xjs_Date.MONTH_NAMES
     /**
-     * Convert a positive number to a string, adding a leading zero if and only if it is less than 10.
-     * @param  {number} n any positive number
-     * @return {string} that number as a string, possibly prepended with '0'
+     * @summary Convert a positive number to a string, adding a leading zero if and only if it is less than 10.
+     * @private
+     * @param  n any positive number
+     * @return that number as a string, possibly prepended with '0'
      */
     function leadingZero(n: number): string { return `${(n < 10) ? '0' : ''}${n}` }
     const switch_: { [index: string]: (arg: Date) => string } = {
@@ -107,7 +108,7 @@ export default class xjs_Date {
       'g:ia'     : (date) => `${(date.getUTCHours() - 1)%12 + 1}:${(date.getUTCMinutes() < 10) ? '0' : ''}${date.getUTCMinutes()}${(date.getUTCHours() < 12) ? 'am' : 'pm'}`,
       default(date) { return date.toISOString() },
     }
-    if (!switch_[format]) console.warn(new ReferenceError(`Warning: Date format \`${format}\` not supported.`))
+    if (!switch_[format]) console.warn(new ReferenceError(`Warning: Date format \`${format}\` not supported; using ISO string.`))
     return (switch_[format] || switch_.default)(date)
   }
 
