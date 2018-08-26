@@ -33,23 +33,21 @@ export default class xjs_Object {
    * @returns the type of the thing
    */
   static typeOf(thing: unknown): string {
-    let type: string = typeof thing
-    const switch_: { [index: string]: () => string } = {
-      'object': () => {
+    return xjs_Object.switch<string>([
+      ['object', (thing: any) => {
         if (thing === null)       return 'null'
         if (Array.isArray(thing)) return 'array'
-        return type // 'object'
-      },
-      'number': () => {
-        if (Number.isNaN(thing as number))     return 'NaN'
-        if (!Number.isFinite(thing as number)) return 'infinite'
-        return type // 'number'
-      },
-      default() {
-        return type // 'undefined', 'boolean', 'string', 'function'
-      },
-    }
-    return (switch_[type] || switch_.default)()
+        return 'object'
+      }],
+      ['number', (thing: number) => {
+        if (Number.isNaN(thing))     return 'NaN'
+        if (!Number.isFinite(thing)) return 'infinite'
+        return 'number'
+      }],
+      ['default', (thing: Function|string|boolean|void) => {
+        return typeof thing // 'function', 'string', 'boolean', 'undefined'
+      }],
+    ], typeof thing, [thing])
   }
 
   /**
