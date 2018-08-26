@@ -2,6 +2,14 @@ import xjs_Array from './Array.class'
 
 
 /**
+ * @summary A helper interface for {@link Object.switch}.
+ */
+interface SwitchFn<T> extends Function {
+      (this: unknown, ...args: any[]): T;
+  call(this: unknown, ...args: any[]): T;
+}
+
+/**
  * @summary Additional static members for the native Object class.
  * @description Does not extend the native Object class.
  */
@@ -25,23 +33,21 @@ export default class xjs_Object {
    * @returns the type of the thing
    */
   static typeOf(thing: unknown): string {
-    let type: string = typeof thing
-    const switch_: { [index: string]: () => string } = {
-      'object': () => {
+    return xjs_Object.switch<string>([
+      ['object', (thing: any) => {
         if (thing === null)       return 'null'
         if (Array.isArray(thing)) return 'array'
-        return type // 'object'
-      },
-      'number': () => {
-        if (Number.isNaN(thing as number))     return 'NaN'
-        if (!Number.isFinite(thing as number)) return 'infinite'
-        return type // 'number'
-      },
-      default() {
-        return type // 'undefined', 'boolean', 'string', 'function'
-      },
-    }
-    return (switch_[type] || switch_.default)()
+        return 'object'
+      }],
+      ['number', (thing: number) => {
+        if (Number.isNaN(thing))     return 'NaN'
+        if (!Number.isFinite(thing)) return 'infinite'
+        return 'number'
+      }],
+      ['default', (thing: Function|string|boolean|void) => {
+        return typeof thing // 'function', 'string', 'boolean', 'undefined'
+      }],
+    ], typeof thing, [thing])
   }
 
   /**
@@ -59,6 +65,64 @@ export default class xjs_Object {
     return (thing as any).__proto__.constructor.name
   }
 
+  /**
+   * @summary A structured `switch` statement.
+   * @description
+   * This method offers a more structured alternative to a standard `switch` statement,
+   * using object lookups to find values.
+   *
+   * The iterable parameter must be an array of pairs, each an array containing
+   * a string (the key) followed by a function (the value).
+   * This function, when called, should return a value corresponding to its key string.
+   * All functions in the iterable must return the same type of value.
+   *
+   * The next parameters after the iterable are the key whose value to look up,
+   * followed by the arguments to pass to the object lookup function, if any.
+   * Optionally provide a `'default'` key to handle cases when no written key matches user input.
+   * The `'default'` key is analogous to the **`default` clause** of a `switch` statement.
+   *
+   * The following example calls this method to look up
+   * the date of the *nth* Tuesday of each month of 2018,
+   * where *n* could be a number 1 through 5.
+   * (Note that this example is actually pretty inefficient,
+   * but it only serves as a demonstration.)
+   *
+   * @example
+   * // What is the date of the 1st Tuesday of November, 2018?
+   * xjs.Object.switch<number>([
+   *
+   *   ['January'  , (n: number) => [ 2,  9, 16, 23,  30][n - 1]],
+   *   ['February' , (n: number) => [ 6. 13. 20, 27, NaN][n - 1]],
+   *   ['March'    , (n: number) => [ 6, 13, 20, 27, NaN][n - 1]],
+   *   ['April'    , (n: number) => [ 3, 10, 17, 24, NaN][n - 1]],
+   *   ['May'      , (n: number) => [ 1,  8, 15, 22,  29][n - 1]],
+   *   ['June'     , (n: number) => [ 5, 12, 19, 26, NaN][n - 1]],
+   *   ['July'     , (n: number) => [ 3, 10, 17, 24,  31][n - 1]],
+   *   ['August'   , (n: number) => [ 7, 14, 21, 28, NaN][n - 1]],
+   *   ['September', (n: number) => [ 4, 11, 18, 25, NaN][n - 1]],
+   *   ['October'  , (n: number) => [ 2,  9, 16, 23,  30][n - 1]],
+   *   ['November' , (n: number) => [ 6, 13, 20, 27, NaN][n - 1]],
+   *   ['December' , (n: number) => [ 4, 11, 18, 25, NaN][n - 1]],
+   *   ['default', (n: number) => NaN],
+   *
+   * ], 'November', [1]) // returns the number `6`
+   * @param   iterable an argument with which to instantiate a native Map object
+   * @param   key the key to provide the lookup, which will result in a function
+   * @param   args an array of arguments to provide the looked-up function
+   * @param   this_arg the context to use for `this` inside the looked-up function; optional
+   * @returns the result of calling the looked-up function with the given arguments
+   * @throws  {ReferenceError} when failing to find a lookup value
+   */
+  static switch<T>(iterable: [string, SwitchFn<T>][], key: string, args: unknown[] = [], this_arg: unknown = null): T {
+    let map = new Map(iterable)
+    let returned = map.get(key)
+    if (!returned) {
+      console.warn(`Key '${key}' cannot be found. Using key 'default'.`)
+      returned = map.get('default')
+      if (!returned) throw new ReferenceError(`No default value found.`)
+    }
+    return returned.call(this_arg, ...args)
+  }
   /**
    * @summary Test whether two things are “the same”.
    * @description

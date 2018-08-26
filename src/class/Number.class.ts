@@ -17,9 +17,49 @@ export default class xjs_Number {
    * @throws  {RangeError} if the given arguemnt was not a finite number
    */
   static typeOf(num: number): string {
-    if (xjs_Object.typeOf(num) === 'number') {
-      return (Number.isInteger(num)) ? 'integer' : 'float'
-    } else throw new RangeError('Argument must be a finite number.')
+    if (['NaN', 'infinite'].includes(xjs_Object.typeOf(num))) {
+      throw new RangeError('Argument must be a finite number.')
+    }
+    return (Number.isInteger(num)) ? 'integer' : 'float'
+  }
+
+  /**
+   * @summary Verify the type of number given, throwing if it does not match.
+   * @description
+   * Given a (finite) number and a "type", test to see if the number is of that type.
+   * Mainly used for parameter validation, when the type `number` is not specific enough.
+   * The acceptable "types", which are not mutually exclusive, follow:
+   *
+   * - `'float'   ` : the number is not an integer
+   * - `'integer' ` : the number is divisible by 1 (`num %1 === 0`)
+   * - `'natural' ` : the number is a non-negative integer (either positive or 0)
+   * - `'whole'   ` : the number is a positive integer
+   * - `'positive'` : the number is greater than 0
+   * - `'negative'` : the number is less than 0
+   *
+   * Note that if the given number does not match the given type,
+   * then this method will throw an error, instead of returning `false`.
+   * This is useful for parameter validation.
+   *
+   * @param   num the number to test
+   * @param   type one of the string literals listed above
+   * @returns does the number match the described type?
+   * @throws  {RangeError} if the number does not match
+   */
+  static checkType(num: number, type: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'): boolean {
+    if (['NaN', 'infinite'].includes(xjs_Object.typeOf(num))) {
+      throw new RangeError('Argument must be a finite number.')
+    }
+    const returned = xjs_Object.switch<[boolean, string]>([
+      ['float'   , (n: number) => [!Number.isInteger(n)          , `${n} may not be an integer.`         ]],
+      ['integer' , (n: number) => [ Number.isInteger(n)          , `${n} must be an integer.`            ]],
+      ['natural' , (n: number) => [ Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`]],
+      ['whole'   , (n: number) => [ Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    ]],
+      ['positive', (n: number) => [0 < n                         , `${n} must be a positive number.`     ]],
+      ['negative', (n: number) => [n < 0                         , `${n} must be a negative number.`     ]],
+    ], type, [num])
+    if (returned[0]) return true
+    throw new RangeError(returned[1])
   }
 
 

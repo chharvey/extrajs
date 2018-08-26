@@ -1,3 +1,6 @@
+import xjs_Number from './Number.class'
+
+
 /**
  * @summary Additional static members for the native Math class.
  * @description Does not extend the native Math class.
@@ -25,7 +28,7 @@ export default class xjs_Math {
    * @throws  {RangeError} when `n` is not a non-negative integer
    */
   static tetrate(x: number, n: number): number {
-    if (n < 0 || n%1 !== 0) throw new RangeError(`${n} must be a non-negative integer.`)
+    xjs_Number.checkType(n, 'natural')
     if (n === 0) return 1
     return x ** xjs_Math.tetrate(x, n-1)
   }
@@ -41,7 +44,7 @@ export default class xjs_Math {
    * @throws  {RangeError} when `n` is not a positive integer
    */
   static mod(x: number, n: number): number {
-    if (n <= 0 || n%1 !== 0) throw new RangeError(`${n} must be a positive integer.`)
+    xjs_Number.checkType(n, 'whole')
     return ((x % n) + n) % n
   }
 
