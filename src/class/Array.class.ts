@@ -11,9 +11,9 @@ export default class xjs_Array {
    * @description Shortcut of {@link xjs_Object.is}, but for arrays.
    * @param   arr1 the first array
    * @param   arr2 the second array
-   * @returns Are corresponding elements the same (via {@link xjs_Object.is})?
+   * @returns Are corresponding elements the same, i.e. replaceable??
    */
-  static is(arr1: unknown[], arr2: unknown[]): boolean {
+  static is<T>(arr1: T[], arr2: T[]): boolean {
     if (arr1 === arr2) return true
     if (arr1.length !== arr2.length) return false
     for (let i = 0; i < arr1.length; i++) {
@@ -66,7 +66,7 @@ export default class xjs_Array {
    * @returns Is `smaller` a subarray of `larger`?
    * @throws  {RangeError} if the second array is larger than the first
    */
-  static contains<T, U>(larger: T[], smaller: U[]): boolean {
+  static contains<T>(larger: T[], smaller: T[]): boolean {
     if (smaller.length > larger.length) throw new RangeError('Smaller array cannot have a greater length than larger array.')
     if (xjs_Array.is(smaller, [])) return true
     if (xjs_Array.is(smaller, larger)) return true

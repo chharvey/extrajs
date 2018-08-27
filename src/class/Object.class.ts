@@ -5,8 +5,8 @@ import xjs_Array from './Array.class'
  * @summary A helper interface for {@link Object.switch}.
  */
 interface SwitchFn<T> extends Function {
-      (this: unknown, ...args: any[]): T;
-  call(this: unknown, ...args: any[]): T;
+  (this: unknown, ...args: any[]): T;
+  call(this_arg: unknown, ...args: any[]): T;
 }
 
 /**
@@ -145,10 +145,10 @@ export default class xjs_Object {
    * @param   b the second thing
    * @returns Are corresponding elements the same, i.e. replaceable?
    */
-  static is(a: unknown, b: unknown): boolean {
+  static is<T>(a: T, b: T): boolean {
     const xjs_Array = require('./Array.class.js') // relative to dist
     if (a === b || Object.is(a,b)) return true
-    if (xjs_Object.typeOf(a) === 'array' && xjs_Object.typeOf(b) === 'array') return xjs_Array.is(a as unknown[], b as unknown[])
+    if (xjs_Object.typeOf(a) === 'array' && xjs_Object.typeOf(b) === 'array') return xjs_Array.is(a as unknown as unknown[], b as unknown as unknown[]) // HACK https://stackoverflow.com/a/18736071/
     // both must be objects
     if (xjs_Object.typeOf(a) !== 'object' || xjs_Object.typeOf(b) !== 'object') return false
     // both must have the same number of own properties
@@ -157,7 +157,7 @@ export default class xjs_Object {
     if (!Object.getOwnPropertyNames(a).every((key) => Object.getOwnPropertyNames(b).includes(key))) return false
     // `a` must own every property in `b` // NOTE unnecessary if they have the same length
     // if (!Object.getOwnPropertyNames(b).every((key) => Object.getOwnPropertyNames(a).includes(key))) return false
-    for (let i in a as object) {
+    for (let i in a as unknown as object) { // HACK https://stackoverflow.com/a/18736071/
       let ai: unknown = (a as { [key: string]: unknown })[i]
       let bi: unknown = (b as { [key: string]: unknown })[i]
       if (!xjs_Object.is(ai, bi)) return false
@@ -179,7 +179,7 @@ export default class xjs_Object {
    */
   static freezeDeep<T>(thing: T): T {
     const xjs_Array = require('./Array.class.js') // relative to dist
-    if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.freezeDeep(thing as unknown as unknown[]) as unknown as T // BUG https://stackoverflow.com/a/18736071/
+    if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.freezeDeep(thing as unknown as unknown[]) as unknown as T // HACK https://stackoverflow.com/a/18736071/
     Object.freeze(thing)
     if (xjs_Object.typeOf(thing) === 'object') {
         for (let key in thing) {
@@ -242,7 +242,7 @@ export default class xjs_Object {
    */
   static cloneDeep<T>(thing: T): T {
     const xjs_Array = require('./Array.class.js') // relative to dist
-    if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.cloneDeep(thing as unknown as unknown[]) as unknown as T // BUG https://stackoverflow.com/a/18736071/
+    if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.cloneDeep(thing as unknown as unknown[]) as unknown as T // HACK https://stackoverflow.com/a/18736071/
     if (xjs_Object.typeOf(thing) === 'object') {
         const returned: { [index: string]: unknown } = {}
         for (let key in thing) {
