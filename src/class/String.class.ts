@@ -21,8 +21,8 @@ export default class xjs_String {
       ['array'    , (arg: unknown[])               => arg.join('')       ],
       ['object'   , (arg: Object)                  => JSON.stringify(arg)],
       ['string'   , (arg: string)                  => arg                ],
-      ['null'     , (arg: null)                    => 'null'             ],
-      ['undefined', (arg: void)                    => 'undefined'        ],
+      ['null'     , (arg: null)                    => `${arg}`           ],
+      ['undefined', (arg: void)                    => `${arg}`           ],
       ['default'  , (arg: Function|number|boolean) => arg.toString()     ],
     ], xjs_Object.typeOf(thing), [thing])
   }

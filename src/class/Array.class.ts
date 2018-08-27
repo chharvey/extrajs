@@ -81,7 +81,7 @@ export default class xjs_Array {
     }
     if (xjs_Array.is(smaller, []    )) return true
     if (xjs_Array.is(smaller, larger)) return true
-    return larger.map((el, i) => larger.slice(i, i+smaller.length)).some((sub) => xjs_Array.is(smaller, sub))
+    return larger.map((_el, i) => larger.slice(i, i+smaller.length)).some((sub) => xjs_Array.is(smaller, sub))
   }
 
   /**
