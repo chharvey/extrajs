@@ -125,6 +125,22 @@ export default class xjs_Object {
     }
     return returned.call(this_arg, ...args)
   }
+
+  /**
+   * @summary Test whether two things are equal vis-à-vis the Same-Value-Zero algorithm.
+   * @description
+   * This method is less strict than
+   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is},
+   * only in that `_sameValueZero(0, -0)` will return `true`.
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#Same-value-zero_equality
+   * @param   a the first  thing
+   * @param   b the second thing
+   * @returns exactly `a === b || Object.is(a, b)`
+   */
+  static sameValueZero(a: unknown, b: unknown): boolean {
+    return a === b || Object.is(a, b)
+  }
+
   /**
    * @summary Test whether two things are “the same”.
    * @description
