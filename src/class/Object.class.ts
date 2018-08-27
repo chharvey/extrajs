@@ -1,5 +1,3 @@
-import * as assert from 'assert'
-
 import xjs_Array from './Array.class'
 
 
@@ -142,28 +140,26 @@ export default class xjs_Object {
   }
 
   /**
-   * @summary Test whether two things are “the same”.
+   * @summary Test whether two things have “the same” properties.
    * @description
-   * This function tests the equality of two arguemnts, using the provided comparator predicate.
+   * This function tests the properties of two arguemnts, using the provided comparator predicate.
+   * Arguments must be of the same type.
+   * If both are primitives, this method checks
+   * {@link xjs_Object._sameValueZero|Same-Value-Zero Equality}.
+   * If both are functions, this method throws an TypeError — functions are not supported at this time.
    * If both arguments are arrays, it is faster and more robust to use {@link xjs_Array.is}.
+   * If both are objects or arrays, this method checks the properties (or elements) of each,
+   * comparing them with the provided comparator predicate.
    *
-   * If no predicate is provided, this method uses the default predicate:
-   * ```js
-   * (a, b) => a === b || Object.is(a, b)
-   * ```
-   * Assuming the default predicate is used, this function is less strict than
-   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is},
-   * only in that `xjs.Object.is(0, -0)` will return `true`.
+   * If no predicate is provided, this method uses the default predicate {@link xjs_Object._sameValueZero}.
    *
-   * **IMPORTANT: If no predicate is provided, this method will recursively check further levels
-   * of depth, testing not only the given arguments but also those arguments’ properties, and so on.
-   * *WARNING: this is deprecated behavior, and it will be removed in v0.13+.*
-   * Instead, for depth > 1, you should use Node.js’s native
+   * Note: This method does not deep-check equality within the objects’ properties (or arrays’ elements).
+   * To check deeper, I suggest using Node.js’s native
    * {@link https://nodejs.org/dist/latest/docs/api/assert.html#assert_assert_deepstrictequal_actual_expected_message|assert.deepStrictEqual}.
-   * Therefore I strongly suggest that you *always* provide 3 arguments when calling this method.
-   * After v0.13+, if you still want depth > 1, you can provide another deep-equal function as the 3rd argument.**
+   * However, you may specify this behavior in your custom comparator.
    *
-   * This method is based on the **Liskov Substitution Principle**.
+   * This method is based on the
+   * {@link https://en.wikipedia.org/wiki/Liskov_substitution_principle|Liskov Substitution Principle}.
    * Values that are considered “the same” should semantically mean they are “replaceable”
    * with one another. This is demonstrated rigorously below.
    *
@@ -179,22 +175,12 @@ export default class xjs_Object {
    * @returns Are corresponding properties the same, i.e. replaceable?
    * @throws  {TypeError} if either `a` or `b` is a function (not supported)
    */
-  static is<T>(a: T, b: T, comparator?: (x: any, y: any) => boolean): boolean {
-    // comparator = comparator || (x, y) => x === y || Object.is(x, y) // TODO make default param after v0.13+
+  static is<T>(a: T, b: T, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
     if (['string', 'number', 'boolean', 'null', 'undefined'].includes(xjs_Object.typeOf(a))) {
-      return a === b || Object.is(a, b)
+      return xjs_Object.sameValueZero(a, b)
     }
     if (xjs_Object.typeOf(a) === 'function') throw new TypeError('Function arguments to xjs.Object.is are not yet supported.')
     // else, it will be 'object' or 'array'
-    if (!comparator) { // TEMP: this preserves deprecated funcationality; will be removed on v0.13+
-      try {
-        assert.deepStrictEqual(a, b) // COMBAK in node.js v10+, use `assert.strict.deepStrictEqual()`
-        return true
-      } catch (e) {
-        console.error(e.message)
-        return false
-      }
-    }
     return a === b || Object.entries(a).every((a_entry) =>
       Object.entries(b).some((b_entry) =>
         a_entry[0] === b_entry[0] && comparator(a_entry[1], b_entry[1])

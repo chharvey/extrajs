@@ -1,5 +1,3 @@
-import * as assert from 'assert'
-
 import xjs_Object from './Object.class'
 
 
@@ -9,26 +7,15 @@ import xjs_Object from './Object.class'
  */
 export default class xjs_Array {
   /**
-   * @summary Test whether two arrays are “the same”.
+   * @summary Test whether two arrays have “the same” elements.
    * @description Shortcut of {@link xjs_Object.is}, but for arrays.
    * @param   a the first array
    * @param   b the second array
    * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
    * @returns Are corresponding elements the same, i.e. replaceable??
    */
-  static is<T>(a: T[], b: T[], comparator?: (x: T, y: T) => boolean): boolean {
-    // comparator = comparator || (x, y) => x === y || Object.is(x, y) // TODO make default param after v0.13+
-    if (!comparator) { // TEMP: this preserves deprecated funcationality; will be removed on v0.13+
-      try {
-        assert.deepStrictEqual(a, b) // COMBAK in node.js v10+, use `assert.strict.deepStrictEqual()`
-        return true
-      } catch (e) {
-        console.error(e.message)
-        return false
-      }
-    }
-    return a === b ||
-      (a.length === b.length) && a.every((el, i) => comparator(el, b[i]))
+  static is<T>(a: T[], b: T[], comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
+    return a === b || (a.length === b.length) && a.every((el, i) => comparator(el, b[i]))
   }
 
   /**
@@ -124,13 +111,13 @@ export default class xjs_Array {
    * @summary Make a copy of an array, and then remove duplicate entries.
    * @description "Duplicate entries" are entries that considered "the same" by
    * the provided comparator function, or if none is given,
-   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is}.
+   * {@link xjs_Object.sameValueZero}.
    * Only duplicate entries are removed; the order of non-duplicates is preserved.
    * @param   arr an array to use
    * @param   comparator a function comparing elements in the array
    * @returns a new array, with duplicates removed
    */
-  static removeDuplicates<T>(arr: T[], comparator: (a: T, b: T) => boolean = Object.is): T[] {
+  static removeDuplicates<T>(arr: T[], comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): T[] {
     const returned: T[] = arr.slice()
     for (let i = 0; i < returned.length; i++) {
       for (let j = i + 1; j < returned.length; j++) {
