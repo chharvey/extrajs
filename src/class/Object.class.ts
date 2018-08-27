@@ -117,7 +117,7 @@ export default class xjs_Object {
     let map = new Map(iterable)
     let returned = map.get(key)
     if (!returned) {
-      console.warn(`Key '${key}' cannot be found. Using key 'default'.`)
+      console.warn(`Key '${key}' cannot be found. Using key 'default'…`)
       returned = map.get('default')
       if (!returned) throw new ReferenceError(`No default value found.`)
     }

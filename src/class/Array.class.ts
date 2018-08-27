@@ -61,11 +61,13 @@ export default class xjs_Array {
    * @param   larger  the larger array, to test against
    * @param   smaller the smaller array, to test
    * @returns Is `smaller` a subarray of `larger`?
-   * @throws  {RangeError} if the second array is larger than the first
    */
   static contains<T>(larger: T[], smaller: T[]): boolean {
-    if (smaller.length > larger.length) throw new RangeError('Smaller array cannot have a greater length than larger array.')
-    if (xjs_Array.is(smaller, [])) return true
+    if (smaller.length > larger.length) {
+      console.warn('First argument cannot be smaller than the second. Switching the arguments…')
+      return xjs_Array.contains(smaller, larger)
+    }
+    if (xjs_Array.is(smaller, []    )) return true
     if (xjs_Array.is(smaller, larger)) return true
     return larger.map((el, i) => larger.slice(i, i+smaller.length)).some((sub) => xjs_Array.is(smaller, sub))
   }
