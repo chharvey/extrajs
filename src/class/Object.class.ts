@@ -126,32 +126,54 @@ export default class xjs_Object {
   /**
    * @summary Test whether two things are “the same”.
    * @description
-   * This function uses
-   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is}
-   * equality on corresponding entries, testing replaceability.
+   * This function tests the equality of two arguemnts, using the provided comparator predicate.
+   * If both arguments are arrays, it is faster and more robust to use {@link xjs_Array.is}.
    *
-   * This function acts **recursively** on corresponding object values,
-   * where the base case (for non-object values) is `Object.is()`.
+   * If no predicate is provided, this method uses the default predicate:
+   * ```js
+   * (a, b) => a === b || Object.is(a, b)
+   * ```
+   * Assuming the default predicate is used, this function is less strict than
+   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is},
+   * only in that `xjs.Object.is(0, -0)` will return `true`.
    *
-   * “The same” means “replaceable”, that is,
-   * for any deterministic function: `fn(a)` would return the same result as `fn(b)` if and only if
-   * `xjs.Object.is(a, b)`.
+   * **IMPORTANT: If no predicate is provided, this method will recursively check further levels
+   * of depth, testing not only the given arguments but also those arguments’ properties, and so on.
+   * *WARNING: this is deprecated behavior, and it will be removed in v0.13+.*
+   * Instead, you should use `require('deep-eql')` for depth > 1.
+   * Therefore I strongly suggest that you *always* provide 3 arguments when calling this method.
+   * After v0.13+, if you still want depth > 1, you can provide `require('deep-eql')` as the 3rd argument.**
    *
-   * This function is less strict than
-   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is}.
-   * If both arguments are arrays, it is faster to use {@link xjs_Array.is}.
+   * This method is based on the **Liskov Substitution Principle**.
+   * Values that are considered “the same” should semantically mean they are “replaceable”
+   * with one another. This is demonstrated rigorously below.
+   *
+   * Let us define a “replaceability” relation `R` as thus: a value `x` can be replaced with a value `y`
+   * exactly when, given any deterministic (that is, a **well-defined**, or **right-unique**)
+   * function `fn`, the value `fn(x)` equals the value `fn(y)`.
+   * Then this replaceability relation `R` is **symmetric**, because `x R y` implies `y R x`.
+   * We want `xjs.Object.is(x, y)` to emulate this relation.
    *
    * @param   a the first  thing
    * @param   b the second thing
-   * @returns Are corresponding elements the same, i.e. replaceable?
+   * @param   comparator a predicate checking the “sameness” of corresponding properties of `a` and `b`
+   * @returns Are corresponding properties the same, i.e. replaceable?
+   * @throws  {TypeError} if either `a` or `b` is a function (not supported)
    */
-  static is<T>(a: T, b: T): boolean {
-    const xjs_Array = require('./Array.class.js') // relative to dist
-    if (a === b || Object.is(a,b)) return true
-    if (xjs_Object.typeOf(a) === 'array'    && xjs_Object.typeOf(b) === 'array'   ) return xjs_Array.is(a as unknown as unknown[], b as unknown as unknown[]) // HACK https://stackoverflow.com/a/18736071/
-    if (xjs_Object.typeOf(a) === 'function' || xjs_Object.typeOf(b) === 'function') throw new Error('Function arguments to xjs.Object.is are not yet supported.')
-    if (xjs_Object.typeOf(a) !== 'object'   || xjs_Object.typeOf(b) !== 'object'  ) return false
-    return Object.entries(a).every((a_entry) => Object.entries(b).some((b_entry) => xjs_Array.is(a_entry, b_entry)))
+  static is<T>(a: T, b: T, comparator?: (x: any, y: any) => boolean): boolean {
+    // comparator = comparator || (x, y) => x === y || Object.is(x, y) // TODO make default param after v0.13+
+    const deepEql = (a: any, b: any) => a===b // BUG `require('deep-eql')`
+    if (['string', 'number', 'boolean', 'null', 'undefined'].includes(xjs_Object.typeOf(a))) {
+      return a === b || Object.is(a, b)
+    }
+    if (xjs_Object.typeOf(a) === 'function') throw new TypeError('Function arguments to xjs.Object.is are not yet supported.')
+    // else, it will be 'object' or 'array'
+    if (!comparator) return deepEql(a, b) // TEMP: this preserves deprecated funcationality; will be removed on v0.13+
+    return a === b || Object.entries(a).every((a_entry) =>
+      Object.entries(b).some((b_entry) =>
+        a_entry[0] === b_entry[0] && comparator(a_entry[1], b_entry[1])
+      )
+    )
   }
 
   /**

@@ -9,14 +9,17 @@ export default class xjs_Array {
   /**
    * @summary Test whether two arrays are “the same”.
    * @description Shortcut of {@link xjs_Object.is}, but for arrays.
-   * @param   arr1 the first array
-   * @param   arr2 the second array
+   * @param   a the first array
+   * @param   b the second array
+   * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
    * @returns Are corresponding elements the same, i.e. replaceable??
    */
-  static is<T>(arr1: T[], arr2: T[]): boolean {
-    return (arr1 === arr2) ||
-      (arr1.length === arr2.length) &&
-      arr1.every((el, i) => xjs_Object.is(el, arr2[i]))
+  static is<T>(a: T[], b: T[], comparator?: (x: T, y: T) => boolean): boolean {
+    // comparator = comparator || (x, y) => x === y || Object.is(x, y) // TODO make default param after v0.13+
+    const deepEql = (a: any, b: any) => a===b // BUG `require('deep-eql')`
+    if (!comparator) return deepEql(a, b) // TEMP: this preserves deprecated funcationality; will be removed on v0.13+
+    return a === b ||
+      (a.length === b.length) && a.every((el, i) => comparator(el, b[i]))
   }
 
   /**
