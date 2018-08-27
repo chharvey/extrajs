@@ -14,12 +14,9 @@ export default class xjs_Array {
    * @returns Are corresponding elements the same, i.e. replaceable??
    */
   static is<T>(arr1: T[], arr2: T[]): boolean {
-    if (arr1 === arr2) return true
-    if (arr1.length !== arr2.length) return false
-    for (let i = 0; i < arr1.length; i++) {
-      if (!xjs_Object.is(arr1[i], arr2[i])) return false
-    }
-    return true
+    return (arr1 === arr2) ||
+      (arr1.length === arr2.length) &&
+      arr1.every((el, i) => xjs_Object.is(el, arr2[i]))
   }
 
   /**

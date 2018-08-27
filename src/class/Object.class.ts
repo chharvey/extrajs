@@ -148,21 +148,10 @@ export default class xjs_Object {
   static is<T>(a: T, b: T): boolean {
     const xjs_Array = require('./Array.class.js') // relative to dist
     if (a === b || Object.is(a,b)) return true
-    if (xjs_Object.typeOf(a) === 'array' && xjs_Object.typeOf(b) === 'array') return xjs_Array.is(a as unknown as unknown[], b as unknown as unknown[]) // HACK https://stackoverflow.com/a/18736071/
-    // both must be objects
-    if (xjs_Object.typeOf(a) !== 'object' || xjs_Object.typeOf(b) !== 'object') return false
-    // both must have the same number of own properties
-    if (Object.getOwnPropertyNames(a).length !== Object.getOwnPropertyNames(b).length) return false
-    // `b` must own every property in `a`
-    if (!Object.getOwnPropertyNames(a).every((key) => Object.getOwnPropertyNames(b).includes(key))) return false
-    // `a` must own every property in `b` // NOTE unnecessary if they have the same length
-    // if (!Object.getOwnPropertyNames(b).every((key) => Object.getOwnPropertyNames(a).includes(key))) return false
-    for (let i in a as unknown as object) { // HACK https://stackoverflow.com/a/18736071/
-      let ai: unknown = (a as { [key: string]: unknown })[i]
-      let bi: unknown = (b as { [key: string]: unknown })[i]
-      if (!xjs_Object.is(ai, bi)) return false
-    }
-    return true
+    if (xjs_Object.typeOf(a) === 'array'    && xjs_Object.typeOf(b) === 'array'   ) return xjs_Array.is(a as unknown as unknown[], b as unknown as unknown[]) // HACK https://stackoverflow.com/a/18736071/
+    if (xjs_Object.typeOf(a) === 'function' || xjs_Object.typeOf(b) === 'function') throw new Error('Function arguments to xjs.Object.is are not yet supported.')
+    if (xjs_Object.typeOf(a) !== 'object'   || xjs_Object.typeOf(b) !== 'object'  ) return false
+    return Object.entries(a).every((a_entry) => Object.entries(b).some((b_entry) => xjs_Array.is(a_entry, b_entry)))
   }
 
   /**
