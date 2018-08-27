@@ -28,7 +28,7 @@ export default class xjs_Math {
    * @throws  {RangeError} when `n` is not a non-negative integer
    */
   static tetrate(x: number, n: number): number {
-    xjs_Number.checkType(n, 'natural')
+    xjs_Number.assertType(n, 'natural')
     if (n === 0) return 1
     return x ** xjs_Math.tetrate(x, n-1)
   }
@@ -44,7 +44,7 @@ export default class xjs_Math {
    * @throws  {RangeError} when `n` is not a positive integer
    */
   static mod(x: number, n: number): number {
-    xjs_Number.checkType(n, 'whole')
+    xjs_Number.assertType(n, 'whole')
     return ((x % n) + n) % n
   }
 

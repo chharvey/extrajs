@@ -46,7 +46,7 @@ export default class xjs_Number {
    * @returns does the number match the described type?
    * @throws  {RangeError} if the number does not match
    */
-  static checkType(num: number, type: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'): boolean {
+  static assertType(num: number, type: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'): boolean {
     if (['NaN', 'infinite'].includes(xjs_Object.typeOf(num))) {
       throw new RangeError('Argument must be a finite number.')
     }
