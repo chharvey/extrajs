@@ -1,3 +1,5 @@
+import * as assert from 'assert'
+
 import xjs_Array from './Array.class'
 
 
@@ -5,8 +7,8 @@ import xjs_Array from './Array.class'
  * @summary A helper interface for {@link Object.switch}.
  */
 interface SwitchFn<T> extends Function {
-      (this: unknown, ...args: any[]): T;
-  call(this: unknown, ...args: any[]): T;
+  (this: unknown, ...args: any[]): T;
+  call(this_arg: unknown, ...args: any[]): T;
 }
 
 /**
@@ -117,7 +119,7 @@ export default class xjs_Object {
     let map = new Map(iterable)
     let returned = map.get(key)
     if (!returned) {
-      console.warn(`Key '${key}' cannot be found. Using key 'default'.`)
+      console.warn(`Key '${key}' cannot be found. Using key 'default'…`)
       returned = map.get('default')
       if (!returned) throw new ReferenceError(`No default value found.`)
     }
@@ -126,43 +128,62 @@ export default class xjs_Object {
   /**
    * @summary Test whether two things are “the same”.
    * @description
-   * This function uses
-   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is}
-   * equality on corresponding entries, testing replaceability.
+   * This function tests the equality of two arguemnts, using the provided comparator predicate.
+   * If both arguments are arrays, it is faster and more robust to use {@link xjs_Array.is}.
    *
-   * This function acts **recursively** on corresponding object values,
-   * where the base case (for non-object values) is `Object.is()`.
+   * If no predicate is provided, this method uses the default predicate:
+   * ```js
+   * (a, b) => a === b || Object.is(a, b)
+   * ```
+   * Assuming the default predicate is used, this function is less strict than
+   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is},
+   * only in that `xjs.Object.is(0, -0)` will return `true`.
    *
-   * “The same” means “replaceable”, that is,
-   * for any deterministic function: `fn(a)` would return the same result as `fn(b)` if and only if
-   * `xjs.Object.is(a, b)`.
+   * **IMPORTANT: If no predicate is provided, this method will recursively check further levels
+   * of depth, testing not only the given arguments but also those arguments’ properties, and so on.
+   * *WARNING: this is deprecated behavior, and it will be removed in v0.13+.*
+   * Instead, for depth > 1, you should use Node.js’s native
+   * {@link https://nodejs.org/dist/latest/docs/api/assert.html#assert_assert_deepstrictequal_actual_expected_message|assert.deepStrictEqual}.
+   * Therefore I strongly suggest that you *always* provide 3 arguments when calling this method.
+   * After v0.13+, if you still want depth > 1, you can provide another deep-equal function as the 3rd argument.**
    *
-   * This function is less strict than
-   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is}.
-   * If both arguments are arrays, it is faster to use {@link xjs_Array.is}.
+   * This method is based on the **Liskov Substitution Principle**.
+   * Values that are considered “the same” should semantically mean they are “replaceable”
+   * with one another. This is demonstrated rigorously below.
+   *
+   * Let us define a “replaceability” relation `R` as thus: a value `x` can be replaced with a value `y`
+   * exactly when, given any deterministic (that is, a **well-defined**, or **right-unique**)
+   * function `fn`, the value `fn(x)` equals the value `fn(y)`.
+   * Then this replaceability relation `R` is **symmetric**, because `x R y` implies `y R x`.
+   * We want `xjs.Object.is(x, y)` to emulate this relation.
    *
    * @param   a the first  thing
    * @param   b the second thing
-   * @returns Are corresponding elements the same, i.e. replaceable?
+   * @param   comparator a predicate checking the “sameness” of corresponding properties of `a` and `b`
+   * @returns Are corresponding properties the same, i.e. replaceable?
+   * @throws  {TypeError} if either `a` or `b` is a function (not supported)
    */
-  static is(a: unknown, b: unknown): boolean {
-    const xjs_Array = require('./Array.class.js') // relative to dist
-    if (a === b || Object.is(a,b)) return true
-    if (xjs_Object.typeOf(a) === 'array' && xjs_Object.typeOf(b) === 'array') return xjs_Array.is(a as unknown[], b as unknown[])
-    // both must be objects
-    if (xjs_Object.typeOf(a) !== 'object' || xjs_Object.typeOf(b) !== 'object') return false
-    // both must have the same number of own properties
-    if (Object.getOwnPropertyNames(a).length !== Object.getOwnPropertyNames(b).length) return false
-    // `b` must own every property in `a`
-    if (!Object.getOwnPropertyNames(a).every((key) => Object.getOwnPropertyNames(b).includes(key))) return false
-    // `a` must own every property in `b` // NOTE unnecessary if they have the same length
-    // if (!Object.getOwnPropertyNames(b).every((key) => Object.getOwnPropertyNames(a).includes(key))) return false
-    for (let i in a as object) {
-      let ai: unknown = (a as { [key: string]: unknown })[i]
-      let bi: unknown = (b as { [key: string]: unknown })[i]
-      if (!xjs_Object.is(ai, bi)) return false
+  static is<T>(a: T, b: T, comparator?: (x: any, y: any) => boolean): boolean {
+    // comparator = comparator || (x, y) => x === y || Object.is(x, y) // TODO make default param after v0.13+
+    if (['string', 'number', 'boolean', 'null', 'undefined'].includes(xjs_Object.typeOf(a))) {
+      return a === b || Object.is(a, b)
     }
-    return true
+    if (xjs_Object.typeOf(a) === 'function') throw new TypeError('Function arguments to xjs.Object.is are not yet supported.')
+    // else, it will be 'object' or 'array'
+    if (!comparator) { // TEMP: this preserves deprecated funcationality; will be removed on v0.13+
+      try {
+        assert.deepStrictEqual(a, b) // COMBAK in node.js v10+, use `assert.strict.deepStrictEqual()`
+        return true
+      } catch (e) {
+        console.error(e.message)
+        return false
+      }
+    }
+    return a === b || Object.entries(a).every((a_entry) =>
+      Object.entries(b).some((b_entry) =>
+        a_entry[0] === b_entry[0] && comparator(a_entry[1], b_entry[1])
+      )
+    )
   }
 
   /**
@@ -178,8 +199,8 @@ export default class xjs_Object {
    * @returns the given value, with everything frozen
    */
   static freezeDeep<T>(thing: T): T {
-    const xjs_Array = require('./Array.class.js') // relative to dist
-    if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.freezeDeep(thing as unknown as unknown[]) as unknown as T // BUG https://stackoverflow.com/a/18736071/
+    const xjs_Array = require('./Array.class.js').default // NB relative to dist
+    if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.freezeDeep(thing as unknown as unknown[]) as unknown as T // HACK https://stackoverflow.com/a/18736071/
     Object.freeze(thing)
     if (xjs_Object.typeOf(thing) === 'object') {
         for (let key in thing) {
@@ -241,8 +262,8 @@ export default class xjs_Object {
    * @returns an exact copy of the given value, but with nothing equal via `===` (unless the value given is primitive)
    */
   static cloneDeep<T>(thing: T): T {
-    const xjs_Array = require('./Array.class.js') // relative to dist
-    if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.cloneDeep(thing as unknown as unknown[]) as unknown as T // BUG https://stackoverflow.com/a/18736071/
+    const xjs_Array = require('./Array.class.js').default // NB relative to dist
+    if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.cloneDeep(thing as unknown as unknown[]) as unknown as T // HACK https://stackoverflow.com/a/18736071/
     if (xjs_Object.typeOf(thing) === 'object') {
         const returned: { [index: string]: unknown } = {}
         for (let key in thing) {

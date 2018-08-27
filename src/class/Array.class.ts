@@ -1,3 +1,5 @@
+import * as assert from 'assert'
+
 import xjs_Object from './Object.class'
 
 
@@ -9,17 +11,24 @@ export default class xjs_Array {
   /**
    * @summary Test whether two arrays are “the same”.
    * @description Shortcut of {@link xjs_Object.is}, but for arrays.
-   * @param   arr1 the first array
-   * @param   arr2 the second array
-   * @returns Are corresponding elements the same (via {@link xjs_Object.is})?
+   * @param   a the first array
+   * @param   b the second array
+   * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
+   * @returns Are corresponding elements the same, i.e. replaceable??
    */
-  static is(arr1: unknown[], arr2: unknown[]): boolean {
-    if (arr1 === arr2) return true
-    if (arr1.length !== arr2.length) return false
-    for (let i = 0; i < arr1.length; i++) {
-      if (!xjs_Object.is(arr1[i], arr2[i])) return false
+  static is<T>(a: T[], b: T[], comparator?: (x: T, y: T) => boolean): boolean {
+    // comparator = comparator || (x, y) => x === y || Object.is(x, y) // TODO make default param after v0.13+
+    if (!comparator) { // TEMP: this preserves deprecated funcationality; will be removed on v0.13+
+      try {
+        assert.deepStrictEqual(a, b) // COMBAK in node.js v10+, use `assert.strict.deepStrictEqual()`
+        return true
+      } catch (e) {
+        console.error(e.message)
+        return false
+      }
     }
-    return true
+    return a === b ||
+      (a.length === b.length) && a.every((el, i) => comparator(el, b[i]))
   }
 
   /**
@@ -64,11 +73,13 @@ export default class xjs_Array {
    * @param   larger  the larger array, to test against
    * @param   smaller the smaller array, to test
    * @returns Is `smaller` a subarray of `larger`?
-   * @throws  {RangeError} if the second array is larger than the first
    */
-  static contains<T, U>(larger: T[], smaller: U[]): boolean {
-    if (smaller.length > larger.length) throw new RangeError('Smaller array cannot have a greater length than larger array.')
-    if (xjs_Array.is(smaller, [])) return true
+  static contains<T>(larger: T[], smaller: T[]): boolean {
+    if (smaller.length > larger.length) {
+      console.warn('First argument cannot be smaller than the second. Switching the arguments…')
+      return xjs_Array.contains(smaller, larger)
+    }
+    if (xjs_Array.is(smaller, []    )) return true
     if (xjs_Array.is(smaller, larger)) return true
     return larger.map((el, i) => larger.slice(i, i+smaller.length)).some((sub) => xjs_Array.is(smaller, sub))
   }
