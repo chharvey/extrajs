@@ -1,3 +1,5 @@
+import * as assert from 'assert'
+
 import xjs_Object from './Object.class'
 
 
@@ -16,8 +18,15 @@ export default class xjs_Array {
    */
   static is<T>(a: T[], b: T[], comparator?: (x: T, y: T) => boolean): boolean {
     // comparator = comparator || (x, y) => x === y || Object.is(x, y) // TODO make default param after v0.13+
-    const deepEql = (a: any, b: any) => a===b // BUG `require('deep-eql')`
-    if (!comparator) return deepEql(a, b) // TEMP: this preserves deprecated funcationality; will be removed on v0.13+
+    if (!comparator) { // TEMP: this preserves deprecated funcationality; will be removed on v0.13+
+      try {
+        assert.deepStrictEqual(a, b) // COMBAK in node.js v10+, use `assert.strict.deepStrictEqual()`
+        return true
+      } catch (e) {
+        console.error(e.message)
+        return false
+      }
+    }
     return a === b ||
       (a.length === b.length) && a.every((el, i) => comparator(el, b[i]))
   }

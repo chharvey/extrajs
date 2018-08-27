@@ -1,3 +1,5 @@
+import * as assert from 'assert'
+
 import xjs_Array from './Array.class'
 
 
@@ -140,9 +142,10 @@ export default class xjs_Object {
    * **IMPORTANT: If no predicate is provided, this method will recursively check further levels
    * of depth, testing not only the given arguments but also those arguments’ properties, and so on.
    * *WARNING: this is deprecated behavior, and it will be removed in v0.13+.*
-   * Instead, you should use `require('deep-eql')` for depth > 1.
+   * Instead, for depth > 1, you should use Node.js’s native
+   * {@link https://nodejs.org/dist/latest/docs/api/assert.html#assert_assert_deepstrictequal_actual_expected_message|assert.deepStrictEqual}.
    * Therefore I strongly suggest that you *always* provide 3 arguments when calling this method.
-   * After v0.13+, if you still want depth > 1, you can provide `require('deep-eql')` as the 3rd argument.**
+   * After v0.13+, if you still want depth > 1, you can provide another deep-equal function as the 3rd argument.**
    *
    * This method is based on the **Liskov Substitution Principle**.
    * Values that are considered “the same” should semantically mean they are “replaceable”
@@ -162,13 +165,20 @@ export default class xjs_Object {
    */
   static is<T>(a: T, b: T, comparator?: (x: any, y: any) => boolean): boolean {
     // comparator = comparator || (x, y) => x === y || Object.is(x, y) // TODO make default param after v0.13+
-    const deepEql = (a: any, b: any) => a===b // BUG `require('deep-eql')`
     if (['string', 'number', 'boolean', 'null', 'undefined'].includes(xjs_Object.typeOf(a))) {
       return a === b || Object.is(a, b)
     }
     if (xjs_Object.typeOf(a) === 'function') throw new TypeError('Function arguments to xjs.Object.is are not yet supported.')
     // else, it will be 'object' or 'array'
-    if (!comparator) return deepEql(a, b) // TEMP: this preserves deprecated funcationality; will be removed on v0.13+
+    if (!comparator) { // TEMP: this preserves deprecated funcationality; will be removed on v0.13+
+      try {
+        assert.deepStrictEqual(a, b) // COMBAK in node.js v10+, use `assert.strict.deepStrictEqual()`
+        return true
+      } catch (e) {
+        console.error(e.message)
+        return false
+      }
+    }
     return a === b || Object.entries(a).every((a_entry) =>
       Object.entries(b).some((b_entry) =>
         a_entry[0] === b_entry[0] && comparator(a_entry[1], b_entry[1])
@@ -189,7 +199,7 @@ export default class xjs_Object {
    * @returns the given value, with everything frozen
    */
   static freezeDeep<T>(thing: T): T {
-    const xjs_Array = require('./Array.class.js') // relative to dist
+    const xjs_Array = require('./Array.class.js').default // NB relative to dist
     if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.freezeDeep(thing as unknown as unknown[]) as unknown as T // HACK https://stackoverflow.com/a/18736071/
     Object.freeze(thing)
     if (xjs_Object.typeOf(thing) === 'object') {
@@ -252,7 +262,7 @@ export default class xjs_Object {
    * @returns an exact copy of the given value, but with nothing equal via `===` (unless the value given is primitive)
    */
   static cloneDeep<T>(thing: T): T {
-    const xjs_Array = require('./Array.class.js') // relative to dist
+    const xjs_Array = require('./Array.class.js').default // NB relative to dist
     if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.cloneDeep(thing as unknown as unknown[]) as unknown as T // HACK https://stackoverflow.com/a/18736071/
     if (xjs_Object.typeOf(thing) === 'object') {
         const returned: { [index: string]: unknown } = {}
