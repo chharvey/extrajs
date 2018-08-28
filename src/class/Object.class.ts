@@ -17,9 +17,10 @@ export default class xjs_Object {
   /**
    * @summary Return the type of a thing.
    * @description Similar to the `typeof` primitive operator, but more refined.
-   * Credit to {@link https://github.com/zaggino/|@zaggino}.
+   * Note: this method should only be used at runtime —
+   * TypeScript is much better at checking types, and can do so at compile time.
    *
-   * Note! passing undeclared variables will throw a `ReferenceError`!
+   * Warning! passing undeclared variables will throw a `ReferenceError`!
    *
    * @example
    * var x;          // declare `x`
@@ -28,27 +29,29 @@ export default class xjs_Object {
    * xjs.typeOf(x);  // 'undefined'
    * xjs.typeOf(y);  // Uncaught ReferenceError: y is not defined
    *
-   * @see https://github.com/zaggino/z-schema/blob/bddb0b25daa0c96119e84b121d7306b1a7871594/src/Utils.js#L12
+   * @see {@link https://github.com/zaggino/z-schema/blob/bddb0b25daa0c96119e84b121d7306b1a7871594/src/Utils.js#L12|Credit to @zaggino}
    * @param   thing anything
    * @returns the type of the thing
    */
-  static typeOf(thing: unknown): string {
-    return xjs_Object.switch<string>({
-      'object': (thing: any) => {
-        if (thing === null)       return 'null'
-        if (Array.isArray(thing)) return 'array'
-        return 'object'
-      },
-      'number': (thing: number) => {
-        if (Number.isNaN(thing))     return 'NaN'
-        if (!Number.isFinite(thing)) return 'infinite'
-        return 'number'
-      },
-      'default': (thing: Function|string|boolean|void) => {
-        return typeof thing // 'function', 'string', 'boolean', 'undefined'
-      },
-    }, typeof thing)(thing)
-  }
+	static typeOf(thing: unknown): string {
+		return xjs_Object.switch<string>({
+			'object': (arg: unknown) => {
+				if (arg === null)       return 'null'
+				if (Array.isArray(arg)) return 'array'
+				return 'object'
+			},
+			'number': (arg: number) => {
+				if (Number.isNaN(arg))     return 'NaN'
+				if (!Number.isFinite(arg)) return 'infinite'
+				return 'number'
+			},
+			'function' : () => 'function',
+			'string'   : () => 'string',
+			'boolean'  : () => 'boolean',
+			'undefined': () => 'undefined',
+			'default'  : (arg: unknown) => typeof arg,
+		}, typeof thing)(thing)
+	}
 
   /**
    * @summary Return the name of an object’s constructing class or function.

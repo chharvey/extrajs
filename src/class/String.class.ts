@@ -16,16 +16,19 @@ export default class xjs_String {
    * @param   thing anything to convert
    * @returns a string version of the argument
    */
-  static stringify(thing: unknown): string {
+	static stringify(thing: unknown): string {
 		return xjs_Object.switch<string>({
-			'array'    : (arg: unknown[])               => arg.join(''),
-			'object'   : (arg: Object)                  => JSON.stringify(arg),
-			'string'   : (arg: string)                  => arg,
-			'null'     : (arg: null)                    => 'null',
-			'undefined': (arg: void)                    => 'undefined',
-			'default'  : (arg: Function|number|boolean) => arg.toString(),
+			'object'   : (arg: object)    => JSON.stringify(arg),
+			'array'    : (arg: unknown[]) => arg.join(''),
+			'function' : (arg: Function)  => arg.toString(),
+			'string'   : (arg: string)    => arg,
+			'number'   : (arg: number)    => arg.toString(),
+			'boolean'  : (arg: boolean)   => arg.toString(),
+			'null'     : (arg: null)      => `${arg}`,
+			'undefined': (arg: void)      => `${arg}`,
+			'default'  : (arg: unknown)   => `${arg}`,
 		}, xjs_Object.typeOf(thing))(thing)
-  }
+	}
 
 
   private constructor() {}
