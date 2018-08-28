@@ -50,14 +50,14 @@ export default class xjs_Number {
     if (['NaN', 'infinite'].includes(xjs_Object.typeOf(num))) {
       throw new RangeError('Argument must be a finite number.')
     }
-    const returned = xjs_Object.switch<[boolean, string]>([
-      ['float'   , (n: number) => [!Number.isInteger(n)          , `${n} may not be an integer.`         ]],
-      ['integer' , (n: number) => [ Number.isInteger(n)          , `${n} must be an integer.`            ]],
-      ['natural' , (n: number) => [ Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`]],
-      ['whole'   , (n: number) => [ Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    ]],
-      ['positive', (n: number) => [0 < n                         , `${n} must be a positive number.`     ]],
-      ['negative', (n: number) => [n < 0                         , `${n} must be a negative number.`     ]],
-    ], type, [num])
+		const returned = xjs_Object.switch<[boolean, string]>({
+			'float'   : (n: number) => [!Number.isInteger(n)          , `${n} may not be an integer.`         ],
+			'integer' : (n: number) => [ Number.isInteger(n)          , `${n} must be an integer.`            ],
+			'natural' : (n: number) => [ Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`],
+			'whole'   : (n: number) => [ Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    ],
+			'positive': (n: number) => [0 < n                         , `${n} must be a positive number.`     ],
+			'negative': (n: number) => [n < 0                         , `${n} must be a negative number.`     ],
+		}, type)(num)
     if (returned[0]) return true
     throw new RangeError(returned[1])
   }

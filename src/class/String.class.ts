@@ -17,14 +17,14 @@ export default class xjs_String {
    * @returns a string version of the argument
    */
   static stringify(thing: unknown): string {
-    return xjs_Object.switch<string>([
-      ['array'    , (arg: unknown[])               => arg.join('')       ],
-      ['object'   , (arg: Object)                  => JSON.stringify(arg)],
-      ['string'   , (arg: string)                  => arg                ],
-      ['null'     , (arg: null)                    => 'null'             ],
-      ['undefined', (arg: void)                    => 'undefined'        ],
-      ['default'  , (arg: Function|number|boolean) => arg.toString()     ],
-    ], xjs_Object.typeOf(thing), [thing])
+		return xjs_Object.switch<string>({
+			'array'    : (arg: unknown[])               => arg.join(''),
+			'object'   : (arg: Object)                  => JSON.stringify(arg),
+			'string'   : (arg: string)                  => arg,
+			'null'     : (arg: null)                    => 'null',
+			'undefined': (arg: void)                    => 'undefined',
+			'default'  : (arg: Function|number|boolean) => arg.toString(),
+		}, xjs_Object.typeOf(thing))(thing)
   }
 
 
