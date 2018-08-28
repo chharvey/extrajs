@@ -31,11 +31,11 @@ export default class xjs_Number {
    * The acceptable "types", which are not mutually exclusive, follow:
    *
    * - `'float'   ` : the number is not an integer
-   * - `'integer' ` : the number is divisible by 1 (`num %1 === 0`)
+   * - `'integer' ` : the number is divisible by 1 (`num % 1 === 0`)
    * - `'natural' ` : the number is a non-negative integer (either positive or 0)
    * - `'whole'   ` : the number is a positive integer
-   * - `'positive'` : the number is greater than 0
-   * - `'negative'` : the number is less than 0
+   * - `'positive'` : the number is strictly greater than 0
+   * - `'negative'` : the number is strictly less than 0
    *
    * Note that if the given number does not match the given type,
    * then this method will throw an error, instead of returning `false`.
@@ -44,12 +44,11 @@ export default class xjs_Number {
    * @param   num the number to test
    * @param   type one of the string literals listed above
    * @returns does the number match the described type?
+   * @throws  {RangeError} if the given arguemnt was not a finite number
    * @throws  {RangeError} if the number does not match
    */
   static checkType(num: number, type: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'): boolean {
-    if (['NaN', 'infinite'].includes(xjs_Object.typeOf(num))) {
-      throw new RangeError('Argument must be a finite number.')
-    }
+		xjs_Number.typeOf(num) // re-throw
 		const returned = xjs_Object.switch<[boolean, string]>({
 			'float'   : (n: number) => [!Number.isInteger(n)          , `${n} may not be an integer.`         ],
 			'integer' : (n: number) => [ Number.isInteger(n)          , `${n} must be an integer.`            ],
