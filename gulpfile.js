@@ -10,8 +10,10 @@ const typedocconfig = require('./config/typedoc.json')
 gulp.task('test', async function () {
 	;[
 		{ filename: './test/Object-typeOf.test.js', subject: 'xjs.Object.typeOf' },
+		{ filename: './test/Object-is.test.js'    , subject: 'xjs.Object.is' },
 	].forEach((t) => {
 		if (require(t.filename)) console.log(`All tests for \`${t.subject}\` ran successfully!`)
+		else throw Error(`Some test for \`${t.subject}\` has failed!`)
 	})
 })
 
