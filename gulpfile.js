@@ -8,6 +8,11 @@ const tsconfig      = require('./config/tsconfig.json')
 const typedocconfig = require('./config/typedoc.json')
 
 gulp.task('test', async function () {
+	;[
+		{ filename: './test/Object-typeOf.test.js', subject: 'xjs.Object.typeOf' },
+	].forEach((t) => {
+		if (require(t.filename)) console.log(`All tests for \`${t.subject}\` ran successfully!`)
+	})
 })
 
 gulp.task('docs', async function () {
