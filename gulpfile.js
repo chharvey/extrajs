@@ -7,6 +7,12 @@ const typescript = require('gulp-typescript')
 const tsconfig      = require('./config/tsconfig.json')
 const typedocconfig = require('./config/typedoc.json')
 
+gulp.task('dist', async function () {
+  return gulp.src('./src/class/*.class.ts')
+    .pipe(typescript(tsconfig.compilerOptions))
+    .pipe(gulp.dest('./dist/class/'))
+})
+
 gulp.task('test', async function () {
 	;[
 		{ filename: './test/Object-typeOf.test.js', subject: 'xjs.Object.typeOf' },
@@ -22,10 +28,4 @@ gulp.task('docs', async function () {
     .pipe(typedoc(typedocconfig))
 })
 
-gulp.task('dist', async function () {
-  return gulp.src('./src/class/*.class.ts')
-    .pipe(typescript(tsconfig.compilerOptions))
-    .pipe(gulp.dest('./dist/class/'))
-})
-
-gulp.task('build', ['test', 'docs', 'dist'])
+gulp.task('build', ['dist', 'test', 'docs'])
