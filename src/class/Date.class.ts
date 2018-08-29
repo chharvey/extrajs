@@ -93,13 +93,7 @@ export default class xjs_Date {
    */
   static format(date: Date, format: string): string {
     const MONTHS = xjs_Date.MONTH_NAMES
-    /**
-     * Convert a positive number to a string, adding a leading zero if and only if it is less than 10.
-     * @private
-     * @param  n any positive number
-     * @return that number as a string, possibly prepended with '0'
-     */
-    function leadingZero(n: number): string { return `${(n < 10) ? '0' : ''}${n}` }
+		const leadingZero = (n: number, r: number = 10) => `0${n.toString(r)}`.slice(-2)
 		return xjs_Object.switch<string>(format, {
 			'Y-m-d'    : (date: Date) => `${date.getFullYear()}-${leadingZero(date.getUTCMonth()+1)}-${leadingZero(date.getUTCDate())}`,
 			'j M Y'    : (date: Date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
