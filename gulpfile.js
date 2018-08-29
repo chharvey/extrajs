@@ -19,6 +19,7 @@ gulp.task('test', async function () {
 			require('./test/Object-typeOf.test.js'),
 			require('./test/Object-is.test.js'),
 			require('./test/Number-typeOf.test.js'),
+			require('./test/Date-format.test.js'),
 			require('./test/String-stringify.test.js'),
 		])
 		console.log('All tests ran successfully!')
