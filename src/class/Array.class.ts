@@ -68,6 +68,12 @@ export default class xjs_Array {
    * In other words, if `{@link xjs_Array.is}(larger.slice(a,b), smaller)` (for some integers a and b),
    * then this method returns `true`.
    *
+   * Elements are compared via the provided comparator predicate.
+   * If no predicate is provided, this method uses the default predicate:
+   * ```js
+   * (a, b) => a === b || Object.is(a, b)
+   * ```
+   *
    * ```js
    * 'twofoursix'.includes('wofo')===true
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], ['w','o',4,'o'])===true
@@ -78,16 +84,17 @@ export default class xjs_Array {
    *
    * @param   larger  the larger array, to test against
    * @param   smaller the smaller array, to test
+   * @param   comparator a predicate checking the “sameness” of corresponding elements of `larger` and `smaller`
    * @returns Is `smaller` a subarray of `larger`?
    */
-  static contains<T>(larger: T[], smaller: T[]): boolean {
+  static contains<T>(larger: T[], smaller: T[], comparator: (x: T, y: T) => boolean = (x, y) => x === y || Object.is(x, y)): boolean {
     if (smaller.length > larger.length) {
       console.warn('First argument cannot be smaller than the second. Switching the arguments…')
       return xjs_Array.contains(smaller, larger)
     }
-    if (xjs_Array.is(smaller, []    )) return true
-    if (xjs_Array.is(smaller, larger)) return true
-    return larger.map((_el, i) => larger.slice(i, i+smaller.length)).some((sub) => xjs_Array.is(smaller, sub))
+    if (xjs_Array.is(smaller, []    , comparator)) return true
+    if (xjs_Array.is(smaller, larger, comparator)) return true
+    return larger.map((_el, i) => larger.slice(i, i+smaller.length)).some((sub) => xjs_Array.is(smaller, sub, comparator))
   }
 
   /**
