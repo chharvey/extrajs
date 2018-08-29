@@ -2,13 +2,15 @@ import xjs_Object from './Object.class'
 
 
 /**
- * @summary Additional static members for the native String class.
- * @description Does not extend the native String class.
+ * Additional static members for the native String class.
+ *
+ * Does not extend the native String class.
  */
 export default class xjs_String {
   /**
-   * @summary Convert a thing into a string.
-   * @description If the argument is an array, it is joined.
+   * Convert a thing into a string.
+   *
+   * If the argument is an array, it is joined.
    * If it is an object, `JSON.stringify` is called on it.
    * This method calls `.toString()` on everything else, except `null` and `undefined`,
    * which are converted to the strings `'null'` and `'undefined'` respectively.

@@ -4,7 +4,8 @@ import xjs_Array from './Array.class'
 
 
 /**
- * @summary A helper interface for {@link Object.switch}.
+ * A helper interface for {@link xjs_Object.switch}.
+ * @param args a list of arguments to be passed to the function
  */
 interface SwitchFn<T> extends Function {
 	(this: any, ...args: any[]): T;
@@ -12,24 +13,36 @@ interface SwitchFn<T> extends Function {
 }
 
 /**
- * @summary Additional static members for the native Object class.
- * @description Does not extend the native Object class.
+ * Additional static members for the native Object class.
+ *
+ * Does not extend the native Object class.
  */
 export default class xjs_Object {
   /**
-   * @summary Return the type of a thing.
-   * @description Similar to the `typeof` primitive operator, but more refined.
+   * Return the type of a thing.
+   *
+   * Similar to the `typeof` primitive operator, but more refined.
    * Note: this method should only be used at runtime —
    * TypeScript is much better at checking types, and can do so at compile time.
    *
    * Warning! passing undeclared variables will throw a `ReferenceError`!
    *
-   * @example
-   * var x;          // declare `x`
+   * ```js
+   * typeof null     // 'object' :(
+   * typeof []       // 'object'
+   * typeof NaN      // 'number'
+   * typeof Infinity // 'number'
+   * xjs.typeOf(null)     // 'null'
+   * xjs.typeOf([])       // 'array'
+   * xjs.typeOf(NaN)      // 'NaN'
+   * xjs.typeOf(Infinity) // 'infinite'
+   *
+   * var x;
    * typeof x;       // 'undefined'
    * typeof y;       // 'undefined'
    * xjs.typeOf(x);  // 'undefined'
    * xjs.typeOf(y);  // Uncaught ReferenceError: y is not defined
+   * ```
    *
    * @see {@link https://github.com/zaggino/z-schema/blob/bddb0b25daa0c96119e84b121d7306b1a7871594/src/Utils.js#L12|Credit to @zaggino}
    * @param   thing anything
@@ -56,8 +69,9 @@ export default class xjs_Object {
 	}
 
   /**
-   * @summary Return the name of an object’s constructing class or function.
-   * @description This method reveals the most specific class that the native `instanceof` operator would reveal.
+   * Return the name of an object’s constructing class or function.
+   *
+   * This method reveals the most specific class that the native `instanceof` operator would reveal.
    * This method can be passed either complex values (objects, arrays, functions) or primitive values.
    * Technically, primitives do not have constructing functions, but they can be wrapped with object constructors.
    * For example, calling `instanceOf(3)` will return `Number`, even though `3` was not constructed via the `Number` class.
@@ -71,20 +85,23 @@ export default class xjs_Object {
   }
 
   /**
-   * @summary A structured `switch` statement.
-   * @description
+   * A structured `switch` statement.
+   *
    * This method offers a more structured alternative to a standard `switch` statement,
    * using object lookups to find values.
    * It takes two arguments: a dictionary and a key.
    *
    * The dictionary argument must be an object with string keys and {@link SwitchFn} values.
-   * Each of this functions, when called, should return a value corresponding to its key string.
+   * Each of these functions, when called, should return a value corresponding to its key string.
    * All functions in the dictionary must return the same type of value.
    * The second argument is the key in the dictionary whose value to look up.
    *
-   * You may optionally define a `'default'` key in the dictionary you provide,
-   * in order to handle cases when no written key matches caller input.
+   * You may optionally define a `'default'` key in your dictionary,
+   * in order to handle cases when caller input matches none of the keys.
    * *The `'default'` key is analogous to the **`default` clause** of a `switch` statement.*
+   * You may omit a `'default'` key if you are certain that you’ve accounted for all the inputs,
+   * such as when the inputs are Enum values.
+   *
    * Note that this method looks for `'default'` when it cannot find any other key,
    * and in doing so it logs a warning.
    * To suppress this warning, it is best to provide keys for all known possible inputs,
@@ -98,10 +115,9 @@ export default class xjs_Object {
    * (Note that this example is actually pretty inefficient,
    * but it only serves as a demonstration.)
    *
-   * @example
+   * ```js
    * // What is the date of the 1st Tuesday of November, 2018?
    * let call_me = xjs.Object.switch<number>({
-   *
    *   'January'  : (n: number) => [ 2,  9, 16, 23,  30][n - 1],
    *   'February' : (n: number) => [ 6. 13. 20, 27, NaN][n - 1],
    *   'March'    : (n: number) => [ 6, 13, 20, 27, NaN][n - 1],
@@ -115,9 +131,9 @@ export default class xjs_Object {
    *   'November' : (n: number) => [ 6, 13, 20, 27, NaN][n - 1],
    *   'December' : (n: number) => [ 4, 11, 18, 25, NaN][n - 1],
    *   'default'  : (n: number) => NaN,
-   *
-   * }, 'November') // returns a function taking `n` and returning one of `[ 6, 13, 20, 27, NaN]`
+   * }, 'November') // returns a function taking `n` and returning one of `[6,13,20,27,NaN]`
    * call_me(1) // returns the number `6`
+   * ```
    *
    * @param   dictionary an object with {@link SwitchFn} values
    * @param   key the key to provide the lookup, which will give a function
@@ -133,9 +149,10 @@ export default class xjs_Object {
     }
     return returned
   }
+
   /**
-   * @summary Test whether two things are “the same”.
-   * @description
+   * Test whether two things are “the same”.
+   *
    * This function tests the equality of two arguemnts, using the provided comparator predicate.
    * If both arguments are arrays, it is faster and more robust to use {@link xjs_Array.is}.
    *
@@ -148,19 +165,20 @@ export default class xjs_Object {
    * only in that `xjs.Object.is(0, -0)` will return `true`.
    *
    * **IMPORTANT: If no predicate is provided, this method will recursively check further levels
-   * of depth, testing not only the given arguments but also those arguments’ properties, and so on.
-   * *WARNING: this is deprecated behavior, and it will be removed in v0.13+.*
+   * of depth, testing not only the given arguments and those arguments’ properties, but also
+   * sub-properties of *those* proerties, and so on.
+   * *WARNING: this is deprecated behavior, and it will be removed in v0.14+.*
    * Instead, for depth > 1, you should use Node.js’s native
    * {@link https://nodejs.org/dist/latest/docs/api/assert.html#assert_assert_deepstrictequal_actual_expected_message|assert.deepStrictEqual}.
    * Therefore I strongly suggest that you *always* provide 3 arguments when calling this method.
-   * After v0.13+, if you still want depth > 1, you can provide another deep-equal function as the 3rd argument.**
+   * After v0.14+, if you still want depth > 1, you can provide another deep-equal function as the 3rd argument.**
    *
    * This method is based on the **Liskov Substitution Principle**.
    * Values that are considered “the same” should semantically mean they are “replaceable”
    * with one another. This is demonstrated rigorously below.
    *
    * Let us define a “replaceability” relation `R` as thus: a value `x` can be replaced with a value `y`
-   * exactly when, given any deterministic (that is, a **well-defined**, or **right-unique**)
+   * exactly when, given any deterministic (that is, **well-defined**, or **right-unique**)
    * function `fn`, the value `fn(x)` equals the value `fn(y)`.
    * Then this replaceability relation `R` is **symmetric**, because `x R y` implies `y R x`.
    * We want `xjs.Object.is(x, y)` to emulate this relation.
@@ -172,13 +190,13 @@ export default class xjs_Object {
    * @throws  {TypeError} if either `a` or `b` is a function (not supported)
    */
   static is<T>(a: T, b: T, comparator?: (x: any, y: any) => boolean): boolean {
-    // comparator = comparator || (x, y) => x === y || Object.is(x, y) // TODO make default param after v0.13+
+    // comparator = comparator || (x, y) => x === y || Object.is(x, y) // TODO make default param after v0.14+
     if (['string', 'number', 'boolean', 'null', 'undefined'].includes(xjs_Object.typeOf(a))) {
       return a === b || Object.is(a, b)
     }
     if (xjs_Object.typeOf(a) === 'function') throw new TypeError('Function arguments to xjs.Object.is are not yet supported.')
     // else, it will be 'object' or 'array'
-    if (!comparator) { // TEMP: this preserves deprecated funcationality; will be removed on v0.13+
+    if (!comparator) { // TEMP: this preserves deprecated funcationality; will be removed on v0.14+
       try {
         assert.deepStrictEqual(a, b) // COMBAK in node.js v10+, use `assert.strict.deepStrictEqual()`
         return true
@@ -195,8 +213,9 @@ export default class xjs_Object {
   }
 
   /**
-   * @summary Deep freeze an object, and return the result.
-   * @description *Note: This function is impure, modifying the given argument.*
+   * Deep freeze an object, and return the result.
+   *
+   * *Note: This function is impure, modifying the given argument.*
    * If an array or object is passed,
    * **Recursively** call
    * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze|Object.freeze}
@@ -219,8 +238,9 @@ export default class xjs_Object {
   }
 
   /**
-   * @summary Deep clone an object, and return the result.
-   * @description If an array or object is passed,
+   * Deep clone an object, and return the result.
+   *
+   * If an array or object is passed,
    * This method is **recursively** called, cloning properties and sub-properties of the given parameter.
    * The returned result is an object, that when passed with the original as arguments of
    * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is},
@@ -231,7 +251,7 @@ export default class xjs_Object {
    * This method provides a deeper clone than `Object.assign()`: whereas `Object.assign()` only
    * copies the top-level properties, this method recursively clones into all sub-levels.
    *
-   * @example
+   * ```js
    * var x = { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
    *
    * // Object.assign x into y:
@@ -265,6 +285,7 @@ export default class xjs_Object {
    * z.third[2].v  = [3]
    * console.log(z) // returns { first: 'one', second: 2, third: ['one', 2, { v:[3] }] }
    * console.log(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
+   * ```
    *
    * @param   thing any value to clone
    * @returns an exact copy of the given value, but with nothing equal via `===` (unless the value given is primitive)
