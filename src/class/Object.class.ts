@@ -49,7 +49,7 @@ export default class xjs_Object {
    * @returns the type of the thing
    */
 	static typeOf(thing: unknown): string {
-		return xjs_Object.switch<string>({
+		return xjs_Object.switch<string>(typeof thing, {
 			'object': (arg: unknown) => {
 				if (arg === null)       return 'null'
 				if (Array.isArray(arg)) return 'array'
@@ -65,7 +65,7 @@ export default class xjs_Object {
 			'boolean'  : () => 'boolean',
 			'undefined': () => 'undefined',
 			'default'  : (arg: unknown) => typeof arg,
-		}, typeof thing)(thing)
+		})(thing)
 	}
 
   /**
@@ -89,12 +89,12 @@ export default class xjs_Object {
    *
    * This method offers a more structured alternative to a standard `switch` statement,
    * using object lookups to find values.
-   * It takes two arguments: a dictionary and a key.
+   * It takes two arguments: a key and a dictionary.
    *
+   * The first argument is the key in the dictionary whose value to look up.
    * The dictionary argument must be an object with string keys and {@link SwitchFn} values.
    * Each of these functions, when called, should return a value corresponding to its key string.
    * All functions in the dictionary must return the same type of value.
-   * The second argument is the key in the dictionary whose value to look up.
    *
    * You may optionally define a `'default'` key in your dictionary,
    * in order to handle cases when caller input matches none of the keys.
@@ -117,7 +117,7 @@ export default class xjs_Object {
    *
    * ```js
    * // What is the date of the 1st Tuesday of November, 2018?
-   * let call_me = xjs.Object.switch<number>({
+   * let call_me = xjs.Object.switch<number>('November', {
    *   'January'  : (n: number) => [ 2,  9, 16, 23,  30][n - 1],
    *   'February' : (n: number) => [ 6. 13. 20, 27, NaN][n - 1],
    *   'March'    : (n: number) => [ 6, 13, 20, 27, NaN][n - 1],
@@ -131,16 +131,16 @@ export default class xjs_Object {
    *   'November' : (n: number) => [ 6, 13, 20, 27, NaN][n - 1],
    *   'December' : (n: number) => [ 4, 11, 18, 25, NaN][n - 1],
    *   'default'  : (n: number) => NaN,
-   * }, 'November') // returns a function taking `n` and returning one of `[6,13,20,27,NaN]`
+   * }) // returns a function taking `n` and returning one of `[6,13,20,27,NaN]`
    * call_me(1) // returns the number `6`
    * ```
    *
-   * @param   dictionary an object with {@link SwitchFn} values
    * @param   key the key to provide the lookup, which will give a function
+   * @param   dictionary an object with {@link SwitchFn} values
    * @returns the looked-up function
    * @throws  {ReferenceError} when failing to find a lookup value
    */
-  static switch<T>(dictionary: { [index: string]: SwitchFn<T> }, key: string): SwitchFn<T> {
+  static switch<T>(key: string, dictionary: { [index: string]: SwitchFn<T> }): SwitchFn<T> {
     let returned = dictionary[key]
     if (!returned) {
       console.warn(`Key '${key}' cannot be found. Using key 'default'…`)

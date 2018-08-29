@@ -19,7 +19,7 @@ export default class xjs_String {
    * @returns a string version of the argument
    */
 	static stringify(thing: unknown): string {
-		return xjs_Object.switch<string>({
+		return xjs_Object.switch<string>(xjs_Object.typeOf(thing), {
 			'object'   : (arg: object)    => JSON.stringify(arg),
 			'array'    : (arg: unknown[]) => arg.join(''),
 			'function' : (arg: Function)  => arg.toString(),
@@ -29,7 +29,7 @@ export default class xjs_String {
 			'null'     : (arg: null)      => `${arg}`,
 			'undefined': (arg: void)      => `${arg}`,
 			'default'  : (arg: unknown)   => `${arg}`,
-		}, xjs_Object.typeOf(thing))(thing)
+		})(thing)
 	}
 
 

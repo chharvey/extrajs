@@ -100,7 +100,7 @@ export default class xjs_Date {
      * @return that number as a string, possibly prepended with '0'
      */
     function leadingZero(n: number): string { return `${(n < 10) ? '0' : ''}${n}` }
-		return xjs_Object.switch<string>({
+		return xjs_Object.switch<string>(format, {
 			'Y-m-d'    : (date: Date) => `${date.getFullYear()}-${leadingZero(date.getUTCMonth()+1)}-${leadingZero(date.getUTCDate())}`,
 			'j M Y'    : (date: Date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
 			'd F Y'    : (date: Date) => `${leadingZero(date.getUTCDate())} ${MONTHS[date.getUTCMonth()]} ${date.getFullYear()}`,
@@ -114,7 +114,7 @@ export default class xjs_Date {
 			'H:i'      : (date: Date) => `${(date.getUTCHours() < 10) ? '0' : ''}${date.getUTCHours()}:${(date.getUTCMinutes() < 10) ? '0' : ''}${date.getUTCMinutes()}`,
 			'g:ia'     : (date: Date) => `${(date.getUTCHours() - 1)%12 + 1}:${(date.getUTCMinutes() < 10) ? '0' : ''}${date.getUTCMinutes()}${(date.getUTCHours() < 12) ? 'am' : 'pm'}`,
 			'default'  : (date: Date) => date.toISOString(),
-		}, format)(date)
+		})(date)
   }
 
 
