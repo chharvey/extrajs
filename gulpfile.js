@@ -21,6 +21,7 @@ gulp.task('test', async function () {
 			require('./test/Number-typeOf.test.js'),
 			require('./test/Date-format.test.js'),
 			require('./test/String-stringify.test.js'),
+			require('./test/Array-contains.test.js'),
 		])
 		console.log('All tests ran successfully!')
 	} catch (e) {
