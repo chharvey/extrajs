@@ -2,13 +2,15 @@ import xjs_Object from './Object.class'
 
 
 /**
- * @summary Additional static members for the native Array class.
- * @description Does not extend the native Array class.
+ * Additional static members for the native Array class.
+ *
+ * Does not extend the native Array class.
  */
 export default class xjs_Array {
   /**
-   * @summary Test whether two arrays have “the same” elements.
-   * @description Shortcut of {@link xjs_Object.is}, but for arrays.
+   * Test whether two arrays have “the same” elements.
+   *
+   * Shortcut of {@link xjs_Object.is}, but for arrays.
    * @param   a the first array
    * @param   b the second array
    * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
@@ -19,8 +21,9 @@ export default class xjs_Array {
   }
 
   /**
-   * @summary Deep freeze an array, and return the result.
-   * @description Shortcut of {@link xjs_Object.freezeDeep}, but for arrays.
+   * Deep freeze an array, and return the result.
+   *
+   * Shortcut of {@link xjs_Object.freezeDeep}, but for arrays.
    * *Note: This function is impure, modifying the given argument.*
    * @param   arr the array to freeze
    * @returns the given array, with everything frozen
@@ -32,8 +35,9 @@ export default class xjs_Array {
   }
 
   /**
-   * @summary Deep clone an array, and return the result.
-   * @description Shortcut of {@link xjs_Object.cloneDeep}, but for arrays.
+   * Deep clone an array, and return the result.
+   *
+   * Shortcut of {@link xjs_Object.cloneDeep}, but for arrays.
    * @param   arr the array to clone
    * @returns an exact copy of the given array
    */
@@ -42,37 +46,44 @@ export default class xjs_Array {
   }
 
   /**
-   * @summary Test whether an array is a subarray of another array.
-   * @description This method acts like
+   * Test whether an array is a subarray of another array.
+   *
+   * This method acts like
    * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes|String#includes},
    * testing whether
    * the elements in the smaller array appear consecutively and in the same order as in the larger array.
    * In other words, if `{@link xjs_Array.is}(larger.slice(a,b), smaller)` (for some integers a and b),
    * then this method returns `true`.
    *
-   * @example
+   * Elements are compared via the provided comparator predicate.
+   * If no predicate is provided, this method uses the default predicate {@link xjs_Object._sameValueZero}.
+   *
+   * ```js
    * 'twofoursix'.includes('wofo')===true
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], ['w','o',4,'o'])===true
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], ['o','u'])===true
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], [6,'o','u','r'])===false // not in the same order
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], [2,4,6])===false // not consecutive
+   * xjs.Array.contains([2,4,6], [2,4,6,8])===false // first array is smaller than second
+   * ```
    *
    * @param   larger  the larger array, to test against
    * @param   smaller the smaller array, to test
+   * @param   comparator a predicate checking the “sameness” of corresponding elements of `larger` and `smaller`
    * @returns Is `smaller` a subarray of `larger`?
    */
-  static contains<T>(larger: T[], smaller: T[]): boolean {
+  static contains<T>(larger: T[], smaller: T[], comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
     if (smaller.length > larger.length) {
-      console.warn('First argument cannot be smaller than the second. Switching the arguments…')
-      return xjs_Array.contains(smaller, larger)
+      console.error('First argument cannot be smaller than the second. Try switching the arguments.')
+      return false
     }
-    if (xjs_Array.is(smaller, []    )) return true
-    if (xjs_Array.is(smaller, larger)) return true
-    return larger.map((_el, i) => larger.slice(i, i+smaller.length)).some((sub) => xjs_Array.is(smaller, sub))
+    if (xjs_Array.is(smaller, []    , comparator)) return true
+    if (xjs_Array.is(smaller, larger, comparator)) return true
+    return larger.map((_el, i) => larger.slice(i, i+smaller.length)).some((sub) => xjs_Array.is(smaller, sub, comparator))
   }
 
   /**
-   * @deprecated XXX:DEPRECATED
+   * @deprecated XXX{DEPRECATED}
    * @summary “Convert” an array, number, or string into an array. (Doesn’t really convert.)
    * @description
    * - If the argument is an array, it is returned unchanged.
@@ -108,8 +119,9 @@ export default class xjs_Array {
   }
 
   /**
-   * @summary Make a copy of an array, and then remove duplicate entries.
-   * @description "Duplicate entries" are entries that considered "the same" by
+   * Make a copy of an array, and then remove duplicate entries.
+   *
+   * "Duplicate entries" are entries that considered "the same" by
    * the provided comparator function, or if none is given,
    * {@link xjs_Object.sameValueZero}.
    * Only duplicate entries are removed; the order of non-duplicates is preserved.
