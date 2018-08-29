@@ -80,6 +80,7 @@ export default class xjs_Array {
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], ['o','u'])===true
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], [6,'o','u','r'])===false // not in the same order
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], [2,4,6])===false // not consecutive
+   * xjs.Array.contains([2,4,6], [2,4,6,8])===false // first array is smaller than second
    * ```
    *
    * @param   larger  the larger array, to test against
@@ -89,8 +90,8 @@ export default class xjs_Array {
    */
   static contains<T>(larger: T[], smaller: T[], comparator: (x: T, y: T) => boolean = (x, y) => x === y || Object.is(x, y)): boolean {
     if (smaller.length > larger.length) {
-      console.warn('First argument cannot be smaller than the second. Switching the arguments…')
-      return xjs_Array.contains(smaller, larger)
+      console.error('First argument cannot be smaller than the second. Try switching the arguments.')
+      return false
     }
     if (xjs_Array.is(smaller, []    , comparator)) return true
     if (xjs_Array.is(smaller, larger, comparator)) return true

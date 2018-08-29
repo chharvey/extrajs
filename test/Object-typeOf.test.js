@@ -11,11 +11,11 @@ const xjs = require('../index.js')
  * @returns {boolean} does `assert.strictEqual(actual, expected)` not throw?
  * @throws  {AssertionError} the error from `assert.strictEqual(actual, expected)`
  */
-function test(actual, expected) {
+async function test(actual, expected) {
 	return assert.strictEqual(actual, expected, `Got '${actual}', but was expecting '${expected}'.`) || true
 }
 
-module.exports = [
+module.exports = Promise.all([
 	test(xjs.Object.typeOf(null)                                                       , 'null'     ),
 	test(xjs.Object.typeOf([])                                                         , 'array'    ),
 	test(xjs.Object.typeOf([false, 0, NaN, '', null, true, Infinity, 'true', {}, [] ]) , 'array'    ),
@@ -32,4 +32,4 @@ module.exports = [
 	test(xjs.Object.typeOf()                                                           , 'undefined'),
 	test(xjs.Object.typeOf(undefined)                                                  , 'undefined'),
 	test(xjs.Object.typeOf((() => { let x; return x; })())                             , 'undefined'),
-].reduce((a, b) => a && b)
+]).then((arr) => true)

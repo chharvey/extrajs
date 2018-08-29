@@ -14,13 +14,19 @@ gulp.task('dist', async function () {
 })
 
 gulp.task('test', async function () {
-	;[
-		{ filename: './test/Object-typeOf.test.js', subject: 'xjs.Object.typeOf' },
-		{ filename: './test/Object-is.test.js'    , subject: 'xjs.Object.is' },
-	].forEach((t) => {
-		if (require(t.filename)) console.log(`All tests for \`${t.subject}\` ran successfully!`)
-		else throw Error(`Some test for \`${t.subject}\` has failed!`)
-	})
+	try {
+		await Promise.all([
+			require('./test/Object-typeOf.test.js'),
+			require('./test/Object-is.test.js'),
+			require('./test/Number-typeOf.test.js'),
+			require('./test/Date-format.test.js'),
+			require('./test/String-stringify.test.js'),
+			require('./test/Array-contains.test.js'),
+		])
+		console.log('All tests ran successfully!')
+	} catch (e) {
+		console.error(e)
+	}
 })
 
 gulp.task('docs', async function () {
