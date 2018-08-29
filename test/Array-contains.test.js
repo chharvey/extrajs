@@ -27,5 +27,5 @@ module.exports = Promise.all([
 	test(`${xjs.Array.contains(x, [4,0]          )}`, 'false'),
 	test(`${xjs.Array.contains(x, [4,3]          )}`, 'false'),
 	test(`${xjs.Array.contains(x, [1]            )}`, 'true' ),
-	test(`${xjs.Array.contains(x, [0,1,2,0,3,4,5])}`, 'false'),
+	test((() => { try { return `${xjs.Array.contains(x, [0,1,2,0,3,4,5])}` } catch (e) { return e.name } })(), 'RangeError'),
 ]).then((arr) => true)
