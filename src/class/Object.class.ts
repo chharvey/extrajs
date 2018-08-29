@@ -80,9 +80,17 @@ export default class xjs_Object {
    * The dictionary argument must be an object with string keys and {@link SwitchFn} values.
    * Each of this functions, when called, should return a value corresponding to its key string.
    * All functions in the dictionary must return the same type of value.
-   * Optionally define a `'default'` key in the dictionary to handle cases when no written key matches user input.
-   * The `'default'` key is analogous to the **`default` clause** of a `switch` statement.
    * The second argument is the key in the dictionary whose value to look up.
+   *
+   * You may optionally define a `'default'` key in the dictionary you provide,
+   * in order to handle cases when no written key matches caller input.
+   * *The `'default'` key is analogous to the **`default` clause** of a `switch` statement.*
+   * Note that this method looks for `'default'` when it cannot find any other key,
+   * and in doing so it logs a warning.
+   * To suppress this warning, it is best to provide keys for all known possible inputs,
+   * even if that means duplicating `SwitchFn` values.
+   * (Though it’s easy to define a `SwitchFn` before calling this method.)
+   * Best practice is to write a `'default'` case only for unknown key inputs.
    *
    * The following example calls this method to look up
    * the date of the *nth* Tuesday of each month of 2018,
