@@ -97,15 +97,15 @@ export default class xjs_Date {
      */
     function leadingZero(n: number): string { return `${(n < 10) ? '0' : ''}${n}` }
 		return xjs_Object.switch<string>({
-			'Y-m-d'    : (date: Date) => `${date.getFullYear()}-${leadingZero(date.getUTCMonth()+1)}-${leadingZero(date.getUTCDate())}`,
-			'j M Y'    : (date: Date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
-			'd F Y'    : (date: Date) => `${leadingZero(date.getUTCDate())} ${MONTHS[date.getUTCMonth()]} ${date.getFullYear()}`,
-			'l, j F, Y': (date: Date) => `${xjs_Date.DAY_NAMES[date.getUTCDay()]}, ${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}, ${date.getFullYear()}`,
+			'Y-m-d'    : (date: Date) => `${date.getUTCFullYear()}-${leadingZero(date.getUTCMonth()+1)}-${leadingZero(date.getUTCDate())}`,
+			'j M Y'    : (date: Date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getUTCFullYear()}`,
+			'd F Y'    : (date: Date) => `${leadingZero(date.getUTCDate())} ${MONTHS[date.getUTCMonth()]} ${date.getUTCFullYear()}`,
+			'l, j F, Y': (date: Date) => `${xjs_Date.DAY_NAMES[date.getUTCDay()]}, ${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}, ${date.getUTCFullYear()}`,
 			'j M'      : (date: Date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)}`,
-			'M Y'      : (date: Date) => `${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
+			'M Y'      : (date: Date) => `${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getUTCFullYear()}`,
 			'M j'      : (date: Date) => `${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getUTCDate()}`,
-			'M j, Y'   : (date: Date) => `${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getUTCDate()}, ${date.getFullYear()}`,
-			'F j, Y'   : (date: Date) => `${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getFullYear()}`,
+			'M j, Y'   : (date: Date) => `${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getUTCDate()}, ${date.getUTCFullYear()}`,
+			'F j, Y'   : (date: Date) => `${MONTHS[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`,
 			'M'        : (date: Date) => `${MONTHS[date.getUTCMonth()].slice(0,3)}`,
 			'H:i'      : (date: Date) => `${(date.getUTCHours() < 10) ? '0' : ''}${date.getUTCHours()}:${(date.getUTCMinutes() < 10) ? '0' : ''}${date.getUTCMinutes()}`,
 			'g:ia'     : (date: Date) => `${(date.getUTCHours() - 1)%12 + 1}:${(date.getUTCMinutes() < 10) ? '0' : ''}${date.getUTCMinutes()}${(date.getUTCHours() < 12) ? 'am' : 'pm'}`,
