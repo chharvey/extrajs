@@ -1,30 +1,42 @@
+import * as assert from 'assert'
+
 import xjs_Object from './Object.class'
 
 
 /**
- * @summary Additional static members for the native Array class.
- * @description Does not extend the native Array class.
+ * Additional static members for the native Array class.
+ *
+ * Does not extend the native Array class.
  */
 export default class xjs_Array {
   /**
-   * @summary Test whether two arrays are “the same”.
-   * @description Shortcut of {@link xjs_Object.is}, but for arrays.
-   * @param   arr1 the first array
-   * @param   arr2 the second array
-   * @returns Are corresponding elements the same (via {@link xjs_Object.is})?
+   * Test whether two arrays are “the same”.
+   *
+   * Shortcut of {@link xjs_Object.is}, but for arrays.
+   * @param   a the first array
+   * @param   b the second array
+   * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
+   * @returns Are corresponding elements the same, i.e. replaceable??
    */
-  static is(arr1: unknown[], arr2: unknown[]): boolean {
-    if (arr1 === arr2) return true
-    if (arr1.length !== arr2.length) return false
-    for (let i = 0; i < arr1.length; i++) {
-      if (!xjs_Object.is(arr1[i], arr2[i])) return false
+  static is<T>(a: T[], b: T[], comparator?: (x: T, y: T) => boolean): boolean {
+    // comparator = comparator || (x, y) => x === y || Object.is(x, y) // TODO make default param after v0.13+
+    if (!comparator) { // TEMP: this preserves deprecated funcationality; will be removed on v0.13+
+      try {
+        assert.deepStrictEqual(a, b) // COMBAK in node.js v10+, use `assert.strict.deepStrictEqual()`
+        return true
+      } catch (e) {
+        console.error(e.message)
+        return false
+      }
     }
-    return true
+    return a === b ||
+      (a.length === b.length) && a.every((el, i) => comparator(el, b[i]))
   }
 
   /**
-   * @summary Deep freeze an array, and return the result.
-   * @description Shortcut of {@link xjs_Object.freezeDeep}, but for arrays.
+   * Deep freeze an array, and return the result.
+   *
+   * Shortcut of {@link xjs_Object.freezeDeep}, but for arrays.
    * *Note: This function is impure, modifying the given argument.*
    * @param   arr the array to freeze
    * @returns the given array, with everything frozen
@@ -36,8 +48,9 @@ export default class xjs_Array {
   }
 
   /**
-   * @summary Deep clone an array, and return the result.
-   * @description Shortcut of {@link xjs_Object.cloneDeep}, but for arrays.
+   * Deep clone an array, and return the result.
+   *
+   * Shortcut of {@link xjs_Object.cloneDeep}, but for arrays.
    * @param   arr the array to clone
    * @returns an exact copy of the given array
    */
@@ -46,35 +59,47 @@ export default class xjs_Array {
   }
 
   /**
-   * @summary Test whether an array is a subarray of another array.
-   * @description This method acts like
+   * Test whether an array is a subarray of another array.
+   *
+   * This method acts like
    * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes|String#includes},
    * testing whether
    * the elements in the smaller array appear consecutively and in the same order as in the larger array.
    * In other words, if `{@link xjs_Array.is}(larger.slice(a,b), smaller)` (for some integers a and b),
    * then this method returns `true`.
    *
-   * @example
+   * Elements are compared via the provided comparator predicate.
+   * If no predicate is provided, this method uses the default predicate:
+   * ```js
+   * (a, b) => a === b || Object.is(a, b)
+   * ```
+   *
+   * ```js
    * 'twofoursix'.includes('wofo')===true
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], ['w','o',4,'o'])===true
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], ['o','u'])===true
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], [6,'o','u','r'])===false // not in the same order
    * xjs.Array.contains([2,'w','o',4,'o','u','r',6,'i','x'], [2,4,6])===false // not consecutive
+   * xjs.Array.contains([2,4,6], [2,4,6,8]) // throws a RangeError: first array is smaller than second
+   * ```
    *
    * @param   larger  the larger array, to test against
    * @param   smaller the smaller array, to test
+   * @param   comparator a predicate checking the “sameness” of corresponding elements of `larger` and `smaller`
    * @returns Is `smaller` a subarray of `larger`?
    * @throws  {RangeError} if the second array is larger than the first
    */
-  static contains<T, U>(larger: T[], smaller: U[]): boolean {
-    if (smaller.length > larger.length) throw new RangeError('Smaller array cannot have a greater length than larger array.')
-    if (xjs_Array.is(smaller, [])) return true
-    if (xjs_Array.is(smaller, larger)) return true
-    return larger.map((el, i) => larger.slice(i, i+smaller.length)).some((sub) => xjs_Array.is(smaller, sub))
+  static contains<T>(larger: T[], smaller: T[], comparator: (x: T, y: T) => boolean = (x, y) => x === y || Object.is(x, y)): boolean {
+    if (smaller.length > larger.length) {
+      throw new RangeError('First argument cannot be smaller than the second. Try switching the arguments.')
+    }
+    if (xjs_Array.is(smaller, []    , comparator)) return true
+    if (xjs_Array.is(smaller, larger, comparator)) return true
+    return larger.map((_el, i) => larger.slice(i, i+smaller.length)).some((sub) => xjs_Array.is(smaller, sub, comparator))
   }
 
   /**
-   * @deprecated XXX:DEPRECATED
+   * @deprecated XXX{DEPRECATED}
    * @summary “Convert” an array, number, or string into an array. (Doesn’t really convert.)
    * @description
    * - If the argument is an array, it is returned unchanged.
@@ -110,8 +135,9 @@ export default class xjs_Array {
   }
 
   /**
-   * @summary Make a copy of an array, and then remove duplicate entries.
-   * @description "Duplicate entries" are entries that considered "the same" by
+   * Make a copy of an array, and then remove duplicate entries.
+   *
+   * "Duplicate entries" are entries that considered "the same" by
    * the provided comparator function, or if none is given,
    * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is}.
    * Only duplicate entries are removed; the order of non-duplicates is preserved.
