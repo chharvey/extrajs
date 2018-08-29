@@ -2,12 +2,13 @@ import xjs_Object from './Object.class'
 
 
 /**
- * @summary Additional static members for the native Date class.
- * @description Does not extend the native Date class.
+ * Additional static members for the native Date class.
+ *
+ * Does not extend the native Date class.
  */
 export default class xjs_Date {
   /**
-   * @summary List of full month names in English.
+   * The list of full month names in English.
    */
   static readonly MONTH_NAMES = [
       'January',
@@ -25,7 +26,7 @@ export default class xjs_Date {
     ]
 
   /**
-   * @summary List of full day names in English.
+   * The list of full day names in English.
    */
   static readonly DAY_NAMES = [
       'Sundary',
@@ -38,19 +39,21 @@ export default class xjs_Date {
     ]
 
   /**
-   * @summary Return whether two dates occur on the same 24-hour day.
-   * @description That is, if both dates have the same year, same month, *and* same day (date of the month).
+   * Return whether two dates occur on the same 24-hour day.
+   *
+   * That is, if both dates have the same year, same month, *and* same day (date of the month).
    * @param   date1 the first date
    * @param   date2 the second date
-   * @returns Does 'YYYY-MM-DD' of `date1` equal 'YYYY-MM-DD' of `date2`?
+   * @returns does 'YYYY-MM-DD' of `date1` equal 'YYYY-MM-DD' of `date2`?
    */
   static sameDate(date1: Date, date2: Date): boolean {
     return date1.toISOString().slice(0,10) === date2.toISOString().slice(0,10)
   }
 
   /**
-   * @summary Return the percentage of the day that has passed at the given time.
-   * @description For example:
+   * Return the percentage of the day that has passed at the given time.
+   *
+   * For example:
    * - `00:00` => 0.00
    * - `06:00` => 0.25
    * - `12:00` => 0.50
@@ -67,21 +70,22 @@ export default class xjs_Date {
   }
 
   /**
-   * @summary Format a date, using PHP-based formatting options.
-   * @description The following options are supported (with examples):
-   * - 'Y-m-d'     : '2017-08-05'
-   * - 'j M Y'     : '5 Aug 2017'
-   * - 'd F Y'     : '05 August 2017'
-   * - 'l, j F, Y' : 'Friday, 5 August, 2017'
-   * - 'j M'       : '5 Aug'
-   * - 'M Y'       : 'Aug 2017'
-   * - 'M j'       : 'Aug 5'
-   * - 'M j, Y'    : 'Aug 5, 2017'
-   * - 'F j, Y'    : 'August 5, 2017'
-   * - 'M'         : 'Aug'
-   * - 'H:i'       : '21:33'
-   * - 'g:ia'      : '9:33pm'
-   * - 'default'   : '2017-08-06T01:33:00.000Z' ({@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString|Date#toISOString})
+   * Format a date, using PHP-based formatting options.
+   *
+   * The following options are supported (with examples):
+   * - `'Y-m-d'`     : '2017-08-05'
+   * - `'j M Y'`     : '5 Aug 2017'
+   * - `'d F Y'`     : '05 August 2017'
+   * - `'l, j F, Y'` : 'Friday, 5 August, 2017'
+   * - `'j M'`       : '5 Aug'
+   * - `'M Y'`       : 'Aug 2017'
+   * - `'M j'`       : 'Aug 5'
+   * - `'M j, Y'`    : 'Aug 5, 2017'
+   * - `'F j, Y'`    : 'August 5, 2017'
+   * - `'M'`         : 'Aug'
+   * - `'H:i'`       : '21:33'
+   * - `'g:ia'`      : '9:33pm'
+   * - `'default'`   : '2017-08-06T01:33:00.000Z' ({@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString|Date#toISOString})
    * @see http://php.net/manual/en/function.date.php
    * @param   date the date to format
    * @param   format one of the enumerated options listed in the description
@@ -89,14 +93,8 @@ export default class xjs_Date {
    */
   static format(date: Date, format: string): string {
     const MONTHS = xjs_Date.MONTH_NAMES
-    /**
-     * @summary Convert a positive number to a string, adding a leading zero if and only if it is less than 10.
-     * @private
-     * @param  n any positive number
-     * @return that number as a string, possibly prepended with '0'
-     */
-    function leadingZero(n: number): string { return `${(n < 10) ? '0' : ''}${n}` }
-		return xjs_Object.switch<string>({
+		const leadingZero = (n: number, r: number = 10) => `0${n.toString(r)}`.slice(-2)
+		return xjs_Object.switch<string>(format, {
 			'Y-m-d'    : (date: Date) => `${date.getFullYear()}-${leadingZero(date.getUTCMonth()+1)}-${leadingZero(date.getUTCDate())}`,
 			'j M Y'    : (date: Date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getFullYear()}`,
 			'd F Y'    : (date: Date) => `${leadingZero(date.getUTCDate())} ${MONTHS[date.getUTCMonth()]} ${date.getFullYear()}`,
@@ -110,7 +108,7 @@ export default class xjs_Date {
 			'H:i'      : (date: Date) => `${(date.getUTCHours() < 10) ? '0' : ''}${date.getUTCHours()}:${(date.getUTCMinutes() < 10) ? '0' : ''}${date.getUTCMinutes()}`,
 			'g:ia'     : (date: Date) => `${(date.getUTCHours() - 1)%12 + 1}:${(date.getUTCMinutes() < 10) ? '0' : ''}${date.getUTCMinutes()}${(date.getUTCHours() < 12) ? 'am' : 'pm'}`,
 			'default'  : (date: Date) => date.toISOString(),
-		}, format)(date)
+		})(date)
   }
 
 
