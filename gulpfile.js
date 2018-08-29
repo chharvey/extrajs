@@ -18,6 +18,7 @@ gulp.task('test', async function () {
 		await Promise.all([
 			require('./test/Object-typeOf.test.js'),
 			require('./test/Object-is.test.js'),
+			require('./test/Number-typeOf.test.js'),
 		])
 		console.log('All tests ran successfully!')
 	} catch (e) {
