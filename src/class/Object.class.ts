@@ -145,7 +145,7 @@ export default class xjs_Object {
     if (!returned) {
       console.warn(`Key '${key}' cannot be found. Using key 'default'…`)
       returned = dictionary['default']
-      if (!returned) throw new ReferenceError(`No default value found.`)
+      if (!returned) throw new ReferenceError(`No default key found.`)
     }
     return returned
   }

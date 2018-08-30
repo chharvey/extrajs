@@ -19,8 +19,8 @@ export default class xjs_Array {
    * @returns Are corresponding elements the same, i.e. replaceable??
    */
   static is<T>(a: T[], b: T[], comparator?: (x: T, y: T) => boolean): boolean {
-    // comparator = comparator || (x, y) => x === y || Object.is(x, y) // TODO make default param after v0.13+
-    if (!comparator) { // TEMP: this preserves deprecated funcationality; will be removed on v0.13+
+    // comparator = comparator || (x, y) => x === y || Object.is(x, y) // TODO make default param after v0.14+
+    if (!comparator) { // TEMP: this preserves deprecated funcationality; will be removed on v0.14+
       try {
         assert.deepStrictEqual(a, b) // COMBAK in node.js v10+, use `assert.strict.deepStrictEqual()`
         return true
@@ -99,7 +99,7 @@ export default class xjs_Array {
   }
 
   /**
-   * @deprecated XXX{DEPRECATED}
+   * @deprecated XXX{OBSOLETE}
    * @summary “Convert” an array, number, or string into an array. (Doesn’t really convert.)
    * @description
    * - If the argument is an array, it is returned unchanged.
