@@ -32,12 +32,11 @@ export default class xjs_Math {
 	 * @param   x the dividend
 	 * @param   n the divisor, a positive integer
 	 * @returns exactly `((x % n) + n) % n`
-	 * @throws  {RangeError} when `n` is not a positive integer
+	 * @throws  {Error} when `n` is not a positive integer
 	 */
 	static mod(x: number, n: number): number {
-		let e = xjs_Number.assertType(n, 'whole')
-		if (e === true) return ((x % n) + n) % n
-		throw e
+		xjs_Number.assertType(n, 'whole') // re-throw
+		return ((x % n) + n) % n
 	}
 
   /**
@@ -62,14 +61,11 @@ export default class xjs_Math {
    * @param   x the root, any number
    * @param   n the hyper-exponent to which the root is raised, a non-negative integer
    * @returns informally, `x *** n`
-   * @throws  {RangeError} when `n` is not a non-negative integer
+   * @throws  {Error} when `n` is not a non-negative integer
    */
   static tetrate(x: number, n: number): number {
-    let e = xjs_Number.assertType(n, 'natural')
-    if (e === true) {
-      return (n === 0) ? 1 : x ** xjs_Math.tetrate(x, n-1)
-    }
-    throw e
+    xjs_Number.assertType(n, 'natural') // re-throw
+    return (n === 0) ? 1 : x ** xjs_Math.tetrate(x, n-1)
   }
 
 

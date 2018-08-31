@@ -1,3 +1,5 @@
+import * as assert from 'assert'
+
 import xjs_Object from './Object.class'
 
 
@@ -8,11 +10,7 @@ import xjs_Object from './Object.class'
  */
 export default class xjs_Number {
   /**
-   * Verify the type of number given.
-   *
-   * If the number matches the given type, this method returns `true`.
-   * If the number does not match, this method *returns* a `RangeError` object — it does not throw it.
-   * This method throws an error if the argument is `NaN`.
+   * Verify the type of number given, throwing if it does not match.
    *
    * Given a number and a "type", test to see if the number is of that type.
    * Mainly used for parameter validation, when the type `number` is not specific enough.
@@ -27,24 +25,29 @@ export default class xjs_Number {
    * - `'finite'`   : the number is not equal to `Infinity` or `-Infinity`
    * - `'infinite'` : the number is     equal to `Infinity` or `-Infinity`
    *
+   * Note that if the given number does not match the given type,
+   * or if the given number is `NaN`,
+   * then this method will throw an error, instead of returning `false`.
+   * This is useful for parameter validation.
+   *
    * @param   num the number to test
    * @param   type one of the string literals listed above
-   * @returns does the number match the described type? | if false, a `RangeError` object
-   * @throws  {RangeError} if `NaN` is given
+   * @returns the number matches the described type
+   * @throws  {Error} if the number does not match the describe type
+   * @throws  {RangeError} if the argument is `NaN`
    */
-	static assertType(num: number, type: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'|'finite'|'infinite'): true|RangeError {
+	static assertType(num: number, type: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'|'finite'|'infinite'): true {
 		if (xjs_Object.typeOf(num) === 'NaN') throw new RangeError('Unacceptable argument `NaN`.')
-		const returned = xjs_Object.switch<[boolean, string]>(type, {
-			'float'   : (n: number) => [!Number.isInteger(n)          , `${n} must not be an integer.`        ],
-			'integer' : (n: number) => [ Number.isInteger(n)          , `${n} must be an integer.`            ],
-			'natural' : (n: number) => [ Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`],
-			'whole'   : (n: number) => [ Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    ],
-			'positive': (n: number) => [0 < n                         , `${n} must be a positive number.`     ],
-			'negative': (n: number) => [n < 0                         , `${n} must be a negative number.`     ],
-			'finite'  : (n: number) => [ Number.isFinite(n)           , `${n} must be a finite number.`       ],
-			'infinite': (n: number) => [!Number.isFinite(n)           , `${n} must be an infinite number.`    ],
+		return xjs_Object.switch<true>(type, {
+			'float'   : (n: number) => assert(!Number.isInteger(n)          , `${n} must not be an integer.`        ) || true,
+			'integer' : (n: number) => assert( Number.isInteger(n)          , `${n} must be an integer.`            ) || true,
+			'natural' : (n: number) => assert( Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`) || true,
+			'whole'   : (n: number) => assert( Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    ) || true,
+			'positive': (n: number) => assert(0 < n                         , `${n} must be a positive number.`     ) || true,
+			'negative': (n: number) => assert(n < 0                         , `${n} must be a negative number.`     ) || true,
+			'finite'  : (n: number) => assert( Number.isFinite(n)           , `${n} must be a finite number.`       ) || true,
+			'infinite': (n: number) => assert(!Number.isFinite(n)           , `${n} must be an infinite number.`    ) || true,
 		})(num)
-		return (returned[0]) ? true : new RangeError(returned[1])
 	}
 
 	/**
