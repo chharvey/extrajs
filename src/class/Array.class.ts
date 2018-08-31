@@ -83,7 +83,7 @@ export default class xjs_Array {
   }
 
   /**
-   * @deprecated XXX{DEPRECATED}
+   * @deprecated XXX{OBSOLETE}
    * @summary “Convert” an array, number, or string into an array. (Doesn’t really convert.)
    * @description
    * - If the argument is an array, it is returned unchanged.

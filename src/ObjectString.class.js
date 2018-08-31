@@ -1,7 +1,7 @@
 console.warn(`
   (${__filename})
-  WARNING: \`ObjectString.class\` is DEPRECATED!
-  This class will be removed on Version 1.0.
+  WARNING: \`ObjectString.class\` is OBSOLETE!
+  This class will be removed on Version 0.14+.
 `)
 const xjs = require('../index.js')
 module.exports = class ObjectString {

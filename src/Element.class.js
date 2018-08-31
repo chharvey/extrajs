@@ -1,9 +1,7 @@
 console.warn(`
   (${__filename})
-  WARNING: \`Element.class\` is DEPRECATED!
-  It has been moved to another repository. To install, run the following command:
-  $ npm install extrajs-dom
-  This class will be removed on Version 1.0.
+  WARNING: \`Element.class\` is OBSOLETE!
+  This class will be removed on Version 0.14+.
 `)
 const xjs = require('../index.js')
 const ObjectString = require('./ObjectString.class.js')
