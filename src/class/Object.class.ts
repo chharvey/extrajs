@@ -16,6 +16,134 @@ interface SwitchFn<T> extends Function {
  * Does not extend the native Object class.
  */
 export default class xjs_Object {
+	/**
+	 * Test whether two things have “the same” properties.
+	 *
+	 * This function tests the properties of two arguemnts, using the provided comparator predicate.
+	 * Arguments must be of the same type.
+	 * If both are primitives, this method checks
+	 * {@link xjs_Object._sameValueZero|Same-Value-Zero Equality}.
+	 * If both are functions, this method throws an TypeError — functions are not supported at this time.
+	 * If both arguments are arrays, it is faster and more robust to use {@link xjs_Array.is}.
+	 * If both are objects or arrays, this method checks the properties (or elements) of each,
+	 * comparing them with the provided comparator predicate.
+	 *
+	 * If no predicate is provided, this method uses the default predicate {@link xjs_Object._sameValueZero}.
+	 *
+	 * Note: This method does not deep-check equality within the objects’ properties (or arrays’ elements).
+	 * To check deeper, I suggest using Node.js’s native
+	 * {@link https://nodejs.org/dist/latest/docs/api/assert.html#assert_assert_deepstrictequal_actual_expected_message|assert.deepStrictEqual}.
+	 * You may also specify this behavior in your custom comparator.
+	 *
+	 * This method is based on the
+	 * {@link https://en.wikipedia.org/wiki/Liskov_substitution_principle|Liskov Substitution Principle}.
+	 * Values that are considered “the same” should semantically mean they are “replaceable”
+	 * with one another. This is demonstrated rigorously below.
+	 *
+	 * Let us define a “replaceability” relation `R` as thus: a value `x` can be replaced with a value `y`
+	 * exactly when, given any deterministic (that is, **well-defined**, or **right-unique**)
+	 * function `fn`, the value `fn(x)` equals the value `fn(y)`.
+	 * Then this replaceability relation `R` is **symmetric**, because `x R y` implies `y R x`.
+	 * We want `xjs.Object.is(x, y)` to emulate this relation.
+	 *
+	 * @param   a the first  thing
+	 * @param   b the second thing
+	 * @param   comparator a predicate checking the “sameness” of corresponding properties of `a` and `b`
+	 * @returns Are corresponding properties the same, i.e. replaceable?
+	 * @throws  {TypeError} if either `a` or `b` is a function (not supported)
+	 */
+	static is<T>(a: T, b: T, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		if (['string', 'number', 'boolean', 'null', 'undefined'].includes(xjs_Object.typeOf(a))) {
+			return xjs_Object.sameValueZero(a, b)
+		}
+		if (xjs_Object.typeOf(a) === 'function') throw new TypeError('Function arguments to xjs.Object.is are not yet supported.')
+		// else, it will be 'object' or 'array'
+		return a === b || Object.entries(a).every((a_entry) =>
+			Object.entries(b).some((b_entry) => a_entry[0] === b_entry[0] && comparator(a_entry[1], b_entry[1]))
+		)
+	}
+
+	/**
+	 * Test whether two things are equal vis-à-vis the Same-Value-Zero algorithm.
+	 *
+	 * This method is less strict than
+	 * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is},
+	 * only in that `.sameValueZero(0, -0)` will return `true`.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#Same-value-zero_equality
+	 * @param   a the first  thing
+	 * @param   b the second thing
+	 * @returns exactly `a === b || Object.is(a, b)`
+	 */
+	static sameValueZero(a: unknown, b: unknown): boolean {
+		return a === b || Object.is(a, b)
+	}
+
+	/**
+	 * A structured `switch` statement.
+	 *
+	 * This method offers a more structured alternative to a standard `switch` statement,
+	 * using object lookups to find values.
+	 * It takes two arguments: a key and a dictionary.
+	 *
+	 * The first argument is the key in the dictionary whose value to look up.
+	 * The dictionary argument must be an object with string keys and {@link SwitchFn} values.
+	 * Each of these functions, when called, should return a value corresponding to its key string.
+	 * All functions in the dictionary must return the same type of value.
+	 *
+	 * You may optionally define a `'default'` key in your dictionary,
+	 * in order to handle cases when caller input matches none of the keys.
+	 * *The `'default'` key is analogous to the **`default` clause** of a `switch` statement.*
+	 * You may omit a `'default'` key if you are certain that you’ve accounted for all the inputs,
+	 * such as when the inputs are Enum values.
+	 *
+	 * Note that this method looks for `'default'` when it cannot find any other key,
+	 * and in doing so it logs a warning.
+	 * To suppress this warning, it is best to provide keys for all known possible inputs,
+	 * even if that means duplicating `SwitchFn` values.
+	 * (Though it’s easy to define a `SwitchFn` before calling this method.)
+	 * Best practice is to write a `'default'` case only for unknown key inputs.
+	 *
+	 * The following example calls this method to look up
+	 * the date of the *nth* Tuesday of each month of 2018,
+	 * where *n* could be a number 1 through 5.
+	 * (Note that this example is actually pretty inefficient,
+	 * but it only serves as a demonstration.)
+	 *
+	 * ```js
+	 * // What is the date of the 1st Tuesday of November, 2018?
+	 * let call_me = xjs.Object.switch<number>('November', {
+	 *   'January'  : (n: number) => [ 2,  9, 16, 23,  30][n - 1],
+	 *   'February' : (n: number) => [ 6. 13. 20, 27, NaN][n - 1],
+	 *   'March'    : (n: number) => [ 6, 13, 20, 27, NaN][n - 1],
+	 *   'April'    : (n: number) => [ 3, 10, 17, 24, NaN][n - 1],
+	 *   'May'      : (n: number) => [ 1,  8, 15, 22,  29][n - 1],
+	 *   'June'     : (n: number) => [ 5, 12, 19, 26, NaN][n - 1],
+	 *   'July'     : (n: number) => [ 3, 10, 17, 24,  31][n - 1],
+	 *   'August'   : (n: number) => [ 7, 14, 21, 28, NaN][n - 1],
+	 *   'September': (n: number) => [ 4, 11, 18, 25, NaN][n - 1],
+	 *   'October'  : (n: number) => [ 2,  9, 16, 23,  30][n - 1],
+	 *   'November' : (n: number) => [ 6, 13, 20, 27, NaN][n - 1],
+	 *   'December' : (n: number) => [ 4, 11, 18, 25, NaN][n - 1],
+	 *   'default'  : (n: number) => NaN,
+	 * }) // returns a function taking `n` and returning one of `[6,13,20,27,NaN]`
+	 * call_me(1) // returns the number `6`
+	 * ```
+	 *
+	 * @param   key the key to provide the lookup, which will give a function
+	 * @param   dictionary an object with {@link SwitchFn} values
+	 * @returns the looked-up function
+	 * @throws  {ReferenceError} when failing to find a lookup value
+	 */
+	static switch<T>(key: string, dictionary: { [index: string]: SwitchFn<T> }): SwitchFn<T> {
+		let returned = dictionary[key]
+		if (!returned) {
+			console.warn(`Key '${key}' cannot be found. Using key 'default'…`)
+			returned = dictionary['default']
+			if (!returned) throw new ReferenceError(`No default key found.`)
+		}
+		return returned
+	}
+
   /**
    * Return the type of a thing.
    *
@@ -67,6 +195,7 @@ export default class xjs_Object {
 	}
 
   /**
+   * WARNING{EXPERIMENTAL}
    * Return the name of an object’s constructing class or function.
    *
    * This method reveals the most specific class that the native `instanceof` operator would reveal.
@@ -83,136 +212,7 @@ export default class xjs_Object {
   }
 
   /**
-   * A structured `switch` statement.
-   *
-   * This method offers a more structured alternative to a standard `switch` statement,
-   * using object lookups to find values.
-   * It takes two arguments: a key and a dictionary.
-   *
-   * The first argument is the key in the dictionary whose value to look up.
-   * The dictionary argument must be an object with string keys and {@link SwitchFn} values.
-   * Each of these functions, when called, should return a value corresponding to its key string.
-   * All functions in the dictionary must return the same type of value.
-   *
-   * You may optionally define a `'default'` key in your dictionary,
-   * in order to handle cases when caller input matches none of the keys.
-   * *The `'default'` key is analogous to the **`default` clause** of a `switch` statement.*
-   * You may omit a `'default'` key if you are certain that you’ve accounted for all the inputs,
-   * such as when the inputs are Enum values.
-   *
-   * Note that this method looks for `'default'` when it cannot find any other key,
-   * and in doing so it logs a warning.
-   * To suppress this warning, it is best to provide keys for all known possible inputs,
-   * even if that means duplicating `SwitchFn` values.
-   * (Though it’s easy to define a `SwitchFn` before calling this method.)
-   * Best practice is to write a `'default'` case only for unknown key inputs.
-   *
-   * The following example calls this method to look up
-   * the date of the *nth* Tuesday of each month of 2018,
-   * where *n* could be a number 1 through 5.
-   * (Note that this example is actually pretty inefficient,
-   * but it only serves as a demonstration.)
-   *
-   * ```js
-   * // What is the date of the 1st Tuesday of November, 2018?
-   * let call_me = xjs.Object.switch<number>('November', {
-   *   'January'  : (n: number) => [ 2,  9, 16, 23,  30][n - 1],
-   *   'February' : (n: number) => [ 6. 13. 20, 27, NaN][n - 1],
-   *   'March'    : (n: number) => [ 6, 13, 20, 27, NaN][n - 1],
-   *   'April'    : (n: number) => [ 3, 10, 17, 24, NaN][n - 1],
-   *   'May'      : (n: number) => [ 1,  8, 15, 22,  29][n - 1],
-   *   'June'     : (n: number) => [ 5, 12, 19, 26, NaN][n - 1],
-   *   'July'     : (n: number) => [ 3, 10, 17, 24,  31][n - 1],
-   *   'August'   : (n: number) => [ 7, 14, 21, 28, NaN][n - 1],
-   *   'September': (n: number) => [ 4, 11, 18, 25, NaN][n - 1],
-   *   'October'  : (n: number) => [ 2,  9, 16, 23,  30][n - 1],
-   *   'November' : (n: number) => [ 6, 13, 20, 27, NaN][n - 1],
-   *   'December' : (n: number) => [ 4, 11, 18, 25, NaN][n - 1],
-   *   'default'  : (n: number) => NaN,
-   * }) // returns a function taking `n` and returning one of `[6,13,20,27,NaN]`
-   * call_me(1) // returns the number `6`
-   * ```
-   *
-   * @param   key the key to provide the lookup, which will give a function
-   * @param   dictionary an object with {@link SwitchFn} values
-   * @returns the looked-up function
-   * @throws  {ReferenceError} when failing to find a lookup value
-   */
-  static switch<T>(key: string, dictionary: { [index: string]: SwitchFn<T> }): SwitchFn<T> {
-    let returned = dictionary[key]
-    if (!returned) {
-      console.warn(`Key '${key}' cannot be found. Using key 'default'…`)
-      returned = dictionary['default']
-      if (!returned) throw new ReferenceError(`No default key found.`)
-    }
-    return returned
-  }
-
-  /**
-   * Test whether two things are equal vis-à-vis the Same-Value-Zero algorithm.
-   *
-   * This method is less strict than
-   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is},
-   * only in that `.sameValueZero(0, -0)` will return `true`.
-   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#Same-value-zero_equality
-   * @param   a the first  thing
-   * @param   b the second thing
-   * @returns exactly `a === b || Object.is(a, b)`
-   */
-  static sameValueZero(a: unknown, b: unknown): boolean {
-    return a === b || Object.is(a, b)
-  }
-
-  /**
-   * Test whether two things have “the same” properties.
-   *
-   * This function tests the properties of two arguemnts, using the provided comparator predicate.
-   * Arguments must be of the same type.
-   * If both are primitives, this method checks
-   * {@link xjs_Object._sameValueZero|Same-Value-Zero Equality}.
-   * If both are functions, this method throws an TypeError — functions are not supported at this time.
-   * If both arguments are arrays, it is faster and more robust to use {@link xjs_Array.is}.
-   * If both are objects or arrays, this method checks the properties (or elements) of each,
-   * comparing them with the provided comparator predicate.
-   *
-   * If no predicate is provided, this method uses the default predicate {@link xjs_Object._sameValueZero}.
-   *
-   * Note: This method does not deep-check equality within the objects’ properties (or arrays’ elements).
-   * To check deeper, I suggest using Node.js’s native
-   * {@link https://nodejs.org/dist/latest/docs/api/assert.html#assert_assert_deepstrictequal_actual_expected_message|assert.deepStrictEqual}.
-   * You may also specify this behavior in your custom comparator.
-   *
-   * This method is based on the
-   * {@link https://en.wikipedia.org/wiki/Liskov_substitution_principle|Liskov Substitution Principle}.
-   * Values that are considered “the same” should semantically mean they are “replaceable”
-   * with one another. This is demonstrated rigorously below.
-   *
-   * Let us define a “replaceability” relation `R` as thus: a value `x` can be replaced with a value `y`
-   * exactly when, given any deterministic (that is, **well-defined**, or **right-unique**)
-   * function `fn`, the value `fn(x)` equals the value `fn(y)`.
-   * Then this replaceability relation `R` is **symmetric**, because `x R y` implies `y R x`.
-   * We want `xjs.Object.is(x, y)` to emulate this relation.
-   *
-   * @param   a the first  thing
-   * @param   b the second thing
-   * @param   comparator a predicate checking the “sameness” of corresponding properties of `a` and `b`
-   * @returns Are corresponding properties the same, i.e. replaceable?
-   * @throws  {TypeError} if either `a` or `b` is a function (not supported)
-   */
-  static is<T>(a: T, b: T, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
-    if (['string', 'number', 'boolean', 'null', 'undefined'].includes(xjs_Object.typeOf(a))) {
-      return xjs_Object.sameValueZero(a, b)
-    }
-    if (xjs_Object.typeOf(a) === 'function') throw new TypeError('Function arguments to xjs.Object.is are not yet supported.')
-    // else, it will be 'object' or 'array'
-    return a === b || Object.entries(a).every((a_entry) =>
-      Object.entries(b).some((b_entry) =>
-        a_entry[0] === b_entry[0] && comparator(a_entry[1], b_entry[1])
-      )
-    )
-  }
-
-  /**
+   * WARNING{EXPERIMENTAL}
    * Deep freeze an object, and return the result.
    *
    * *Note: This function is impure, modifying the given argument.*
@@ -238,6 +238,7 @@ export default class xjs_Object {
   }
 
   /**
+   * WARNING{EXPERIMENTAL}
    * Deep clone an object, and return the result.
    *
    * If an array or object is passed,

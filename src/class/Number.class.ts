@@ -8,26 +8,6 @@ import xjs_Object from './Object.class'
  */
 export default class xjs_Number {
   /**
-   * Specify the type of number given.
-   *
-   * If the number is finite, return one of the following strings:
-   *
-   * - `'integer'` : the number is an integer, that is, `num % 1 === 0`
-   * - `'float'`   : the number is not an integer
-   *
-   * Else, throw a `RangeError` (the argument is of the correct type but does not qualify).
-   * @param   num the given number
-   * @returns one of the strings described above
-   * @throws  {RangeError} if the given arguemnt was not a finite number
-   */
-  static typeOf(num: number): 'integer'|'float' {
-    if (['NaN', 'infinite'].includes(xjs_Object.typeOf(num))) {
-      throw new RangeError('Argument must be a finite number.')
-    }
-    return (Number.isInteger(num)) ? 'integer' : 'float'
-  }
-
-  /**
    * Verify the type of number given.
    *
    * If the number matches the given type, this method returns `true`.
@@ -61,6 +41,26 @@ export default class xjs_Number {
 			'negative': (n: number) => [n < 0                         , `${n} must be a negative number.`     ],
 		})(num)
 		return (returned[0]) ? true : new RangeError(returned[1])
+	}
+
+	/**
+	 * Specify the type of number given.
+	 *
+	 * If the number is finite, return one of the following strings:
+	 *
+	 * - `'integer'` : the number is an integer, that is, `num % 1 === 0`
+	 * - `'float'`   : the number is not an integer
+	 *
+	 * Else, throw a `RangeError` (the argument is of the correct type but does not qualify).
+	 * @param   num the given number
+	 * @returns one of the strings described above
+	 * @throws  {RangeError} if the given arguemnt was not a finite number
+	 */
+	static typeOf(num: number): 'integer'|'float' {
+		if (['NaN', 'infinite'].includes(xjs_Object.typeOf(num))) {
+			throw new RangeError('Argument must be a finite number.')
+		}
+		return (Number.isInteger(num)) ? 'integer' : 'float'
 	}
 
 
