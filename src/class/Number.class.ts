@@ -53,7 +53,7 @@ export default class xjs_Number {
 	static assertType(num: number, type: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'): true|RangeError {
 		xjs_Number.typeOf(num) // re-throw
 		const returned = xjs_Object.switch<[boolean, string]>(type, {
-			'float'   : (n: number) => [!Number.isInteger(n)          , `${n} may not be an integer.`         ],
+			'float'   : (n: number) => [!Number.isInteger(n)          , `${n} must not be an integer.`        ],
 			'integer' : (n: number) => [ Number.isInteger(n)          , `${n} must be an integer.`            ],
 			'natural' : (n: number) => [ Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`],
 			'whole'   : (n: number) => [ Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    ],
