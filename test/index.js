@@ -1,9 +1,0 @@
-require('./Object-typeOf.test.js');
-require('./Object-is.test.js');
-require('./Object-freezeDeep.test.js');
-require('./Object-cloneDeep.test.js');
-require('./Number-typeOf.test.js');
-require('./Array-is.test.js');
-require('./Array-contains.test.js');
-require('./Date-format.test.js');
-require('./String-stringify.test.js');
