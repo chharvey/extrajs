@@ -12,9 +12,9 @@ export default class xjs_Number {
    *
    * If the number matches the given type, this method returns `true`.
    * If the number does not match, this method *returns* a `RangeError` object — it does not throw it.
-   * This method throws an error if the argument is not a finite number.
+   * This method throws an error if the argument is `NaN`.
    *
-   * Given a (finite) number and a "type", test to see if the number is of that type.
+   * Given a number and a "type", test to see if the number is of that type.
    * Mainly used for parameter validation, when the type `number` is not specific enough.
    * The acceptable "types", which are not mutually exclusive, follow:
    *
@@ -24,14 +24,16 @@ export default class xjs_Number {
    * - `'whole'   ` : the number is a positive integer
    * - `'positive'` : the number is strictly greater than 0
    * - `'negative'` : the number is strictly less than 0
+   * - `'finite'`   : the number is not equal to `Infinity` or `-Infinity`
+   * - `'infinite'` : the number is     equal to `Infinity` or `-Infinity`
    *
    * @param   num the number to test
    * @param   type one of the string literals listed above
    * @returns does the number match the described type? | if false, a `RangeError` object
-   * @throws  {RangeError} if the given arguemnt was not a finite number
+   * @throws  {RangeError} if `NaN` is given
    */
-	static assertType(num: number, type: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'): true|RangeError {
-		xjs_Number.typeOf(num) // re-throw
+	static assertType(num: number, type: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'|'finite'|'infinite'): true|RangeError {
+		if (xjs_Object.typeOf(num) === 'NaN') throw new RangeError('Unacceptable argument `NaN`.')
 		const returned = xjs_Object.switch<[boolean, string]>(type, {
 			'float'   : (n: number) => [!Number.isInteger(n)          , `${n} must not be an integer.`        ],
 			'integer' : (n: number) => [ Number.isInteger(n)          , `${n} must be an integer.`            ],
@@ -39,6 +41,8 @@ export default class xjs_Number {
 			'whole'   : (n: number) => [ Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    ],
 			'positive': (n: number) => [0 < n                         , `${n} must be a positive number.`     ],
 			'negative': (n: number) => [n < 0                         , `${n} must be a negative number.`     ],
+			'finite'  : (n: number) => [ Number.isFinite(n)           , `${n} must be a finite number.`       ],
+			'infinite': (n: number) => [!Number.isFinite(n)           , `${n} must be an infinite number.`    ],
 		})(num)
 		return (returned[0]) ? true : new RangeError(returned[1])
 	}
