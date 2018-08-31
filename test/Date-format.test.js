@@ -29,4 +29,7 @@ module.exports = Promise.all([
 	test(xjs.Date.format(new Date('1970-01-01T00:00:00Z'), 'H:i'      ), '00:00'),
 	test(xjs.Date.format(new Date('1970-01-01T00:00:00Z'), 'g:ia'     ), '0:00am'),
 	test(xjs.Date.format(new Date('1970-01-01T00:00:00Z'), 'default'  ), '1970-01-01T00:00:00.000Z'),
+	test((() => console.log(`Expected warning: "Key 'invalid-format' cannot be found. Using key 'default'…"`) ||
+		xjs.Date.format(new Date('1970-01-01T00:00:00Z'), 'invalid-format')
+	)(), '1970-01-01T00:00:00.000Z'),
 ]).then((arr) => true)
