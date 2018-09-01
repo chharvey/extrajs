@@ -1,14 +1,14 @@
-const assert = require('assert')
+import * as assert from 'assert'
 
-const xjs = require('../index.js')
-const test = require('../lib/test.js')
+import * as xjs from '../../index'
+import test from './test'
 
 
 let x = { a: 1, b: ['1'], c: { val: ['one'] } }
 let y = { a: 1, b: ['1'], c: { val: ['one'] } }
-let c1 = (x_a, y_a) => assert.deepStrictEqual(x_a, y_a) || true
+let c1 = (x_a: unknown, y_a: unknown) => assert.deepStrictEqual(x_a, y_a) || true
 
-module.exports = Promise.all([
+export default Promise.all([
 	test(`${xjs.Object.is(x, y)    }`, 'false'),
 	test(`${xjs.Object.is(x, y, c1)}`, 'true' ),
-]).then((arr) => true)
+])

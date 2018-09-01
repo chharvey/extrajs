@@ -16,29 +16,31 @@ gulp.task('dist', async function () {
 gulp.task('test-out', async function () {
 	return gulp.src(['./test/src/{,*.}test.ts'])
 		.pipe(typescript(tsconfig.compilerOptions))
-		.pipe(gulp.dest('./test/build/'))
+		.pipe(gulp.dest('./test/out/'))
 })
 
-gulp.task('test', ['test-out'], async function () {
+gulp.task('test-run', async function () {
 	try {
 		await Promise.all([
-			require('./test/build/Object-typeOf.test.js'),
-			require('./test/build/Object-is.test.js'),
-			require('./test/build/Number-typeOf.test.js'),
-			require('./test/build/Number-assertType.test.js'),
-			require('./test/build/Math-mod.test.js'),
-			require('./test/build/Math-clamp.test.js'),
-			require('./test/build/Math-average.test.js'),
-			require('./test/build/Math-mean.test.js'),
-			require('./test/build/Date-format.test.js'),
-			require('./test/build/String-stringify.test.js'),
-			require('./test/build/Array-contains.test.js'),
+			require('./test/out/Object-typeOf.test.js'),
+			require('./test/out/Object-is.test.js'),
+			require('./test/out/Number-typeOf.test.js'),
+			require('./test/out/Number-assertType.test.js'),
+			require('./test/out/Math-mod.test.js'),
+			require('./test/out/Math-clamp.test.js'),
+			require('./test/out/Math-average.test.js'),
+			require('./test/out/Math-mean.test.js'),
+			require('./test/out/Date-format.test.js'),
+			require('./test/out/String-stringify.test.js'),
+			require('./test/out/Array-contains.test.js'),
 		])
 		console.info('All tests ran successfully!')
 	} catch (e) {
 		console.error(e)
 	}
 })
+
+gulp.task('test', ['test-out', 'test-run'])
 
 gulp.task('docs', async function () {
   return gulp.src('./src/**/*.ts')

@@ -1,10 +1,10 @@
-const xjs = require('../index.js')
-const test = require('../lib/test.js')
+import * as xjs from '../../index'
+import test from './test'
 
 
 let x = [0,1,2,0,3,4]
 
-module.exports = Promise.all([
+export default Promise.all([
 	test(`${xjs.Array.contains(x, [3,4]          )}`, 'true' ),
 	test(`${xjs.Array.contains(x, [0,1,2]        )}`, 'true' ),
 	test(`${xjs.Array.contains(x, [0,1,2,0,3,4]  )}`, 'true' ),
@@ -15,4 +15,4 @@ module.exports = Promise.all([
 	test(`${xjs.Array.contains(x, [4,3]          )}`, 'false'),
 	test(`${xjs.Array.contains(x, [1]            )}`, 'true' ),
 	test((() => { try { return `${xjs.Array.contains(x, [0,1,2,0,3,4,5])}` } catch (e) { return e.name } })(), 'RangeError'),
-]).then((arr) => true)
+])

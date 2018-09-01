@@ -1,14 +1,14 @@
-const assert = require('assert')
+import * as assert from 'assert'
 
 
 /**
- * @summary The master test function for this project.
+ * The master test function for this project.
  * @see https://nodejs.org/api/assert.html#assert_assert_strictequal_actual_expected_message
- * @param   {string}  actual   the actual value to test
- * @param   {string}  expected the value that `actual` is expected to be
- * @returns {true} does `assert.strictEqual(actual, expected)` not throw?
+ * @param   actual   the actual value to test
+ * @param   expected the value that `actual` is expected to be
+ * @returns does `assert.strictEqual(actual, expected)` not throw?
  * @throws  {AssertionError} the error from `assert.strictEqual(actual, expected)`
  */
-module.exports = async function test(actual, expected) {
+export default async function test(actual: string, expected: string): Promise<true> {
 	return assert.strictEqual(actual, expected, `Got '${actual}', but was expecting '${expected}'.`) || true
 }
