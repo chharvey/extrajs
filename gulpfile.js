@@ -22,6 +22,8 @@ gulp.task('test', async function () {
 			require('./test/Number-assertType.test.js'),
 			require('./test/Math-mod.test.js'),
 			require('./test/Math-clamp.test.js'),
+			require('./test/Math-average.test.js'),
+			require('./test/Math-mean.test.js'),
 			require('./test/Date-format.test.js'),
 			require('./test/String-stringify.test.js'),
 			require('./test/Array-contains.test.js'),
