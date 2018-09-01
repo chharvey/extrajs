@@ -18,8 +18,8 @@ export default class xjs_Math {
 	 * @param   y 2nd finite number
 	 * @param   w weight of 2nd number; between 0–1
 	 * @returns the weighted average of `x` and `y`
-   * @throws  {Error} if `x` or `y` is not a finite number
-	 * @throws  {RangeError} if the weight is not between 0 and 1
+	 * @throws  {Error} if `x` or `y` is not a finite number
+	 * @throws  {RangeError} if an argument is `NaN`, or if the weight is not between 0 and 1
 	 */
 	static average(x: number, y: number, w = 0.5): number {
 		;[x, y].forEach((n) => xjs_Number.assertType(n, 'finite')) // NB re-throw
@@ -53,7 +53,8 @@ export default class xjs_Math {
 	 * ```
 	 * @param   nums an array of finite numbers
 	 * @returns the arithmetic mean of the given numbers
-   * @throws  {Error} if one of the array entries is not a finite number
+	 * @throws  {Error} if one of the array entries is not a finite number
+	 * @throws  {RangeError} if `NaN` is in the array
 	 */
 	static meanArithmetic(nums: number[]): number {
 		nums.forEach((n) => xjs_Number.assertType(n, 'finite')) // NB re-throw
@@ -69,7 +70,8 @@ export default class xjs_Math {
 	 * ```
 	 * @param   nums an array of finite numbers
 	 * @returns the geometric mean of the given numbers
-   * @throws  {Error} if one of the array entries is not a finite number
+	 * @throws  {Error} if one of the array entries is not a finite number
+	 * @throws  {RangeError} if `NaN` is in the array
 	 */
 	static meanGeometric(nums: number[]): number {
 		nums.forEach((n) => xjs_Number.assertType(n, 'finite')) // NB re-throw
@@ -85,7 +87,8 @@ export default class xjs_Math {
 	 * ```
 	 * @param   nums an array of finite numbers
 	 * @returns the harmonic mean of the given numbers
-   * @throws  {Error} if one of the array entries is not a finite number
+	 * @throws  {Error} if one of the array entries is not a finite number
+	 * @throws  {RangeError} if `NaN` is in the array
 	 */
 	static meanHarmonic(nums: number[]): number {
 		nums.forEach((n) => xjs_Number.assertType(n, 'finite')) // NB re-throw
