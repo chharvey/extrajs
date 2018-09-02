@@ -9,6 +9,6 @@ import * as assert from 'assert'
  * @returns does `assert.strictEqual(actual, expected)` not throw?
  * @throws  {AssertionError} the error from `assert.strictEqual(actual, expected)`
  */
-export default async function test(actual: string, expected: string): Promise<true> {
-	return assert.strictEqual(actual, expected, `Got '${actual}', but was expecting '${expected}'.`) || true
+export default async function test(actual: string|Promise<string>, expected: string): Promise<true> {
+	return assert.strictEqual(await actual, expected, `Got '${await actual}', but was expecting '${expected}'.`) || true
 }
