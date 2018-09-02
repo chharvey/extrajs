@@ -20,7 +20,6 @@ gulp.task('test-out', async function () {
 })
 
 gulp.task('test-run', async function () {
-	try {
 		await Promise.all([
 			require('./test/out/Object-typeOf.test.js')    .default,
 			require('./test/out/Object-is.test.js')        .default,
@@ -35,9 +34,6 @@ gulp.task('test-run', async function () {
 			require('./test/out/Array-contains.test.js')   .default,
 		])
 		console.info('All tests ran successfully!')
-	} catch (e) {
-		console.error(e)
-	}
 })
 
 gulp.task('test', ['test-out', 'test-run'])
