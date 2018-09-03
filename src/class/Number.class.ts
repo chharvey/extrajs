@@ -22,6 +22,8 @@ export default class xjs_Number {
    * - `'whole'   ` : the number is a positive integer
    * - `'positive'` : the number is strictly greater than 0
    * - `'negative'` : the number is strictly less than 0
+   * - `'non-positive'` : the number is less    than or equal to 0
+   * - `'non-negative'` : the number is greater than or equal to 0
    * - `'finite'`   : the number is not equal to `Infinity` or `-Infinity`
    * - `'infinite'` : the number is     equal to `Infinity` or `-Infinity`
    *
@@ -36,7 +38,7 @@ export default class xjs_Number {
    * @throws  {Error} if the number does not match the describe type
    * @throws  {RangeError} if the argument is `NaN`
    */
-	static assertType(num: number, type: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'|'finite'|'infinite'): true {
+	static assertType(num: number, type: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'|'non-positive'|'non-negative'|'finite'|'infinite'): true {
 		if (xjs_Object.typeOf(num) === 'NaN') throw new RangeError('Unacceptable argument `NaN`.')
 		return xjs_Object.switch<true>(type, {
 			'float'   : (n: number) => assert(!Number.isInteger(n)          , `${n} must not be an integer.`        ) || true,
@@ -45,6 +47,8 @@ export default class xjs_Number {
 			'whole'   : (n: number) => assert( Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    ) || true,
 			'positive': (n: number) => assert(0 < n                         , `${n} must be a positive number.`     ) || true,
 			'negative': (n: number) => assert(n < 0                         , `${n} must be a negative number.`     ) || true,
+			'non-positive': (n: number) => assert(n <= 0                    , `${n} must not be a positive number.` ) || true,
+			'non-negative': (n: number) => assert(0 <= n                    , `${n} must not be a negative number.` ) || true,
 			'finite'  : (n: number) => assert( Number.isFinite(n)           , `${n} must be a finite number.`       ) || true,
 			'infinite': (n: number) => assert(!Number.isFinite(n)           , `${n} must be an infinite number.`    ) || true,
 		})(num)
