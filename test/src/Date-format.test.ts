@@ -1,8 +1,8 @@
-const xjs = require('../index.js')
-const test = require('../lib/test.js')
+import * as xjs from '../../index'
+import test from './test'
 
 
-module.exports = Promise.all([
+export default Promise.all([
 	test(xjs.Date.format(new Date('1970-01-01T00:00:00Z'), 'Y-m-d'    ), '1970-01-01'),
 	test(xjs.Date.format(new Date('1970-01-01T00:00:00Z'), 'j M Y'    ), '1 Jan 1970'),
 	test(xjs.Date.format(new Date('1970-01-01T00:00:00Z'), 'd F Y'    ), '01 January 1970'),
@@ -19,4 +19,4 @@ module.exports = Promise.all([
 	test((() => console.log(`Expected warning: "Key 'invalid-format' cannot be found. Using key 'default'…"`) ||
 		xjs.Date.format(new Date('1970-01-01T00:00:00Z'), 'invalid-format')
 	)(), '1970-01-01T00:00:00.000Z'),
-]).then((arr) => true)
+])

@@ -76,5 +76,8 @@ typings/
 # Generated build files
 dist/
 
+# Generated test files
+test/out/
+
 # Generated documentation & style guides
 docs/api/

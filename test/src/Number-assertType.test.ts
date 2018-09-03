@@ -1,8 +1,8 @@
-const xjs = require('../index.js')
-const test = require('../lib/test.js')
+import * as xjs from '../../index'
+import test from './test'
 
 
-module.exports = Promise.all([
+export default Promise.all([
 	// floats
 	test(`${xjs.Number.assertType( 42.24, 'float')}`, 'true'),
 	test(`${xjs.Number.assertType(-42.24, 'float')}`, 'true'),
@@ -45,5 +45,5 @@ module.exports = Promise.all([
 	test((() => { try { return `${xjs.Number.assertType( 42.24 , 'infinite')}` } catch (e) { return e.code } })(), 'ERR_ASSERTION'),
 	test((() => { try { return `${xjs.Number.assertType(-42.24 , 'infinite')}` } catch (e) { return e.code } })(), 'ERR_ASSERTION'),
 	// errors
-	test((() => { try { return xjs.Number.assertType(NaN) } catch (e) { return e.name } })(), 'RangeError'),
-]).then((arr) => true)
+	test((() => { try { return xjs.Number.assertType(NaN, 'positive') } catch (e) { return e.name } })(), 'RangeError'),
+])

@@ -1,8 +1,8 @@
-const xjs = require('../index.js')
-const test = require('../lib/test.js')
+import * as xjs from '../../index'
+import test from './test'
 
 
-module.exports = Promise.all([
+export default Promise.all([
 	test(xjs.Number.typeOf(42)    , 'integer'),
 	test(xjs.Number.typeOf(-42)   , 'integer'),
 	test(xjs.Number.typeOf(0)     , 'integer'),
@@ -13,4 +13,4 @@ module.exports = Promise.all([
 	test(xjs.Number.typeOf(-42.24), 'float'  ),
 	test((() => { try { return xjs.Number.typeOf(NaN     ) } catch (e) { return e.name } })(), 'RangeError'),
 	test((() => { try { return xjs.Number.typeOf(Infinity) } catch (e) { return e.name } })(), 'RangeError'),
-]).then((arr) => true)
+])
