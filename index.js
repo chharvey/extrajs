@@ -5,4 +5,5 @@ module.exports = {
   Date   : require('./dist/class/Date.class.js').default,
   String : require('./dist/class/String.class.js').default,
   Array  : require('./dist/class/Array.class.js').default,
+  UnsupportedError: require('./dist/class/UnsupportedError.class.js').default,
 }
