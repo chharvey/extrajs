@@ -26,6 +26,7 @@ export default class xjs_Number {
    * - `'non-negative'` : the number is greater than or equal to 0
    * - `'finite'`       : the number is not equal to `Infinity` or `-Infinity`
    * - `'infinite'`     : the number is     equal to `Infinity` or `-Infinity`
+   * - no type (`undefiend`): this method returns `true`
    *
    * Note that if the given number does not match the given type,
    * or if the given number is `NaN`,
@@ -38,8 +39,9 @@ export default class xjs_Number {
    * @throws  {Error} if the number does not match the describe type
    * @throws  {RangeError} if the argument is `NaN`
    */
-	static assertType(num: number, type: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'|'non-positive'|'non-negative'|'finite'|'infinite'): true {
+	static assertType(num: number, type?: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'|'non-positive'|'non-negative'|'finite'|'infinite'): true {
 		if (xjs_Object.typeOf(num) === 'NaN') throw new RangeError('Unacceptable argument `NaN`.')
+		if (!type) return true
 		return xjs_Object.switch<true>(type, {
 			'integer'     : (n: number) => assert( Number.isInteger(n)          , `${n} must be an integer.`            ) || true,
 			'natural'     : (n: number) => assert( Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`) || true,
