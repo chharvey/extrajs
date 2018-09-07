@@ -97,7 +97,11 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_math.html#average" class="tsd-kind-icon">average</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_math.html#clamp" class="tsd-kind-icon">clamp</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_math.html#meanarithmetic" class="tsd-kind-icon">mean<wbr>Arithmetic</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_math.html#meangeometric" class="tsd-kind-icon">mean<wbr>Geometric</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_math.html#meanharmonic" class="tsd-kind-icon">mean<wbr>Harmonic</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_math.html#mod" class="tsd-kind-icon">mod</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_math.html#tetrate" class="tsd-kind-icon">tetrate</a></li>
 							</ul>
@@ -117,7 +121,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Math.class.ts#L70">Math.class.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Math.class.ts#L141">Math.class.ts:141</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="xjs_math.html" class="tsd-signature-type">xjs_Math</a></h4>
@@ -128,6 +132,63 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="average" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> average</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">average<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, w<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Math.class.ts#L24">Math.class.ts:24</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Average two numbers, with a weight favoring the 2nd number.</p>
+								</div>
+								<p>The result will always be between the two numbers.
+									For example, <code>average(10, 20, 0.7)</code> will return 17, while
+									<code>average(20, 10, 0.7)</code> will return 13 (the same result as <code>average(10, 20, 1 - 0.7)</code>).
+									When the optional parameter <code>w</code> is not given, it defaults to 0.5, thus yielding
+								an even weight, that is, the <a href="xjs_math.html#meanarithmetic">arithmetic mean</a>, of the two numbers.</p>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>{Error} if <code>x</code> or <code>y</code> is not a finite number</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>{RangeError} if an argument is <code>NaN</code>, or if the weight is not between 0 and 1</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>x: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>1st finite number</p>
+									</div>
+								</li>
+								<li>
+									<h5>y: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>2nd finite number</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> w: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0.5</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>weight of 2nd number; between 0–1</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+							<p>the weighted average of <code>x</code> and <code>y</code></p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="clamp" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> clamp</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -137,7 +198,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Math.class.ts#L68">Math.class.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Math.class.ts#L43">Math.class.ts:43</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -177,6 +238,132 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="meanarithmetic" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> mean<wbr>Arithmetic</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">mean<wbr>Arithmetic<span class="tsd-signature-symbol">(</span>nums<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Math.class.ts#L59">Math.class.ts:59</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Return the arithmetic mean of a set of numbers.</p>
+								</div>
+								<pre><code class="language-js">meanArithmetic([a,b])   == (a + b)     / <span class="hljs-number">2</span>
+meanArithmetic([a,b,c]) == (a + b + c) / <span class="hljs-number">3</span></code></pre>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>{Error} if one of the array entries is not a finite number</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>{RangeError} if <code>NaN</code> is in the array</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>nums: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an array of finite numbers</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+							<p>the arithmetic mean of the given numbers</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="meangeometric" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> mean<wbr>Geometric</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">mean<wbr>Geometric<span class="tsd-signature-symbol">(</span>nums<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Math.class.ts#L76">Math.class.ts:76</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Return the geomeric mean of a set of numbers.</p>
+								</div>
+								<pre><code class="language-js">meanGeometric([a,b])   == (a * b)     ** (<span class="hljs-number">1</span>/<span class="hljs-number">2</span>)
+meanGeometric([a,b,c]) == (a * b * c) ** (<span class="hljs-number">1</span>/<span class="hljs-number">3</span>)</code></pre>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>{Error} if one of the array entries is not a finite number</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>{RangeError} if <code>NaN</code> is in the array</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>nums: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an array of finite numbers</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+							<p>the geometric mean of the given numbers</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="meanharmonic" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> mean<wbr>Harmonic</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">mean<wbr>Harmonic<span class="tsd-signature-symbol">(</span>nums<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Math.class.ts#L93">Math.class.ts:93</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Return the harmonic mean of a set of numbers.</p>
+								</div>
+								<pre><code class="language-js">meanHarmonic([a,b])   == <span class="hljs-number">1</span> / ((<span class="hljs-number">1</span>/a + <span class="hljs-number">1</span>/b)       / <span class="hljs-number">2</span>)
+meanHarmonic([a,b,c]) == <span class="hljs-number">1</span> / ((<span class="hljs-number">1</span>/a + <span class="hljs-number">1</span>/b + <span class="hljs-number">1</span>/c) / <span class="hljs-number">3</span>)</code></pre>
+								<dl class="tsd-comment-tags">
+									<dt>throws</dt>
+									<dd><p>{Error} if one of the array entries is not a finite number</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>{RangeError} if <code>NaN</code> is in the array</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>nums: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an array of finite numbers</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+							<p>the harmonic mean of the given numbers</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="mod" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> mod</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -186,7 +373,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Math.class.ts#L50">Math.class.ts:50</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Math.class.ts#L109">Math.class.ts:109</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -198,7 +385,7 @@
 								The divisor <code>n</code> must be positive.</p>
 								<dl class="tsd-comment-tags">
 									<dt>throws</dt>
-									<dd><p>{RangeError} when <code>n</code> is not a positive integer</p>
+									<dd><p>{Error} if <code>n</code> is not a positive integer</p>
 									</dd>
 								</dl>
 							</div>
@@ -232,7 +419,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Math.class.ts#L33">Math.class.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Math.class.ts#L138">Math.class.ts:138</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -252,7 +439,7 @@ tetrateLeft(<span class="hljs-number">5</span>, <span class="hljs-number">1</spa
 tetrateLeft(<span class="hljs-number">5</span>, <span class="hljs-number">0</span>) <span class="hljs-comment">// returns 1</span></code></pre>
 								<dl class="tsd-comment-tags">
 									<dt>throws</dt>
-									<dd><p>{RangeError} when <code>n</code> is not a non-negative integer</p>
+									<dd><p>{Error} if <code>n</code> is not a non-negative integer</p>
 									</dd>
 								</dl>
 							</div>
@@ -303,7 +490,19 @@ tetrateLeft(<span class="hljs-number">5</span>, <span class="hljs-number">0</spa
 								<a href="xjs_math.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="xjs_math.html#average" class="tsd-kind-icon">average</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="xjs_math.html#clamp" class="tsd-kind-icon">clamp</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="xjs_math.html#meanarithmetic" class="tsd-kind-icon">mean<wbr>Arithmetic</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="xjs_math.html#meangeometric" class="tsd-kind-icon">mean<wbr>Geometric</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="xjs_math.html#meanharmonic" class="tsd-kind-icon">mean<wbr>Harmonic</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="xjs_math.html#mod" class="tsd-kind-icon">mod</a>

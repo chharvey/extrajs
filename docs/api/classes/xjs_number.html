@@ -112,7 +112,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Number.class.ts#L64">Number.class.ts:64</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Number.class.ts#L75">Number.class.ts:75</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="xjs_number.html" class="tsd-signature-type">xjs_Number</a></h4>
@@ -126,39 +126,44 @@
 					<a name="asserttype" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> assert<wbr>Type</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">assert<wbr>Type<span class="tsd-signature-symbol">(</span>num<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"float"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"integer"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"natural"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"whole"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"negative"</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">assert<wbr>Type<span class="tsd-signature-symbol">(</span>num<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, type<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">"float"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"integer"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"natural"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"whole"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"finite"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"infinite"</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Number.class.ts#L52">Number.class.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Number.class.ts#L40">Number.class.ts:40</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Verify the type of number given, throwing if it does not match.</p>
 								</div>
-								<p>Given a (finite) number and a &quot;type&quot;, test to see if the number is of that type.
+								<p>Given a number and a &quot;type&quot;, test to see if the number is of that type.
 									Mainly used for parameter validation, when the type <code>number</code> is not specific enough.
 								The acceptable &quot;types&quot;, which are not mutually exclusive, follow:</p>
 								<ul>
-									<li><code>&#39;float&#39;</code> : the number is not an integer</li>
-									<li><code>&#39;integer&#39;</code> : the number is divisible by 1 (<code>num % 1 === 0</code>)</li>
-									<li><code>&#39;natural&#39;</code> : the number is a non-negative integer (either positive or 0)</li>
-									<li><code>&#39;whole&#39;</code> : the number is a positive integer</li>
-									<li><code>&#39;positive&#39;</code> : the number is strictly greater than 0</li>
-									<li><code>&#39;negative&#39;</code> : the number is strictly less than 0</li>
+									<li><code>&#39;integer&#39;</code>      : the number is divisible by 1 (<code>num % 1 === 0</code>)</li>
+									<li><code>&#39;natural&#39;</code>      : the number is a non-negative integer (either positive or 0)</li>
+									<li><code>&#39;whole&#39;</code>        : the number is a positive integer</li>
+									<li><code>&#39;float&#39;</code>        : the number is not an integer</li>
+									<li><code>&#39;positive&#39;</code>     : the number is strictly greater than 0</li>
+									<li><code>&#39;negative&#39;</code>     : the number is strictly less    than 0</li>
+									<li><code>&#39;non-positive&#39;</code> : the number is less    than or equal to 0</li>
+									<li><code>&#39;non-negative&#39;</code> : the number is greater than or equal to 0</li>
+									<li><code>&#39;finite&#39;</code>       : the number is not equal to <code>Infinity</code> or <code>-Infinity</code></li>
+									<li><code>&#39;infinite&#39;</code>     : the number is     equal to <code>Infinity</code> or <code>-Infinity</code></li>
+									<li>no type (<code>undefiend</code>): the number is not <code>NaN</code></li>
 								</ul>
-								<p>Note that if the given number does not match the given type,
-									then this method will throw an error, instead of returning <code>false</code>.
-								This is useful for parameter validation.</p>
+								<p>If the number matches the described type, this method returns <code>void</code> instead of <code>true</code>.
+									If the number does not match, this method throws an error instead of returning <code>false</code>.
+								This pattern is helpful where an error message is more descriptive than a boolean.</p>
 								<dl class="tsd-comment-tags">
 									<dt>throws</dt>
-									<dd><p>{RangeError} if the given arguemnt was not a finite number</p>
+									<dd><p>{AssertionError} if the number does not match the described type</p>
 									</dd>
 									<dt>throws</dt>
-									<dd><p>{RangeError} if the number does not match</p>
+									<dd><p>{RangeError} if the argument is <code>NaN</code></p>
 									</dd>
 								</dl>
 							</div>
@@ -171,14 +176,13 @@
 									</div>
 								</li>
 								<li>
-									<h5>type: <span class="tsd-signature-type">"float"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"integer"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"natural"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"whole"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"negative"</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> type: <span class="tsd-signature-type">"float"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"integer"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"natural"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"whole"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"finite"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"infinite"</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>one of the string literals listed above</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-							<p>does the number match the described type?</p>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -186,13 +190,13 @@
 					<a name="typeof" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> type<wbr>Of</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">type<wbr>Of<span class="tsd-signature-symbol">(</span>num<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">type<wbr>Of<span class="tsd-signature-symbol">(</span>num<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"integer"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"float"</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Number.class.ts#L21">Number.class.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Number.class.ts#L70">Number.class.ts:70</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -202,9 +206,9 @@
 								<p>If the number is finite, return one of the following strings:</p>
 								<ul>
 									<li><code>&#39;integer&#39;</code> : the number is an integer, that is, <code>num % 1 === 0</code></li>
-									<li><code>&#39;float&#39;</code>   : the number is not an integer
-									Else, throw a <code>RangeError</code> (the argument is of the correct type but does not qualify).</li>
+									<li><code>&#39;float&#39;</code>   : the number is not an integer</li>
 								</ul>
+								<p>Else, throw a <code>RangeError</code> (the argument is of the correct type but does not qualify).</p>
 								<dl class="tsd-comment-tags">
 									<dt>throws</dt>
 									<dd><p>{RangeError} if the given arguemnt was not a finite number</p>
@@ -220,7 +224,10 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">"integer"</span>
+								<span class="tsd-signature-symbol"> | </span>
+								<span class="tsd-signature-type">"float"</span>
+							</h4>
 							<p>one of the strings described above</p>
 						</li>
 					</ul>

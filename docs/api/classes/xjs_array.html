@@ -116,7 +116,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Array.class.ts#L156">Array.class.ts:156</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Array.class.ts#L143">Array.class.ts:143</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="xjs_array.html" class="tsd-signature-type">xjs_Array</a></h4>
@@ -136,12 +136,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Array.class.ts#L57">Array.class.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Array.class.ts#L83">Array.class.ts:83</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Deep clone an array, and return the result.</p>
+									<p>WARNING{EXPERIMENTAL}
+									Deep clone an array, and return the result.</p>
 								</div>
 								<p>Shortcut of <a href="xjs_object.html#clonedeep">xjs_Object.cloneDeep</a>, but for arrays.</p>
 							</div>
@@ -175,7 +176,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Array.class.ts#L92">Array.class.ts:92</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Array.class.ts#L38">Array.class.ts:38</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -189,8 +190,7 @@
 									In other words, if <code>&lt;a href=&quot;xjs_array.html#is&quot;&gt;xjs_Array.is&lt;/a&gt;(larger.slice(a,b), smaller)</code> (for some integers a and b),
 								then this method returns <code>true</code>.</p>
 								<p>Elements are compared via the provided comparator predicate.
-								If no predicate is provided, this method uses the default predicate:</p>
-								<pre><code class="language-js">(a, b) =&gt; a === b || <span class="hljs-built_in">Object</span>.is(a, b)</code></pre>
+								If no predicate is provided, this method uses the default predicate {@link xjs_Object._sameValueZero}.</p>
 								<pre><code class="language-js"><span class="hljs-string">'twofoursix'</span>.includes(<span class="hljs-string">'wofo'</span>)===<span class="hljs-literal">true</span>
 xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-string">'w'</span>,<span class="hljs-string">'o'</span>,<span class="hljs-number">4</span>,<span class="hljs-string">'o'</span>,<span class="hljs-string">'u'</span>,<span class="hljs-string">'r'</span>,<span class="hljs-number">6</span>,<span class="hljs-string">'i'</span>,<span class="hljs-string">'x'</span>], [<span class="hljs-string">'w'</span>,<span class="hljs-string">'o'</span>,<span class="hljs-number">4</span>,<span class="hljs-string">'o'</span>])===<span class="hljs-literal">true</span>
 xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-string">'w'</span>,<span class="hljs-string">'o'</span>,<span class="hljs-number">4</span>,<span class="hljs-string">'o'</span>,<span class="hljs-string">'u'</span>,<span class="hljs-string">'r'</span>,<span class="hljs-number">6</span>,<span class="hljs-string">'i'</span>,<span class="hljs-string">'x'</span>], [<span class="hljs-string">'o'</span>,<span class="hljs-string">'u'</span>])===<span class="hljs-literal">true</span>
@@ -224,7 +224,7 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> comparator: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;(x, y) &#x3D;&gt; x &#x3D;&#x3D;&#x3D; y || Object.is(x, y)</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> comparator: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>a predicate checking the “sameness” of corresponding elements of <code>larger</code> and <code>smaller</code></p>
 									</div>
@@ -252,7 +252,7 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-							<p>Is <code>smaller</code> a subarray of <code>larger</code>?</p>
+							<p>is <code>smaller</code> a subarray of <code>larger</code>?</p>
 						</li>
 					</ul>
 				</section>
@@ -266,12 +266,13 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Array.class.ts#L44">Array.class.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Array.class.ts#L69">Array.class.ts:69</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Deep freeze an array, and return the result.</p>
+									<p>WARNING{EXPERIMENTAL}
+									Deep freeze an array, and return the result.</p>
 								</div>
 								<p>Shortcut of <a href="xjs_object.html#freezedeep">xjs_Object.freezeDeep</a>, but for arrays.
 								<em>Note: This function is impure, modifying the given argument.</em></p>
@@ -306,12 +307,12 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Array.class.ts#L21">Array.class.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Array.class.ts#L56">Array.class.ts:56</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Test whether two arrays are “the same”.</p>
+									<p>Test whether two arrays have “the same” elements.</p>
 								</div>
 								<p>Shortcut of <a href="xjs_object.html#is">xjs_Object.is</a>, but for arrays.</p>
 							</div>
@@ -336,7 +337,7 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> comparator: <span class="tsd-signature-type">function</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> comparator: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>a predicate checking the “sameness” of corresponding elements of <code>a</code> and <code>b</code></p>
 									</div>
@@ -378,16 +379,17 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Array.class.ts#L148">Array.class.ts:148</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Array.class.ts#L135">Array.class.ts:135</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Make a copy of an array, and then remove duplicate entries.</p>
+									<p>WARNING{EXPERIMENTAL}
+									Make a copy of an array, and then remove duplicate entries.</p>
 								</div>
 								<p>&quot;Duplicate entries&quot; are entries that considered &quot;the same&quot; by
 									the provided comparator function, or if none is given,
-									<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is" class="external">Object.is</a>.
+									<a href="xjs_object.html#samevaluezero">xjs_Object.sameValueZero</a>.
 								Only duplicate entries are removed; the order of non-duplicates is preserved.</p>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -405,24 +407,24 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> comparator: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;Object.is</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> comparator: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>a function comparing elements in the array</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
 													<h4 class="tsd-parameters-title">Parameters</h4>
 													<ul class="tsd-parameters">
 														<li>
-															<h5>a: <span class="tsd-signature-type">T</span></h5>
+															<h5>x: <span class="tsd-signature-type">T</span></h5>
 														</li>
 														<li>
-															<h5>b: <span class="tsd-signature-type">T</span></h5>
+															<h5>y: <span class="tsd-signature-type">T</span></h5>
 														</li>
 													</ul>
 													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -447,13 +449,13 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Array.class.ts#L116">Array.class.ts:116</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Array.class.ts#L102">Array.class.ts:102</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<dl class="tsd-comment-tags">
 									<dt>deprecated</dt>
-									<dd><p>XXX{DEPRECATED}</p>
+									<dd><p>XXX{OBSOLETE}</p>
 									</dd>
 									<dt>summary</dt>
 									<dd><p>“Convert” an array, number, or string into an array. (Doesn’t really convert.)</p>

@@ -97,6 +97,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="xjs_object.html#freezedeep" class="tsd-kind-icon">freeze<wbr>Deep</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_object.html#instanceof" class="tsd-kind-icon">instance<wbr>Of</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="xjs_object.html#is" class="tsd-kind-icon">is</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_object.html#samevaluezero" class="tsd-kind-icon">same<wbr>Value<wbr>Zero</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="xjs_object.html#switch" class="tsd-kind-icon">switch</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_object.html#typeof" class="tsd-kind-icon">type<wbr>Of</a></li>
 							</ul>
@@ -116,7 +117,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Object.class.ts#L305">Object.class.ts:305</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Object.class.ts#L306">Object.class.ts:306</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="xjs_object.html" class="tsd-signature-type">xjs_Object</a></h4>
@@ -136,12 +137,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Object.class.ts#L293">Object.class.ts:293</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Object.class.ts#L294">Object.class.ts:294</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Deep clone an object, and return the result.</p>
+									<p>WARNING{EXPERIMENTAL}
+									Deep clone an object, and return the result.</p>
 								</div>
 								<p>If an array or object is passed,
 									This method is <strong>recursively</strong> called, cloning properties and sub-properties of the given parameter.
@@ -216,12 +218,13 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Object.class.ts#L228">Object.class.ts:228</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Object.class.ts#L228">Object.class.ts:228</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Deep freeze an object, and return the result.</p>
+									<p>WARNING{EXPERIMENTAL}
+									Deep freeze an object, and return the result.</p>
 								</div>
 								<p><em>Note: This function is impure, modifying the given argument.</em>
 									If an array or object is passed,
@@ -261,12 +264,13 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Object.class.ts#L82">Object.class.ts:82</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Object.class.ts#L209">Object.class.ts:209</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Return the name of an object’s constructing class or function.</p>
+									<p>WARNING{EXPERIMENTAL}
+									Return the name of an object’s constructing class or function.</p>
 								</div>
 								<p>This method reveals the most specific class that the native <code>instanceof</code> operator would reveal.
 									This method can be passed either complex values (objects, arrays, functions) or primitive values.
@@ -302,29 +306,28 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Object.class.ts#L192">Object.class.ts:192</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Object.class.ts#L55">Object.class.ts:55</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Test whether two things are “the same”.</p>
+									<p>Test whether two things have “the same” properties.</p>
 								</div>
-								<p>This function tests the equality of two arguemnts, using the provided comparator predicate.
-								If both arguments are arrays, it is faster and more robust to use <a href="xjs_array.html#is">xjs_Array.is</a>.</p>
-								<p>If no predicate is provided, this method uses the default predicate:</p>
-								<pre><code class="language-js">(a, b) =&gt; a === b || <span class="hljs-built_in">Object</span>.is(a, b)</code></pre>
-								<p>Assuming the default predicate is used, this function is less strict than
-									<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is" class="external">Object.is</a>,
-								only in that <code>xjs.Object.is(0, -0)</code> will return <code>true</code>.</p>
-								<p><strong>IMPORTANT: If no predicate is provided, this method will recursively check further levels
-										of depth, testing not only the given arguments and those arguments’ properties, but also
-										sub-properties of <em>those</em> proerties, and so on.
-										<em>WARNING: this is deprecated behavior, and it will be removed in v0.14+.</em>
-										Instead, for depth &gt; 1, you should use Node.js’s native
-										<a href="https://nodejs.org/dist/latest/docs/api/assert.html#assert_assert_deepstrictequal_actual_expected_message" class="external">assert.deepStrictEqual</a>.
-										Therefore I strongly suggest that you <em>always</em> provide 3 arguments when calling this method.
-								After v0.14+, if you still want depth &gt; 1, you can provide another deep-equal function as the 3rd argument.</strong></p>
-								<p>This method is based on the <strong>Liskov Substitution Principle</strong>.
+								<p>This function tests the properties of two arguemnts, using the provided comparator predicate.
+									Arguments must be of the same type.
+									If both are primitives, this method checks
+									{@link xjs_Object.<em>sameValueZero|Same-Value-Zero Equality}.
+										If both are functions, this method throws an TypeError — functions are not supported at this time.
+									If both arguments are arrays, it is faster and more robust to use &lt;a href=&quot;xjs</em>array.html#is&quot;&gt;xjs_Array.is</a>.
+									If both are objects or arrays, this method checks the properties (or elements) of each,
+								comparing them with the provided comparator predicate.</p>
+								<p>If no predicate is provided, this method uses the default predicate {@link xjs_Object._sameValueZero}.</p>
+								<p>Note: This method does not deep-check equality within the objects’ properties (or arrays’ elements).
+									To check deeper, I suggest using Node.js’s native
+									<a href="https://nodejs.org/dist/latest/docs/api/assert.html#assert_assert_deepstrictequal_actual_expected_message" class="external">assert.deepStrictEqual</a>.
+								You may also specify this behavior in your custom comparator.</p>
+								<p>This method is based on the
+									<a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle" class="external">Liskov Substitution Principle</a>.
 									Values that are considered “the same” should semantically mean they are “replaceable”
 								with one another. This is demonstrated rigorously below.</p>
 								<p>Let us define a “replaceability” relation <code>R</code> as thus: a value <code>x</code> can be replaced with a value <code>y</code>
@@ -359,7 +362,7 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> comparator: <span class="tsd-signature-type">function</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> comparator: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>a predicate checking the “sameness” of corresponding properties of <code>a</code> and <code>b</code></p>
 									</div>
@@ -391,6 +394,52 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="samevaluezero" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> same<wbr>Value<wbr>Zero</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">same<wbr>Value<wbr>Zero<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Object.class.ts#L77">Object.class.ts:77</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Test whether two things are equal vis-à-vis the Same-Value-Zero algorithm.</p>
+								</div>
+								<p>This method is less strict than
+									<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is" class="external">Object.is</a>,
+								only in that <code>.sameValueZero(0, -0)</code> will return <code>true</code>.</p>
+								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#Same-value-zero_equality">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#Same-value-zero_equality</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>a: <span class="tsd-signature-type">unknown</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the first  thing</p>
+									</div>
+								</li>
+								<li>
+									<h5>b: <span class="tsd-signature-type">unknown</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the second thing</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+							<p>exactly <code>a === b || Object.is(a, b)</code></p>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
 					<a name="switch" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> switch</h3>
@@ -401,7 +450,7 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Object.class.ts#L143">Object.class.ts:143</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Object.class.ts#L137">Object.class.ts:137</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -495,7 +544,7 @@ call_me(<span class="hljs-number">1</span>) <span class="hljs-comment">// return
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c677167/src/class/Object.class.ts#L51">Object.class.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/cf70af3/src/class/Object.class.ts#L177">Object.class.ts:177</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -583,6 +632,9 @@ xjs.typeOf(y);  <span class="hljs-comment">// Uncaught ReferenceError: y is not 
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
 								<a href="xjs_object.html#is" class="tsd-kind-icon">is</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="xjs_object.html#samevaluezero" class="tsd-kind-icon">same<wbr>Value<wbr>Zero</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
 								<a href="xjs_object.html#switch" class="tsd-kind-icon">switch</a>
