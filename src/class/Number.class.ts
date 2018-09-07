@@ -1,3 +1,5 @@
+import * as assert from 'assert'
+
 import xjs_Object from './Object.class'
 
 
@@ -8,60 +10,69 @@ import xjs_Object from './Object.class'
  */
 export default class xjs_Number {
   /**
-   * Specify the type of number given.
-   *
-   * If the number is finite, return one of the following strings:
-   * - `'integer'` : the number is an integer, that is, `num % 1 === 0`
-   * - `'float'`   : the number is not an integer
-   * Else, throw a `RangeError` (the argument is of the correct type but does not qualify).
-   * @param   num the given number
-   * @returns one of the strings described above
-   * @throws  {RangeError} if the given arguemnt was not a finite number
-   */
-  static typeOf(num: number): string {
-    if (['NaN', 'infinite'].includes(xjs_Object.typeOf(num))) {
-      throw new RangeError('Argument must be a finite number.')
-    }
-    return (Number.isInteger(num)) ? 'integer' : 'float'
-  }
-
-  /**
    * Verify the type of number given, throwing if it does not match.
    *
-   * Given a (finite) number and a "type", test to see if the number is of that type.
+   * Given a number and a "type", test to see if the number is of that type.
    * Mainly used for parameter validation, when the type `number` is not specific enough.
    * The acceptable "types", which are not mutually exclusive, follow:
    *
-   * - `'float'   ` : the number is not an integer
-   * - `'integer' ` : the number is divisible by 1 (`num % 1 === 0`)
-   * - `'natural' ` : the number is a non-negative integer (either positive or 0)
-   * - `'whole'   ` : the number is a positive integer
-   * - `'positive'` : the number is strictly greater than 0
-   * - `'negative'` : the number is strictly less than 0
+   * - `'integer'`      : the number is divisible by 1 (`num % 1 === 0`)
+   * - `'natural'`      : the number is a non-negative integer (either positive or 0)
+   * - `'whole'`        : the number is a positive integer
+   * - `'float'`        : the number is not an integer
+   * - `'positive'`     : the number is strictly greater than 0
+   * - `'negative'`     : the number is strictly less    than 0
+   * - `'non-positive'` : the number is less    than or equal to 0
+   * - `'non-negative'` : the number is greater than or equal to 0
+   * - `'finite'`       : the number is not equal to `Infinity` or `-Infinity`
+   * - `'infinite'`     : the number is     equal to `Infinity` or `-Infinity`
+   * - no type (`undefiend`): the number is not `NaN`
    *
-   * Note that if the given number does not match the given type,
-   * then this method will throw an error, instead of returning `false`.
-   * This is useful for parameter validation.
+   * If the number matches the described type, this method returns `void` instead of `true`.
+   * If the number does not match, this method throws an error instead of returning `false`.
+   * This pattern is helpful where an error message is more descriptive than a boolean.
    *
    * @param   num the number to test
    * @param   type one of the string literals listed above
-   * @returns does the number match the described type?
-   * @throws  {RangeError} if the given arguemnt was not a finite number
-   * @throws  {RangeError} if the number does not match
+   * @throws  {AssertionError} if the number does not match the described type
+   * @throws  {RangeError} if the argument is `NaN`
    */
-  static assertType(num: number, type: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'): boolean {
-		xjs_Number.typeOf(num) // re-throw
-		const returned = xjs_Object.switch<[boolean, string]>(type, {
-			'float'   : (n: number) => [!Number.isInteger(n)          , `${n} may not be an integer.`         ],
-			'integer' : (n: number) => [ Number.isInteger(n)          , `${n} must be an integer.`            ],
-			'natural' : (n: number) => [ Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`],
-			'whole'   : (n: number) => [ Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    ],
-			'positive': (n: number) => [0 < n                         , `${n} must be a positive number.`     ],
-			'negative': (n: number) => [n < 0                         , `${n} must be a negative number.`     ],
+	static assertType(num: number, type?: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'|'non-positive'|'non-negative'|'finite'|'infinite'): void {
+		if (xjs_Object.typeOf(num) === 'NaN') throw new RangeError('Unacceptable argument `NaN`.')
+		if (!type) return;
+		return xjs_Object.switch<void>(type, {
+			'integer'     : (n: number) => assert( Number.isInteger(n)          , `${n} must be an integer.`            ),
+			'natural'     : (n: number) => assert( Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`),
+			'whole'       : (n: number) => assert( Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    ),
+			'float'       : (n: number) => assert(!Number.isInteger(n)          , `${n} must not be an integer.`        ),
+			'positive'    : (n: number) => assert(0 < n                         , `${n} must be a positive number.`     ),
+			'negative'    : (n: number) => assert(n < 0                         , `${n} must be a negative number.`     ),
+			'non-positive': (n: number) => assert(n <= 0                        , `${n} must not be a positive number.` ),
+			'non-negative': (n: number) => assert(0 <= n                        , `${n} must not be a negative number.` ),
+			'finite'      : (n: number) => assert( Number.isFinite(n)           , `${n} must be a finite number.`       ),
+			'infinite'    : (n: number) => assert(!Number.isFinite(n)           , `${n} must be an infinite number.`    ),
 		})(num)
-    if (returned[0]) return true
-    throw new RangeError(returned[1])
-  }
+	}
+
+	/**
+	 * Specify the type of number given.
+	 *
+	 * If the number is finite, return one of the following strings:
+	 *
+	 * - `'integer'` : the number is an integer, that is, `num % 1 === 0`
+	 * - `'float'`   : the number is not an integer
+	 *
+	 * Else, throw a `RangeError` (the argument is of the correct type but does not qualify).
+	 * @param   num the given number
+	 * @returns one of the strings described above
+	 * @throws  {RangeError} if the given arguemnt was not a finite number
+	 */
+	static typeOf(num: number): 'integer'|'float' {
+		if (['NaN', 'infinite'].includes(xjs_Object.typeOf(num))) {
+			throw new RangeError('Argument must be a finite number.')
+		}
+		return (Number.isInteger(num)) ? 'integer' : 'float'
+	}
 
 
   private constructor() {}
