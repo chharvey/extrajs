@@ -1,7 +1,7 @@
 console.warn(`
   (${__filename})
   WARNING: \`Tree.class\` is OBSOLETE!
-  This class will be removed on Version 0.14+.
+  This class will be removed on Version 0.15+.
 `)
 const xjs = require('../index.js')
 const Mapp = require('./Mapp.class.js')
