@@ -57,6 +57,18 @@ export default class xjs_Array {
     return a === b || (a.length === b.length) && a.every((el, i) => comparator(el, b[i]))
   }
 
+	/**
+	 * Look at the top of a stack, without affecting the stack.
+	 * @param   arr the stack to peek
+	 * @returns the last entry of the array, or `void` if the array is empty
+	 * @throws  {RangeError} if the array is empty
+	 */
+	static peek<T>(arr: T[]): T {
+		if (!arr.length) throw new RangeError('Cannot peek an empty array.')
+		return arr[arr.length - 1]
+		// return arr.slice(-1)[0]
+	}
+
   /**
    * WARNING{EXPERIMENTAL}
    * Deep freeze an array, and return the result.
