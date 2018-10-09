@@ -1,4 +1,5 @@
 import xjs_Number from './Number.class'
+import Integer from './Integer.class'
 
 
 /**
@@ -40,8 +41,12 @@ export default class xjs_Math {
 	 * @param   max the upper bound
 	 * @returns exactly `Math.min(Math.max(min, x), max)`
 	 */
-	static clamp(min: number, x: number, max: number): number {
-		return (min <= max) ? Math.min(Math.max(min, x), max) : xjs_Math.clamp(max, x, min)
+	static clamp(min: Integer, x: Integer, max: Integer): Integer;
+	static clamp(min: number, x: number, max: number): number;
+	static clamp(min: any, x: any, max: any): any {
+		return (x instanceof Integer) ?
+			new Integer(xjs_Math.clamp(min.valueOf(), x.valueOf(), max.valueOf())) :
+			(min <= max) ? Math.min(Math.max(min, x), max) : xjs_Math.clamp(max, x, min)
 	}
 
 	/**

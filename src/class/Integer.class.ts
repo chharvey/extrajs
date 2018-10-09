@@ -1,4 +1,3 @@
-import xjs_Math from './Math.class'
 import xjs_Number from './Number.class'
 
 
@@ -43,16 +42,6 @@ export default class Integer extends Number {
 	/** The multiplicative absorber of the group of Integers. */
 	static readonly ZERO: Integer = new Integer()
 
-	/**
-	 * Return the argument, clamped between two bounds.
-	 * @param   min the lower bound
-	 * @param   x the value to clamp between the bounds
-	 * @param   max the upper bound
-	 * @returns informally, `{@link xjs.Math.clamp}(min, x, max)`
-	 */
-	static clamp(min: Integer, x: Integer, max: Integer): Integer {
-		return new Integer(xjs_Math.clamp(min.valueOf(), x.valueOf(), max.valueOf()))
-	}
 	/**
 	 * Return the maximum of two or more Integers.
 	 * @param   ints two or more Integers to compare
