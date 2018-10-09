@@ -18,6 +18,7 @@ export default class xjs_Math {
 	static abs(num: any): any {
 		return (num instanceof Integer) ?
 			new Integer(Math.abs(num.valueOf())) : // (num.lessThan(Integer.ZERO)) ? num.negate() : num
+			xjs_Number.assertType(num),
 			Math.abs(num)
 	}
 
@@ -37,8 +38,9 @@ export default class xjs_Math {
 	 * @throws  {RangeError} if an argument is `NaN`, or if the weight is not between 0 and 1
 	 */
 	static average(x: number, y: number, w = 0.5): number {
-		;[x, y].forEach((n) => xjs_Number.assertType(n, 'finite')) // NB re-throw
 		if (w < 0 || 1 < w) throw new RangeError(`${w} must be between 0 and 1.`)
+		xjs_Number.assertType(x, 'finite')
+		xjs_Number.assertType(y, 'finite')
 		return (x * (1-w)) + (y * w)
 	}
 
@@ -60,6 +62,9 @@ export default class xjs_Math {
 	static clamp(min: any, x: any, max: any): any {
 		return (x instanceof Integer) ?
 			new Integer(xjs_Math.clamp(min.valueOf(), x.valueOf(), max.valueOf())) :
+			xjs_Number.assertType(min),
+			xjs_Number.assertType(x  ),
+			xjs_Number.assertType(max),
 			(min <= max) ? Math.min(Math.max(min, x), max) : xjs_Math.clamp(max, x, min)
 	}
 
@@ -73,6 +78,7 @@ export default class xjs_Math {
 	static max(...nums: any[]): any {
 		return (nums[0] instanceof Integer) ?
 			new Integer(Math.max(...nums.map((i) => i.valueOf()))) :
+			nums.forEach((n) => xjs_Number.assertType(n)),
 			Math.max(...nums)
 	}
 
@@ -137,6 +143,7 @@ export default class xjs_Math {
 	static min(...nums: any[]): any {
 		return (nums[0] instanceof Integer) ?
 			new Integer(Math.min(...nums.map((i) => i.valueOf()))) :
+			nums.forEach((n) => xjs_Number.assertType(n)),
 			Math.min(...nums)
 	}
 
@@ -152,6 +159,7 @@ export default class xjs_Math {
 	 * @throws  {Error} if `n` is not a positive integer
 	 */
 	static mod(x: number, n: number): number {
+		xjs_Number.assertType(x, 'finite') // NB re-throw
 		xjs_Number.assertType(n, 'whole') // NB re-throw
 		return ((x % n) + n) % n
 	}
@@ -181,6 +189,7 @@ export default class xjs_Math {
    * @throws  {Error} if `n` is not a non-negative integer
    */
   static tetrate(x: number, n: number): number {
+    xjs_Number.assertType(x, 'finite') // NB re-throw
     xjs_Number.assertType(n, 'natural') // NB re-throw
     return (n === 0) ? 1 : x ** xjs_Math.tetrate(x, n-1)
   }

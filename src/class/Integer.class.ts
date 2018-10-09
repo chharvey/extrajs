@@ -48,8 +48,9 @@ export default class Integer extends Number {
 	 * @param   z the numeric value of this Integer
 	 */
 	constructor(z: Integer|number = 0) {
-		if (z instanceof Integer) z = z.valueOf()
-		super((xjs_Number.assertType(z, 'finite'), Math.floor(z)))
+		z = z.valueOf()
+		xjs_Number.assertType(z, 'finite')
+		super(Math.trunc(z))
 	}
 
 	/**
