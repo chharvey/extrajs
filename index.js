@@ -5,4 +5,6 @@ module.exports = {
   Date   : require('./dist/class/Date.class.js').default,
   String : require('./dist/class/String.class.js').default,
   Array  : require('./dist/class/Array.class.js').default,
+
+	Integer: require('./dist/class/Integer.class.js').default,
 }
