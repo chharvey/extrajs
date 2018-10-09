@@ -8,6 +8,20 @@ import Integer from './Integer.class'
  */
 export default class xjs_Math {
 	/**
+	 * Return the absolute value of a number.
+	 *
+	 * @param   num the number
+	 * @returns exactly `(num < 0) ? -num : num`
+	 */
+	static abs(num: Integer): Integer;
+	static abs(num: number): number;
+	static abs(num: any): any {
+		return (num instanceof Integer) ?
+			new Integer(Math.abs(num.valueOf())) : // (num.lessThan(Integer.ZERO)) ? num.negate() : num
+			Math.abs(num)
+	}
+
+	/**
 	 * Average two numbers, with a weight favoring the 2nd number.
 	 *
 	 * The result will always be between the two numbers.
