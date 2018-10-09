@@ -42,23 +42,6 @@ export default class Integer extends Number {
 	/** The multiplicative absorber of the group of Integers. */
 	static readonly ZERO: Integer = new Integer()
 
-	/**
-	 * Return the maximum of two or more Integers.
-	 * @param   ints two or more Integers to compare
-	 * @returns the greatest of all the arguments
-	 */
-	static max(...ints: Integer[]): Integer {
-		return new Integer(Math.max(...ints.map((i) => i.valueOf())))
-	}
-	/**
-	 * Return the minimum of two or more Integers.
-	 * @param   ints two or more Integers to compare
-	 * @returns the least of all the arguments
-	 */
-	static min(...ints: Integer[]): Integer {
-		return new Integer(Math.min(...ints.map((i) => i.valueOf())))
-	}
-
 
 	/**
 	 * Construct a new Integer object.

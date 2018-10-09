@@ -50,6 +50,19 @@ export default class xjs_Math {
 	}
 
 	/**
+	 * Return the maximum of two or more numbers.
+	 * @param   nums two or more numbers to compare
+	 * @returns the greatest of all the arguments
+	 */
+	static max(...nums: Integer[]): Integer;
+	static max(...nums: number[]): number;
+	static max(...nums: any[]): any {
+		return (nums[0] instanceof Integer) ?
+			new Integer(Math.max(...nums.map((i) => i.valueOf()))) :
+			Math.max(...nums)
+	}
+
+	/**
 	 * Return the arithmetic mean of a set of numbers.
 	 *
 	 * ```js
@@ -98,6 +111,19 @@ export default class xjs_Math {
 	static meanHarmonic(nums: number[]): number {
 		nums.forEach((n) => xjs_Number.assertType(n, 'finite')) // NB re-throw
 		return 1 / xjs_Math.meanArithmetic(nums.map((x) => 1 / x))
+	}
+
+	/**
+	 * Return the minimum of two or more numbers.
+	 * @param   nums two or more numbers to compare
+	 * @returns the least of all the arguments
+	 */
+	static min(...nums: Integer[]): Integer;
+	static min(...nums: number[]): number;
+	static min(...nums: any[]): any {
+		return (nums[0] instanceof Integer) ?
+			new Integer(Math.min(...nums.map((i) => i.valueOf()))) :
+			Math.min(...nums)
 	}
 
 	/**
