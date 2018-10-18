@@ -8,5 +8,3 @@ export { default as Math   } from './src/class/Math.class'
 export { default as Date   } from './src/class/Date.class'
 export { default as String } from './src/class/String.class'
 export { default as Array  } from './src/class/Array.class'
-
-export { default as Integer } from './src/class/Integer.class'

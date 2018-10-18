@@ -1,5 +1,5 @@
 import xjs_Number from './Number.class'
-import Integer from './Integer.class'
+import {Integer} from 'number-types'
 
 
 /**
