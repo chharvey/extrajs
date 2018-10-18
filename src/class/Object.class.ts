@@ -1,6 +1,3 @@
-import xjs_Array from './Array.class'
-
-
 /**
  * A helper interface for {@link xjs_Object.switch}.
  * @param args a list of arguments to be passed to the function
