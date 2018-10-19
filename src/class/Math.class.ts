@@ -1,5 +1,4 @@
 import xjs_Number from './Number.class'
-import {Integer} from 'number-types'
 
 
 /**
@@ -7,21 +6,6 @@ import {Integer} from 'number-types'
  * @description Does not extend the native Math class.
  */
 export default class xjs_Math {
-	/**
-	 * Return the absolute value of a number.
-	 *
-	 * @param   num the number
-	 * @returns exactly `(num < 0) ? -num : num`
-	 */
-	static abs(num: Integer): Integer;
-	static abs(num: number): number;
-	static abs(num: any): any {
-		return (num instanceof Integer) ?
-			new Integer(Math.abs(num.valueOf())) : // (num.lessThan(Integer.ZERO)) ? num.negate() : num
-			xjs_Number.assertType(num),
-			Math.abs(num)
-	}
-
 	/**
 	 * Average two numbers, with a weight favoring the 2nd number.
 	 *
@@ -51,35 +35,17 @@ export default class xjs_Math {
 	 * it returns `min` iff the argument is strictly less than `min`;
 	 * and `max` iff the argument is strictly greater than `max`.
 	 * If `min === max` then this method returns that value.
-	 * If `min >= max` then this method switches the bounds.
+	 * If `min > max` then this method switches the bounds.
 	 * @param   min the lower bound
 	 * @param   x the value to clamp between the bounds
 	 * @param   max the upper bound
 	 * @returns exactly `Math.min(Math.max(min, x), max)`
 	 */
-	static clamp(min: Integer, x: Integer, max: Integer): Integer;
-	static clamp(min: number, x: number, max: number): number;
-	static clamp(min: any, x: any, max: any): any {
-		return (x instanceof Integer) ?
-			new Integer(xjs_Math.clamp(min.valueOf(), x.valueOf(), max.valueOf())) :
-			xjs_Number.assertType(min),
-			xjs_Number.assertType(x  ),
-			xjs_Number.assertType(max),
-			(min <= max) ? Math.min(Math.max(min, x), max) : xjs_Math.clamp(max, x, min)
-	}
-
-	/**
-	 * Return the maximum of two or more numbers.
-	 * @param   nums two or more numbers to compare
-	 * @returns the greatest of all the arguments
-	 */
-	static max(...nums: Integer[]): Integer;
-	static max(...nums: number[]): number;
-	static max(...nums: any[]): any {
-		return (nums[0] instanceof Integer) ?
-			new Integer(Math.max(...nums.map((i) => i.valueOf()))) :
-			nums.forEach((n) => xjs_Number.assertType(n)),
-			Math.max(...nums)
+	static clamp(min: number, x: number, max: number): number {
+		xjs_Number.assertType(min)
+		xjs_Number.assertType(x  )
+		xjs_Number.assertType(max)
+		return (min <= max) ? Math.min(Math.max(min, x), max) : xjs_Math.clamp(max, x, min)
 	}
 
 	/**
@@ -134,20 +100,6 @@ export default class xjs_Math {
 	}
 
 	/**
-	 * Return the minimum of two or more numbers.
-	 * @param   nums two or more numbers to compare
-	 * @returns the least of all the arguments
-	 */
-	static min(...nums: Integer[]): Integer;
-	static min(...nums: number[]): number;
-	static min(...nums: any[]): any {
-		return (nums[0] instanceof Integer) ?
-			new Integer(Math.min(...nums.map((i) => i.valueOf()))) :
-			nums.forEach((n) => xjs_Number.assertType(n)),
-			Math.min(...nums)
-	}
-
-	/**
 	 * Return the remainder of Euclidean division of `x` by `n`.
 	 *
 	 * This method returns `x % n` when `x` is positive,
@@ -174,13 +126,13 @@ export default class xjs_Math {
    * If there were a native JavaScript operator for tetration,
    * it might be a triple-asterisk: `5 *** 3`.
    *
-   * Currently, there is only support for `n` being a non-negagive integer.
+   * Currently, there is only support for non-negative integer hyperexponents.
    * Negative numbers and non-integers are not yet allowed.
    *
    * ```js
-   * tetrateLeft(5, 3) // returns 5 ** 5 ** 5 // equal to 5 ** (5 ** 5)
-   * tetrateLeft(5, 1) // returns 5
-   * tetrateLeft(5, 0) // returns 1
+   * tetrate(5, 3) // returns 5 ** 5 ** 5 // equal to 5 ** (5 ** 5)
+   * tetrate(5, 1) // returns 5
+   * tetrate(5, 0) // returns 1
    * ```
    *
    * @param   x the root, any number
