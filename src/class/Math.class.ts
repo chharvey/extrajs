@@ -22,10 +22,11 @@ export default class xjs_Math {
 	 * @throws  {RangeError} if an argument is `NaN`, or if the weight is not between 0 and 1
 	 */
 	static average(x: number, y: number, w = 0.5): number {
-		if (w < 0 || 1 < w) throw new RangeError(`${w} must be between 0 and 1.`)
 		xjs_Number.assertType(x, 'finite')
 		xjs_Number.assertType(y, 'finite')
-		return (x * (1-w)) + (y * w)
+		xjs_Number.assertType(w)
+		if (w < 0 || 1 < w) throw new RangeError(`${w} must be between 0 and 1.`)
+		return (x * (1 - w)) + (y * w)
 	}
 
 	/**
@@ -111,8 +112,8 @@ export default class xjs_Math {
 	 * @throws  {Error} if `n` is not a positive integer
 	 */
 	static mod(x: number, n: number): number {
-		xjs_Number.assertType(x, 'finite') // NB re-throw
-		xjs_Number.assertType(n, 'whole') // NB re-throw
+		xjs_Number.assertType(x, 'finite')
+		xjs_Number.assertType(n, 'whole')
 		return ((x % n) + n) % n
 	}
 
@@ -141,9 +142,9 @@ export default class xjs_Math {
    * @throws  {Error} if `n` is not a non-negative integer
    */
   static tetrate(x: number, n: number): number {
-    xjs_Number.assertType(x, 'finite') // NB re-throw
-    xjs_Number.assertType(n, 'natural') // NB re-throw
-    return (n === 0) ? 1 : x ** xjs_Math.tetrate(x, n-1)
+    xjs_Number.assertType(x, 'finite')
+    xjs_Number.assertType(n, 'natural')
+    return (n === 0) ? 1 : x ** xjs_Math.tetrate(x, n - 1)
   }
 
 
