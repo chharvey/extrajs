@@ -7,6 +7,24 @@ import xjs_Number from './Number.class'
  */
 export default class xjs_Math {
 	/**
+	 * Test whether two numbers are approximately equal: closer together than some given interval of refinement.
+	 *
+	 * If no interval is given,
+	 * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/EPSILON|Number.EPSILON}
+	 * is used.
+	 * @param   x a number to compare
+	 * @param   y a number to compare
+	 * @param   epsilon the interval of refinement
+	 * @returns are `x` and `y` within `epsilon` distance apart?
+	 */
+	static approx(x: number, y: number, epsilon: number = Number.EPSILON): boolean {
+		xjs_Number.assertType(x)
+		xjs_Number.assertType(y)
+		xjs_Number.assertType(epsilon)
+		return Math.abs(x - y) < epsilon
+	}
+
+	/**
 	 * Average two numbers, with a weight favoring the 2nd number.
 	 *
 	 * The result will always be between the two numbers.
