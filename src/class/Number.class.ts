@@ -1,5 +1,6 @@
 import * as assert from 'assert'
 
+import NaNError from './NaNError.class'
 import xjs_Object from './Object.class'
 
 
@@ -35,10 +36,10 @@ export default class xjs_Number {
    * @param   num the number to test
    * @param   type one of the string literals listed above
    * @throws  {AssertionError} if the number does not match the described type
-   * @throws  {RangeError} if the argument is `NaN`
+   * @throws  {NaNError} if the argument is `NaN`
    */
 	static assertType(num: number, type?: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'|'non-positive'|'non-negative'|'finite'|'infinite'): void {
-		if (xjs_Object.typeOf(num) === 'NaN') throw new RangeError('Unacceptable argument `NaN`.')
+		if (Number.isNaN(num)) throw new NaNError()
 		if (!type) return;
 		return xjs_Object.switch<void>(type, {
 			'integer'     : (n: number) => assert( Number.isInteger(n)          , `${n} must be an integer.`            ),
