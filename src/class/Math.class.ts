@@ -7,6 +7,24 @@ import xjs_Number from './Number.class'
  */
 export default class xjs_Math {
 	/**
+	 * Test whether two numbers are approximately equal: closer together than some given interval of refinement.
+	 *
+	 * If no interval is given,
+	 * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/EPSILON|Number.EPSILON}
+	 * is used.
+	 * @param   x a number to compare
+	 * @param   y a number to compare
+	 * @param   epsilon the interval of refinement
+	 * @returns are `x` and `y` within `epsilon` distance apart?
+	 */
+	static approx(x: number, y: number, epsilon: number = Number.EPSILON): boolean {
+		xjs_Number.assertType(x)
+		xjs_Number.assertType(y)
+		xjs_Number.assertType(epsilon)
+		return Math.abs(x - y) < epsilon
+	}
+
+	/**
 	 * Average two numbers, with a weight favoring the 2nd number.
 	 *
 	 * The result will always be between the two numbers.
@@ -22,9 +40,11 @@ export default class xjs_Math {
 	 * @throws  {RangeError} if an argument is `NaN`, or if the weight is not between 0 and 1
 	 */
 	static average(x: number, y: number, w = 0.5): number {
-		;[x, y].forEach((n) => xjs_Number.assertType(n, 'finite')) // NB re-throw
+		xjs_Number.assertType(x, 'finite')
+		xjs_Number.assertType(y, 'finite')
+		xjs_Number.assertType(w)
 		if (w < 0 || 1 < w) throw new RangeError(`${w} must be between 0 and 1.`)
-		return (x * (1-w)) + (y * w)
+		return (x * (1 - w)) + (y * w)
 	}
 
 	/**
@@ -34,13 +54,16 @@ export default class xjs_Math {
 	 * it returns `min` iff the argument is strictly less than `min`;
 	 * and `max` iff the argument is strictly greater than `max`.
 	 * If `min === max` then this method returns that value.
-	 * If `min >= max` then this method switches the bounds.
+	 * If `min > max` then this method switches the bounds.
 	 * @param   min the lower bound
 	 * @param   x the value to clamp between the bounds
 	 * @param   max the upper bound
 	 * @returns exactly `Math.min(Math.max(min, x), max)`
 	 */
 	static clamp(min: number, x: number, max: number): number {
+		xjs_Number.assertType(min)
+		xjs_Number.assertType(x  )
+		xjs_Number.assertType(max)
 		return (min <= max) ? Math.min(Math.max(min, x), max) : xjs_Math.clamp(max, x, min)
 	}
 
@@ -107,7 +130,8 @@ export default class xjs_Math {
 	 * @throws  {Error} if `n` is not a positive integer
 	 */
 	static mod(x: number, n: number): number {
-		xjs_Number.assertType(n, 'whole') // NB re-throw
+		xjs_Number.assertType(x, 'finite')
+		xjs_Number.assertType(n, 'whole')
 		return ((x % n) + n) % n
 	}
 
@@ -121,13 +145,13 @@ export default class xjs_Math {
    * If there were a native JavaScript operator for tetration,
    * it might be a triple-asterisk: `5 *** 3`.
    *
-   * Currently, there is only support for `n` being a non-negagive integer.
+   * Currently, there is only support for non-negative integer hyperexponents.
    * Negative numbers and non-integers are not yet allowed.
    *
    * ```js
-   * tetrateLeft(5, 3) // returns 5 ** 5 ** 5 // equal to 5 ** (5 ** 5)
-   * tetrateLeft(5, 1) // returns 5
-   * tetrateLeft(5, 0) // returns 1
+   * tetrate(5, 3) // returns 5 ** 5 ** 5 // equal to 5 ** (5 ** 5)
+   * tetrate(5, 1) // returns 5
+   * tetrate(5, 0) // returns 1
    * ```
    *
    * @param   x the root, any number
@@ -136,8 +160,9 @@ export default class xjs_Math {
    * @throws  {Error} if `n` is not a non-negative integer
    */
   static tetrate(x: number, n: number): number {
-    xjs_Number.assertType(n, 'natural') // NB re-throw
-    return (n === 0) ? 1 : x ** xjs_Math.tetrate(x, n-1)
+    xjs_Number.assertType(x, 'finite')
+    xjs_Number.assertType(n, 'natural')
+    return (n === 0) ? 1 : x ** xjs_Math.tetrate(x, n - 1)
   }
 
 
