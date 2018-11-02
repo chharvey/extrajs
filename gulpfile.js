@@ -4,7 +4,7 @@ const typescript = require('gulp-typescript')
 // require('typedoc')    // DO NOT REMOVE … peerDependency of `gulp-typedoc`
 // require('typescript') // DO NOT REMOVE … peerDependency of `gulp-typescript`
 
-const tsconfig      = require('./config/tsconfig.json')
+const tsconfig      = require('./tsconfig.json')
 const typedocconfig = require('./config/typedoc.json')
 
 gulp.task('dist', async function () {

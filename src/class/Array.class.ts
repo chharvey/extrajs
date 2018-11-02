@@ -57,6 +57,18 @@ export default class xjs_Array {
     return a === b || (a.length === b.length) && a.every((el, i) => comparator(el, b[i]))
   }
 
+	/**
+	 * Look at the top of a stack, without affecting the stack.
+	 * @param   arr the stack to peek
+	 * @returns the last entry of the array, if the array is nonempty
+	 * @throws  {RangeError} if the array is empty
+	 */
+	static peek<T>(arr: T[]): T {
+		if (!arr.length) throw new RangeError('Cannot peek an empty array.')
+		return arr[arr.length - 1]
+		// return arr.slice(-1)[0]
+	}
+
   /**
    * WARNING{EXPERIMENTAL}
    * Deep freeze an array, and return the result.
@@ -82,42 +94,6 @@ export default class xjs_Array {
    */
   static cloneDeep<T>(arr: T[]): T[] {
     return arr.map((el) => xjs_Object.cloneDeep(el))
-  }
-
-  /**
-   * @deprecated XXX{OBSOLETE}
-   * @summary “Convert” an array, number, or string into an array. (Doesn’t really convert.)
-   * @description
-   * - If the argument is an array, it is returned unchanged.
-   * - If the argument is a number `n`, an array of length `n`, filled with increasing integers,
-   *   starting with 1, is returned. (E.g. if `n===5` then `[1,2,3,4,5]` is returned.)
-   * - If the argument is a string, that string is checked as an **own property** of the given database.
-   *   If the value of that property *is* a string, then *that* string is checked, and so on,
-   *   until an array or number is found. If no entry is found, an empty array is returned.
-   *   The default database is an empty object `{}`.
-   * @param   arg the argument to convert
-   * @param   database a database to check against
-   * @returns an array
-   */
-  static toArray(arg: any, database: object = {}): any[] {
-    const switch_: { [index: string]: () => unknown[] } = {
-      'array': () => {
-        return arg as any[]
-      },
-      'number': () => {
-        let array = []
-        for (let n = 1; n <= arg; n++) { array.push(n) }
-        return array
-      },
-      'string': () => {
-        let check = (database as { [index: string]: unknown })[arg]
-        return xjs_Array.toArray(check, database)
-      },
-      default() {
-        return []
-      },
-    }
-    return (switch_[xjs_Object.typeOf(arg)] || switch_.default)()
   }
 
   /**

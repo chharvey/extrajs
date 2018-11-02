@@ -1,6 +1,6 @@
 {
   "name": "extrajs",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "Javascript helpers for lazy people.",
   "main": "index.js",
   "scripts": {
@@ -33,6 +33,6 @@
     "typescript": "^3.0.3"
   },
   "dependencies": {
-    "@types/node": "^10.9.4"
+    "@types/node": "^10.12.0"
   }
 }
