@@ -85,42 +85,6 @@ export default class xjs_Array {
   }
 
   /**
-   * @deprecated XXX{OBSOLETE}
-   * @summary “Convert” an array, number, or string into an array. (Doesn’t really convert.)
-   * @description
-   * - If the argument is an array, it is returned unchanged.
-   * - If the argument is a number `n`, an array of length `n`, filled with increasing integers,
-   *   starting with 1, is returned. (E.g. if `n===5` then `[1,2,3,4,5]` is returned.)
-   * - If the argument is a string, that string is checked as an **own property** of the given database.
-   *   If the value of that property *is* a string, then *that* string is checked, and so on,
-   *   until an array or number is found. If no entry is found, an empty array is returned.
-   *   The default database is an empty object `{}`.
-   * @param   arg the argument to convert
-   * @param   database a database to check against
-   * @returns an array
-   */
-  static toArray(arg: any, database: object = {}): any[] {
-    const switch_: { [index: string]: () => unknown[] } = {
-      'array': () => {
-        return arg as any[]
-      },
-      'number': () => {
-        let array = []
-        for (let n = 1; n <= arg; n++) { array.push(n) }
-        return array
-      },
-      'string': () => {
-        let check = (database as { [index: string]: unknown })[arg]
-        return xjs_Array.toArray(check, database)
-      },
-      default() {
-        return []
-      },
-    }
-    return (switch_[xjs_Object.typeOf(arg)] || switch_.default)()
-  }
-
-  /**
    * WARNING{EXPERIMENTAL}
    * Make a copy of an array, and then remove duplicate entries.
    *
