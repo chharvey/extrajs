@@ -61,15 +61,15 @@ export default class xjs_Math {
 	 * Return the arithmetic mean of a set of numbers.
 	 *
 	 * ```js
-	 * meanArithmetic([a,b])   == (a + b)     / 2
-	 * meanArithmetic([a,b,c]) == (a + b + c) / 3
+	 * meanArithmetic(a,b)   == (a + b)     / 2
+	 * meanArithmetic(a,b,c) == (a + b + c) / 3
 	 * ```
-	 * @param   nums an array of finite numbers
+	 * @param   nums finite numbers to average
 	 * @returns the arithmetic mean of the given numbers
-	 * @throws  {Error} if one of the array entries is not a finite number
-	 * @throws  {NaNError} if `NaN` is in the array
+	 * @throws  {Error} if one of the numbers is not finite
+	 * @throws  {NaNError} if one of the numbers is `NaN`
 	 */
-	static meanArithmetic(nums: number[]): number {
+	static meanArithmetic(...nums: number[]): number {
 		nums.forEach((n) => xjs_Number.assertType(n, 'finite')) // NB re-throw
 		return nums.reduce((x, y) => x + y) * (1 / nums.length)
 	}
@@ -105,15 +105,15 @@ export default class xjs_Math {
 	 * Return the geomeric mean of a set of numbers.
 	 *
 	 * ```js
-	 * meanGeometric([a,b])   == (a * b)     ** (1/2)
-	 * meanGeometric([a,b,c]) == (a * b * c) ** (1/3)
+	 * meanGeometric(a,b)   == (a * b)     ** (1/2)
+	 * meanGeometric(a,b,c) == (a * b * c) ** (1/3)
 	 * ```
-	 * @param   nums an array of finite numbers
+	 * @param   nums finite numbers to average
 	 * @returns the geometric mean of the given numbers
-	 * @throws  {Error} if one of the array entries is not a finite number
-	 * @throws  {NaNError} if `NaN` is in the array
+	 * @throws  {Error} if one of the numbers is not finite
+	 * @throws  {NaNError} if one of the numbers is `NaN`
 	 */
-	static meanGeometric(nums: number[]): number {
+	static meanGeometric(...nums: number[]): number {
 		nums.forEach((n) => xjs_Number.assertType(n, 'finite')) // NB re-throw
 		return Math.abs(nums.reduce((x, y) => x * y)) ** (1 / nums.length)
 	}
@@ -151,17 +151,17 @@ export default class xjs_Math {
 	 * Return the harmonic mean of a set of numbers.
 	 *
 	 * ```js
-	 * meanHarmonic([a,b])   == 1 / ((1/a + 1/b)       / 2)
-	 * meanHarmonic([a,b,c]) == 1 / ((1/a + 1/b + 1/c) / 3)
+	 * meanHarmonic(a,b)   == 1 / ((1/a + 1/b)       / 2)
+	 * meanHarmonic(a,b,c) == 1 / ((1/a + 1/b + 1/c) / 3)
 	 * ```
-	 * @param   nums an array of finite numbers
+	 * @param   nums finite numbers to average
 	 * @returns the harmonic mean of the given numbers
-	 * @throws  {Error} if one of the array entries is not a finite number
-	 * @throws  {RangeError} if `NaN` is in the array
+	 * @throws  {Error} if one of the numbers is not finite
+	 * @throws  {NaNError} if one of the numbers is `NaN`
 	 */
-	static meanHarmonic(nums: number[]): number {
+	static meanHarmonic(...nums: number[]): number {
 		nums.forEach((n) => xjs_Number.assertType(n, 'finite')) // NB re-throw
-		return 1 / xjs_Math.meanArithmetic(nums.map((x) => 1 / x))
+		return 1 / xjs_Math.meanArithmetic(...nums.map((x) => 1 / x))
 	}
 
 	/**
