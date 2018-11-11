@@ -26,25 +26,15 @@ export default class xjs_Math {
 
 	/**
 	 * Average two numbers, with a weight favoring the 2nd number.
-	 *
-	 * The result will always be between the two numbers.
-	 * For example, `average(10, 20, 0.7)` will return 17, while
-	 * `average(20, 10, 0.7)` will return 13 (the same result as `average(10, 20, 1 - 0.7)`).
-	 * When the optional parameter `w` is not given, it defaults to 0.5, thus yielding
-	 * an even weight, that is, the {@link xjs_Math.meanArithmetic|arithmetic mean}, of the two numbers.
+	 * @deprecated This method is an alias of {@link xjs_Math.meanArithmeticWeighted}.
 	 * @param   x 1st finite number
 	 * @param   y 2nd finite number
 	 * @param   w weight of 2nd number; between 0–1
-	 * @returns the weighted average of `x` and `y`
-	 * @throws  {Error} if `x` or `y` is not a finite number
-	 * @throws  {RangeError} if an argument is `NaN`, or if the weight is not between 0 and 1
+	 * @returns exactly `meanArithmeticWeighted(x, y, w)`
+	 * @throws  {Error} if `x` or `y` is not a finite number, an argument is `NaN`, or if the weight is not between 0 and 1
 	 */
 	static average(x: number, y: number, w = 0.5): number {
-		xjs_Number.assertType(x, 'finite')
-		xjs_Number.assertType(y, 'finite')
-		xjs_Number.assertType(w)
-		if (w < 0 || 1 < w) throw new RangeError(`${w} must be between 0 and 1.`)
-		return (x * (1 - w)) + (y * w)
+		return xjs_Math.meanArithmeticWeighted(x, y, w)
 	}
 
 	/**
@@ -77,11 +67,35 @@ export default class xjs_Math {
 	 * @param   nums an array of finite numbers
 	 * @returns the arithmetic mean of the given numbers
 	 * @throws  {Error} if one of the array entries is not a finite number
-	 * @throws  {RangeError} if `NaN` is in the array
+	 * @throws  {NaNError} if `NaN` is in the array
 	 */
 	static meanArithmetic(nums: number[]): number {
 		nums.forEach((n) => xjs_Number.assertType(n, 'finite')) // NB re-throw
 		return nums.reduce((x, y) => x + y) * (1 / nums.length)
+	}
+
+	/**
+	 * Return the weighed arithmetic mean of two numbers, the weight favoring the 2nd number.
+	 *
+	 * The result will always be between the two numbers.
+	 * For example, `meanArithmeticWeighted(10, 20, 0.7)` will return 17, while
+	 * `meanArithmeticWeighted(20, 10, 0.7)` will return 13 (the same result as `meanArithmeticWeighted(10, 20, 1 - 0.7)`).
+	 * When the weight is not given, it defaults to 0.5, thus yielding
+	 * an even weight, that is, the {@link xjs_Math.meanArithmetic|arithmetic mean}, of the two numbers.
+	 * @param   x 1st finite number
+	 * @param   y 2nd finite number
+	 * @param   w weight of 2nd number; between 0–1
+	 * @returns the weighted arithmetic mean of `x` and `y`
+	 * @throws  {Error} if `x` or `y` is not a finite number
+	 * @throws  {RangeError} if the weight is not between 0 and 1
+	 * @throws  {NaNError} if an argument is `NaN`
+	 */
+	static meanArithmeticWeighted(x: number, y: number, w: number = 0.5): number {
+		xjs_Number.assertType(x, 'finite')
+		xjs_Number.assertType(y, 'finite')
+		xjs_Number.assertType(w)
+		if (w < 0 || 1 < w) throw new RangeError(`${w} must be between 0 and 1.`)
+		return (x * (1 - w)) + (y * w)
 	}
 
 	/**
@@ -94,11 +108,36 @@ export default class xjs_Math {
 	 * @param   nums an array of finite numbers
 	 * @returns the geometric mean of the given numbers
 	 * @throws  {Error} if one of the array entries is not a finite number
-	 * @throws  {RangeError} if `NaN` is in the array
+	 * @throws  {NaNError} if `NaN` is in the array
 	 */
 	static meanGeometric(nums: number[]): number {
 		nums.forEach((n) => xjs_Number.assertType(n, 'finite')) // NB re-throw
 		return Math.abs(nums.reduce((x, y) => x * y)) ** (1 / nums.length)
+	}
+
+	/**
+	 * Return the weighed geometric mean of two numbers, the weight favoring the 2nd number.
+	 *
+	 * The result will always be between the two numbers,
+	 * and it will always be less than the same-weighted arithmetic mean.
+	 * For example, `meanGeometricWeighted(10, 20, 0.7)` will return 16.24, while
+	 * `meanGeometricWeighted(20, 10, 0.7)` will return 12.31 (the same result as `meanGeometricWeighted(10, 20, 1 - 0.7)`).
+	 * When the weight is not given, it defaults to 0.5, thus yielding
+	 * an even weight, that is, the {@link xjs_Math.meanGeometric|geometric mean}, of the two numbers.
+	 * @param   x 1st finite number
+	 * @param   y 2nd finite number
+	 * @param   w weight of 2nd number; between 0–1
+	 * @returns the weighted geometric mean of `x` and `y`
+	 * @throws  {Error} if `x` or `y` is not a finite number
+	 * @throws  {RangeError} if the weight is not between 0 and 1
+	 * @throws  {NaNError} if an argument is `NaN`
+	 */
+	static meanGeometricWeighted(x: number, y: number, w: number = 0.5): number {
+		xjs_Number.assertType(x, 'finite')
+		xjs_Number.assertType(y, 'finite')
+		xjs_Number.assertType(w)
+		if (w < 0 || 1 < w) throw new RangeError(`${w} must be between 0 and 1.`)
+		return (x ** (1 - w)) * (y ** w)
 	}
 
 	/**
