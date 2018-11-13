@@ -12,7 +12,7 @@ export default Promise.all([
 	test((() => { try { return `${xjs.Math.meanArithmetic([10, 18, 20, Infinity])}` } catch (e) { return e.code } })(), 'ERR_ASSERTION'),
 	test((() => { try { return `${xjs.Math.meanGeometric ([10, 18, 20, Infinity])}` } catch (e) { return e.code } })(), 'ERR_ASSERTION'),
 	test((() => { try { return `${xjs.Math.meanHarmonic  ([10, 18, 20, Infinity])}` } catch (e) { return e.code } })(), 'ERR_ASSERTION'),
-	test((() => { try { return `${xjs.Math.meanArithmetic([10, 18, 20, NaN     ])}` } catch (e) { return e.name } })(), 'RangeError'   ),
-	test((() => { try { return `${xjs.Math.meanGeometric ([10, 18, 20, NaN     ])}` } catch (e) { return e.name } })(), 'RangeError'   ),
-	test((() => { try { return `${xjs.Math.meanHarmonic  ([10, 18, 20, NaN     ])}` } catch (e) { return e.name } })(), 'RangeError'   ),
+	test((() => { try { return `${xjs.Math.meanArithmetic([10, 18, 20, NaN     ])}` } catch (e) { return e.name } })(), 'NaNError'     ),
+	test((() => { try { return `${xjs.Math.meanGeometric ([10, 18, 20, NaN     ])}` } catch (e) { return e.name } })(), 'NaNError'     ),
+	test((() => { try { return `${xjs.Math.meanHarmonic  ([10, 18, 20, NaN     ])}` } catch (e) { return e.name } })(), 'NaNError'     ),
 ])
