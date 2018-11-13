@@ -56,6 +56,7 @@ export default class xjs_Number {
 	}
 
 	/**
+	 * @deprecated use {@link xjs_Number.assertType}
 	 * Specify the type of number given.
 	 *
 	 * If the number is finite, return one of the following strings:
@@ -69,6 +70,7 @@ export default class xjs_Number {
 	 * @throws  {RangeError} if the given arguemnt was not a finite number
 	 */
 	static typeOf(num: number): 'integer'|'float' {
+		console.warn('`xjs.Number.typeOf` is DEPRECATED: use `xjs.Number.assertType` instead.')
 		if (['NaN', 'infinite'].includes(xjs_Object.typeOf(num))) {
 			throw new RangeError('Argument must be a finite number.')
 		}
