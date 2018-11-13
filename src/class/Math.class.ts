@@ -26,15 +26,14 @@ export default class xjs_Math {
 
 	/**
 	 * Average two numbers, with a weight favoring the 2nd number.
-	 * @deprecated This method is an alias of {@link xjs_Math.meanArithmeticWeighted}.
+	 * @deprecated This method is an alias of {@link xjs_Math.interpolateArithmetic}.
 	 * @param   x 1st finite number
 	 * @param   y 2nd finite number
 	 * @param   w weight of 2nd number; between 0–1
-	 * @returns exactly `meanArithmeticWeighted(x, y, w)`
-	 * @throws  {Error} if `x` or `y` is not a finite number, an argument is `NaN`, or if the weight is not between 0 and 1
+	 * @returns exactly `interpolateArithmetic(x, y, w)`
 	 */
 	static average(x: number, y: number, w = 0.5): number {
-		return xjs_Math.meanArithmeticWeighted(x, y, w)
+		return xjs_Math.interpolateArithmetic(x, y, w)
 	}
 
 	/**
@@ -75,30 +74,32 @@ export default class xjs_Math {
 	}
 
 	/**
-	 * Return the weighed arithmetic mean of two numbers, the weight favoring the 2nd number.
+	 * Linearlly interpolate between, or extrapolate from, two numbers.
 	 *
-	 * The result will typically be between the two numbers.
-	 * For example, `meanArithmeticWeighted(10, 20, 0.7)` will return 17, while
-	 * `meanArithmeticWeighted(20, 10, 0.7)` will return 13 (the same result as `meanArithmeticWeighted(10, 20, 1 - 0.7)`).
+	 * If the argument `p` is within the interval [0, 1], the result is an interpolation within the interval [x, y],
+	 * such that `p == 0` produces `x` and `p == 1` produces `y`.
 	 *
-	 * If the weight is outside the domain of 0–1, the returned value will be outside the range of x–y.
-	 * For example, `meanArithmeticWeighted(10, 20, 1.3)` will return 23, and
-	 * `meanArithmeticWeighted(10, 20, -0.3)` will return 7.
+	 * For example, `interpolateArithmetic(10, 20, 0.7)` will return 17, while
+	 * `interpolateArithmetic(20, 10, 0.7)` will return 13 (the same result as `interpolateArithmetic(10, 20, 1 - 0.7)`).
 	 *
-	 * The weight defaults to 0.5, thus yielding an even average, that is,
+	 * If `p` is outside [0, 1], the result is an extrapolation outside the range of [x, y].
+	 * For example, `interpolateArithmetic(10, 20, 1.3)` will return 23, and
+	 * `interpolateArithmetic(10, 20, -0.3)` will return 7.
+	 *
+	 * `p` defaults to 0.5, thus yielding an even average, that is,
 	 * the {@link xjs_Math.meanArithmetic|arithmetic mean}, of the two numbers.
 	 * @param   x 1st finite number
 	 * @param   y 2nd finite number
-	 * @param   w weight of 2nd number; between 0–1
-	 * @returns the weighted arithmetic mean of `x` and `y`
-	 * @throws  {Error} if `x`, `y`, or `w` is not a finite number
+	 * @param   p the interpolation/extrapolation parameter
+	 * @returns a linear interpolation/extrapolation of `x` and `y`
+	 * @throws  {Error} if `x`, `y`, or `p` is not a finite number
 	 * @throws  {NaNError} if an argument is `NaN`
 	 */
-	static meanArithmeticWeighted(x: number, y: number, w: number = 0.5): number {
+	static interpolateArithmetic(x: number, y: number, p: number = 0.5): number {
 		xjs_Number.assertType(x, 'finite')
 		xjs_Number.assertType(y, 'finite')
-		xjs_Number.assertType(w, 'finite')
-		return (x * (1 - w)) + (y * w)
+		xjs_Number.assertType(p, 'finite')
+		return (x * (1 - p)) + (y * p)
 	}
 
 	/**
@@ -119,32 +120,32 @@ export default class xjs_Math {
 	}
 
 	/**
-	 * Return the weighed geometric mean of two numbers, the weight favoring the 2nd number.
+	 * Exponentially interpolate between, or extrapolate from, two numbers.
 	 *
-	 * The result will typically be between the two numbers,
-	 * and it will typically be less than the same-weighted arithmetic mean.
-	 * For example, `meanGeometricWeighted(10, 20, 0.7)` will return 16.24, while
-	 * `meanGeometricWeighted(20, 10, 0.7)` will return 12.31 (the same result as `meanGeometricWeighted(10, 20, 1 - 0.7)`).
+	 * If the argument `p` is within the interval [0, 1], the result is an interpolation within the interval [x, y],
+	 * such that `p == 0` produces `x` and `p == 1` produces `y`.
 	 *
-	 * If the weight is outside the domain of 0–1, the returned value will be outside the range of x–y,
-	 * and it will be greater than the same-weighted arithmetic mean.
-	 * For example, `meanGeometricWeighted(10, 20, 1.3)` will return 24.62, and
-	 * `meanGeometricWeighted(10, 20, -0.3)` will return 8.12.
+	 * For example, `interpolateGeometric(10, 20, 0.7)` will return 17, while
+	 * `interpolateGeometric(20, 10, 0.7)` will return 13 (the same result as `interpolateGeometric(10, 20, 1 - 0.7)`).
 	 *
-	 * The weight defaults to 0.5, thus yielding an even average, that is,
+	 * If `p` is outside [0, 1], the result is an extrapolation outside the range of [x, y].
+	 * For example, `interpolateGeometric(10, 20, 1.3)` will return 23, and
+	 * `interpolateGeometric(10, 20, -0.3)` will return 7.
+	 *
+	 * `p` defaults to 0.5, thus yielding an even average, that is,
 	 * the {@link xjs_Math.meanGeometric|geometric mean}, of the two numbers.
 	 * @param   x 1st finite number
 	 * @param   y 2nd finite number
-	 * @param   w weight of 2nd number; between 0–1
-	 * @returns the weighted geometric mean of `x` and `y`
-	 * @throws  {Error} if `x`, `y`, or `w` is not a finite number
+	 * @param   p the interpolation/extrapolation parameter
+	 * @returns an exponential interpolation/extrapolation of `x` and `y`
+	 * @throws  {Error} if `x`, `y`, or `p` is not a finite number
 	 * @throws  {NaNError} if an argument is `NaN`
 	 */
-	static meanGeometricWeighted(x: number, y: number, w: number = 0.5): number {
+	static interpolateGeometric(x: number, y: number, p: number = 0.5): number {
 		xjs_Number.assertType(x, 'finite')
 		xjs_Number.assertType(y, 'finite')
-		xjs_Number.assertType(w, 'finite')
-		return (x ** (1 - w)) * (y ** w)
+		xjs_Number.assertType(p, 'finite')
+		return (x ** (1 - p)) * (y ** p)
 	}
 
 	/**
