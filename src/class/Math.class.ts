@@ -74,6 +74,40 @@ export default class xjs_Math {
 	}
 
 	/**
+	 * Return the geomeric mean of a set of numbers.
+	 *
+	 * ```js
+	 * meanGeometric(a,b)   == (a * b)     ** (1/2)
+	 * meanGeometric(a,b,c) == (a * b * c) ** (1/3)
+	 * ```
+	 * @param   nums finite numbers to average
+	 * @returns the geometric mean of the given numbers
+	 * @throws  {Error} if one of the numbers is not finite
+	 * @throws  {NaNError} if one of the numbers is `NaN`
+	 */
+	static meanGeometric(...nums: number[]): number {
+		nums.forEach((n) => xjs_Number.assertType(n, 'finite')) // NB re-throw
+		return Math.abs(nums.reduce((x, y) => x * y)) ** (1 / nums.length)
+	}
+
+	/**
+	 * Return the harmonic mean of a set of numbers.
+	 *
+	 * ```js
+	 * meanHarmonic(a,b)   == 1 / ((1/a + 1/b)       / 2)
+	 * meanHarmonic(a,b,c) == 1 / ((1/a + 1/b + 1/c) / 3)
+	 * ```
+	 * @param   nums finite numbers to average
+	 * @returns the harmonic mean of the given numbers
+	 * @throws  {Error} if one of the numbers is not finite
+	 * @throws  {NaNError} if one of the numbers is `NaN`
+	 */
+	static meanHarmonic(...nums: number[]): number {
+		nums.forEach((n) => xjs_Number.assertType(n, 'finite')) // NB re-throw
+		return 1 / xjs_Math.meanArithmetic(...nums.map((x) => 1 / x))
+	}
+
+	/**
 	 * Linearlly interpolate between, or extrapolate from, two numbers.
 	 *
 	 * If the argument `p` is within the interval [0, 1], the result is an interpolation within the interval [x, y],
@@ -103,23 +137,6 @@ export default class xjs_Math {
 	}
 
 	/**
-	 * Return the geomeric mean of a set of numbers.
-	 *
-	 * ```js
-	 * meanGeometric(a,b)   == (a * b)     ** (1/2)
-	 * meanGeometric(a,b,c) == (a * b * c) ** (1/3)
-	 * ```
-	 * @param   nums finite numbers to average
-	 * @returns the geometric mean of the given numbers
-	 * @throws  {Error} if one of the numbers is not finite
-	 * @throws  {NaNError} if one of the numbers is `NaN`
-	 */
-	static meanGeometric(...nums: number[]): number {
-		nums.forEach((n) => xjs_Number.assertType(n, 'finite')) // NB re-throw
-		return Math.abs(nums.reduce((x, y) => x * y)) ** (1 / nums.length)
-	}
-
-	/**
 	 * Exponentially interpolate between, or extrapolate from, two numbers.
 	 *
 	 * If the argument `p` is within the interval [0, 1], the result is an interpolation within the interval [x, y],
@@ -146,23 +163,6 @@ export default class xjs_Math {
 		xjs_Number.assertType(y, 'finite')
 		xjs_Number.assertType(p, 'finite')
 		return (x ** (1 - p)) * (y ** p)
-	}
-
-	/**
-	 * Return the harmonic mean of a set of numbers.
-	 *
-	 * ```js
-	 * meanHarmonic(a,b)   == 1 / ((1/a + 1/b)       / 2)
-	 * meanHarmonic(a,b,c) == 1 / ((1/a + 1/b + 1/c) / 3)
-	 * ```
-	 * @param   nums finite numbers to average
-	 * @returns the harmonic mean of the given numbers
-	 * @throws  {Error} if one of the numbers is not finite
-	 * @throws  {NaNError} if one of the numbers is `NaN`
-	 */
-	static meanHarmonic(...nums: number[]): number {
-		nums.forEach((n) => xjs_Number.assertType(n, 'finite')) // NB re-throw
-		return 1 / xjs_Math.meanArithmetic(...nums.map((x) => 1 / x))
 	}
 
 	/**
