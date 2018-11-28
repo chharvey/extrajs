@@ -142,12 +142,12 @@ export default class xjs_Math {
 	 * If the argument `p` is within the interval [0, 1], the result is an interpolation within the interval [x, y],
 	 * such that `p == 0` produces `x` and `p == 1` produces `y`.
 	 *
-	 * For example, `interpolateGeometric(10, 20, 0.7)` will return 17, while
-	 * `interpolateGeometric(20, 10, 0.7)` will return 13 (the same result as `interpolateGeometric(10, 20, 1 - 0.7)`).
+	 * For example, `interpolateGeometric(10, 20, 0.7)` will return ~16.245, while
+	 * `interpolateGeometric(20, 10, 0.7)` will return ~12.311 (the same result as `interpolateGeometric(10, 20, 1 - 0.7)`).
 	 *
 	 * If `p` is outside [0, 1], the result is an extrapolation outside the range of [x, y].
-	 * For example, `interpolateGeometric(10, 20, 1.3)` will return 23, and
-	 * `interpolateGeometric(10, 20, -0.3)` will return 7.
+	 * For example, `interpolateGeometric(10, 20, 1.3)` will return ~24.623, and
+	 * `interpolateGeometric(10, 20, -0.3)` will return ~8.123.
 	 *
 	 * `p` defaults to 0.5, thus yielding an even average, that is,
 	 * the {@link xjs_Math.meanGeometric|geometric mean}, of the two numbers.
