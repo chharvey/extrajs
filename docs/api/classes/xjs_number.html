@@ -112,7 +112,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/0be7a4c/src/class/Number.class.ts#L76">Number.class.ts:76</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Number.class.ts#L78">Number.class.ts:78</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="xjs_number.html" class="tsd-signature-type">xjs_Number</a></h4>
@@ -132,7 +132,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/0be7a4c/src/class/Number.class.ts#L41">Number.class.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Number.class.ts#L41">Number.class.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -196,20 +196,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/0be7a4c/src/class/Number.class.ts#L71">Number.class.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Number.class.ts#L72">Number.class.ts:72</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Specify the type of number given.</p>
-								</div>
-								<p>If the number is finite, return one of the following strings:</p>
-								<ul>
-									<li><code>&#39;integer&#39;</code> : the number is an integer, that is, <code>num % 1 === 0</code></li>
-									<li><code>&#39;float&#39;</code>   : the number is not an integer</li>
-								</ul>
-								<p>Else, throw a <code>RangeError</code> (the argument is of the correct type but does not qualify).</p>
 								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>use <a href="xjs_number.html#asserttype">xjs_Number.assertType</a>
+										Specify the type of number given.</p>
+										<p>If the number is finite, return one of the following strings:</p>
+										<ul>
+											<li><code>&#39;integer&#39;</code> : the number is an integer, that is, <code>num % 1 === 0</code></li>
+											<li><code>&#39;float&#39;</code>   : the number is not an integer</li>
+										</ul>
+										<p>Else, throw a <code>RangeError</code> (the argument is of the correct type but does not qualify).</p>
+									</dd>
 									<dt>throws</dt>
 									<dd><p>{RangeError} if the given arguemnt was not a finite number</p>
 									</dd>

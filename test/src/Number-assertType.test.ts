@@ -45,5 +45,5 @@ export default Promise.all([
 	test((() => { try { return `${xjs.Number.assertType( 42.24 , 'infinite')}` } catch (e) { return e.code } })(), 'ERR_ASSERTION'),
 	test((() => { try { return `${xjs.Number.assertType(-42.24 , 'infinite')}` } catch (e) { return e.code } })(), 'ERR_ASSERTION'),
 	// errors
-	test((() => { try { return xjs.Number.assertType(NaN, 'positive') } catch (e) { return e.name } })(), 'RangeError'),
+	test((() => { try { return xjs.Number.assertType(NaN, 'positive') } catch (e) { return e.name } })(), 'NaNError'),
 ])
