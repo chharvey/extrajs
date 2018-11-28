@@ -1,6 +1,6 @@
 {
   "name": "extrajs",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "description": "Javascript helpers for lazy people.",
   "main": "index.js",
   "scripts": {
