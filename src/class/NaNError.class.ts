@@ -8,5 +8,6 @@ export default class NaNError extends RangeError {
 	 */
 	constructor(message: string = 'Unacceptable argument `NaN`.') {
 		super(message)
+		this.name = 'NaNError'
 	}
 }
