@@ -122,6 +122,7 @@ export default class xjs_Math {
 	 *
 	 * `p` defaults to 0.5, thus yielding an even average, that is,
 	 * the {@link xjs_Math.meanArithmetic|arithmetic mean}, of the two numbers.
+	 * @see https://www.desmos.com/calculator/tfuwejqtav
 	 * @param   a 1st number
 	 * @param   b 2nd number
 	 * @param   p the interpolation/extrapolation parameter
@@ -151,6 +152,7 @@ export default class xjs_Math {
 	 *
 	 * `p` defaults to 0.5, thus yielding an even average, that is,
 	 * the {@link xjs_Math.meanGeometric|geometric mean}, of the two numbers.
+	 * @see https://www.desmos.com/calculator/tfuwejqtav
 	 * @param   a 1st number
 	 * @param   b 2nd number
 	 * @param   p the interpolation/extrapolation parameter
@@ -163,6 +165,36 @@ export default class xjs_Math {
 		xjs_Number.assertType(b, 'finite')
 		xjs_Number.assertType(p, 'finite')
 		return a ** (1 - p) * b ** p // equally, `a * (b / a) ** p`
+	}
+
+	/**
+	 * Rationally interpolate between, or extrapolate from, two numbers.
+	 *
+	 * If the argument `p` is within the interval [0, 1], the result is an interpolation within the interval [a, b],
+	 * such that `p == 0` produces `a` and `p == 1` produces `b`.
+	 *
+	 * For example, `interpolateHarmonic(10, 20, 0.7)` will return ~15.385, while
+	 * `interpolateHarmonic(20, 10, 0.7)` will return ~11.765 (the same result as `interpolateHarmonic(10, 20, 1 - 0.7)`).
+	 *
+	 * If `p` is outside [0, 1], the result is an extrapolation outside the range of [a, b].
+	 * For example, `interpolateHarmonic(10, 20, 1.3)` will return ~28.571, and
+	 * `interpolateHarmonic(10, 20, -0.3)` will return ~8.696.
+	 *
+	 * `p` defaults to 0.5, thus yielding an even average, that is,
+	 * the {@link xjs_Math.meanHarmonic|harmonic mean}, of the two numbers.
+	 * @see https://www.desmos.com/calculator/tfuwejqtav
+	 * @param   a 1st number
+	 * @param   b 2nd number
+	 * @param   p the interpolation/extrapolation parameter
+	 * @returns exactly `1 / interpolateArithmetic(1/a, 1/b, p)`
+	 * @throws  {Error} if `a`, `b`, or `p` is not a finite number
+	 * @throws  {NaNError} if an argument is `NaN`
+	 */
+	static interpolateHarmonic(a: number, b: number, p: number = 0.5): number {
+		xjs_Number.assertType(a, 'finite')
+		xjs_Number.assertType(b, 'finite')
+		xjs_Number.assertType(p, 'finite')
+		return 1 / xjs_Math.interpolateArithmetic(1/a, 1/b, p) // equally, `(a * b) / ((a - b) * p + b)`
 	}
 
 	/**
