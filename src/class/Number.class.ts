@@ -11,11 +11,13 @@ import xjs_Object from './Object.class'
  */
 export default class xjs_Number {
   /**
-   * Verify the type of number given, throwing if it does not match.
+   * Verify the type of number or bigint given, throwing if it does not match.
    *
-   * Given a number and a "type", test to see if the number is of that type.
+   * Given a number or bigint and a "type", test to see if the argument is of that type.
    * Mainly used for parameter validation, when the type `number` is not specific enough.
    * The acceptable "types", which are not mutually exclusive, follow:
+   *
+   * Types for numbers:
    *
    * - `'integer'`      : the number is divisible by 1 (`num % 1 === 0`)
    * - `'natural'`      : the number is a non-negative integer (either positive or 0)
@@ -29,19 +31,33 @@ export default class xjs_Number {
    * - `'infinite'`     : the number is     equal to `Infinity` or `-Infinity`
    * - no type (`undefiend`): the number is not `NaN`
    *
-   * If the number matches the described type, this method returns `void` instead of `true`.
-   * If the number does not match, this method throws an error instead of returning `false`.
+   * Types for bigints:
+   *
+   * - `'integer'`      : always matches
+   * - `'natural'`      : synonym of `'non-negative'`
+   * - `'whole'`        : synonym of `'positive'`
+   * - `'float'`        : never matches
+   * - `'positive'`     : the bigint is strictly greater than 0n
+   * - `'negative'`     : the bigint is strictly less    than 0n
+   * - `'non-positive'` : the bigint is less    than or equal to 0n
+   * - `'non-negative'` : the bigint is greater than or equal to 0n
+   * - `'finite'`       : always matches
+   * - `'infinite'`     : never matches
+   * - no type (`undefiend`): always matches
+   *
+   * If the argument matches the described type, this method returns `void` instead of `true`.
+   * If the argument does not match, this method throws an error instead of returning `false`.
    * This pattern is helpful where an error message is more descriptive than a boolean.
    *
-   * @param   num the number to test
+   * @param   num the argument to test
    * @param   type one of the string literals listed above
-   * @throws  {AssertionError} if the number does not match the described type
+   * @throws  {AssertionError} if the argument does not match the described type
    * @throws  {NaNError} if the argument is `NaN`
    */
-	static assertType(num: number, type?: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'|'non-positive'|'non-negative'|'finite'|'infinite'): void {
-		if (Number.isNaN(num)) throw new NaNError()
+	static assertType(num: number|bigint, type?: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'|'non-positive'|'non-negative'|'finite'|'infinite'): void {
+		if (typeof num === 'number' && Number.isNaN(num)) throw new NaNError()
 		if (!type) return;
-		return xjs_Object.switch<void>(type, {
+		return (typeof num === 'number') ? xjs_Object.switch<void>(type, {
 			'integer'     : (n: number) => assert( Number.isInteger(n)          , `${n} must be an integer.`            ),
 			'natural'     : (n: number) => assert( Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`),
 			'whole'       : (n: number) => assert( Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    ),
@@ -52,6 +68,17 @@ export default class xjs_Number {
 			'non-negative': (n: number) => assert(0 <= n                        , `${n} must not be a negative number.` ),
 			'finite'      : (n: number) => assert( Number.isFinite(n)           , `${n} must be a finite number.`       ),
 			'infinite'    : (n: number) => assert(!Number.isFinite(n)           , `${n} must be an infinite number.`    ),
+		})(num) : xjs_Object.switch<void>(type, {
+			'integer'     : (_n: bigint) => {},
+			'natural'     : ( n: bigint) => xjs_Number.assertType(n, 'non-negative'),
+			'whole'       : ( n: bigint) => xjs_Number.assertType(n, 'positive'    ),
+			'float'       : ( n: bigint) => assert(false    , `${n} must not be an integer.`    ),
+			'positive'    : ( n: bigint) => assert(0n <  n  , `${n} must be positive.`          ),
+			'negative'    : ( n: bigint) => assert(n  <  0n , `${n} must be negative.`          ),
+			'non-positive': ( n: bigint) => assert(n  <= 0n , `${n} must not be positive.`      ),
+			'non-negative': ( n: bigint) => assert(0n <= n  , `${n} must not be negative.`      ),
+			'finite'      : ( n: bigint) => assert(true     , `${n} must be a finite number.`   ),
+			'infinite'    : ( n: bigint) => assert(false    , `${n} must be an infinite number.`),
 		})(num)
 	}
 

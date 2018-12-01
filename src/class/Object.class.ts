@@ -183,6 +183,7 @@ export default class xjs_Object {
 				if (!Number.isFinite(arg)) return 'infinite'
 				return 'number'
 			},
+			'bigint'   : () => 'bigint',
 			'function' : () => 'function',
 			'string'   : () => 'string',
 			'boolean'  : () => 'boolean',

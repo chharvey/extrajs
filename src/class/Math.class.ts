@@ -208,9 +208,10 @@ export default class xjs_Math {
 	 * @returns exactly `((x % n) + n) % n`
 	 * @throws  {Error} if `n` is not a positive integer
 	 */
-	static mod(x: number, n: number): number {
+	static mod(x: number, n: number|bigint): number {
 		xjs_Number.assertType(x, 'finite')
 		xjs_Number.assertType(n, 'whole')
+		n = Number(n)
 		return ((x % n) + n) % n
 	}
 
