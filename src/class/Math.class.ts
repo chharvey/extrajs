@@ -166,6 +166,31 @@ export default class xjs_Math {
 	}
 
 	/**
+	 * Round a number to a number of significant figures.
+	 *
+	 * For example, if the number of sig figs is 3, then the number is rounded to the nearest 0.001 (thousandth).
+	 * If the number of sig figs is `Infinity`, the given number is returned as is.
+	 * The number of sig figs defaults to 1, rounding to the nearest integer.
+	 * ```
+	 * round(3.141592654, 3)        // returns exactly 3.142
+	 * round(3.141592654, Infinity) // returns exactly 3.141592654
+	 * round(3.141592654, 1)        // returns exactly 3
+	 * round(3.141592654)           // returns exactly 3
+	 * ```
+	 * @param   x the number to round
+	 * @param   n a whole number of significant figures, or `Infinity` to not round
+	 * @param   radix the base of the number
+	 * @returns exactly `Math.round(x * radix ** n) / radix ** n`
+	 */
+	static round(x: number, n: number = 0, radix: number = 10): number {
+		xjs_Number.assertType(x, 'finite')
+		if (n === Infinity) return x
+		xjs_Number.assertType(n    , 'whole')
+		xjs_Number.assertType(radix, 'whole')
+		return Math.round(x * radix ** n) / radix ** n
+	}
+
+	/**
 	 * Return the remainder of Euclidean division of `x` by `n`.
 	 *
 	 * This method returns `x % n` when `x` is positive,
