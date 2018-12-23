@@ -148,6 +148,30 @@ export default class xjs_Array {
 		return (arr.length === newarr.length) ? arr : newarr
 	}
 
+	/**
+	 * Fill the ‘holes’ in an array with a given value.
+	 *
+	 * Similar to {@link xjs_Array.densify}, but instead of removing the holes of a sparse array
+	 * (thus decreasing the length), this method fills the holes with a given value,
+	 * thus maintaining the original array’s length.
+	 *
+	 * **Warning: This method has an important side-effect:
+	 * It treats entries of `undefined` as ‘holes’, even if they were intentionally declared.**
+	 * Therefore this method is not well-suited for arrays with intentional entries of `undefined`.
+	 * Suggestion: replace all intentional entries of `undefined` with `null`.
+	 *
+	 * @param   arr an array whose ‘holes’ and `undefined`s to fill, if it has any
+	 * @param   value the value to fill in the holes
+	 * @returns a copy of the given array, but with all holes and `undefined`s filled;
+	 *          the returned array will have the same length as the argument
+	 */
+	static fillHoles<T, U>(arr: T[], value: U): (T|U)[] {
+		const newarr: (T|U)[] = arr
+		for (let i = 0; i < newarr.length; i++) { // `Array#forEach` does not iterate over holes in sparse arrays
+			if (newarr[i] === void 0) newarr[i] = value
+		}
+		return newarr
+	}
 
   private constructor() {}
 }
