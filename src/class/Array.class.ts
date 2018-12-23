@@ -135,12 +135,16 @@ export default class xjs_Array {
 	 * Note that accessor notation is not sufficient to detect sparseness: calling `new Array(4)[0]`
 	 * will return `undefined`, even though `undefined` is not an element in the array.
 	 *
+	 * For example, `let arr = ['a', 'b', , 'd']` is a sparse array because `arr[2]` has not been defined.
+	 * Evaluating `arr[2]` will yield `undefined`, even though it has not been explicitly declared so.
+	 *
 	 * @param   arr an array to make dense
-	 * @returns a copy of the given array, but with no ‘holes’
+	 * @returns a copy of the given array, but with no ‘holes’;
+	 *          the returned array might have a smaller `length`
 	 */
 	static densify<T>(arr: T[]): T[] {
-		let newarr: T[] = []
-		arr.forEach((el) => { newarr.push(el) }) // Array#forEach does not iterate over holes
+		const newarr: T[] = []
+		arr.forEach((el) => { newarr.push(el) }) // `Array#forEach` does not iterate over holes in sparse arrays
 		return (arr.length === newarr.length) ? arr : newarr
 	}
 
