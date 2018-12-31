@@ -7,6 +7,6 @@ x[1] = 42
 x[3] = 48
 
 export default Promise.all([
-	test(x                            .join(), ',42,,48,'               ),
-	test(xjs.Array.fillHoles(x, false).join(), 'false,42,false,48,false'),
+	test(x                        .join(), ',42,,48,'   ),
+	test(xjs.Array.fillHoles(x, 0).join(), '0,42,0,48,0'),
 ])
