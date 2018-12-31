@@ -126,6 +126,7 @@ export default class xjs_Array {
 	 * Remove the ‘holes’ in an array.
 	 *
 	 * (Make a sparse array dense, or keep a dense array dense).
+	 * This method is **Pure** — it does not modify the given argument.
 	 *
 	 * A **sparse array** is an array whose length is greater than the number of elements its contains.
 	 * For example, `new Array(4)` is a sparse array: it has a length of 4 but no elements.
@@ -140,16 +141,18 @@ export default class xjs_Array {
 	 *
 	 * @param   arr an array to make dense
 	 * @returns a copy of the given array, but with no ‘holes’;
-	 *          the returned array might have a smaller `length`
+	 *          the returned array might have a smaller `length` than the argument
 	 */
 	static densify<T>(arr: T[]): T[] {
 		const newarr: T[] = []
 		arr.forEach((el) => { newarr.push(el) }) // `Array#forEach` does not iterate over holes in sparse arrays
-		return (arr.length === newarr.length) ? arr : newarr
+		return newarr
 	}
 
 	/**
 	 * Fill the ‘holes’ in an array with a given value.
+	 *
+	 * This method is **Pure** — it does not modify the given argument.
 	 *
 	 * Similar to {@link xjs_Array.densify}, but instead of removing the holes of a sparse array
 	 * (thus decreasing the length), this method fills the holes with a given value,
@@ -165,8 +168,8 @@ export default class xjs_Array {
 	 * @returns a copy of the given array, but with all holes and `undefined`s filled;
 	 *          the returned array will have the same length as the argument
 	 */
-	static fillHoles<T, U>(arr: T[], value: U): (T|U)[] {
-		const newarr: (T|U)[] = arr
+	static fillHoles<T>(arr: T[], value: T): T[] {
+		const newarr: T[] = arr
 		for (let i = 0; i < newarr.length; i++) { // `Array#forEach` does not iterate over holes in sparse arrays
 			if (newarr[i] === void 0) newarr[i] = value
 		}
