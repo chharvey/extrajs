@@ -95,6 +95,8 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="xjs_array.html#clonedeep" class="tsd-kind-icon">clone<wbr>Deep</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="xjs_array.html#contains" class="tsd-kind-icon">contains</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="xjs_array.html#densify" class="tsd-kind-icon">densify</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="xjs_array.html#fillholes" class="tsd-kind-icon">fill<wbr>Holes</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="xjs_array.html#freezedeep" class="tsd-kind-icon">freeze<wbr>Deep</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="xjs_array.html#is" class="tsd-kind-icon">is</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="xjs_array.html#peek" class="tsd-kind-icon">peek</a></li>
@@ -116,7 +118,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Array.class.ts#L119">Array.class.ts:119</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Array.class.ts#L177">Array.class.ts:177</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="xjs_array.html" class="tsd-signature-type">xjs_Array</a></h4>
@@ -136,7 +138,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Array.class.ts#L95">Array.class.ts:95</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Array.class.ts#L99">Array.class.ts:99</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -144,7 +146,8 @@
 									<p>WARNING{EXPERIMENTAL}
 									Deep clone an array, and return the result.</p>
 								</div>
-								<p>Shortcut of <a href="xjs_object.html#clonedeep">xjs_Object.cloneDeep</a>, but for arrays.</p>
+								<p>Shortcut of <a href="xjs_object.html#clonedeep">xjs_Object.cloneDeep</a>, but for arrays.
+								Warning: passing in a sparse array can yield unexpected results.</p>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
@@ -176,7 +179,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Array.class.ts#L38">Array.class.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Array.class.ts#L39">Array.class.ts:39</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -188,7 +191,8 @@
 									testing whether
 									the elements in the smaller array appear consecutively and in the same order as in the larger array.
 									In other words, if <code>&lt;a href=&quot;xjs_array.html#is&quot;&gt;xjs_Array.is&lt;/a&gt;(larger.slice(a,b), smaller)</code> (for some integers a and b),
-								then this method returns <code>true</code>.</p>
+									then this method returns <code>true</code>.
+								Warning: passing in sparse arrays can yield unexpected results.</p>
 								<p>Elements are compared via the provided comparator predicate.
 								If no predicate is provided, this method uses the default predicate {@link xjs_Object._sameValueZero}.</p>
 								<pre><code class="language-js"><span class="hljs-string">'twofoursix'</span>.includes(<span class="hljs-string">'wofo'</span>)===<span class="hljs-literal">true</span>
@@ -257,6 +261,108 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+					<a name="densify" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> densify</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">densify&lt;T&gt;<span class="tsd-signature-symbol">(</span>arr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Array.class.ts#L146">Array.class.ts:146</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Remove the ‘holes’ in an array.</p>
+								</div>
+								<p>(Make a sparse array dense, or keep a dense array dense).
+								This method is <strong>Pure</strong> — it does not modify the given argument.</p>
+								<p>A <strong>sparse array</strong> is an array whose length is greater than the number of elements its contains.
+									For example, <code>new Array(4)</code> is a sparse array: it has a length of 4 but no elements.
+									Sparse arrays are said to have a ‘hole’ where there is an index but no element.
+								A <strong>dense array</strong> is an array whose length is equal to its number of elements.</p>
+								<p>Note that accessor notation is not sufficient to detect sparseness: calling <code>new Array(4)[0]</code>
+								will return <code>undefined</code>, even though <code>undefined</code> is not an element in the array.</p>
+								<p>For example, <code>let arr = [&#39;a&#39;, &#39;b&#39;, , &#39;d&#39;]</code> is a sparse array because <code>arr[2]</code> has not been defined.
+								Evaluating <code>arr[2]</code> will yield <code>undefined</code>, even though it has not been explicitly declared so.</p>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T</h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>arr: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an array to make dense</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h4>
+							<p>a copy of the given array, but with no ‘holes’;
+							the returned array might have a smaller <code>length</code> than the argument</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+					<a name="fillholes" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> fill<wbr>Holes</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">fill<wbr>Holes&lt;T&gt;<span class="tsd-signature-symbol">(</span>arr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Array.class.ts#L171">Array.class.ts:171</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Fill the ‘holes’ in an array with a given value.</p>
+								</div>
+								<p>This method is <strong>Pure</strong> — it does not modify the given argument.</p>
+								<p>Similar to <a href="xjs_array.html#densify">xjs_Array.densify</a>, but instead of removing the holes of a sparse array
+									(thus decreasing the length), this method fills the holes with a given value,
+								thus maintaining the original array’s length.</p>
+								<p><strong>Warning: This method has an important side-effect:
+									It treats entries of <code>undefined</code> as ‘holes’, even if they were intentionally declared.</strong>
+									Therefore this method is not well-suited for arrays with intentional entries of <code>undefined</code>.
+								Suggestion: replace all intentional entries of <code>undefined</code> with <code>null</code>.</p>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T</h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>arr: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an array whose ‘holes’ and <code>undefined</code>s to fill, if it has any</p>
+									</div>
+								</li>
+								<li>
+									<h5>value: <span class="tsd-signature-type">T</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the value to fill in the holes</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h4>
+							<p>a copy of the given array, but with all holes and <code>undefined</code>s filled;
+							the returned array will have the same length as the argument</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
 					<a name="freezedeep" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> freeze<wbr>Deep</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
@@ -266,7 +372,7 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Array.class.ts#L81">Array.class.ts:81</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Array.class.ts#L84">Array.class.ts:84</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -275,6 +381,7 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 									Deep freeze an array, and return the result.</p>
 								</div>
 								<p>Shortcut of <a href="xjs_object.html#freezedeep">xjs_Object.freezeDeep</a>, but for arrays.
+									Warning: passing in a sparse array can yield unexpected results.
 								<em>Note: This function is impure, modifying the given argument.</em></p>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -307,14 +414,15 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Array.class.ts#L56">Array.class.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Array.class.ts#L58">Array.class.ts:58</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Test whether two arrays have “the same” elements.</p>
 								</div>
-								<p>Shortcut of <a href="xjs_object.html#is">xjs_Object.is</a>, but for arrays.</p>
+								<p>Shortcut of <a href="xjs_object.html#is">xjs_Object.is</a>, but for arrays.
+								Warning: passing in sparse arrays can yield unexpected results.</p>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
@@ -379,7 +487,7 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Array.class.ts#L66">Array.class.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Array.class.ts#L68">Array.class.ts:68</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -422,7 +530,7 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Array.class.ts#L111">Array.class.ts:111</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Array.class.ts#L115">Array.class.ts:115</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -512,6 +620,12 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 								<a href="xjs_array.html#contains" class="tsd-kind-icon">contains</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+								<a href="xjs_array.html#densify" class="tsd-kind-icon">densify</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+								<a href="xjs_array.html#fillholes" class="tsd-kind-icon">fill<wbr>Holes</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
 								<a href="xjs_array.html#freezedeep" class="tsd-kind-icon">freeze<wbr>Deep</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
@@ -542,8 +656,8 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 					<li class=" tsd-kind-class">
 						<a href="xjs_string.html" class="tsd-kind-icon">xjs_<wbr><wbr>String</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../interfaces/switchfn.html" class="tsd-kind-icon">Switch<wbr>Fn</a>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-not-exported">
+						<a href="../globals.html#switchfn" class="tsd-kind-icon">Switch<wbr>Fn</a>
 					</li>
 				</ul>
 			</nav>

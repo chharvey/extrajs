@@ -10,6 +10,11 @@ import xjs_Object from './Object.class'
  * Does not extend the native Number class.
  */
 export default class xjs_Number {
+	/**
+	 * An immutable RegExp instance, representing a string in Number format.
+	 */
+	static readonly REGEXP: Readonly<RegExp> = /^-?(?:\d+(?:\.\d+)?|\.\d+)$/
+
   /**
    * Verify the type of number given, throwing if it does not match.
    *

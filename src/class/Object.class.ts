@@ -1,11 +1,8 @@
 /**
- * A helper interface for {@link xjs_Object.switch}.
+ * A helper for {@link xjs_Object.switch}.
  * @param args a list of arguments to be passed to the function
  */
-interface SwitchFn<T> extends Function {
-	(this: any, ...args: any[]): T;
-	call(this_arg: any, ...args: any[]): T;
-}
+type SwitchFn<T> = (this: any, ...args: any[]) => T;
 
 /**
  * Additional static members for the native Object class.

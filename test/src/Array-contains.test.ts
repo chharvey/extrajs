@@ -2,7 +2,7 @@ import * as xjs from '../../index'
 import test from './test'
 
 
-let x = [0,1,2,0,3,4]
+let x: number[] = [0,1,2,0,3,4]
 
 export default Promise.all([
 	test(`${xjs.Array.contains(x, [3,4]          )}`, 'true' ),

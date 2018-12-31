@@ -110,59 +110,91 @@ export default class xjs_Math {
 	/**
 	 * Linearlly interpolate between, or extrapolate from, two numbers.
 	 *
-	 * If the argument `p` is within the interval [0, 1], the result is an interpolation within the interval [x, y],
-	 * such that `p == 0` produces `x` and `p == 1` produces `y`.
+	 * If the argument `p` is within the interval [0, 1], the result is an interpolation within the interval [a, b],
+	 * such that `p == 0` produces `a` and `p == 1` produces `b`.
 	 *
 	 * For example, `interpolateArithmetic(10, 20, 0.7)` will return 17, while
 	 * `interpolateArithmetic(20, 10, 0.7)` will return 13 (the same result as `interpolateArithmetic(10, 20, 1 - 0.7)`).
 	 *
-	 * If `p` is outside [0, 1], the result is an extrapolation outside the range of [x, y].
+	 * If `p` is outside [0, 1], the result is an extrapolation outside the range of [a, b].
 	 * For example, `interpolateArithmetic(10, 20, 1.3)` will return 23, and
 	 * `interpolateArithmetic(10, 20, -0.3)` will return 7.
 	 *
 	 * `p` defaults to 0.5, thus yielding an even average, that is,
 	 * the {@link xjs_Math.meanArithmetic|arithmetic mean}, of the two numbers.
-	 * @param   x 1st finite number
-	 * @param   y 2nd finite number
+	 * @see https://www.desmos.com/calculator/tfuwejqtav
+	 * @param   a 1st number
+	 * @param   b 2nd number
 	 * @param   p the interpolation/extrapolation parameter
-	 * @returns a linear interpolation/extrapolation of `x` and `y`
-	 * @throws  {Error} if `x`, `y`, or `p` is not a finite number
+	 * @returns exactly `a * (1 - p) + (b * p)`
+	 * @throws  {Error} if `a`, `b`, or `p` is not a finite number
 	 * @throws  {NaNError} if an argument is `NaN`
 	 */
-	static interpolateArithmetic(x: number, y: number, p: number = 0.5): number {
-		xjs_Number.assertType(x, 'finite')
-		xjs_Number.assertType(y, 'finite')
+	static interpolateArithmetic(a: number, b: number, p: number = 0.5): number {
+		xjs_Number.assertType(a, 'finite')
+		xjs_Number.assertType(b, 'finite')
 		xjs_Number.assertType(p, 'finite')
-		return (x * (1 - p)) + (y * p)
+		return a * (1 - p) + (b * p) // equally, `(b - a) * p + a`
 	}
 
 	/**
 	 * Exponentially interpolate between, or extrapolate from, two numbers.
 	 *
-	 * If the argument `p` is within the interval [0, 1], the result is an interpolation within the interval [x, y],
-	 * such that `p == 0` produces `x` and `p == 1` produces `y`.
+	 * If the argument `p` is within the interval [0, 1], the result is an interpolation within the interval [a, b],
+	 * such that `p == 0` produces `a` and `p == 1` produces `b`.
 	 *
 	 * For example, `interpolateGeometric(10, 20, 0.7)` will return ~16.245, while
 	 * `interpolateGeometric(20, 10, 0.7)` will return ~12.311 (the same result as `interpolateGeometric(10, 20, 1 - 0.7)`).
 	 *
-	 * If `p` is outside [0, 1], the result is an extrapolation outside the range of [x, y].
+	 * If `p` is outside [0, 1], the result is an extrapolation outside the range of [a, b].
 	 * For example, `interpolateGeometric(10, 20, 1.3)` will return ~24.623, and
 	 * `interpolateGeometric(10, 20, -0.3)` will return ~8.123.
 	 *
 	 * `p` defaults to 0.5, thus yielding an even average, that is,
 	 * the {@link xjs_Math.meanGeometric|geometric mean}, of the two numbers.
-	 * @param   x 1st finite number
-	 * @param   y 2nd finite number
+	 * @see https://www.desmos.com/calculator/tfuwejqtav
+	 * @param   a 1st number
+	 * @param   b 2nd number
 	 * @param   p the interpolation/extrapolation parameter
-	 * @returns an exponential interpolation/extrapolation of `x` and `y`
-	 * @throws  {Error} if `x`, `y`, or `p` is not a finite number
+	 * @returns exactly `a ** (1 - p) * b ** p`
+	 * @throws  {Error} if `a`, `b`, or `p` is not a finite number
 	 * @throws  {NaNError} if an argument is `NaN`
 	 */
-	static interpolateGeometric(x: number, y: number, p: number = 0.5): number {
-		xjs_Number.assertType(x, 'finite')
-		xjs_Number.assertType(y, 'finite')
+	static interpolateGeometric(a: number, b: number, p: number = 0.5): number {
+		xjs_Number.assertType(a, 'finite')
+		xjs_Number.assertType(b, 'finite')
 		xjs_Number.assertType(p, 'finite')
-		return (x ** (1 - p)) * (y ** p)
+		return a ** (1 - p) * b ** p // equally, `a * (b / a) ** p`
+	}
+
+	/**
+	 * Rationally interpolate between, or extrapolate from, two numbers.
+	 *
+	 * If the argument `p` is within the interval [0, 1], the result is an interpolation within the interval [a, b],
+	 * such that `p == 0` produces `a` and `p == 1` produces `b`.
+	 *
+	 * For example, `interpolateHarmonic(10, 20, 0.7)` will return ~15.385, while
+	 * `interpolateHarmonic(20, 10, 0.7)` will return ~11.765 (the same result as `interpolateHarmonic(10, 20, 1 - 0.7)`).
+	 *
+	 * If `p` is outside [0, 1], the result is an extrapolation outside the range of [a, b].
+	 * For example, `interpolateHarmonic(10, 20, 1.3)` will return ~28.571, and
+	 * `interpolateHarmonic(10, 20, -0.3)` will return ~8.696.
+	 *
+	 * `p` defaults to 0.5, thus yielding an even average, that is,
+	 * the {@link xjs_Math.meanHarmonic|harmonic mean}, of the two numbers.
+	 * @see https://www.desmos.com/calculator/tfuwejqtav
+	 * @param   a 1st number
+	 * @param   b 2nd number
+	 * @param   p the interpolation/extrapolation parameter
+	 * @returns exactly `1 / interpolateArithmetic(1/a, 1/b, p)`
+	 * @throws  {Error} if `a`, `b`, or `p` is not a finite number
+	 * @throws  {NaNError} if an argument is `NaN`
+	 */
+	static interpolateHarmonic(a: number, b: number, p: number = 0.5): number {
+		xjs_Number.assertType(a, 'finite')
+		xjs_Number.assertType(b, 'finite')
+		xjs_Number.assertType(p, 'finite')
+		return 1 / xjs_Math.interpolateArithmetic(1/a, 1/b, p) // equally, `(a * b) / ((a - b) * p + b)`
 	}
 
 	/**

@@ -16,6 +16,7 @@ export default class xjs_Array {
 	 * the elements in the smaller array appear consecutively and in the same order as in the larger array.
 	 * In other words, if `{@link xjs_Array.is}(larger.slice(a,b), smaller)` (for some integers a and b),
 	 * then this method returns `true`.
+	 * Warning: passing in sparse arrays can yield unexpected results.
 	 *
 	 * Elements are compared via the provided comparator predicate.
 	 * If no predicate is provided, this method uses the default predicate {@link xjs_Object._sameValueZero}.
@@ -48,6 +49,7 @@ export default class xjs_Array {
    * Test whether two arrays have “the same” elements.
    *
    * Shortcut of {@link xjs_Object.is}, but for arrays.
+   * Warning: passing in sparse arrays can yield unexpected results.
    * @param   a the first array
    * @param   b the second array
    * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
@@ -74,6 +76,7 @@ export default class xjs_Array {
    * Deep freeze an array, and return the result.
    *
    * Shortcut of {@link xjs_Object.freezeDeep}, but for arrays.
+   * Warning: passing in a sparse array can yield unexpected results.
    * *Note: This function is impure, modifying the given argument.*
    * @param   arr the array to freeze
    * @returns the given array, with everything frozen
@@ -89,6 +92,7 @@ export default class xjs_Array {
    * Deep clone an array, and return the result.
    *
    * Shortcut of {@link xjs_Object.cloneDeep}, but for arrays.
+   * Warning: passing in a sparse array can yield unexpected results.
    * @param   arr the array to clone
    * @returns an exact copy of the given array
    */
@@ -118,6 +122,59 @@ export default class xjs_Array {
     return returned
   }
 
+	/**
+	 * Remove the ‘holes’ in an array.
+	 *
+	 * (Make a sparse array dense, or keep a dense array dense).
+	 * This method is **Pure** — it does not modify the given argument.
+	 *
+	 * A **sparse array** is an array whose length is greater than the number of elements its contains.
+	 * For example, `new Array(4)` is a sparse array: it has a length of 4 but no elements.
+	 * Sparse arrays are said to have a ‘hole’ where there is an index but no element.
+	 * A **dense array** is an array whose length is equal to its number of elements.
+	 *
+	 * Note that accessor notation is not sufficient to detect sparseness: calling `new Array(4)[0]`
+	 * will return `undefined`, even though `undefined` is not an element in the array.
+	 *
+	 * For example, `let arr = ['a', 'b', , 'd']` is a sparse array because `arr[2]` has not been defined.
+	 * Evaluating `arr[2]` will yield `undefined`, even though it has not been explicitly declared so.
+	 *
+	 * @param   arr an array to make dense
+	 * @returns a copy of the given array, but with no ‘holes’;
+	 *          the returned array might have a smaller `length` than the argument
+	 */
+	static densify<T>(arr: T[]): T[] {
+		const newarr: T[] = []
+		arr.forEach((el) => { newarr.push(el) }) // `Array#forEach` does not iterate over holes in sparse arrays
+		return newarr
+	}
+
+	/**
+	 * Fill the ‘holes’ in an array with a given value.
+	 *
+	 * This method is **Pure** — it does not modify the given argument.
+	 *
+	 * Similar to {@link xjs_Array.densify}, but instead of removing the holes of a sparse array
+	 * (thus decreasing the length), this method fills the holes with a given value,
+	 * thus maintaining the original array’s length.
+	 *
+	 * **Warning: This method has an important side-effect:
+	 * It treats entries of `undefined` as ‘holes’, even if they were intentionally declared.**
+	 * Therefore this method is not well-suited for arrays with intentional entries of `undefined`.
+	 * Suggestion: replace all intentional entries of `undefined` with `null`.
+	 *
+	 * @param   arr an array whose ‘holes’ and `undefined`s to fill, if it has any
+	 * @param   value the value to fill in the holes
+	 * @returns a copy of the given array, but with all holes and `undefined`s filled;
+	 *          the returned array will have the same length as the argument
+	 */
+	static fillHoles<T>(arr: T[], value: T): T[] {
+		const newarr: T[] = arr
+		for (let i = 0; i < newarr.length; i++) { // `Array#forEach` does not iterate over holes in sparse arrays
+			if (newarr[i] === void 0) newarr[i] = value
+		}
+		return newarr
+	}
 
   private constructor() {}
 }

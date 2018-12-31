@@ -102,6 +102,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_math.html#clamp" class="tsd-kind-icon">clamp</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_math.html#interpolatearithmetic" class="tsd-kind-icon">interpolate<wbr>Arithmetic</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_math.html#interpolategeometric" class="tsd-kind-icon">interpolate<wbr>Geometric</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_math.html#interpolateharmonic" class="tsd-kind-icon">interpolate<wbr>Harmonic</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_math.html#meanarithmetic" class="tsd-kind-icon">mean<wbr>Arithmetic</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_math.html#meangeometric" class="tsd-kind-icon">mean<wbr>Geometric</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_math.html#meanharmonic" class="tsd-kind-icon">mean<wbr>Harmonic</a></li>
@@ -124,7 +125,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Math.class.ts#L213">Math.class.ts:213</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Math.class.ts#L245">Math.class.ts:245</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="xjs_math.html" class="tsd-signature-type">xjs_Math</a></h4>
@@ -144,7 +145,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Math.class.ts#L20">Math.class.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Math.class.ts#L20">Math.class.ts:20</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -191,7 +192,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Math.class.ts#L35">Math.class.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Math.class.ts#L35">Math.class.ts:35</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -240,7 +241,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Math.class.ts#L52">Math.class.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Math.class.ts#L52">Math.class.ts:52</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -283,31 +284,34 @@
 					<a name="interpolatearithmetic" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> interpolate<wbr>Arithmetic</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">interpolate<wbr>Arithmetic<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, p<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">interpolate<wbr>Arithmetic<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, p<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Math.class.ts#L132">Math.class.ts:132</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Math.class.ts#L133">Math.class.ts:133</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Linearlly interpolate between, or extrapolate from, two numbers.</p>
 								</div>
-								<p>If the argument <code>p</code> is within the interval [0, 1], the result is an interpolation within the interval [x, y],
-								such that <code>p == 0</code> produces <code>x</code> and <code>p == 1</code> produces <code>y</code>.</p>
+								<p>If the argument <code>p</code> is within the interval [0, 1], the result is an interpolation within the interval [a, b],
+								such that <code>p == 0</code> produces <code>a</code> and <code>p == 1</code> produces <code>b</code>.</p>
 								<p>For example, <code>interpolateArithmetic(10, 20, 0.7)</code> will return 17, while
 								<code>interpolateArithmetic(20, 10, 0.7)</code> will return 13 (the same result as <code>interpolateArithmetic(10, 20, 1 - 0.7)</code>).</p>
-								<p>If <code>p</code> is outside [0, 1], the result is an extrapolation outside the range of [x, y].
+								<p>If <code>p</code> is outside [0, 1], the result is an extrapolation outside the range of [a, b].
 									For example, <code>interpolateArithmetic(10, 20, 1.3)</code> will return 23, and
 								<code>interpolateArithmetic(10, 20, -0.3)</code> will return 7.</p>
 								<p><code>p</code> defaults to 0.5, thus yielding an even average, that is,
 								the <a href="xjs_math.html#meanarithmetic">arithmetic mean</a>, of the two numbers.</p>
 								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p><a href="https://www.desmos.com/calculator/tfuwejqtav">https://www.desmos.com/calculator/tfuwejqtav</a></p>
+									</dd>
 									<dt>throws</dt>
-									<dd><p>{Error} if <code>x</code>, <code>y</code>, or <code>p</code> is not a finite number</p>
+									<dd><p>{Error} if <code>a</code>, <code>b</code>, or <code>p</code> is not a finite number</p>
 									</dd>
 									<dt>throws</dt>
 									<dd><p>{NaNError} if an argument is <code>NaN</code></p>
@@ -317,15 +321,15 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>x: <span class="tsd-signature-type">number</span></h5>
+									<h5>a: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>1st finite number</p>
+										<p>1st number</p>
 									</div>
 								</li>
 								<li>
-									<h5>y: <span class="tsd-signature-type">number</span></h5>
+									<h5>b: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>2nd finite number</p>
+										<p>2nd number</p>
 									</div>
 								</li>
 								<li>
@@ -336,7 +340,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-							<p>a linear interpolation/extrapolation of <code>x</code> and <code>y</code></p>
+							<p>exactly <code>a * (1 - p) + (b * p)</code></p>
 						</li>
 					</ul>
 				</section>
@@ -344,31 +348,34 @@
 					<a name="interpolategeometric" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> interpolate<wbr>Geometric</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">interpolate<wbr>Geometric<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, p<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">interpolate<wbr>Geometric<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, p<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Math.class.ts#L161">Math.class.ts:161</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Math.class.ts#L163">Math.class.ts:163</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Exponentially interpolate between, or extrapolate from, two numbers.</p>
 								</div>
-								<p>If the argument <code>p</code> is within the interval [0, 1], the result is an interpolation within the interval [x, y],
-								such that <code>p == 0</code> produces <code>x</code> and <code>p == 1</code> produces <code>y</code>.</p>
+								<p>If the argument <code>p</code> is within the interval [0, 1], the result is an interpolation within the interval [a, b],
+								such that <code>p == 0</code> produces <code>a</code> and <code>p == 1</code> produces <code>b</code>.</p>
 								<p>For example, <code>interpolateGeometric(10, 20, 0.7)</code> will return ~16.245, while
 								<code>interpolateGeometric(20, 10, 0.7)</code> will return ~12.311 (the same result as <code>interpolateGeometric(10, 20, 1 - 0.7)</code>).</p>
-								<p>If <code>p</code> is outside [0, 1], the result is an extrapolation outside the range of [x, y].
+								<p>If <code>p</code> is outside [0, 1], the result is an extrapolation outside the range of [a, b].
 									For example, <code>interpolateGeometric(10, 20, 1.3)</code> will return ~24.623, and
 								<code>interpolateGeometric(10, 20, -0.3)</code> will return ~8.123.</p>
 								<p><code>p</code> defaults to 0.5, thus yielding an even average, that is,
 								the <a href="xjs_math.html#meangeometric">geometric mean</a>, of the two numbers.</p>
 								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p><a href="https://www.desmos.com/calculator/tfuwejqtav">https://www.desmos.com/calculator/tfuwejqtav</a></p>
+									</dd>
 									<dt>throws</dt>
-									<dd><p>{Error} if <code>x</code>, <code>y</code>, or <code>p</code> is not a finite number</p>
+									<dd><p>{Error} if <code>a</code>, <code>b</code>, or <code>p</code> is not a finite number</p>
 									</dd>
 									<dt>throws</dt>
 									<dd><p>{NaNError} if an argument is <code>NaN</code></p>
@@ -378,15 +385,15 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>x: <span class="tsd-signature-type">number</span></h5>
+									<h5>a: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>1st finite number</p>
+										<p>1st number</p>
 									</div>
 								</li>
 								<li>
-									<h5>y: <span class="tsd-signature-type">number</span></h5>
+									<h5>b: <span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>2nd finite number</p>
+										<p>2nd number</p>
 									</div>
 								</li>
 								<li>
@@ -397,7 +404,71 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-							<p>an exponential interpolation/extrapolation of <code>x</code> and <code>y</code></p>
+							<p>exactly <code>a ** (1 - p) * b ** p</code></p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="interpolateharmonic" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> interpolate<wbr>Harmonic</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">interpolate<wbr>Harmonic<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, p<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Math.class.ts#L193">Math.class.ts:193</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Rationally interpolate between, or extrapolate from, two numbers.</p>
+								</div>
+								<p>If the argument <code>p</code> is within the interval [0, 1], the result is an interpolation within the interval [a, b],
+								such that <code>p == 0</code> produces <code>a</code> and <code>p == 1</code> produces <code>b</code>.</p>
+								<p>For example, <code>interpolateHarmonic(10, 20, 0.7)</code> will return ~15.385, while
+								<code>interpolateHarmonic(20, 10, 0.7)</code> will return ~11.765 (the same result as <code>interpolateHarmonic(10, 20, 1 - 0.7)</code>).</p>
+								<p>If <code>p</code> is outside [0, 1], the result is an extrapolation outside the range of [a, b].
+									For example, <code>interpolateHarmonic(10, 20, 1.3)</code> will return ~28.571, and
+								<code>interpolateHarmonic(10, 20, -0.3)</code> will return ~8.696.</p>
+								<p><code>p</code> defaults to 0.5, thus yielding an even average, that is,
+								the <a href="xjs_math.html#meanharmonic">harmonic mean</a>, of the two numbers.</p>
+								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p><a href="https://www.desmos.com/calculator/tfuwejqtav">https://www.desmos.com/calculator/tfuwejqtav</a></p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>{Error} if <code>a</code>, <code>b</code>, or <code>p</code> is not a finite number</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>{NaNError} if an argument is <code>NaN</code></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>a: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>1st number</p>
+									</div>
+								</li>
+								<li>
+									<h5>b: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>2nd number</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> p: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0.5</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the interpolation/extrapolation parameter</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+							<p>exactly <code>1 / interpolateArithmetic(1/a, 1/b, p)</code></p>
 						</li>
 					</ul>
 				</section>
@@ -411,7 +482,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Math.class.ts#L71">Math.class.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Math.class.ts#L71">Math.class.ts:71</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -453,7 +524,7 @@ meanArithmetic(a,b,c) == (a + b + c) / <span class="hljs-number">3</span></code>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Math.class.ts#L88">Math.class.ts:88</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Math.class.ts#L88">Math.class.ts:88</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -495,7 +566,7 @@ meanGeometric(a,b,c) == (a * b * c) ** (<span class="hljs-number">1</span>/<span
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Math.class.ts#L105">Math.class.ts:105</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Math.class.ts#L105">Math.class.ts:105</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -537,7 +608,7 @@ meanHarmonic(a,b,c) == <span class="hljs-number">1</span> / ((<span class="hljs-
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Math.class.ts#L179">Math.class.ts:179</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Math.class.ts#L211">Math.class.ts:211</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -583,7 +654,7 @@ meanHarmonic(a,b,c) == <span class="hljs-number">1</span> / ((<span class="hljs-
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/7ca98ad/src/class/Math.class.ts#L209">Math.class.ts:209</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/acc0324/src/class/Math.class.ts#L241">Math.class.ts:241</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -672,6 +743,9 @@ tetrate(<span class="hljs-number">5</span>, <span class="hljs-number">0</span>) 
 								<a href="xjs_math.html#interpolategeometric" class="tsd-kind-icon">interpolate<wbr>Geometric</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="xjs_math.html#interpolateharmonic" class="tsd-kind-icon">interpolate<wbr>Harmonic</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="xjs_math.html#meanarithmetic" class="tsd-kind-icon">mean<wbr>Arithmetic</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -699,8 +773,8 @@ tetrate(<span class="hljs-number">5</span>, <span class="hljs-number">0</span>) 
 					<li class=" tsd-kind-class">
 						<a href="xjs_string.html" class="tsd-kind-icon">xjs_<wbr><wbr>String</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../interfaces/switchfn.html" class="tsd-kind-icon">Switch<wbr>Fn</a>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-not-exported">
+						<a href="../globals.html#switchfn" class="tsd-kind-icon">Switch<wbr>Fn</a>
 					</li>
 				</ul>
 			</nav>
