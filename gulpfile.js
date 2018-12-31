@@ -32,6 +32,8 @@ async function test_run() {
 			require('./test/out/Date-format.test.js')      .default,
 			require('./test/out/String-stringify.test.js') .default,
 			require('./test/out/Array-contains.test.js')   .default,
+			require('./test/out/Array-densify.test.js')    .default,
+			require('./test/out/Array-fillHoles.test.js')  .default,
 		])
 		console.info('All tests ran successfully!')
 }
