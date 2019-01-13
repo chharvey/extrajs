@@ -36,7 +36,7 @@ export default class xjs_Array {
 	 * @returns is `smaller` a subarray of `larger`?
 	 * @throws  {RangeError} if the second array is larger than the first
 	 */
-	static contains<T>(larger: T[], smaller: T[], comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
+	static contains<T>(larger: ReadonlyArray<T>, smaller: ReadonlyArray<T>, comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
 		if (smaller.length > larger.length) {
 			throw new RangeError('First argument cannot be smaller than the second. Try switching the arguments.')
 		}
@@ -55,7 +55,7 @@ export default class xjs_Array {
    * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
    * @returns Are corresponding elements the same, i.e. replaceable??
    */
-  static is<T>(a: T[], b: T[], comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
+  static is<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>, comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
     return a === b || (a.length === b.length) && a.every((el, i) => comparator(el, b[i]))
   }
 
@@ -65,7 +65,7 @@ export default class xjs_Array {
 	 * @returns the last entry of the array, if the array is nonempty
 	 * @throws  {RangeError} if the array is empty
 	 */
-	static peek<T>(arr: T[]): T {
+	static peek<T>(arr: ReadonlyArray<T>): T {
 		if (!arr.length) throw new RangeError('Cannot peek an empty array.')
 		return arr[arr.length - 1]
 		// return arr.slice(-1)[0]
@@ -96,7 +96,7 @@ export default class xjs_Array {
    * @param   arr the array to clone
    * @returns an exact copy of the given array
    */
-  static cloneDeep<T>(arr: T[]): T[] {
+  static cloneDeep<T>(arr: ReadonlyArray<T>): T[] {
     return arr.map((el) => xjs_Object.cloneDeep(el))
   }
 
@@ -112,7 +112,7 @@ export default class xjs_Array {
    * @param   comparator a function comparing elements in the array
    * @returns a new array, with duplicates removed
    */
-  static removeDuplicates<T>(arr: T[], comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): T[] {
+  static removeDuplicates<T>(arr: ReadonlyArray<T>, comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): T[] {
     const returned: T[] = arr.slice()
     for (let i = 0; i < returned.length; i++) {
       for (let j = i + 1; j < returned.length; j++) {
@@ -143,7 +143,7 @@ export default class xjs_Array {
 	 * @returns a copy of the given array, but with no ‘holes’;
 	 *          the returned array might have a smaller `length` than the argument
 	 */
-	static densify<T>(arr: T[]): T[] {
+	static densify<T>(arr: ReadonlyArray<T>): T[] {
 		const newarr: T[] = []
 		arr.forEach((el) => { newarr.push(el) }) // `Array#forEach` does not iterate over holes in sparse arrays
 		return newarr
@@ -168,8 +168,8 @@ export default class xjs_Array {
 	 * @returns a copy of the given array, but with all holes and `undefined`s filled;
 	 *          the returned array will have the same length as the argument
 	 */
-	static fillHoles<T>(arr: T[], value: T): T[] {
-		const newarr: T[] = arr
+	static fillHoles<T>(arr: ReadonlyArray<T>, value: T): T[] {
+		const newarr: T[] = arr.slice()
 		for (let i = 0; i < newarr.length; i++) { // `Array#forEach` does not iterate over holes in sparse arrays
 			if (newarr[i] === void 0) newarr[i] = value
 		}
