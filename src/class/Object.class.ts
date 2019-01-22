@@ -1,3 +1,6 @@
+import xjs_Array_module from './Array.class'
+
+
 /**
  * A helper for {@link xjs_Object.switch}.
  * @param args a list of arguments to be passed to the function
@@ -220,7 +223,7 @@ export default class xjs_Object {
    * @returns the given value, with everything frozen
    */
   static freezeDeep<T>(thing: T): T {
-    const xjs_Array = require('./Array.class.js').default // NB relative to dist
+		const xjs_Array: typeof xjs_Array_module = require('./Array.class.js').default // NB relative to dist
     if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.freezeDeep(thing as unknown as unknown[]) as unknown as T // HACK https://stackoverflow.com/a/18736071/
     Object.freeze(thing)
     if (xjs_Object.typeOf(thing) === 'object') {
@@ -286,7 +289,7 @@ export default class xjs_Object {
    * @returns an exact copy of the given value, but with nothing equal via `===` (unless the value given is primitive)
    */
   static cloneDeep<T>(thing: T): T {
-    const xjs_Array = require('./Array.class.js').default // NB relative to dist
+		const xjs_Array: typeof xjs_Array_module = require('./Array.class.js').default // NB relative to dist
     if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.cloneDeep(thing as unknown as unknown[]) as unknown as T // HACK https://stackoverflow.com/a/18736071/
     if (xjs_Object.typeOf(thing) === 'object') {
         const returned: { [index: string]: unknown } = {}
