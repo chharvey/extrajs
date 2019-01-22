@@ -209,7 +209,7 @@ export default class xjs_Object {
   }
 
   /**
-   * WARNING{EXPERIMENTAL}
+   * @deprecated WARNING{DEPRECATED} - use interface `Readonly<T>` instead
    * Deep freeze an object, and return the result.
    *
    * *Note: This function is impure, modifying the given argument.*
@@ -222,9 +222,9 @@ export default class xjs_Object {
    * @param   thing any value to freeze
    * @returns the given value, with everything frozen
    */
-  static freezeDeep<T>(thing: T): T {
+  static freezeDeep<T>(thing: Readonly<T>): Readonly<T> {
 		const xjs_Array: typeof xjs_Array_module = require('./Array.class.js').default // NB relative to dist
-    if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.freezeDeep(thing as unknown as unknown[]) as unknown as T // HACK https://stackoverflow.com/a/18736071/
+		if (thing instanceof Array) return xjs_Array.freezeDeep(thing) as unknown as T // HACK https://stackoverflow.com/a/18736071/
     Object.freeze(thing)
     if (xjs_Object.typeOf(thing) === 'object') {
         for (let key in thing) {
@@ -290,7 +290,7 @@ export default class xjs_Object {
    */
   static cloneDeep<T>(thing: T): T {
 		const xjs_Array: typeof xjs_Array_module = require('./Array.class.js').default // NB relative to dist
-    if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.cloneDeep(thing as unknown as unknown[]) as unknown as T // HACK https://stackoverflow.com/a/18736071/
+		if (thing instanceof Array) return xjs_Array.cloneDeep(thing) as unknown as T // HACK https://stackoverflow.com/a/18736071/
     if (xjs_Object.typeOf(thing) === 'object') {
         const returned: { [index: string]: unknown } = {}
         for (let key in thing) {

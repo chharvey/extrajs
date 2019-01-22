@@ -72,7 +72,7 @@ export default class xjs_Array {
 	}
 
   /**
-   * WARNING{EXPERIMENTAL}
+   * @deprecated WARNING{DEPRECATED} - use interface `ReadonlyArray<T>` instead
    * Deep freeze an array, and return the result.
    *
    * Shortcut of {@link xjs_Object.freezeDeep}, but for arrays.
@@ -81,7 +81,7 @@ export default class xjs_Array {
    * @param   arr the array to freeze
    * @returns the given array, with everything frozen
    */
-  static freezeDeep<T>(arr: T[]): T[] {
+  static freezeDeep<T>(arr: ReadonlyArray<T>): ReadonlyArray<T> {
     Object.freeze(arr)
     arr.forEach((el) => { if (!Object.isFrozen(el)) xjs_Object.freezeDeep(el) })
     return arr
