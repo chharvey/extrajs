@@ -30,6 +30,7 @@ export default class xjs_Array {
 	 * xjs.Array.contains([2,4,6], [2,4,6,8]) // throws a RangeError: first array is smaller than second
 	 * ```
 	 *
+	 * @param   <T> the type of elements in `larger` and `smaller`
 	 * @param   larger  the larger array, to test against
 	 * @param   smaller the smaller array, to test
 	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `larger` and `smaller`
@@ -50,6 +51,7 @@ export default class xjs_Array {
    *
    * Shortcut of {@link xjs_Object.is}, but for arrays.
    * Warning: passing in sparse arrays can yield unexpected results.
+	 * @param   <T> the type of elements in `a` and `b`
    * @param   a the first array
    * @param   b the second array
    * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
@@ -61,6 +63,7 @@ export default class xjs_Array {
 
 	/**
 	 * Look at the top of a stack, without affecting the stack.
+	 * @param   <T> the type of elements in `arr`
 	 * @param   arr the stack to peek
 	 * @returns the last entry of the array, if the array is nonempty
 	 * @throws  {RangeError} if the array is empty
@@ -93,6 +96,7 @@ export default class xjs_Array {
    *
    * Shortcut of {@link xjs_Object.cloneDeep}, but for arrays.
    * Warning: passing in a sparse array can yield unexpected results.
+	 * @param   <T> the type of elements in `arr`
    * @param   arr the array to clone
    * @returns an exact copy of the given array
    */
@@ -108,6 +112,7 @@ export default class xjs_Array {
    * the provided comparator function, or if none is given,
    * {@link xjs_Object.sameValueZero}.
    * Only duplicate entries are removed; the order of non-duplicates is preserved.
+	 * @param   <T> the type of elements in `arr`
    * @param   arr an array to use
    * @param   comparator a function comparing elements in the array
    * @returns a new array, with duplicates removed
@@ -139,6 +144,7 @@ export default class xjs_Array {
 	 * For example, `let arr = ['a', 'b', , 'd']` is a sparse array because `arr[2]` has not been defined.
 	 * Evaluating `arr[2]` will yield `undefined`, even though it has not been explicitly declared so.
 	 *
+	 * @param   <T> the type of elements in `arr`
 	 * @param   arr an array to make dense
 	 * @returns a copy of the given array, but with no ‘holes’;
 	 *          the returned array might have a smaller `length` than the argument
@@ -163,6 +169,7 @@ export default class xjs_Array {
 	 * Therefore this method is not well-suited for arrays with intentional entries of `undefined`.
 	 * Suggestion: replace all intentional entries of `undefined` with `null`.
 	 *
+	 * @param   <T> the type of elements in `arr`
 	 * @param   arr an array whose ‘holes’ and `undefined`s to fill, if it has any
 	 * @param   value the value to fill in the holes
 	 * @returns a copy of the given array, but with all holes and `undefined`s filled;
