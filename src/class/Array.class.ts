@@ -8,6 +8,7 @@ import xjs_Object from './Object.class'
  */
 export default class xjs_Array {
 	/**
+	 * @deprecated - WARNING{DEPRECATED} - use {@link xjs_Array.isConsecutiveSuperarrayOf} instead.
 	 * Test whether an array is a subarray of another array.
 	 *
 	 * This method acts like
@@ -55,9 +56,81 @@ export default class xjs_Array {
    * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
    * @returns Are corresponding elements the same, i.e. replaceable??
    */
-  static is<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>, comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
-    return a === b || (a.length === b.length) && a.every((el, i) => comparator(el, b[i]))
-  }
+	static is<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		return a === b || a.length === b.length && a.every((el, i) => comparator(el, b[i]))
+	}
+
+	/**
+	 * Return whether `a` is a subarray of `b`.
+	 *
+	 * If and only if `a` is a subarray of `b`, all of the following must be true:
+	 * - `a` cannot be larger than `b`
+	 * - every element of `a` must appear somewhere in `b`,
+	 * 	where comparison is determined by the `comparator` parameter
+	 * - the elements of `a` that are in `b` must appear in the same order in which they appear in `a`
+	 *
+	 * Note that if `a` is an empty array `[]`, or if `a` and `b` are “the same” (as determined by `comparator`),
+	 * this method returns `true`.
+	 * @param   <T> the type of elements in `a`
+	 * @param   <U> the type of elements in `b`
+	 * @param   a the smaller array
+	 * @param   b the larger array
+	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
+	 * @returns Is `a` a subarray of `b`?
+	 */
+	static isSubarrayOf<U, T extends U>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		return a.length <= b.length && (
+			a.length === 0 || xjs_Array.is(a, b, comparator) ||
+			a.map((t) =>
+				b.findIndex((u) => comparator(u, t)) // indices of `b`’s elements in the order in which they appear in `a`
+			).every((n, i, arr) =>
+				n >= 0 && (i === 0 || arr[i] > arr[i-1]) // indices must all be 0+ and increasing (all of `a`’s elements are present in `b` and in the right order)
+			)
+		)
+	}
+
+	/**
+	 * {@link xjs_Array.isSubarrayOf}, but with the parameters switched.
+	 * @param   <T> the type of elements in `a`
+	 * @param   <U> the type of elements in `b`
+	 * @param   a the larger array
+	 * @param   b the smaller array
+	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
+	 * @returns exactly `xjs_Array.isSubarrayOf(b, a, comparator)`
+	 */
+	static isSuperarrayOf<T, U extends T>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		return xjs_Array.isSubarrayOf(b, a, comparator)
+	}
+
+	/**
+	 * {@link xjs_Array.isSubarrayOf}, but the elements of `a` must appear consecutively in `b`.
+	 * @param   <T> the type of elements in `a`
+	 * @param   <U> the type of elements in `b`
+	 * @param   a the smaller array
+	 * @param   b the larger array
+	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
+	 * @returns Is `a` a consecutive subarray of `b`?
+	 */
+	static isConsecutiveSubarrayOf<U, T extends U>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		return xjs_Array.isSubarrayOf(a, b, comparator) && a.map((t) =>
+			b.findIndex((u) => comparator(u, t)) // indices of `b`’s elements in the order in which they appear in `a`
+		).every((n, i, arr) =>
+			n >= 0 && (i === 0 || arr[i] === arr[i-1] + 1) // indices must all be 0+ and incrementing (all of `a`’s elements are present in `b` and in the right order, consecutively)
+		)
+	}
+
+	/**
+	 * {@link xjs_Array.isConsecutiveSubarrayOf} but with the parameters switched.
+	 * @param   <T> the type of elements in `a`
+	 * @param   <U> the type of elements in `b`
+	 * @param   a the larger array
+	 * @param   b the smaller array
+	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
+	 * @returns exactly `xjs_Array.isConsecutiveSubarrayOf(b, a, comparator)`
+	 */
+	static isConsecutiveSuperarrayOf<T, U extends T>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		return xjs_Array.isConsecutiveSubarrayOf(b, a, comparator)
+	}
 
 	/**
 	 * Look at the top of a stack, without affecting the stack.
