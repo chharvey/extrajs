@@ -174,7 +174,7 @@ export default class xjs_Array {
   }
 
   /**
-   * WARNING{EXPERIMENTAL}
+   * @deprecated WARNING{DEPRECATED} - use `[...new Set(arr)]` instead
    * Make a copy of an array, and then remove duplicate entries.
    *
    * "Duplicate entries" are entries that considered "the same" by
