@@ -2,12 +2,6 @@ import xjs_Array_module from './Array.class'
 
 
 /**
- * A helper for {@link xjs_Object.switch}.
- * @param args a list of arguments to be passed to the function
- */
-type SwitchFn<T> = (this: any, ...args: any[]) => T;
-
-/**
  * Additional static members for the native Object class.
  *
  * Does not extend the native Object class.
@@ -83,7 +77,7 @@ export default class xjs_Object {
 	 * It takes two arguments: a key and a dictionary.
 	 *
 	 * The first argument is the key in the dictionary whose value to look up.
-	 * The dictionary argument must be an object with string keys and {@link SwitchFn} values.
+	 * The dictionary argument must be an object with string keys and function values.
 	 * Each of these functions, when called, should return a value corresponding to its key string.
 	 * All functions in the dictionary must return the same type of value.
 	 *
@@ -96,8 +90,8 @@ export default class xjs_Object {
 	 * Note that this method looks for `'default'` when it cannot find any other key,
 	 * and in doing so it logs a warning.
 	 * To suppress this warning, it is best to provide keys for all known possible inputs,
-	 * even if that means duplicating `SwitchFn` values.
-	 * (Though it’s easy to define a `SwitchFn` before calling this method.)
+	 * even if that means duplicating some values.
+	 * (Though it’s easy to define and reuse a function value before calling this method.)
 	 * Best practice is to write a `'default'` case only for unknown key inputs.
 	 *
 	 * The following example calls this method to look up
@@ -126,16 +120,17 @@ export default class xjs_Object {
 	 * call_me(1) // returns the number `6`
 	 * ```
 	 *
+	 * @param   <T> the type of value returned by the looked-up function
 	 * @param   key the key to provide the lookup, which will give a function
-	 * @param   dictionary an object with {@link SwitchFn} values
-	 * @returns the looked-up function
+	 * @param   dictionary an object with function values
+	 * @returns the looked-up function, returning <T>
 	 * @throws  {ReferenceError} when failing to find a lookup value
 	 */
-	static switch<T>(key: string, dictionary: { [index: string]: SwitchFn<T> }): SwitchFn<T> {
-		let returned = dictionary[key]
+	static switch<T>(key: string, dictionary: { [index: string]: (this: any, ...args: any[]) => T }): (this: any, ...args: any[]) => T {
+		let returned: (this: any, ...args: any[]) => T = dictionary[key]
 		if (!returned) {
 			console.warn(`Key '${key}' cannot be found. Using key 'default'…`)
-			returned = dictionary['default']
+			returned = dictionary['default'] || null
 			if (!returned) throw new ReferenceError(`No default key found.`)
 		}
 		return returned
