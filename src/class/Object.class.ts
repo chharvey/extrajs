@@ -2,12 +2,6 @@ import xjs_Array_module from './Array.class'
 
 
 /**
- * A helper for {@link xjs_Object.switch}.
- * @param args a list of arguments to be passed to the function
- */
-type SwitchFn<T> = (this: any, ...args: any[]) => T;
-
-/**
  * Additional static members for the native Object class.
  *
  * Does not extend the native Object class.
@@ -43,6 +37,7 @@ export default class xjs_Object {
 	 * Then this replaceability relation `R` is **symmetric**, because `x R y` implies `y R x`.
 	 * We want `xjs.Object.is(x, y)` to emulate this relation.
 	 *
+	 * @param   <T> the least common supertype of `a` and `b`
 	 * @param   a the first  thing
 	 * @param   b the second thing
 	 * @param   comparator a predicate checking the “sameness” of corresponding properties of `a` and `b`
@@ -50,12 +45,13 @@ export default class xjs_Object {
 	 * @throws  {TypeError} if either `a` or `b` is a function (not supported)
 	 */
 	static is<T>(a: T, b: T, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		if (a === b) return true
 		if (['string', 'number', 'boolean', 'null', 'undefined'].includes(xjs_Object.typeOf(a))) {
 			return xjs_Object.sameValueZero(a, b)
 		}
 		if (xjs_Object.typeOf(a) === 'function') throw new TypeError('Function arguments to xjs.Object.is are not yet supported.')
 		// else, it will be 'object' or 'array'
-		return a === b || Object.entries(a).every((a_entry) =>
+		return Object.entries(a).every((a_entry) =>
 			Object.entries(b).some((b_entry) => a_entry[0] === b_entry[0] && comparator(a_entry[1], b_entry[1]))
 		)
 	}
@@ -83,7 +79,7 @@ export default class xjs_Object {
 	 * It takes two arguments: a key and a dictionary.
 	 *
 	 * The first argument is the key in the dictionary whose value to look up.
-	 * The dictionary argument must be an object with string keys and {@link SwitchFn} values.
+	 * The dictionary argument must be an object with string keys and function values.
 	 * Each of these functions, when called, should return a value corresponding to its key string.
 	 * All functions in the dictionary must return the same type of value.
 	 *
@@ -96,8 +92,8 @@ export default class xjs_Object {
 	 * Note that this method looks for `'default'` when it cannot find any other key,
 	 * and in doing so it logs a warning.
 	 * To suppress this warning, it is best to provide keys for all known possible inputs,
-	 * even if that means duplicating `SwitchFn` values.
-	 * (Though it’s easy to define a `SwitchFn` before calling this method.)
+	 * even if that means duplicating some values.
+	 * (Though it’s easy to define and reuse a function value before calling this method.)
 	 * Best practice is to write a `'default'` case only for unknown key inputs.
 	 *
 	 * The following example calls this method to look up
@@ -126,16 +122,17 @@ export default class xjs_Object {
 	 * call_me(1) // returns the number `6`
 	 * ```
 	 *
+	 * @param   <T> the type of value returned by the looked-up function
 	 * @param   key the key to provide the lookup, which will give a function
-	 * @param   dictionary an object with {@link SwitchFn} values
-	 * @returns the looked-up function
+	 * @param   dictionary an object with function values
+	 * @returns the looked-up function, returning <T>
 	 * @throws  {ReferenceError} when failing to find a lookup value
 	 */
-	static switch<T>(key: string, dictionary: { [index: string]: SwitchFn<T> }): SwitchFn<T> {
-		let returned = dictionary[key]
+	static switch<T>(key: string, dictionary: { [index: string]: (this: any, ...args: any[]) => T }): (this: any, ...args: any[]) => T {
+		let returned: (this: any, ...args: any[]) => T = dictionary[key]
 		if (!returned) {
 			console.warn(`Key '${key}' cannot be found. Using key 'default'…`)
-			returned = dictionary['default']
+			returned = dictionary['default'] || null
 			if (!returned) throw new ReferenceError(`No default key found.`)
 		}
 		return returned
@@ -285,6 +282,7 @@ export default class xjs_Object {
    * console.log(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
    * ```
    *
+	 * @param   <T> the type of `thing`
    * @param   thing any value to clone
    * @returns an exact copy of the given value, but with nothing equal via `===` (unless the value given is primitive)
    */
