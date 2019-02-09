@@ -64,6 +64,13 @@ async function test_run_Object() {
 	console.info('All _Object_ tests ran successfully!')
 }
 
+async function test_run_Promise() {
+	await Promise.all([
+		require('./test/out/Promise-any.test.js').default,
+	])
+	console.info('All _Promise_ tests ran successfully!')
+}
+
 async function test_run_Set() {
 	await Promise.all([
 		require('./test/out/Set-isSubsetOf.test.js'  ).default,
@@ -86,6 +93,7 @@ const test_run = gulp.series(
 		test_run_Number,
 		test_run_Math,
 		test_run_Object,
+		test_run_Promise,
 		test_run_Set,
 		test_run_String,
 	), async function test_run0() {
@@ -119,6 +127,7 @@ module.exports = {
 	test_run_Math,
 	test_run_Number,
 	test_run_Object,
+	test_run_Promise,
 	test_run_Set,
 	test_run_String,
 	test_run,

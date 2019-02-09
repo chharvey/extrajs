@@ -254,5 +254,6 @@ export default class xjs_Array {
 		return newarr
 	}
 
+
   private constructor() {}
 }
