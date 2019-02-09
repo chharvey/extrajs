@@ -66,7 +66,8 @@ async function test_run_Object() {
 
 async function test_run_Set() {
 	await Promise.all([
-		require('./test/out/String-stringify.test.js').default,
+		require('./test/out/Set-isSubsetOf.test.js'  ).default,
+		require('./test/out/Set-isSupersetOf.test.js').default,
 	])
 	console.info('All _Set_ tests ran successfully!')
 }
