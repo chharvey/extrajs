@@ -19,7 +19,8 @@ export default class xjs_Set {
 	 * @returns Are corresponding elements the same, i.e. replaceable??
 	 */
 	static is<T>(a: ReadonlySet<T>, b: ReadonlySet<T>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
-		return a === b || a.size === b.size &&
+		if (a === b) return true
+		return a.size === b.size &&
 			[...a].every((a_el) => [...b].some((b_el) => comparator(a_el, b_el))) &&
 			[...b].every((b_el) => [...a].some((a_el) => comparator(b_el, a_el)))
 	}

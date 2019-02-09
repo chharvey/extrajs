@@ -45,12 +45,13 @@ export default class xjs_Object {
 	 * @throws  {TypeError} if either `a` or `b` is a function (not supported)
 	 */
 	static is<T>(a: T, b: T, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		if (a === b) return true
 		if (['string', 'number', 'boolean', 'null', 'undefined'].includes(xjs_Object.typeOf(a))) {
 			return xjs_Object.sameValueZero(a, b)
 		}
 		if (xjs_Object.typeOf(a) === 'function') throw new TypeError('Function arguments to xjs.Object.is are not yet supported.')
 		// else, it will be 'object' or 'array'
-		return a === b || Object.entries(a).every((a_entry) =>
+		return Object.entries(a).every((a_entry) =>
 			Object.entries(b).some((b_entry) => a_entry[0] === b_entry[0] && comparator(a_entry[1], b_entry[1]))
 		)
 	}

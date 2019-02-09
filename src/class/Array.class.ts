@@ -59,7 +59,8 @@ export default class xjs_Array {
    * @returns Are corresponding elements the same, i.e. replaceable??
    */
 	static is<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
-		return a === b || a.length === b.length && a.every((el, i) => comparator(el, b[i]))
+		if (a === b) return true
+		return a.length === b.length && a.every((el, i) => comparator(el, b[i]))
 	}
 
 	/**
