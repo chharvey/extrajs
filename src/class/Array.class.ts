@@ -59,7 +59,8 @@ export default class xjs_Array {
    * @returns Are corresponding elements the same, i.e. replaceable??
    */
 	static is<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
-		return a === b || a.length === b.length && a.every((el, i) => comparator(el, b[i]))
+		if (a === b) return true
+		return a.length === b.length && a.every((el, i) => comparator(el, b[i]))
 	}
 
 	/**
@@ -85,8 +86,8 @@ export default class xjs_Array {
 			a.length === 0 || xjs_Array.is(a, b, comparator) ||
 			a.map((t) =>
 				b.findIndex((u) => comparator(u, t)) // indices of `b`’s elements in the order in which they appear in `a`
-			).every((n, i, arr) =>
-				n >= 0 && (i === 0 || arr[i] > arr[i-1]) // indices must all be 0+ and increasing (all of `a`’s elements are present in `b` and in the right order)
+			).every((n, i, indices) =>
+				n >= 0 && (i === 0 || indices[i] > indices[i-1]) // indices must all be 0+ and increasing (all of `a`’s elements are present in `b` and in the right order)
 			)
 		)
 	}
@@ -114,11 +115,8 @@ export default class xjs_Array {
 	 * @returns Is `a` a consecutive subarray of `b`?
 	 */
 	static isConsecutiveSubarrayOf<U, T extends U>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
-		return xjs_Array.isSubarrayOf(a, b, comparator) && a.map((t) =>
-			b.findIndex((u) => comparator(u, t)) // indices of `b`’s elements in the order in which they appear in `a`
-		).every((n, i, arr) =>
-			n >= 0 && (i === 0 || arr[i] === arr[i-1] + 1) // indices must all be 0+ and incrementing (all of `a`’s elements are present in `b` and in the right order, consecutively)
-		)
+		return xjs_Array.isSubarrayOf(a, b, comparator) &&
+			b.map((_el, i) => b.slice(i, i+a.length)).some((sub) => xjs_Array.is(a, sub, comparator))
 	}
 
 	/**
