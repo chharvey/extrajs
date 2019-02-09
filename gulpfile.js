@@ -21,9 +21,12 @@ function test_out() {
 
 async function test_run_Array() {
 	await Promise.all([
-		require('./test/out/Array-contains.test.js' ).default,
-		require('./test/out/Array-densify.test.js'  ).default,
-		require('./test/out/Array-fillHoles.test.js').default,
+		require('./test/out/Array-isSubarrayOf.test.js'             ).default,
+		require('./test/out/Array-isSuperarrayOf.test.js'           ).default,
+		require('./test/out/Array-isConsecutiveSubarrayOf.test.js'  ).default,
+		require('./test/out/Array-isConsecutiveSuperarrayOf.test.js').default,
+		require('./test/out/Array-densify.test.js'                  ).default,
+		require('./test/out/Array-fillHoles.test.js'                ).default,
 	])
 	console.info('All _Array_ tests ran successfully!')
 }
