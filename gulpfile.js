@@ -88,7 +88,7 @@ const test_run = gulp.series(
 		test_run_Object,
 		test_run_Set,
 		test_run_String,
-	), function test_run0() {
+	), async function test_run0() {
 		console.info('All tests ran successfully!')
 	}
 )
