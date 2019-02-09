@@ -38,7 +38,7 @@ export default class xjs_Set {
 	 * @returns Is `a` a subarray of `b`?
 	 */
 	static isSubsetOf<U, T extends U>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
-		return xjs_Array.isSubarrayOf([...a], [...b], comparator)
+		return xjs_Array.isSubarrayOf([...a].sort(), [...b].sort(), comparator)
 	}
 
 	/**
