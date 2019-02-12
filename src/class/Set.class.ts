@@ -35,7 +35,7 @@ export default class xjs_Set {
 	 * @param   a the smaller set
 	 * @param   b the larger set
 	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
-	 * @returns Is `a` a subarray of `b`?
+	 * @returns Is `a` a subset of `b`?
 	 */
 	static isSubsetOf<U, T extends U>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
 		return xjs_Array.isSubarrayOf([...a].sort(), [...b].sort(), comparator)
@@ -48,7 +48,7 @@ export default class xjs_Set {
 	 * @param   a the larger set
 	 * @param   b the smaller set
 	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
-	 * @returns exactly `xjs_Set.isSubsetOf(b, a, comparator)`
+	 * @returns exactly `xjs.Set.isSubsetOf(b, a, comparator)`
 	 */
 	static isSupersetOf<T, U extends T>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
 		return xjs_Set.isSubsetOf(b, a, comparator)
@@ -100,6 +100,10 @@ export default class xjs_Set {
 
 	/**
 	 * Return the symmetric difference (exclusive disjunction) of two sets: the set of elements either in one set, or in the other, but not both.
+	 *
+	 * Equivalent to:
+	 * - `difference( union(a,b) , intersection(a,b) )`
+	 * - `union( difference(a,b) , difference(b,a) )`
 	 * @param   <T> the type of elements in `a`
 	 * @param   <U> the type of elements in `b`
 	 * @param   a the first set
@@ -107,7 +111,7 @@ export default class xjs_Set {
 	 * @returns a new Set containing the elements present only in `a` or only in `b`, but not both
 	 */
 	static symmetricDifference<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>): Set<T|U> {
-		return xjs_Set.union(xjs_Set.difference(a, b), xjs_Set.difference(b, a))
+		return xjs_Set.difference(xjs_Set.union(a,b), xjs_Set.intersection(a,b))
 	}
 
 
