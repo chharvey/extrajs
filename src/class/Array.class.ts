@@ -1,4 +1,5 @@
 import xjs_Object from './Object.class'
+import NaNError from './NaNError.class'
 
 
 /**
@@ -7,6 +8,22 @@ import xjs_Object from './Object.class'
  * Does not extend the native Array class.
  */
 export default class xjs_Array {
+	/**
+	 * Get a value of an array, given an index.
+	 *
+	 * Same as `arr[index]`, but more robust.
+	 * @param   arr the array to search
+	 * @param   index the index of the returned value
+	 * @returns the value in `arr` found at `index`
+	 * @throws  {RangeError} if the index is out of bounds (or if the returned value is `undefined`)
+	 * @throws  {NaNError} if the returned value is `NaN`
+	 */
+	static get<T>(arr: T[], index: number): T {
+		if (arr[index] === void 0) throw new RangeError(`Index \`${index}\` out of bounds.`)
+		if (Number.isNaN(arr[index] as any)) throw new NaNError('Got `NaN`.')
+		return arr[index]
+	}
+
 	/**
 	 * @deprecated - WARNING{DEPRECATED} - use {@link xjs_Array.isConsecutiveSuperarrayOf} instead.
 	 * Test whether an array is a subarray of another array.
