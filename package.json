@@ -1,6 +1,6 @@
 {
   "name": "extrajs",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "Javascript helpers for lazy people.",
   "main": "index.js",
   "scripts": {
@@ -29,8 +29,8 @@
     "gulp": "^4.0.0",
     "gulp-typedoc": "^2.2.0",
     "gulp-typescript": "^5.0.0-alpha.3",
-    "typedoc": "^0.13.0",
-    "typescript": "~3.2.2"
+    "typedoc": "^0.14.2",
+    "typescript": "~3.3.3"
   },
   "dependencies": {
     "@types/node": "^10.12.0"

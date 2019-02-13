@@ -1,4 +1,5 @@
 import xjs_Object from './Object.class'
+import NaNError from './NaNError.class'
 
 
 /**
@@ -8,6 +9,23 @@ import xjs_Object from './Object.class'
  */
 export default class xjs_Array {
 	/**
+	 * Get a value of an array, given an index.
+	 *
+	 * Same as `arr[index]`, but more robust.
+	 * @param   arr the array to search
+	 * @param   index the index of the returned value
+	 * @returns the value in `arr` found at `index`
+	 * @throws  {RangeError} if the index is out of bounds (or if the returned value is `undefined`)
+	 * @throws  {NaNError} if the returned value is `NaN`
+	 */
+	static get<T>(arr: T[], index: number): T {
+		if (arr[index] === void 0) throw new RangeError(`Index \`${index}\` out of bounds.`)
+		if (Number.isNaN(arr[index] as any)) throw new NaNError('Got `NaN`.')
+		return arr[index]
+	}
+
+	/**
+	 * @deprecated - WARNING{DEPRECATED} - use {@link xjs_Array.isConsecutiveSuperarrayOf} instead.
 	 * Test whether an array is a subarray of another array.
 	 *
 	 * This method acts like
@@ -30,13 +48,14 @@ export default class xjs_Array {
 	 * xjs.Array.contains([2,4,6], [2,4,6,8]) // throws a RangeError: first array is smaller than second
 	 * ```
 	 *
+	 * @param   <T> the type of elements in `larger` and `smaller`
 	 * @param   larger  the larger array, to test against
 	 * @param   smaller the smaller array, to test
 	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `larger` and `smaller`
 	 * @returns is `smaller` a subarray of `larger`?
 	 * @throws  {RangeError} if the second array is larger than the first
 	 */
-	static contains<T>(larger: T[], smaller: T[], comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
+	static contains<T>(larger: ReadonlyArray<T>, smaller: ReadonlyArray<T>, comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
 		if (smaller.length > larger.length) {
 			throw new RangeError('First argument cannot be smaller than the second. Try switching the arguments.')
 		}
@@ -50,29 +69,101 @@ export default class xjs_Array {
    *
    * Shortcut of {@link xjs_Object.is}, but for arrays.
    * Warning: passing in sparse arrays can yield unexpected results.
+	 * @param   <T> the type of elements in `a` and `b`
    * @param   a the first array
    * @param   b the second array
    * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
    * @returns Are corresponding elements the same, i.e. replaceable??
    */
-  static is<T>(a: T[], b: T[], comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
-    return a === b || (a.length === b.length) && a.every((el, i) => comparator(el, b[i]))
-  }
+	static is<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		if (a === b) return true
+		return a.length === b.length && a.every((el, i) => comparator(el, b[i]))
+	}
+
+	/**
+	 * Return whether `a` is a subarray of `b`.
+	 *
+	 * If and only if `a` is a subarray of `b`, all of the following must be true:
+	 * - `a` cannot be larger than `b`
+	 * - every element of `a` must appear somewhere in `b`,
+	 * 	where comparison is determined by the `comparator` parameter
+	 * - the elements of `a` that are in `b` must appear in the same order in which they appear in `a`
+	 *
+	 * Note that if `a` is an empty array `[]`, or if `a` and `b` are “the same” (as determined by `comparator`),
+	 * this method returns `true`.
+	 * @param   <T> the type of elements in `a`
+	 * @param   <U> the type of elements in `b`
+	 * @param   a the smaller array
+	 * @param   b the larger array
+	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
+	 * @returns Is `a` a subarray of `b`?
+	 */
+	static isSubarrayOf<U, T extends U>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		return a.length <= b.length && (
+			a.length === 0 || xjs_Array.is(a, b, comparator) ||
+			a.map((t) =>
+				b.findIndex((u) => comparator(u, t)) // indices of `b`’s elements in the order in which they appear in `a`
+			).every((n, i, indices) =>
+				n >= 0 && (i === 0 || indices[i] > indices[i-1]) // indices must all be 0+ and increasing (all of `a`’s elements are present in `b` and in the right order)
+			)
+		)
+	}
+
+	/**
+	 * {@link xjs_Array.isSubarrayOf}, but with the parameters switched.
+	 * @param   <T> the type of elements in `a`
+	 * @param   <U> the type of elements in `b`
+	 * @param   a the larger array
+	 * @param   b the smaller array
+	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
+	 * @returns exactly `xjs_Array.isSubarrayOf(b, a, comparator)`
+	 */
+	static isSuperarrayOf<T, U extends T>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		return xjs_Array.isSubarrayOf(b, a, comparator)
+	}
+
+	/**
+	 * {@link xjs_Array.isSubarrayOf}, but the elements of `a` must appear consecutively in `b`.
+	 * @param   <T> the type of elements in `a`
+	 * @param   <U> the type of elements in `b`
+	 * @param   a the smaller array
+	 * @param   b the larger array
+	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
+	 * @returns Is `a` a consecutive subarray of `b`?
+	 */
+	static isConsecutiveSubarrayOf<U, T extends U>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		return xjs_Array.isSubarrayOf(a, b, comparator) &&
+			b.map((_el, i) => b.slice(i, i+a.length)).some((sub) => xjs_Array.is(a, sub, comparator))
+	}
+
+	/**
+	 * {@link xjs_Array.isConsecutiveSubarrayOf} but with the parameters switched.
+	 * @param   <T> the type of elements in `a`
+	 * @param   <U> the type of elements in `b`
+	 * @param   a the larger array
+	 * @param   b the smaller array
+	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
+	 * @returns exactly `xjs_Array.isConsecutiveSubarrayOf(b, a, comparator)`
+	 */
+	static isConsecutiveSuperarrayOf<T, U extends T>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		return xjs_Array.isConsecutiveSubarrayOf(b, a, comparator)
+	}
 
 	/**
 	 * Look at the top of a stack, without affecting the stack.
+	 * @param   <T> the type of elements in `arr`
 	 * @param   arr the stack to peek
 	 * @returns the last entry of the array, if the array is nonempty
 	 * @throws  {RangeError} if the array is empty
 	 */
-	static peek<T>(arr: T[]): T {
+	static peek<T>(arr: ReadonlyArray<T>): T {
 		if (!arr.length) throw new RangeError('Cannot peek an empty array.')
 		return arr[arr.length - 1]
 		// return arr.slice(-1)[0]
 	}
 
   /**
-   * WARNING{EXPERIMENTAL}
+   * @deprecated WARNING{DEPRECATED} - use interface `ReadonlyArray<T>` instead
    * Deep freeze an array, and return the result.
    *
    * Shortcut of {@link xjs_Object.freezeDeep}, but for arrays.
@@ -81,7 +172,7 @@ export default class xjs_Array {
    * @param   arr the array to freeze
    * @returns the given array, with everything frozen
    */
-  static freezeDeep<T>(arr: T[]): T[] {
+  static freezeDeep<T>(arr: ReadonlyArray<T>): ReadonlyArray<T> {
     Object.freeze(arr)
     arr.forEach((el) => { if (!Object.isFrozen(el)) xjs_Object.freezeDeep(el) })
     return arr
@@ -93,26 +184,28 @@ export default class xjs_Array {
    *
    * Shortcut of {@link xjs_Object.cloneDeep}, but for arrays.
    * Warning: passing in a sparse array can yield unexpected results.
+	 * @param   <T> the type of elements in `arr`
    * @param   arr the array to clone
    * @returns an exact copy of the given array
    */
-  static cloneDeep<T>(arr: T[]): T[] {
+  static cloneDeep<T>(arr: ReadonlyArray<T>): T[] {
     return arr.map((el) => xjs_Object.cloneDeep(el))
   }
 
   /**
-   * WARNING{EXPERIMENTAL}
+   * @deprecated WARNING{DEPRECATED} - use `[...new Set(arr)]` instead
    * Make a copy of an array, and then remove duplicate entries.
    *
    * "Duplicate entries" are entries that considered "the same" by
    * the provided comparator function, or if none is given,
    * {@link xjs_Object.sameValueZero}.
    * Only duplicate entries are removed; the order of non-duplicates is preserved.
+	 * @param   <T> the type of elements in `arr`
    * @param   arr an array to use
    * @param   comparator a function comparing elements in the array
    * @returns a new array, with duplicates removed
    */
-  static removeDuplicates<T>(arr: T[], comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): T[] {
+  static removeDuplicates<T>(arr: ReadonlyArray<T>, comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): T[] {
     const returned: T[] = arr.slice()
     for (let i = 0; i < returned.length; i++) {
       for (let j = i + 1; j < returned.length; j++) {
@@ -139,11 +232,12 @@ export default class xjs_Array {
 	 * For example, `let arr = ['a', 'b', , 'd']` is a sparse array because `arr[2]` has not been defined.
 	 * Evaluating `arr[2]` will yield `undefined`, even though it has not been explicitly declared so.
 	 *
+	 * @param   <T> the type of elements in `arr`
 	 * @param   arr an array to make dense
 	 * @returns a copy of the given array, but with no ‘holes’;
 	 *          the returned array might have a smaller `length` than the argument
 	 */
-	static densify<T>(arr: T[]): T[] {
+	static densify<T>(arr: ReadonlyArray<T>): T[] {
 		const newarr: T[] = []
 		arr.forEach((el) => { newarr.push(el) }) // `Array#forEach` does not iterate over holes in sparse arrays
 		return newarr
@@ -163,18 +257,20 @@ export default class xjs_Array {
 	 * Therefore this method is not well-suited for arrays with intentional entries of `undefined`.
 	 * Suggestion: replace all intentional entries of `undefined` with `null`.
 	 *
+	 * @param   <T> the type of elements in `arr`
 	 * @param   arr an array whose ‘holes’ and `undefined`s to fill, if it has any
 	 * @param   value the value to fill in the holes
 	 * @returns a copy of the given array, but with all holes and `undefined`s filled;
 	 *          the returned array will have the same length as the argument
 	 */
-	static fillHoles<T>(arr: T[], value: T): T[] {
-		const newarr: T[] = arr
+	static fillHoles<T>(arr: ReadonlyArray<T>, value: T): T[] {
+		const newarr: T[] = arr.slice()
 		for (let i = 0; i < newarr.length; i++) { // `Array#forEach` does not iterate over holes in sparse arrays
 			if (newarr[i] === void 0) newarr[i] = value
 		}
 		return newarr
 	}
+
 
   private constructor() {}
 }
