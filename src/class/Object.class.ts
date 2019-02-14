@@ -10,21 +10,21 @@ export default class xjs_Object {
 	/**
 	 * Test whether two things have “the same” properties.
 	 *
-	 * This function tests the properties of two arguemnts, using the provided comparator predicate.
+	 * This function tests the properties of two arguemnts, using the provided predicate.
 	 * Arguments must be of the same type.
 	 * If both are primitives, this method checks
 	 * {@link xjs_Object._sameValueZero|Same-Value-Zero Equality}.
 	 * If both are functions, this method throws an TypeError — functions are not supported at this time.
 	 * If both arguments are arrays, it is faster and more robust to use {@link xjs_Array.is}.
 	 * If both are objects or arrays, this method checks the properties (or elements) of each,
-	 * comparing them with the provided comparator predicate.
+	 * comparing them with the provided predicate.
 	 *
 	 * If no predicate is provided, this method uses the default predicate {@link xjs_Object._sameValueZero}.
 	 *
 	 * Note: This method does not deep-check equality within the objects’ properties (or arrays’ elements).
 	 * To check deeper, I suggest using Node.js’s native
 	 * {@link https://nodejs.org/dist/latest/docs/api/assert.html#assert_assert_deepstrictequal_actual_expected_message|assert.deepStrictEqual}.
-	 * You may also specify this behavior in your custom comparator.
+	 * You may also specify this behavior in your custom predicate.
 	 *
 	 * This method is based on the
 	 * {@link https://en.wikipedia.org/wiki/Liskov_substitution_principle|Liskov Substitution Principle}.
@@ -40,11 +40,11 @@ export default class xjs_Object {
 	 * @param   <T> the least common supertype of `a` and `b`
 	 * @param   a the first  thing
 	 * @param   b the second thing
-	 * @param   comparator a predicate checking the “sameness” of corresponding properties of `a` and `b`
+	 * @param   predicate check the “sameness” of corresponding properties of `a` and `b`
 	 * @returns Are corresponding properties the same, i.e. replaceable?
 	 * @throws  {TypeError} if either `a` or `b` is a function (not supported)
 	 */
-	static is<T>(a: T, b: T, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+	static is<T>(a: T, b: T, predicate: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
 		if (a === b) return true
 		if (['string', 'number', 'boolean', 'null', 'undefined'].includes(xjs_Object.typeOf(a))) {
 			return xjs_Object.sameValueZero(a, b)
@@ -52,7 +52,7 @@ export default class xjs_Object {
 		if (xjs_Object.typeOf(a) === 'function') throw new TypeError('Function arguments to xjs.Object.is are not yet supported.')
 		// else, it will be 'object' or 'array'
 		return Object.entries(a).every((a_entry) =>
-			Object.entries(b).some((b_entry) => a_entry[0] === b_entry[0] && comparator(a_entry[1], b_entry[1]))
+			Object.entries(b).some((b_entry) => a_entry[0] === b_entry[0] && predicate(a_entry[1], b_entry[1]))
 		)
 	}
 

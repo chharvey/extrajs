@@ -36,7 +36,7 @@ export default class xjs_Array {
 	 * then this method returns `true`.
 	 * Warning: passing in sparse arrays can yield unexpected results.
 	 *
-	 * Elements are compared via the provided comparator predicate.
+	 * Elements are compared via the provided predicate.
 	 * If no predicate is provided, this method uses the default predicate {@link xjs_Object._sameValueZero}.
 	 *
 	 * ```js
@@ -51,17 +51,17 @@ export default class xjs_Array {
 	 * @param   <T> the type of elements in `larger` and `smaller`
 	 * @param   larger  the larger array, to test against
 	 * @param   smaller the smaller array, to test
-	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `larger` and `smaller`
+	 * @param   predicate check the “sameness” of corresponding elements of `larger` and `smaller`
 	 * @returns is `smaller` a subarray of `larger`?
 	 * @throws  {RangeError} if the second array is larger than the first
 	 */
-	static contains<T>(larger: ReadonlyArray<T>, smaller: ReadonlyArray<T>, comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
+	static contains<T>(larger: ReadonlyArray<T>, smaller: ReadonlyArray<T>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
 		if (smaller.length > larger.length) {
 			throw new RangeError('First argument cannot be smaller than the second. Try switching the arguments.')
 		}
-		if (xjs_Array.is(smaller, []    , comparator)) return true
-		if (xjs_Array.is(smaller, larger, comparator)) return true
-		return larger.map((_el, i) => larger.slice(i, i+smaller.length)).some((sub) => xjs_Array.is(smaller, sub, comparator))
+		if (xjs_Array.is(smaller, []    , predicate)) return true
+		if (xjs_Array.is(smaller, larger, predicate)) return true
+		return larger.map((_el, i) => larger.slice(i, i+smaller.length)).some((sub) => xjs_Array.is(smaller, sub, predicate))
 	}
 
   /**
@@ -72,12 +72,12 @@ export default class xjs_Array {
 	 * @param   <T> the type of elements in `a` and `b`
    * @param   a the first array
    * @param   b the second array
-   * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
+	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
    * @returns Are corresponding elements the same, i.e. replaceable??
    */
-	static is<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+	static is<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>, predicate: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
 		if (a === b) return true
-		return a.length === b.length && a.every((el, i) => comparator(el, b[i]))
+		return a.length === b.length && a.every((el, i) => predicate(el, b[i]))
 	}
 
 	/**
@@ -86,23 +86,23 @@ export default class xjs_Array {
 	 * If and only if `a` is a subarray of `b`, all of the following must be true:
 	 * - `a` cannot be larger than `b`
 	 * - every element of `a` must appear somewhere in `b`,
-	 * 	where comparison is determined by the `comparator` parameter
+	 * 	where comparison is determined by the `predicate` parameter
 	 * - the elements of `a` that are in `b` must appear in the same order in which they appear in `a`
 	 *
-	 * Note that if `a` is an empty array `[]`, or if `a` and `b` are “the same” (as determined by `comparator`),
+	 * Note that if `a` is an empty array `[]`, or if `a` and `b` are “the same” (as determined by `predicate`),
 	 * this method returns `true`.
 	 * @param   <T> the type of elements in `a`
 	 * @param   <U> the type of elements in `b`
 	 * @param   a the smaller array
 	 * @param   b the larger array
-	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
+	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
 	 * @returns Is `a` a subarray of `b`?
 	 */
-	static isSubarrayOf<U, T extends U>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+	static isSubarrayOf<U, T extends U>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, predicate: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
 		return a.length <= b.length && (
-			a.length === 0 || xjs_Array.is(a, b, comparator) ||
+			a.length === 0 || xjs_Array.is(a, b, predicate) ||
 			a.map((t) =>
-				b.findIndex((u) => comparator(u, t)) // indices of `b`’s elements in the order in which they appear in `a`
+				b.findIndex((u) => predicate(u, t)) // indices of `b`’s elements in the order in which they appear in `a`
 			).every((n, i, indices) =>
 				n >= 0 && (i === 0 || indices[i] > indices[i-1]) // indices must all be 0+ and increasing (all of `a`’s elements are present in `b` and in the right order)
 			)
@@ -115,11 +115,11 @@ export default class xjs_Array {
 	 * @param   <U> the type of elements in `b`
 	 * @param   a the larger array
 	 * @param   b the smaller array
-	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
-	 * @returns exactly `xjs_Array.isSubarrayOf(b, a, comparator)`
+	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
+	 * @returns exactly `xjs_Array.isSubarrayOf(b, a, predicate)`
 	 */
-	static isSuperarrayOf<T, U extends T>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
-		return xjs_Array.isSubarrayOf(b, a, comparator)
+	static isSuperarrayOf<T, U extends T>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, predicate: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		return xjs_Array.isSubarrayOf(b, a, predicate)
 	}
 
 	/**
@@ -128,12 +128,12 @@ export default class xjs_Array {
 	 * @param   <U> the type of elements in `b`
 	 * @param   a the smaller array
 	 * @param   b the larger array
-	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
+	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
 	 * @returns Is `a` a consecutive subarray of `b`?
 	 */
-	static isConsecutiveSubarrayOf<U, T extends U>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
-		return xjs_Array.isSubarrayOf(a, b, comparator) &&
-			b.map((_el, i) => b.slice(i, i+a.length)).some((sub) => xjs_Array.is(a, sub, comparator))
+	static isConsecutiveSubarrayOf<U, T extends U>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, predicate: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		return xjs_Array.isSubarrayOf(a, b, predicate) &&
+			b.map((_el, i) => b.slice(i, i+a.length)).some((sub) => xjs_Array.is(a, sub, predicate))
 	}
 
 	/**
@@ -142,11 +142,11 @@ export default class xjs_Array {
 	 * @param   <U> the type of elements in `b`
 	 * @param   a the larger array
 	 * @param   b the smaller array
-	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
-	 * @returns exactly `xjs_Array.isConsecutiveSubarrayOf(b, a, comparator)`
+	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
+	 * @returns exactly `xjs_Array.isConsecutiveSubarrayOf(b, a, predicate)`
 	 */
-	static isConsecutiveSuperarrayOf<T, U extends T>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
-		return xjs_Array.isConsecutiveSubarrayOf(b, a, comparator)
+	static isConsecutiveSuperarrayOf<T, U extends T>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, predicate: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		return xjs_Array.isConsecutiveSubarrayOf(b, a, predicate)
 	}
 
 	/**
@@ -197,19 +197,19 @@ export default class xjs_Array {
    * Make a copy of an array, and then remove duplicate entries.
    *
    * "Duplicate entries" are entries that considered "the same" by
-   * the provided comparator function, or if none is given,
+   * the provided predicate, or if none is given,
    * {@link xjs_Object.sameValueZero}.
    * Only duplicate entries are removed; the order of non-duplicates is preserved.
 	 * @param   <T> the type of elements in `arr`
    * @param   arr an array to use
-   * @param   comparator a function comparing elements in the array
+   * @param   predicate check the “sameness” of elements in the array
    * @returns a new array, with duplicates removed
    */
-  static removeDuplicates<T>(arr: ReadonlyArray<T>, comparator: (x: T, y: T) => boolean = xjs_Object.sameValueZero): T[] {
+  static removeDuplicates<T>(arr: ReadonlyArray<T>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): T[] {
     const returned: T[] = arr.slice()
     for (let i = 0; i < returned.length; i++) {
       for (let j = i + 1; j < returned.length; j++) {
-        if (comparator(returned[i], returned[j])) returned.splice(j, 1)
+        if (predicate(returned[i], returned[j])) returned.splice(j, 1)
       }
     }
     return returned
