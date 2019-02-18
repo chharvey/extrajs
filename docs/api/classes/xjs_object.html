@@ -117,7 +117,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Object.class.ts#L301">Object.class.ts:301</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Object.class.ts#L305">Object.class.ts:305</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="xjs_object.html" class="tsd-signature-type">xjs_Object</a></h4>
@@ -137,7 +137,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Object.class.ts#L289">Object.class.ts:289</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Object.class.ts#L293">Object.class.ts:293</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -221,7 +221,7 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Object.class.ts#L222">Object.class.ts:222</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Object.class.ts#L226">Object.class.ts:226</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -269,7 +269,7 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Object.class.ts#L203">Object.class.ts:203</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Object.class.ts#L207">Object.class.ts:207</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -305,32 +305,35 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 					<a name="is" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> is</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">is&lt;T&gt;<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, comparator<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">is&lt;T&gt;<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, predicate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Object.class.ts#L47">Object.class.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Object.class.ts#L51">Object.class.ts:51</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Test whether two things have “the same” properties.</p>
 								</div>
-								<p>This function tests the properties of two arguemnts, using the provided comparator predicate.
+								<p>Note: Use this method only if providing a predicate.
+									If testing for “same-value-zero” equality (the default predicate), use
+								Node.js’s built-in <code>assert.deepStrictEqual()</code> instead.</p>
+								<p>This function tests the properties of two arguemnts, using the provided predicate.
 									Arguments must be of the same type.
 									If both are primitives, this method checks
 									{@link xjs_Object.<em>sameValueZero|Same-Value-Zero Equality}.
 										If both are functions, this method throws an TypeError — functions are not supported at this time.
 									If both arguments are arrays, it is faster and more robust to use &lt;a href=&quot;xjs</em>array.html#is&quot;&gt;xjs_Array.is</a>.
 									If both are objects or arrays, this method checks the properties (or elements) of each,
-								comparing them with the provided comparator predicate.</p>
+								comparing them with the provided predicate.</p>
 								<p>If no predicate is provided, this method uses the default predicate {@link xjs_Object._sameValueZero}.</p>
 								<p>Note: This method does not deep-check equality within the objects’ properties (or arrays’ elements).
 									To check deeper, I suggest using Node.js’s native
 									<a href="https://nodejs.org/dist/latest/docs/api/assert.html#assert_assert_deepstrictequal_actual_expected_message" class="external">assert.deepStrictEqual</a>.
-								You may also specify this behavior in your custom comparator.</p>
+								You may also specify this behavior in your custom predicate.</p>
 								<p>This method is based on the
 									<a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle" class="external">Liskov Substitution Principle</a>.
 									Values that are considered “the same” should semantically mean they are “replaceable”
@@ -370,9 +373,9 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> comparator: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> predicate: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>a predicate checking the “sameness” of corresponding properties of <code>a</code> and <code>b</code></p>
+										<p>check the “sameness” of corresponding properties of <code>a</code> and <code>b</code></p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -412,7 +415,7 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Object.class.ts#L70">Object.class.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Object.class.ts#L74">Object.class.ts:74</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -458,7 +461,7 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Object.class.ts#L131">Object.class.ts:131</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Object.class.ts#L135">Object.class.ts:135</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -597,7 +600,7 @@ call_me(<span class="hljs-number">1</span>) <span class="hljs-comment">// return
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Object.class.ts#L171">Object.class.ts:171</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Object.class.ts#L175">Object.class.ts:175</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">

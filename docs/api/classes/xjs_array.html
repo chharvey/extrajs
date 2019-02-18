@@ -123,7 +123,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Array.class.ts#L272">Array.class.ts:272</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Array.class.ts#L276">Array.class.ts:276</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="xjs_array.html" class="tsd-signature-type">xjs_Array</a></h4>
@@ -143,7 +143,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Array.class.ts#L191">Array.class.ts:191</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Array.class.ts#L195">Array.class.ts:195</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -181,13 +181,13 @@
 					<a name="contains" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> contains</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">contains&lt;T&gt;<span class="tsd-signature-symbol">(</span>larger<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, smaller<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, comparator<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">contains&lt;T&gt;<span class="tsd-signature-symbol">(</span>larger<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, smaller<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, predicate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Array.class.ts#L58">Array.class.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Array.class.ts#L58">Array.class.ts:58</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -204,7 +204,7 @@
 											In other words, if <code>&lt;a href=&quot;xjs_array.html#is&quot;&gt;xjs_Array.is&lt;/a&gt;(larger.slice(a,b), smaller)</code> (for some integers a and b),
 											then this method returns <code>true</code>.
 										Warning: passing in sparse arrays can yield unexpected results.</p>
-										<p>Elements are compared via the provided comparator predicate.
+										<p>Elements are compared via the provided predicate.
 										If no predicate is provided, this method uses the default predicate {@link xjs_Object._sameValueZero}.</p>
 										<pre><code class="language-js"><span class="hljs-string">'twofoursix'</span>.includes(<span class="hljs-string">'wofo'</span>)===<span class="hljs-literal">true</span>
 xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-string">'w'</span>,<span class="hljs-string">'o'</span>,<span class="hljs-number">4</span>,<span class="hljs-string">'o'</span>,<span class="hljs-string">'u'</span>,<span class="hljs-string">'r'</span>,<span class="hljs-number">6</span>,<span class="hljs-string">'i'</span>,<span class="hljs-string">'x'</span>], [<span class="hljs-string">'w'</span>,<span class="hljs-string">'o'</span>,<span class="hljs-number">4</span>,<span class="hljs-string">'o'</span>])===<span class="hljs-literal">true</span>
@@ -242,9 +242,9 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> comparator: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> predicate: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>a predicate checking the “sameness” of corresponding elements of <code>larger</code> and <code>smaller</code></p>
+										<p>check the “sameness” of corresponding elements of <code>larger</code> and <code>smaller</code></p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
@@ -284,7 +284,7 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Array.class.ts#L240">Array.class.ts:240</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Array.class.ts#L244">Array.class.ts:244</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -336,7 +336,7 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Array.class.ts#L266">Array.class.ts:266</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Array.class.ts#L270">Array.class.ts:270</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -392,7 +392,7 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Array.class.ts#L175">Array.class.ts:175</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Array.class.ts#L179">Array.class.ts:179</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -436,7 +436,7 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Array.class.ts#L21">Array.class.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Array.class.ts#L21">Array.class.ts:21</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -483,19 +483,22 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 					<a name="is" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> is</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">is&lt;T&gt;<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, comparator<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">is&lt;T&gt;<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, predicate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Array.class.ts#L78">Array.class.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Array.class.ts#L82">Array.class.ts:82</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Test whether two arrays have “the same” elements.</p>
 								</div>
+								<p>Note: Use this method only if providing a predicate.
+									If testing for “same-value-zero” equality (the default predicate), use
+								Node.js’s built-in <code>assert.deepStrictEqual()</code> instead.</p>
 								<p>Shortcut of <a href="xjs_object.html#is">xjs_Object.is</a>, but for arrays.
 								Warning: passing in sparse arrays can yield unexpected results.</p>
 							</div>
@@ -523,24 +526,24 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> comparator: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> predicate: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>a predicate checking the “sameness” of corresponding elements of <code>a</code> and <code>b</code></p>
+										<p>check the “sameness” of corresponding elements of <code>a</code> and <code>b</code></p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
 													<h4 class="tsd-parameters-title">Parameters</h4>
 													<ul class="tsd-parameters">
 														<li>
-															<h5>x: <span class="tsd-signature-type">any</span></h5>
+															<h5>x: <span class="tsd-signature-type">T</span></h5>
 														</li>
 														<li>
-															<h5>y: <span class="tsd-signature-type">any</span></h5>
+															<h5>y: <span class="tsd-signature-type">T</span></h5>
 														</li>
 													</ul>
 													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -559,13 +562,13 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 					<a name="isconsecutivesubarrayof" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> is<wbr>Consecutive<wbr>Subarray<wbr>Of</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Consecutive<wbr>Subarray<wbr>Of&lt;U, T&gt;<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol">&gt;</span>, comparator<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Consecutive<wbr>Subarray<wbr>Of&lt;U, T&gt;<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol">&gt;</span>, predicate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Array.class.ts#L134">Array.class.ts:134</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Array.class.ts#L138">Array.class.ts:138</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -603,24 +606,24 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> comparator: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> predicate: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>a predicate checking the “sameness” of corresponding elements of <code>a</code> and <code>b</code></p>
+										<p>check the “sameness” of corresponding elements of <code>a</code> and <code>b</code></p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">U</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
 													<h4 class="tsd-parameters-title">Parameters</h4>
 													<ul class="tsd-parameters">
 														<li>
-															<h5>x: <span class="tsd-signature-type">any</span></h5>
+															<h5>x: <span class="tsd-signature-type">U</span></h5>
 														</li>
 														<li>
-															<h5>y: <span class="tsd-signature-type">any</span></h5>
+															<h5>y: <span class="tsd-signature-type">U</span></h5>
 														</li>
 													</ul>
 													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -639,13 +642,13 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 					<a name="isconsecutivesuperarrayof" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> is<wbr>Consecutive<wbr>Superarray<wbr>Of</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Consecutive<wbr>Superarray<wbr>Of&lt;T, U&gt;<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol">&gt;</span>, comparator<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Consecutive<wbr>Superarray<wbr>Of&lt;T, U&gt;<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol">&gt;</span>, predicate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Array.class.ts#L148">Array.class.ts:148</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Array.class.ts#L152">Array.class.ts:152</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -683,24 +686,24 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> comparator: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> predicate: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>a predicate checking the “sameness” of corresponding elements of <code>a</code> and <code>b</code></p>
+										<p>check the “sameness” of corresponding elements of <code>a</code> and <code>b</code></p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
 													<h4 class="tsd-parameters-title">Parameters</h4>
 													<ul class="tsd-parameters">
 														<li>
-															<h5>x: <span class="tsd-signature-type">any</span></h5>
+															<h5>x: <span class="tsd-signature-type">T</span></h5>
 														</li>
 														<li>
-															<h5>y: <span class="tsd-signature-type">any</span></h5>
+															<h5>y: <span class="tsd-signature-type">T</span></h5>
 														</li>
 													</ul>
 													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -711,7 +714,7 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-							<p>exactly <code>xjs_Array.isConsecutiveSubarrayOf(b, a, comparator)</code></p>
+							<p>exactly <code>xjs_Array.isConsecutiveSubarrayOf(b, a, predicate)</code></p>
 						</li>
 					</ul>
 				</section>
@@ -719,13 +722,13 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 					<a name="issubarrayof" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> is<wbr>Subarray<wbr>Of</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Subarray<wbr>Of&lt;U, T&gt;<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol">&gt;</span>, comparator<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Subarray<wbr>Of&lt;U, T&gt;<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol">&gt;</span>, predicate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Array.class.ts#L101">Array.class.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Array.class.ts#L105">Array.class.ts:105</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -736,10 +739,10 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 								<ul>
 									<li><code>a</code> cannot be larger than <code>b</code></li>
 									<li>every element of <code>a</code> must appear somewhere in <code>b</code>,
-									where comparison is determined by the <code>comparator</code> parameter</li>
+									where comparison is determined by the <code>predicate</code> parameter</li>
 									<li>the elements of <code>a</code> that are in <code>b</code> must appear in the same order in which they appear in <code>a</code></li>
 								</ul>
-								<p>Note that if <code>a</code> is an empty array <code>[]</code>, or if <code>a</code> and <code>b</code> are “the same” (as determined by <code>comparator</code>),
+								<p>Note that if <code>a</code> is an empty array <code>[]</code>, or if <code>a</code> and <code>b</code> are “the same” (as determined by <code>predicate</code>),
 								this method returns <code>true</code>.</p>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -772,24 +775,24 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> comparator: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> predicate: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>a predicate checking the “sameness” of corresponding elements of <code>a</code> and <code>b</code></p>
+										<p>check the “sameness” of corresponding elements of <code>a</code> and <code>b</code></p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">U</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
 													<h4 class="tsd-parameters-title">Parameters</h4>
 													<ul class="tsd-parameters">
 														<li>
-															<h5>x: <span class="tsd-signature-type">any</span></h5>
+															<h5>x: <span class="tsd-signature-type">U</span></h5>
 														</li>
 														<li>
-															<h5>y: <span class="tsd-signature-type">any</span></h5>
+															<h5>y: <span class="tsd-signature-type">U</span></h5>
 														</li>
 													</ul>
 													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -808,13 +811,13 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 					<a name="issuperarrayof" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> is<wbr>Superarray<wbr>Of</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Superarray<wbr>Of&lt;T, U&gt;<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol">&gt;</span>, comparator<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Superarray<wbr>Of&lt;T, U&gt;<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">U</span><span class="tsd-signature-symbol">&gt;</span>, predicate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Array.class.ts#L121">Array.class.ts:121</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Array.class.ts#L125">Array.class.ts:125</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -852,24 +855,24 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> comparator: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> predicate: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>a predicate checking the “sameness” of corresponding elements of <code>a</code> and <code>b</code></p>
+										<p>check the “sameness” of corresponding elements of <code>a</code> and <code>b</code></p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
 													<h4 class="tsd-parameters-title">Parameters</h4>
 													<ul class="tsd-parameters">
 														<li>
-															<h5>x: <span class="tsd-signature-type">any</span></h5>
+															<h5>x: <span class="tsd-signature-type">T</span></h5>
 														</li>
 														<li>
-															<h5>y: <span class="tsd-signature-type">any</span></h5>
+															<h5>y: <span class="tsd-signature-type">T</span></h5>
 														</li>
 													</ul>
 													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -880,7 +883,7 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-							<p>exactly <code>xjs_Array.isSubarrayOf(b, a, comparator)</code></p>
+							<p>exactly <code>xjs_Array.isSubarrayOf(b, a, predicate)</code></p>
 						</li>
 					</ul>
 				</section>
@@ -894,7 +897,7 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Array.class.ts#L159">Array.class.ts:159</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Array.class.ts#L163">Array.class.ts:163</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -934,13 +937,13 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 					<a name="removeduplicates" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> remove<wbr>Duplicates</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">remove<wbr>Duplicates&lt;T&gt;<span class="tsd-signature-symbol">(</span>arr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, comparator<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">remove<wbr>Duplicates&lt;T&gt;<span class="tsd-signature-symbol">(</span>arr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, predicate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/8ad643d/src/class/Array.class.ts#L208">Array.class.ts:208</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Array.class.ts#L212">Array.class.ts:212</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -949,7 +952,7 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 									<dd><p>WARNING{DEPRECATED} - use <code>[...new Set(arr)]</code> instead
 										Make a copy of an array, and then remove duplicate entries.</p>
 										<p>&quot;Duplicate entries&quot; are entries that considered &quot;the same&quot; by
-											the provided comparator function, or if none is given,
+											the provided predicate, or if none is given,
 											<a href="xjs_object.html#samevaluezero">xjs_Object.sameValueZero</a>.
 										Only duplicate entries are removed; the order of non-duplicates is preserved.</p>
 									</dd>
@@ -973,9 +976,9 @@ xjs.Array.contains([<span class="hljs-number">2</span>,<span class="hljs-number"
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> comparator: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> predicate: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>a function comparing elements in the array</p>
+										<p>check the “sameness” of elements in the array</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">

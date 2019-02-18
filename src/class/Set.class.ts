@@ -15,30 +15,30 @@ export default class xjs_Set {
 	 * @param   <T> the type of elements in the sets
 	 * @param   a the first set
 	 * @param   b the second set
-	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
+	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
 	 * @returns Are corresponding elements the same, i.e. replaceable??
 	 */
-	static is<T>(a: ReadonlySet<T>, b: ReadonlySet<T>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+	static is<T>(a: ReadonlySet<T>, b: ReadonlySet<T>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
 		if (a === b) return true
 		return a.size === b.size &&
-			[...a].every((a_el) => [...b].some((b_el) => comparator(a_el, b_el))) &&
-			[...b].every((b_el) => [...a].some((a_el) => comparator(b_el, a_el)))
+			[...a].every((a_el) => [...b].some((b_el) => predicate(a_el, b_el))) &&
+			[...b].every((b_el) => [...a].some((a_el) => predicate(b_el, a_el)))
 	}
 
 	/**
 	 * Return whether `a` is a subset of `b`: whether all elements of `a` are in `b`.
 	 *
-	 * Note that if `a` is an empty set, or if `a` and `b` are “the same” (as determined by `comparator`),
+	 * Note that if `a` is an empty set, or if `a` and `b` are “the same” (as determined by `predicate`),
 	 * this method returns `true`.
 	 * @param   <T> the type of elements in `a`
 	 * @param   <U> the type of elements in `b`
 	 * @param   a the smaller set
 	 * @param   b the larger set
-	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
+	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
 	 * @returns Is `a` a subset of `b`?
 	 */
-	static isSubsetOf<U, T extends U>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
-		return xjs_Array.isSubarrayOf([...a].sort(), [...b].sort(), comparator)
+	static isSubsetOf<U, T extends U>(a: ReadonlySet<T>, b: ReadonlySet<U>, predicate: (x: U, y: U) => boolean = xjs_Object.sameValueZero): boolean {
+		return xjs_Array.isSubarrayOf([...a].sort(), [...b].sort(), predicate)
 	}
 
 	/**
@@ -47,11 +47,11 @@ export default class xjs_Set {
 	 * @param   <U> the type of elements in `b`
 	 * @param   a the larger set
 	 * @param   b the smaller set
-	 * @param   comparator a predicate checking the “sameness” of corresponding elements of `a` and `b`
-	 * @returns exactly `xjs.Set.isSubsetOf(b, a, comparator)`
+	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
+	 * @returns exactly `xjs.Set.isSubsetOf(b, a, predicate)`
 	 */
-	static isSupersetOf<T, U extends T>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
-		return xjs_Set.isSubsetOf(b, a, comparator)
+	static isSupersetOf<T, U extends T>(a: ReadonlySet<T>, b: ReadonlySet<U>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
+		return xjs_Set.isSubsetOf(b, a, predicate)
 	}
 
 	/**
