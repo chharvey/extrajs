@@ -67,6 +67,10 @@ export default class xjs_Array {
   /**
    * Test whether two arrays have “the same” elements.
    *
+	 * Note: Use this method only if providing a predicate.
+	 * If testing for “same-value-zero” equality (the default predicate), use
+	 * Node.js’s built-in `assert.deepStrictEqual()` instead.
+	 *
    * Shortcut of {@link xjs_Object.is}, but for arrays.
    * Warning: passing in sparse arrays can yield unexpected results.
 	 * @param   <T> the type of elements in `a` and `b`

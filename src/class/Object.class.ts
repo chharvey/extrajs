@@ -10,6 +10,10 @@ export default class xjs_Object {
 	/**
 	 * Test whether two things have “the same” properties.
 	 *
+	 * Note: Use this method only if providing a predicate.
+	 * If testing for “same-value-zero” equality (the default predicate), use
+	 * Node.js’s built-in `assert.deepStrictEqual()` instead.
+	 *
 	 * This function tests the properties of two arguemnts, using the provided predicate.
 	 * Arguments must be of the same type.
 	 * If both are primitives, this method checks
