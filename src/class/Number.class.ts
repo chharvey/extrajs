@@ -30,6 +30,7 @@ export default class xjs_Number {
    * - `'negative'`     : the number is strictly less    than 0
    * - `'non-positive'` : the number is less    than or equal to 0
    * - `'non-negative'` : the number is greater than or equal to 0
+   * - `'non-zero'`     : the number is not equal to 0
    * - `'finite'`       : the number is not equal to `Infinity` or `-Infinity`
    * - `'infinite'`     : the number is     equal to `Infinity` or `-Infinity`
    * - no type (`undefiend`): the number is not `NaN`
@@ -43,7 +44,7 @@ export default class xjs_Number {
    * @throws  {AssertionError} if the number does not match the described type
    * @throws  {NaNError} if the argument is `NaN`
    */
-	static assertType(num: number, type?: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'|'non-positive'|'non-negative'|'finite'|'infinite'): void {
+	static assertType(num: number, type?: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'|'non-positive'|'non-negative'|'non-zero'|'finite'|'infinite'): void {
 		if (Number.isNaN(num)) throw new NaNError()
 		if (!type) return;
 		return xjs_Object.switch<void>(type, {
@@ -55,6 +56,7 @@ export default class xjs_Number {
 			'negative'    : (n: number) => assert(n < 0                         , `${n} must be a negative number.`     ),
 			'non-positive': (n: number) => assert(n <= 0                        , `${n} must not be a positive number.` ),
 			'non-negative': (n: number) => assert(0 <= n                        , `${n} must not be a negative number.` ),
+			'non-zero'    : (n: number) => assert(n !== 0                       , `${n} must not be zero.`              ),
 			'finite'      : (n: number) => assert( Number.isFinite(n)           , `${n} must be a finite number.`       ),
 			'infinite'    : (n: number) => assert(!Number.isFinite(n)           , `${n} must be an infinite number.`    ),
 		})(num)
