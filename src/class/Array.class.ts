@@ -1,5 +1,6 @@
 import xjs_Object from './Object.class'
-import NaNError from './NaNError.class'
+import xjs_Number from './Number.class'
+import IndexOutOfBoundsError from './IndexOutOfBoundsError.class'
 
 
 /**
@@ -15,12 +16,12 @@ export default class xjs_Array {
 	 * @param   arr the array to search
 	 * @param   index the index of the returned value
 	 * @returns the value in `arr` found at `index`
-	 * @throws  {RangeError} if the index is out of bounds (or if the returned value is `undefined`)
-	 * @throws  {NaNError} if the returned value is `NaN`
+	 * @throws  {NaNError} if the given index is `NaN`
+	 * @throws  {IndexOutOfBoundsError} if the index is out of bounds (or if the returned value is `undefined`)
 	 */
 	static get<T>(arr: T[], index: number): T {
-		if (arr[index] === void 0) throw new RangeError(`Index \`${index}\` out of bounds.`)
-		if (Number.isNaN(arr[index] as any)) throw new NaNError('Got `NaN`.')
+		xjs_Number.assertType(index)
+		if (arr[index] === void 0) throw new IndexOutOfBoundsError(index)
 		return arr[index]
 	}
 
