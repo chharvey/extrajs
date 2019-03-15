@@ -30,6 +30,7 @@ export default class xjs_Set {
 	 *
 	 * Note that if `a` is an empty set, or if `a` and `b` are “the same” (as determined by `predicate`),
 	 * this method returns `true`.
+	 * @see https://github.com/tc39/proposal-set-methods
 	 * @param   <T> the type of elements in `a`
 	 * @param   <U> the type of elements in `b`
 	 * @param   a the smaller set
@@ -43,6 +44,7 @@ export default class xjs_Set {
 
 	/**
 	 * {@link xjs_Set.isSubsetOf}, but with the parameters switched.
+	 * @see https://github.com/tc39/proposal-set-methods
 	 * @param   <T> the type of elements in `a`
 	 * @param   <U> the type of elements in `b`
 	 * @param   a the larger set
@@ -56,6 +58,7 @@ export default class xjs_Set {
 
 	/**
 	 * Return the union (disjunction) of two sets: the set of elements that are in either set (or both sets).
+	 * @see https://github.com/tc39/proposal-set-methods
 	 * @param   <T> the type of elements in the `a`
 	 * @param   <U> the type of elements in the `b`
 	 * @param   a the first set
@@ -70,6 +73,7 @@ export default class xjs_Set {
 
 	/**
 	 * Return the intersection (conjunction) of two sets: the set of elements that are in both sets.
+	 * @see https://github.com/tc39/proposal-set-methods
 	 * @param   <T> the type of elements in `a`
 	 * @param   <U> the type of elements in `b`
 	 * @param   a the first set
@@ -85,6 +89,7 @@ export default class xjs_Set {
 
 	/**
 	 * Return the difference (nonimplication) of two sets: the set of elements in `a`, but not in `b`.
+	 * @see https://github.com/tc39/proposal-set-methods
 	 * @param   <T> the type of elements in `a`
 	 * @param   <U> the type of elements in `b`
 	 * @param   a the first set
@@ -104,6 +109,7 @@ export default class xjs_Set {
 	 * Equivalent to:
 	 * - `difference( union(a,b) , intersection(a,b) )`
 	 * - `union( difference(a,b) , difference(b,a) )`
+	 * @see https://github.com/tc39/proposal-set-methods
 	 * @param   <T> the type of elements in `a`
 	 * @param   <U> the type of elements in `b`
 	 * @param   a the first set
