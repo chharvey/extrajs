@@ -26,6 +26,19 @@ export default class xjs_Set {
 	}
 
 	/**
+	 * Return a value found in the set that satisfies the predicate, or `null` if none is found.
+	 * @see https://github.com/tc39/proposal-collection-methods
+	 * @param   <T> the type of elements in the set
+	 * @param   set the set to search
+	 * @param   predicate the testing function
+	 * @param   this_arg object to use as `this` when executing `predicate`
+	 * @returns the item found, or `null` if none is found
+	 */
+	static find<T>(set: Set<T>, predicate: (element: T, index: number, set: Set<T>) => boolean, this_arg: unknown = null): T|null {
+		return [...set].find((el, i) => predicate.call(this_arg, el, i, set)) || null
+	}
+
+	/**
 	 * Return whether `a` is a subset of `b`: whether all elements of `a` are in `b`.
 	 *
 	 * Note that if `a` is an empty set, or if `a` and `b` are “the same” (as determined by `predicate`),
