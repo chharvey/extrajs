@@ -34,8 +34,22 @@ export default class xjs_Set {
 	 * @param   this_arg object to use as `this` when executing `predicate`
 	 * @returns the item found, or `null` if none is found
 	 */
-	static find<T>(set: Set<T>, predicate: (element: T, index: number, set: Set<T>) => boolean, this_arg: unknown = null): T|null {
-		return [...set].find((el, i) => predicate.call(this_arg, el, i, set)) || null
+	static find<T>(set: Set<T>, predicate: (element: T, index: T, set: Set<T>) => boolean, this_arg: unknown = null): T|null {
+		return [...set].find((el) => predicate.call(this_arg, el, el, set)) || null
+	}
+
+	/**
+	 * Return a new Set with the results of calling a provided function on every element in the given Set.
+	 * @see https://github.com/tc39/proposal-collection-methods
+	 * @param   <T> the type of elements in the set
+	 * @param   <U> the type of new elements returned by the callback
+	 * @param   set the set to map
+	 * @param   callback the function to call on each element of the set
+	 * @param   this_arg object to use as `this` when executing `callback`
+	 * @returns a new Set with transformed elements obtained from `callback`
+	 */
+	static map<T, U>(set: Set<T>, callback: (element: T, index: T, set: Set<T>) => U, this_arg: unknown = null): Set<U> {
+		return new Set([...set].map((el) => callback.call(this_arg, el, el, set)))
 	}
 
 	/**
