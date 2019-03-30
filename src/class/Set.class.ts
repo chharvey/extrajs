@@ -16,7 +16,7 @@ export default class xjs_Set {
 	 * @param   a the first set
 	 * @param   b the second set
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
-	 * @returns Are corresponding elements the same, i.e. replaceable??
+	 * @returns Are corresponding elements the same, i.e. replaceable?
 	 */
 	static is<T>(a: ReadonlySet<T>, b: ReadonlySet<T>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
 		if (a === b) return true

@@ -1,9 +1,41 @@
+import xjs_Object from './Object.class'
+
+
 /**
  * Additional static members for the native Map class.
  *
  * Does not extend the native Map class.
  */
 export default class xjs_Map {
+	/**
+	 * Test whether two maps have “the same” key–value pairs.
+	 *
+	 * Similar to {@link xjs_Set.is}, where the order is not important,
+	 * but also has the option to check equality of keys.
+	 * @param   <K> the type of keys in the maps
+	 * @param   <V> the type of values in the maps
+	 * @param   a the first map
+	 * @param   b the second map
+	 * @returns Are corresponding pairs the same, i.e. replaceable?
+	 */
+	static is<K, V>(a: ReadonlyMap<K, V>, b: ReadonlyMap<K, V>, {
+		/** check the “sameness” of corresponding keys of `a` and `b` */
+		keys = xjs_Object.sameValueZero,
+		/** check the “sameness” of corresponding values of `a` and `b` */
+		values = xjs_Object.sameValueZero,
+	}: {
+		keys   ?: (x: K, y: K) => boolean,
+		values ?: (x: V, y: V) => boolean,
+	} = {
+		keys   : xjs_Object.sameValueZero,
+		values : xjs_Object.sameValueZero,
+	}): boolean {
+		if (a === b) return true
+		return a.size === b.size && [...a].every(([a_key, a_value]) =>
+			[...b].some(([b_key, b_value]) => keys(a_key, b_key) && values(a_value, b_value))
+		)
+	}
+
 	/**
 	 * Return a value found in the map that satisfies the predicate, or `null` if none is found.
 	 * @see https://github.com/tc39/proposal-collection-methods

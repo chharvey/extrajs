@@ -78,7 +78,7 @@ export default class xjs_Array {
    * @param   a the first array
    * @param   b the second array
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
-   * @returns Are corresponding elements the same, i.e. replaceable??
+   * @returns Are corresponding elements the same, i.e. replaceable?
    */
 	static is<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
 		if (a === b) return true
