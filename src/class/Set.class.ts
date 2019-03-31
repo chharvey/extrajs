@@ -26,16 +26,29 @@ export default class xjs_Set {
 	}
 
 	/**
+	 * Return a new set with elements that pass the provided predicate function.
+	 * @see https://github.com/tc39/proposal-collection-methods
+	 * @param   <T> the type of elements in the set
+	 * @param   set the set to filter
+	 * @param   predicate function to test each element of the set
+	 * @param   this_arg object to use as `this` when executing `predicate`
+	 * @returns a new set with the elements that pass the test; if no elements pass, an empty set is returned
+	 */
+	static filter<T>(set: Set<T>, predicate: (element: T, index: T, set: Set<T>) => boolean, this_arg: unknown = null): Set<T> {
+		return new Set([...set].filter((el) => predicate.call(this_arg, el, el, set)))
+	}
+
+	/**
 	 * Return a value found in the set that satisfies the predicate, or `null` if none is found.
 	 * @see https://github.com/tc39/proposal-collection-methods
 	 * @param   <T> the type of elements in the set
 	 * @param   set the set to search
-	 * @param   predicate the testing function
+	 * @param   predicate function to test each element of the set
 	 * @param   this_arg object to use as `this` when executing `predicate`
 	 * @returns the item found, or `null` if none is found
 	 */
 	static find<T>(set: Set<T>, predicate: (element: T, index: T, set: Set<T>) => boolean, this_arg: unknown = null): T|null {
-		return [...set].find((el) => predicate.call(this_arg, el, el, set)) || null
+		return [...xjs_Set.filter(set, predicate, this_arg)][0] || null
 	}
 
 	/**

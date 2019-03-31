@@ -37,18 +37,31 @@ export default class xjs_Map {
 	}
 
 	/**
+	 * Return a new map with entries that pass the provided predicate function.
+	 * @see https://github.com/tc39/proposal-collection-methods
+	 * @param   <K> the type of keys in the map
+	 * @param   <V> the type of values in the map
+	 * @param   map the map to filter
+	 * @param   predicate function to test each entry of the map
+	 * @param   this_arg object to use as `this` when executing `predicate`
+	 * @returns a new map with the entries that pass the test; if no entries pass, an empty map is returned
+	 */
+	static filter<K, V>(map: Map<K, V>, predicate: (value: V, key: K, map: Map<K, V>) => boolean, this_arg: unknown = null): Map<K, V> {
+		return new Map([...map].filter((entry) => predicate.call(this_arg, entry[1], entry[0], map)))
+	}
+
+	/**
 	 * Return a value found in the map that satisfies the predicate, or `null` if none is found.
 	 * @see https://github.com/tc39/proposal-collection-methods
 	 * @param   <K> the type of keys in the map
 	 * @param   <V> the type of values in the map
 	 * @param   map the map to search
-	 * @param   predicate the testing function
+	 * @param   predicate function to test each entry of the map
 	 * @param   this_arg object to use as `this` when executing `predicate`
 	 * @returns the value found, or `null` if none is found
 	 */
 	static find<K, V>(map: Map<K, V>, predicate: (value: V, key: K, map: Map<K, V>) => boolean, this_arg: unknown = null): V|null {
-		const returned: [K, V]|null = [...map].find((entry) => predicate.call(this_arg, entry[1], entry[0], map)) || null
-		return (returned) ? returned[1] : null
+		return [...xjs_Map.filter(map, predicate, this_arg)].map((entry) => entry[1])[0] || null
 	}
 
 	/**
@@ -57,7 +70,7 @@ export default class xjs_Map {
 	 * @param   <K> the type of keys in the map
 	 * @param   <V> the type of values in the map
 	 * @param   map the map to search
-	 * @param   predicate the testing function
+	 * @param   predicate function to test each key of the map
 	 * @param   this_arg object to use as `this` when executing `predicate`
 	 * @returns the key found, or `null` if none is found
 	 */
