@@ -167,6 +167,31 @@ export default class xjs_Array {
 		// return arr.slice(-1)[0]
 	}
 
+	/**
+	 * Asynchronous {@link Array#filter}.
+	 * @param   <T> the type of elements in the array
+	 * @param   arr the array to filter
+	 * @param   predicate function to test each element of the array
+	 * @param   this_arg object to use as `this` when executing `predicate`
+	 * @returns a new array with the elements that pass the test; if no elements pass, an empty array is returned
+	 */
+	static async filterAsync<T>(arr: T[], predicate: (ele: T, idx: number, ary: T[]) => Promise<boolean>|boolean, this_arg: unknown = null): Promise<T[]> {
+		let tests: boolean[] = await Promise.all(arr.map((el, i) => predicate.call(this_arg, el, i, arr)))
+		return arr.filter((_, i) => tests[i])
+	}
+
+	/**
+	 * Asynchronous {@link Array#find}.
+	 * @param   <T> the type of elements in the array
+	 * @param   arr the array to search
+	 * @param   predicate function to test each element of the array
+	 * @param   this_arg object to use as `this` when executing `predicate`
+	 * @returns the item found, or `null` if none is found
+	 */
+	static async findAsync<T>(arr: T[], predicate: (ele: T, idx: number, ary: T[]) => Promise<boolean>|boolean, this_arg: unknown = null): Promise<T|null> {
+		return (await xjs_Array.filterAsync(arr, predicate, this_arg))[0] || null
+	}
+
   /**
    * @deprecated WARNING{DEPRECATED} - use interface `ReadonlyArray<T>` instead
    * Deep freeze an array, and return the result.
