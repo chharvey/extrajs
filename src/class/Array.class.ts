@@ -1,5 +1,6 @@
 import xjs_Object from './Object.class'
-import NaNError from './NaNError.class'
+import xjs_Number from './Number.class'
+import IndexOutOfBoundsError from './IndexOutOfBoundsError.class'
 
 
 /**
@@ -15,12 +16,12 @@ export default class xjs_Array {
 	 * @param   arr the array to search
 	 * @param   index the index of the returned value
 	 * @returns the value in `arr` found at `index`
-	 * @throws  {RangeError} if the index is out of bounds (or if the returned value is `undefined`)
-	 * @throws  {NaNError} if the returned value is `NaN`
+	 * @throws  {NaNError} if the given index is `NaN`
+	 * @throws  {IndexOutOfBoundsError} if the index is out of bounds (or if the returned value is `undefined`)
 	 */
 	static get<T>(arr: T[], index: number): T {
-		if (arr[index] === void 0) throw new RangeError(`Index \`${index}\` out of bounds.`)
-		if (Number.isNaN(arr[index] as any)) throw new NaNError('Got `NaN`.')
+		xjs_Number.assertType(index)
+		if (arr[index] === void 0) throw new IndexOutOfBoundsError(index)
 		return arr[index]
 	}
 
@@ -55,7 +56,7 @@ export default class xjs_Array {
 	 * @returns is `smaller` a subarray of `larger`?
 	 * @throws  {RangeError} if the second array is larger than the first
 	 */
-	static contains<T>(larger: ReadonlyArray<T>, smaller: ReadonlyArray<T>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
+	static contains<T>(larger: readonly T[], smaller: readonly T[], predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
 		if (smaller.length > larger.length) {
 			throw new RangeError('First argument cannot be smaller than the second. Try switching the arguments.')
 		}
@@ -77,9 +78,9 @@ export default class xjs_Array {
    * @param   a the first array
    * @param   b the second array
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
-   * @returns Are corresponding elements the same, i.e. replaceable??
+   * @returns Are corresponding elements the same, i.e. replaceable?
    */
-	static is<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
+	static is<T>(a: readonly T[], b: readonly T[], predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
 		if (a === b) return true
 		return a.length === b.length && a.every((el, i) => predicate(el, b[i]))
 	}
@@ -102,7 +103,7 @@ export default class xjs_Array {
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
 	 * @returns Is `a` a subarray of `b`?
 	 */
-	static isSubarrayOf<U, T extends U>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, predicate: (x: U, y: U) => boolean = xjs_Object.sameValueZero): boolean {
+	static isSubarrayOf<U, T extends U>(a: readonly T[], b: readonly U[], predicate: (x: U, y: U) => boolean = xjs_Object.sameValueZero): boolean {
 		return a.length <= b.length && (
 			a.length === 0 || xjs_Array.is(a, b, predicate) ||
 			a.map((t) =>
@@ -122,7 +123,7 @@ export default class xjs_Array {
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
 	 * @returns exactly `xjs_Array.isSubarrayOf(b, a, predicate)`
 	 */
-	static isSuperarrayOf<T, U extends T>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
+	static isSuperarrayOf<T, U extends T>(a: readonly T[], b: readonly U[], predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
 		return xjs_Array.isSubarrayOf(b, a, predicate)
 	}
 
@@ -135,7 +136,7 @@ export default class xjs_Array {
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
 	 * @returns Is `a` a consecutive subarray of `b`?
 	 */
-	static isConsecutiveSubarrayOf<U, T extends U>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, predicate: (x: U, y: U) => boolean = xjs_Object.sameValueZero): boolean {
+	static isConsecutiveSubarrayOf<U, T extends U>(a: readonly T[], b: readonly U[], predicate: (x: U, y: U) => boolean = xjs_Object.sameValueZero): boolean {
 		return xjs_Array.isSubarrayOf(a, b, predicate) &&
 			b.map((_el, i) => b.slice(i, i+a.length)).some((sub) => xjs_Array.is(a, sub, predicate))
 	}
@@ -149,7 +150,7 @@ export default class xjs_Array {
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
 	 * @returns exactly `xjs_Array.isConsecutiveSubarrayOf(b, a, predicate)`
 	 */
-	static isConsecutiveSuperarrayOf<T, U extends T>(a: ReadonlyArray<T>, b: ReadonlyArray<U>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
+	static isConsecutiveSuperarrayOf<T, U extends T>(a: readonly T[], b: readonly U[], predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
 		return xjs_Array.isConsecutiveSubarrayOf(b, a, predicate)
 	}
 
@@ -160,14 +161,39 @@ export default class xjs_Array {
 	 * @returns the last entry of the array, if the array is nonempty
 	 * @throws  {RangeError} if the array is empty
 	 */
-	static peek<T>(arr: ReadonlyArray<T>): T {
+	static peek<T>(arr: readonly T[]): T {
 		if (!arr.length) throw new RangeError('Cannot peek an empty array.')
 		return arr[arr.length - 1]
 		// return arr.slice(-1)[0]
 	}
 
+	/**
+	 * Asynchronous {@link Array#filter}.
+	 * @param   <T> the type of elements in the array
+	 * @param   arr the array to filter
+	 * @param   predicate function to test each element of the array
+	 * @param   this_arg object to use as `this` when executing `predicate`
+	 * @returns a new array with the elements that pass the test; if no elements pass, an empty array is returned
+	 */
+	static async filterAsync<T>(arr: T[], predicate: (ele: T, idx: number, ary: T[]) => Promise<boolean>|boolean, this_arg: unknown = null): Promise<T[]> {
+		let tests: boolean[] = await Promise.all(arr.map((el, i) => predicate.call(this_arg, el, i, arr)))
+		return arr.filter((_, i) => tests[i])
+	}
+
+	/**
+	 * Asynchronous {@link Array#find}.
+	 * @param   <T> the type of elements in the array
+	 * @param   arr the array to search
+	 * @param   predicate function to test each element of the array
+	 * @param   this_arg object to use as `this` when executing `predicate`
+	 * @returns the item found, or `null` if none is found
+	 */
+	static async findAsync<T>(arr: T[], predicate: (ele: T, idx: number, ary: T[]) => Promise<boolean>|boolean, this_arg: unknown = null): Promise<T|null> {
+		return (await xjs_Array.filterAsync(arr, predicate, this_arg))[0] || null
+	}
+
   /**
-   * @deprecated WARNING{DEPRECATED} - use interface `ReadonlyArray<T>` instead
+   * @deprecated WARNING{DEPRECATED} - use interface `readonly T[]` instead
    * Deep freeze an array, and return the result.
    *
    * Shortcut of {@link xjs_Object.freezeDeep}, but for arrays.
@@ -176,7 +202,7 @@ export default class xjs_Array {
    * @param   arr the array to freeze
    * @returns the given array, with everything frozen
    */
-  static freezeDeep<T>(arr: ReadonlyArray<T>): ReadonlyArray<T> {
+  static freezeDeep<T>(arr: readonly T[]): readonly T[] {
     Object.freeze(arr)
     arr.forEach((el) => { if (!Object.isFrozen(el)) xjs_Object.freezeDeep(el) })
     return arr
@@ -192,7 +218,7 @@ export default class xjs_Array {
    * @param   arr the array to clone
    * @returns an exact copy of the given array
    */
-  static cloneDeep<T>(arr: ReadonlyArray<T>): T[] {
+  static cloneDeep<T>(arr: readonly T[]): T[] {
     return arr.map((el) => xjs_Object.cloneDeep(el))
   }
 
@@ -209,7 +235,7 @@ export default class xjs_Array {
    * @param   predicate check the “sameness” of elements in the array
    * @returns a new array, with duplicates removed
    */
-  static removeDuplicates<T>(arr: ReadonlyArray<T>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): T[] {
+  static removeDuplicates<T>(arr: readonly T[], predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): T[] {
     const returned: T[] = arr.slice()
     for (let i = 0; i < returned.length; i++) {
       for (let j = i + 1; j < returned.length; j++) {
@@ -241,7 +267,7 @@ export default class xjs_Array {
 	 * @returns a copy of the given array, but with no ‘holes’;
 	 *          the returned array might have a smaller `length` than the argument
 	 */
-	static densify<T>(arr: ReadonlyArray<T>): T[] {
+	static densify<T>(arr: readonly T[]): T[] {
 		const newarr: T[] = []
 		arr.forEach((el) => { newarr.push(el) }) // `Array#forEach` does not iterate over holes in sparse arrays
 		return newarr
@@ -267,7 +293,7 @@ export default class xjs_Array {
 	 * @returns a copy of the given array, but with all holes and `undefined`s filled;
 	 *          the returned array will have the same length as the argument
 	 */
-	static fillHoles<T>(arr: ReadonlyArray<T>, value: T): T[] {
+	static fillHoles<T>(arr: readonly T[], value: T): T[] {
 		const newarr: T[] = arr.slice()
 		for (let i = 0; i < newarr.length; i++) { // `Array#forEach` does not iterate over holes in sparse arrays
 			if (newarr[i] === void 0) newarr[i] = value

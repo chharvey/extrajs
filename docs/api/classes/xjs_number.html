@@ -118,7 +118,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Number.class.ts#L83">Number.class.ts:83</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/997cd73/src/class/Number.class.ts#L85">Number.class.ts:85</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="xjs_number.html" class="tsd-signature-type">xjs_Number</a></h4>
@@ -134,7 +134,7 @@
 					<div class="tsd-signature tsd-kind-icon">REGEXP<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;/^-?(?:\d+(?:\.\d+)?|\.\d+)$/</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Number.class.ts#L16">Number.class.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/997cd73/src/class/Number.class.ts#L16">Number.class.ts:16</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -150,13 +150,13 @@
 					<a name="asserttype" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> assert<wbr>Type</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">assert<wbr>Type<span class="tsd-signature-symbol">(</span>num<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, type<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">"float"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"integer"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"natural"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"whole"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"finite"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"infinite"</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">assert<wbr>Type<span class="tsd-signature-symbol">(</span>num<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, type<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">"float"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"integer"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"natural"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"whole"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-zero"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"finite"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"infinite"</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Number.class.ts#L46">Number.class.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/997cd73/src/class/Number.class.ts#L47">Number.class.ts:47</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -175,6 +175,7 @@
 									<li><code>&#39;negative&#39;</code>     : the number is strictly less    than 0</li>
 									<li><code>&#39;non-positive&#39;</code> : the number is less    than or equal to 0</li>
 									<li><code>&#39;non-negative&#39;</code> : the number is greater than or equal to 0</li>
+									<li><code>&#39;non-zero&#39;</code>     : the number is not equal to 0</li>
 									<li><code>&#39;finite&#39;</code>       : the number is not equal to <code>Infinity</code> or <code>-Infinity</code></li>
 									<li><code>&#39;infinite&#39;</code>     : the number is     equal to <code>Infinity</code> or <code>-Infinity</code></li>
 									<li>no type (<code>undefiend</code>): the number is not <code>NaN</code></li>
@@ -200,7 +201,7 @@
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> type: <span class="tsd-signature-type">"float"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"integer"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"natural"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"whole"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"finite"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"infinite"</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> type: <span class="tsd-signature-type">"float"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"integer"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"natural"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"whole"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-zero"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"finite"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"infinite"</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>one of the string literals listed above</p>
 									</div>
@@ -220,7 +221,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/da4f68c/src/class/Number.class.ts#L77">Number.class.ts:77</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/997cd73/src/class/Number.class.ts#L79">Number.class.ts:79</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -270,6 +271,9 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class">
+						<a href="indexoutofboundserror.html" class="tsd-kind-icon">Index<wbr>Out<wbr>OfBounds<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="nanerror.html" class="tsd-kind-icon">NaNError</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -277,6 +281,9 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="xjs_date.html" class="tsd-kind-icon">xjs_<wbr><wbr>Date</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="xjs_map.html" class="tsd-kind-icon">xjs_<wbr><wbr>Map</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="xjs_math.html" class="tsd-kind-icon">xjs_<wbr><wbr>Math</a>
@@ -313,6 +320,12 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="xjs_string.html" class="tsd-kind-icon">xjs_<wbr><wbr>String</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="../globals.html#newarr" class="tsd-kind-icon">newarr</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="../globals.html#returned" class="tsd-kind-icon">returned</a>
 					</li>
 				</ul>
 			</nav>

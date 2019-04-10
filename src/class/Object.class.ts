@@ -18,7 +18,7 @@ export default class xjs_Object {
 	 * Arguments must be of the same type.
 	 * If both are primitives, this method checks
 	 * {@link xjs_Object._sameValueZero|Same-Value-Zero Equality}.
-	 * If both are functions, this method throws an TypeError — functions are not supported at this time.
+	 * If either are functions, this method throws an TypeError — functions are not supported at this time.
 	 * If both arguments are arrays, it is faster and more robust to use {@link xjs_Array.is}.
 	 * If both are objects or arrays, this method checks the properties (or elements) of each,
 	 * comparing them with the provided predicate.
@@ -49,14 +49,18 @@ export default class xjs_Object {
 	 * @throws  {TypeError} if either `a` or `b` is a function (not supported)
 	 */
 	static is<T>(a: T, b: T, predicate: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		const xjs_Array: typeof xjs_Array_module = require('./Array.class.js').default // NB relative to dist
 		if (a === b) return true
 		if (['string', 'number', 'boolean', 'null', 'undefined'].includes(xjs_Object.typeOf(a))) {
 			return xjs_Object.sameValueZero(a, b)
 		}
-		if (xjs_Object.typeOf(a) === 'function') throw new TypeError('Function arguments to xjs.Object.is are not yet supported.')
-		// else, it will be 'object' or 'array'
-		return Object.entries(a).every((a_entry) =>
-			Object.entries(b).some((b_entry) => a_entry[0] === b_entry[0] && predicate(a_entry[1], b_entry[1]))
+		if (xjs_Object.typeOf(a) === 'function' || xjs_Object.typeOf(b) === 'function') throw new TypeError('Function arguments to xjs.Object.is are not yet supported.')
+		if (a instanceof Array && b instanceof Array) return xjs_Array.is(a, b)
+		// else, it will be 'object'
+		return Object.entries(a).every(([a_key, a_value]) =>
+			Object.entries(b).some(([b_key, b_value]) => a_key === b_key && predicate(a_value, b_value))
+		) && Object.entries(b).every(([b_key, b_value]) =>
+			Object.entries(a).some(([a_key, a_value]) => a_key === b_key && predicate(a_value, b_value))
 		)
 	}
 

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>xjs_String | extrajs</title>
+	<title>IndexOutOfBoundsError | extrajs</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="xjs_string.html">xjs_String</a>
+					<a href="indexoutofboundserror.html">IndexOutOfBoundsError</a>
 				</li>
 			</ul>
-			<h1>Class xjs_String</h1>
+			<h1>Class IndexOutOfBoundsError</h1>
 		</div>
 	</div>
 </header>
@@ -67,16 +67,21 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Additional static members for the native String class.</p>
+						<p>An error that is thrown when trying to access an object’s member
+						with an index that has not been set or is outside the domain of the object.</p>
 					</div>
-					<p>Does not extend the native String class.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">xjs_String</span>
+						<span class="tsd-signature-type">RangeError</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">IndexOutOfBoundsError</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -84,79 +89,130 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
+						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-private"><a href="xjs_string.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="indexoutofboundserror.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
-							<h3>Methods</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_string.html#stringify" class="tsd-kind-icon">stringify</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="indexoutofboundserror.html#message" class="tsd-kind-icon">message</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="indexoutofboundserror.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="indexoutofboundserror.html#stack" class="tsd-kind-icon">stack</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="indexoutofboundserror.html#rangeerror" class="tsd-kind-icon">Range<wbr>Error</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-private">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
 					<a name="constructor" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">new xjs_<wbr><wbr>String<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="xjs_string.html" class="tsd-signature-type">xjs_String</a></li>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Index<wbr>Out<wbr>OfBounds<wbr>Error<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="indexoutofboundserror.html" class="tsd-signature-type">IndexOutOfBoundsError</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Index<wbr>Out<wbr>OfBounds<wbr>Error<span class="tsd-signature-symbol">(</span>index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="indexoutofboundserror.html" class="tsd-signature-type">IndexOutOfBoundsError</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/997cd73/src/class/String.class.ts#L33">String.class.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/997cd73/src/class/IndexOutOfBoundsError.class.ts#L7">IndexOutOfBoundsError.class.ts:7</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="xjs_string.html" class="tsd-signature-type">xjs_String</a></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Construct a new IndexOutOfBoundsError object.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> message: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Optional. A human-readable description of the error.</p>
+										</div>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="indexoutofboundserror.html" class="tsd-signature-type">IndexOutOfBoundsError</a></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/997cd73/src/class/IndexOutOfBoundsError.class.ts#L12">IndexOutOfBoundsError.class.ts:12</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Construct a new IndexOutOfBoundsError object.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>index: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>the index that is out of bounds</p>
+										</div>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="indexoutofboundserror.html" class="tsd-signature-type">IndexOutOfBoundsError</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="stringify" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> stringify</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">stringify<span class="tsd-signature-symbol">(</span>thing<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/997cd73/src/class/String.class.ts#L21">String.class.ts:21</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Convert a thing into a string.</p>
-								</div>
-								<p>If the argument is an array, it is joined.
-									If it is an object, <code>JSON.stringify</code> is called on it.
-									This method calls <code>.toString()</code> on everything else, except <code>null</code> and <code>undefined</code>,
-									which are converted to the strings <code>&#39;null&#39;</code> and <code>&#39;undefined&#39;</code> respectively.
-								Useful for JSON objects where the value could be a single string or an array of strings.</p>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>thing: <span class="tsd-signature-type">unknown</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>anything to convert</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-							<p>a string version of the argument</p>
-						</li>
-					</ul>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="message" class="tsd-anchor"></a>
+					<h3>message</h3>
+					<div class="tsd-signature tsd-kind-icon">message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Error.message</p>
+						<ul>
+							<li>Defined in /Users/Chris/Repositories/extrajs/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:964</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="name" class="tsd-anchor"></a>
+					<h3>name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Error.name</p>
+						<ul>
+							<li>Defined in /Users/Chris/Repositories/extrajs/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:963</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+					<a name="stack" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> stack</h3>
+					<div class="tsd-signature tsd-kind-icon">stack<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Error.stack</p>
+						<p>Overrides Error.stack</p>
+						<ul>
+							<li>Defined in /Users/Chris/Repositories/extrajs/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:965</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a name="rangeerror" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> Range<wbr>Error</h3>
+					<div class="tsd-signature tsd-kind-icon">Range<wbr>Error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RangeErrorConstructor</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in /Users/Chris/Repositories/extrajs/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:996</li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -170,9 +226,30 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class">
 						<a href="indexoutofboundserror.html" class="tsd-kind-icon">Index<wbr>Out<wbr>OfBounds<wbr>Error</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="indexoutofboundserror.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="indexoutofboundserror.html#message" class="tsd-kind-icon">message</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="indexoutofboundserror.html#name" class="tsd-kind-icon">name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+								<a href="indexoutofboundserror.html#stack" class="tsd-kind-icon">stack</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+								<a href="indexoutofboundserror.html#rangeerror" class="tsd-kind-icon">Range<wbr>Error</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="nanerror.html" class="tsd-kind-icon">NaNError</a>
 					</li>
@@ -200,21 +277,9 @@
 					<li class=" tsd-kind-class">
 						<a href="xjs_set.html" class="tsd-kind-icon">xjs_<wbr><wbr>Set</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-class">
+					<li class=" tsd-kind-class">
 						<a href="xjs_string.html" class="tsd-kind-icon">xjs_<wbr><wbr>String</a>
-						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-private">
-								<a href="xjs_string.html#constructor" class="tsd-kind-icon">constructor</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="xjs_string.html#stringify" class="tsd-kind-icon">stringify</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-variable tsd-is-not-exported">
 						<a href="../globals.html#newarr" class="tsd-kind-icon">newarr</a>
 					</li>
