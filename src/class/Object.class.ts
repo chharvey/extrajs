@@ -302,7 +302,7 @@ export default class xjs_Object {
         for (let key in thing) {
           returned[key] = xjs_Object.cloneDeep(thing[key])
         }
-      return returned as T
+			return returned as unknown as T
     } else {
         return thing
     }
