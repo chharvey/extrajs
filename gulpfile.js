@@ -47,6 +47,12 @@ async function test_run_Math() {
 	console.info('All _Math_ tests ran successfully!')
 }
 
+async function test_run_Map() {
+	await Promise.all([
+	])
+	console.info('All _Map_ tests ran successfully!')
+}
+
 async function test_run_Number() {
 	await Promise.all([
 		require('./test/out/Number-typeOf.test.js'    ).default,
@@ -91,6 +97,7 @@ const test_run = gulp.series(
 		test_run_Date,
 		test_run_Number,
 		test_run_Math,
+		test_run_Map,
 		test_run_Object,
 		test_run_Promise,
 		test_run_Set,
@@ -124,6 +131,7 @@ module.exports = {
 	test_run_Array,
 	test_run_Date,
 	test_run_Math,
+	test_run_Map,
 	test_run_Number,
 	test_run_Object,
 	test_run_Promise,
