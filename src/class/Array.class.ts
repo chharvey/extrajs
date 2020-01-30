@@ -82,7 +82,7 @@ export default class xjs_Array {
    */
 	static is<T>(a: readonly T[], b: readonly T[], predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
 		if (a === b) return true
-		return a.length === b.length && a.every((el, i) => predicate(el, b[i]))
+		return a.length === b.length && a.every((el, i) => xjs_Object.sameValueZero(el, b[i]) || predicate(el, b[i]))
 	}
 
 	/**

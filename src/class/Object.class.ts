@@ -80,6 +80,7 @@ export default class xjs_Object {
 	}
 
 	/**
+	 * @deprecated WARNING:DEPRECATED use a built-in {@link Map} object instead.
 	 * A structured `switch` statement.
 	 *
 	 * This method offers a more structured alternative to a standard `switch` statement,
@@ -130,6 +131,26 @@ export default class xjs_Object {
 	 * call_me(1) // returns the number `6`
 	 * ```
 	 *
+	 * DEPRECATION WARNING: This method is deprecated. Instead, use a built-in Map:
+	 * ```js
+	 * // What is the date of the 1st Tuesday of November, 2018?
+	 * let call_me: (n: number) => number = new Map<string, (n: number) => number>([
+	 * 	['January'   , (n: number) => [ 2,  9, 16, 23,  30][n - 1]],
+	 * 	['February'  , (n: number) => [ 6. 13. 20, 27, NaN][n - 1]],
+	 * 	['March'     , (n: number) => [ 6, 13, 20, 27, NaN][n - 1]],
+	 * 	['April'     , (n: number) => [ 3, 10, 17, 24, NaN][n - 1]],
+	 * 	['May'       , (n: number) => [ 1,  8, 15, 22,  29][n - 1]],
+	 * 	['June'      , (n: number) => [ 5, 12, 19, 26, NaN][n - 1]],
+	 * 	['July'      , (n: number) => [ 3, 10, 17, 24,  31][n - 1]],
+	 * 	['August'    , (n: number) => [ 7, 14, 21, 28, NaN][n - 1]],
+	 * 	['September' , (n: number) => [ 4, 11, 18, 25, NaN][n - 1]],
+	 * 	['October'   , (n: number) => [ 2,  9, 16, 23,  30][n - 1]],
+	 * 	['November'  , (n: number) => [ 6, 13, 20, 27, NaN][n - 1]],
+	 * 	['December'  , (n: number) => [ 4, 11, 18, 25, NaN][n - 1]],
+	 * ]).get('November') // returns a function taking `n` and returning one of `[6,13,20,27,NaN]`
+	 * call_me(1) // returns the number `6`
+	 * ```
+	 *
 	 * @param   <T> the type of value returned by the looked-up function
 	 * @param   key the key to provide the lookup, which will give a function
 	 * @param   dictionary an object with function values
@@ -177,23 +198,20 @@ export default class xjs_Object {
    * @returns the type of the thing
    */
 	static typeOf(thing: unknown): string {
-		return xjs_Object.switch<string>(typeof thing, {
-			'object': (arg: unknown) => {
-				if (arg === null)       return 'null'
-				if (Array.isArray(arg)) return 'array'
-				return 'object'
-			},
-			'number': (arg: number) => {
-				if (Number.isNaN(arg))     return 'NaN'
-				if (!Number.isFinite(arg)) return 'infinite'
-				return 'number'
-			},
-			'function' : () => 'function',
-			'string'   : () => 'string',
-			'boolean'  : () => 'boolean',
-			'undefined': () => 'undefined',
-			'default'  : (arg: unknown) => typeof arg,
-		})(thing)
+		return (new Map<string, (arg: any) => string>([
+			['object', (arg: unknown) => (arg === null) ? 'null'
+				: (Array.isArray(arg)) ? 'array'
+				: 'object'
+			],
+			['number', (arg: number) => (Number.isNaN(arg)) ? 'NaN'
+				: (!Number.isFinite(arg)) ? 'infinite'
+				: 'number'
+			],
+			['function'  , () => 'function'],
+			['string'    , () => 'string'],
+			['boolean'   , () => 'boolean'],
+			['undefined' , () => 'undefined'],
+		]).get(typeof thing) || ((arg: unknown) => typeof arg))(thing)
 	}
 
   /**
@@ -302,7 +320,7 @@ export default class xjs_Object {
         for (let key in thing) {
           returned[key] = xjs_Object.cloneDeep(thing[key])
         }
-      return returned as T
+			return returned as unknown as T
     } else {
         return thing
     }

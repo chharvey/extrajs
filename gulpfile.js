@@ -5,7 +5,6 @@ const typescript = require('gulp-typescript')
 // require('typescript') // DO NOT REMOVE … peerDependency of `gulp-typescript`
 
 const tsconfig      = require('./tsconfig.json')
-const typedocconfig = require('./config/typedoc.json')
 
 function dist() {
   return gulp.src('./src/class/*.class.ts')
@@ -105,7 +104,7 @@ const test = gulp.series(test_out, test_run)
 
 function docs() {
   return gulp.src('./src/**/*.ts')
-    .pipe(typedoc(typedocconfig))
+    .pipe(typedoc(tsconfig.typedocOptions))
 }
 
 const build = gulp.parallel(

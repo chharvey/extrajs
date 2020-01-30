@@ -117,7 +117,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/997cd73/src/class/Object.class.ts#L309">Object.class.ts:309</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/e5b5fa0/src/class/Object.class.ts#L327">src/class/Object.class.ts:327</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="xjs_object.html" class="tsd-signature-type">xjs_Object</a></h4>
@@ -137,7 +137,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/997cd73/src/class/Object.class.ts#L297">Object.class.ts:297</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/e5b5fa0/src/class/Object.class.ts#L315">src/class/Object.class.ts:315</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -151,7 +151,7 @@
 									<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is" class="external">Object.is</a>,
 									<code>true</code> would be returned. The new object would be “replaceable” with its cloner.
 									If a primitive value is passed, the original argument is returned.
-								If the argument is an array, it is faster to use {@link xjs_Array.cloneDeep}.</p>
+								If the argument is an array, it is faster to use <a href="xjs_array.html#clonedeep">xjs_Array.cloneDeep</a>.</p>
 								<p>This method provides a deeper clone than <code>Object.assign()</code>: whereas <code>Object.assign()</code> only
 								copies the top-level properties, this method recursively clones into all sub-levels.</p>
 								<pre><code class="language-js"><span class="hljs-keyword">var</span> x = { <span class="hljs-attr">first</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">second</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">2</span> }, <span class="hljs-attr">third</span>: [<span class="hljs-number">1</span>, <span class="hljs-string">'2'</span>, { <span class="hljs-attr">v</span>:<span class="hljs-number">3</span> }] }
@@ -221,7 +221,7 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/997cd73/src/class/Object.class.ts#L230">Object.class.ts:230</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/e5b5fa0/src/class/Object.class.ts#L248">src/class/Object.class.ts:248</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -269,7 +269,7 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/997cd73/src/class/Object.class.ts#L211">Object.class.ts:211</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/e5b5fa0/src/class/Object.class.ts#L229">src/class/Object.class.ts:229</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -305,13 +305,13 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 					<a name="is" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> is</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">is&lt;T&gt;<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, predicate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">is&lt;T&gt;<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, predicate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/997cd73/src/class/Object.class.ts#L51">Object.class.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/e5b5fa0/src/class/Object.class.ts#L51">src/class/Object.class.ts:51</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -324,9 +324,9 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 								<p>This function tests the properties of two arguemnts, using the provided predicate.
 									Arguments must be of the same type.
 									If both are primitives, this method checks
-									{@link xjs_Object.<em>sameValueZero|Same-Value-Zero Equality}.
-										If either are functions, this method throws an TypeError — functions are not supported at this time.
-									If both arguments are arrays, it is faster and more robust to use &lt;a href=&quot;xjs</em>array.html#is&quot;&gt;xjs_Array.is</a>.
+									{@link xjs_Object._sameValueZero|Same-Value-Zero Equality}.
+									If either are functions, this method throws an TypeError — functions are not supported at this time.
+									If both arguments are arrays, it is faster and more robust to use <a href="xjs_array.html#is">xjs_Array.is</a>.
 									If both are objects or arrays, this method checks the properties (or elements) of each,
 								comparing them with the provided predicate.</p>
 								<p>If no predicate is provided, this method uses the default predicate {@link xjs_Object._sameValueZero}.</p>
@@ -373,13 +373,13 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> predicate: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;xjs_Object.sameValueZero</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> predicate: <span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = xjs_Object.sameValueZero</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>check the “sameness” of corresponding properties of <code>a</code> and <code>b</code></p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+											<ul class="tsd-signatures tsd-kind-type-literal">
 												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
@@ -415,7 +415,7 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/997cd73/src/class/Object.class.ts#L78">Object.class.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/e5b5fa0/src/class/Object.class.ts#L78">src/class/Object.class.ts:78</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -455,43 +455,44 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 					<a name="switch" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> switch</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">switch&lt;T&gt;<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, dictionary<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+						<li class="tsd-signature tsd-kind-icon">switch&lt;T&gt;<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, dictionary<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/997cd73/src/class/Object.class.ts#L139">Object.class.ts:139</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/e5b5fa0/src/class/Object.class.ts#L160">src/class/Object.class.ts:160</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>A structured <code>switch</code> statement.</p>
-								</div>
-								<p>This method offers a more structured alternative to a standard <code>switch</code> statement,
-									using object lookups to find values.
-								It takes two arguments: a key and a dictionary.</p>
-								<p>The first argument is the key in the dictionary whose value to look up.
-									The dictionary argument must be an object with string keys and function values.
-									Each of these functions, when called, should return a value corresponding to its key string.
-								All functions in the dictionary must return the same type of value.</p>
-								<p>You may optionally define a <code>&#39;default&#39;</code> key in your dictionary,
-									in order to handle cases when caller input matches none of the keys.
-									<em>The <code>&#39;default&#39;</code> key is analogous to the <strong><code>default</code> clause</strong> of a <code>switch</code> statement.</em>
-									You may omit a <code>&#39;default&#39;</code> key if you are certain that you’ve accounted for all the inputs,
-								such as when the inputs are Enum values.</p>
-								<p>Note that this method looks for <code>&#39;default&#39;</code> when it cannot find any other key,
-									and in doing so it logs a warning.
-									To suppress this warning, it is best to provide keys for all known possible inputs,
-									even if that means duplicating some values.
-									(Though it’s easy to define and reuse a function value before calling this method.)
-								Best practice is to write a <code>&#39;default&#39;</code> case only for unknown key inputs.</p>
-								<p>The following example calls this method to look up
-									the date of the <em>nth</em> Tuesday of each month of 2018,
-									where <em>n</em> could be a number 1 through 5.
-									(Note that this example is actually pretty inefficient,
-								but it only serves as a demonstration.)</p>
-								<pre><code class="language-js"><span class="hljs-comment">// What is the date of the 1st Tuesday of November, 2018?</span>
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>WARNING:DEPRECATED use a built-in {@link Map} object instead.
+										A structured <code>switch</code> statement.</p>
+										<p>This method offers a more structured alternative to a standard <code>switch</code> statement,
+											using object lookups to find values.
+										It takes two arguments: a key and a dictionary.</p>
+										<p>The first argument is the key in the dictionary whose value to look up.
+											The dictionary argument must be an object with string keys and function values.
+											Each of these functions, when called, should return a value corresponding to its key string.
+										All functions in the dictionary must return the same type of value.</p>
+										<p>You may optionally define a <code>&#39;default&#39;</code> key in your dictionary,
+											in order to handle cases when caller input matches none of the keys.
+											<em>The <code>&#39;default&#39;</code> key is analogous to the <strong><code>default</code> clause</strong> of a <code>switch</code> statement.</em>
+											You may omit a <code>&#39;default&#39;</code> key if you are certain that you’ve accounted for all the inputs,
+										such as when the inputs are Enum values.</p>
+										<p>Note that this method looks for <code>&#39;default&#39;</code> when it cannot find any other key,
+											and in doing so it logs a warning.
+											To suppress this warning, it is best to provide keys for all known possible inputs,
+											even if that means duplicating some values.
+											(Though it’s easy to define and reuse a function value before calling this method.)
+										Best practice is to write a <code>&#39;default&#39;</code> case only for unknown key inputs.</p>
+										<p>The following example calls this method to look up
+											the date of the <em>nth</em> Tuesday of each month of 2018,
+											where <em>n</em> could be a number 1 through 5.
+											(Note that this example is actually pretty inefficient,
+										but it only serves as a demonstration.)</p>
+										<pre><code class="language-js"><span class="hljs-comment">// What is the date of the 1st Tuesday of November, 2018?</span>
 <span class="hljs-keyword">let</span> call_me = xjs.Object.switch&lt;number&gt;(<span class="hljs-string">'November'</span>, {
   <span class="hljs-string">'January'</span>  : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">2</span>,  <span class="hljs-number">9</span>, <span class="hljs-number">16</span>, <span class="hljs-number">23</span>,  <span class="hljs-number">30</span>][n - <span class="hljs-number">1</span>],
   <span class="hljs-string">'February'</span> : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">6.</span> <span class="hljs-number">13.</span> <span class="hljs-number">20</span>, <span class="hljs-number">27</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
@@ -508,7 +509,24 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
   <span class="hljs-string">'default'</span>  : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> <span class="hljs-literal">NaN</span>,
 }) <span class="hljs-comment">// returns a function taking `n` and returning one of `[6,13,20,27,NaN]`</span>
 call_me(<span class="hljs-number">1</span>) <span class="hljs-comment">// returns the number `6`</span></code></pre>
-								<dl class="tsd-comment-tags">
+										<p>DEPRECATION WARNING: This method is deprecated. Instead, use a built-in Map:</p>
+										<pre><code class="language-js"><span class="hljs-comment">// What is the date of the 1st Tuesday of November, 2018?</span>
+<span class="hljs-keyword">let</span> call_me: <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> number = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>&lt;string, (n: number) =&gt; number&gt;([
+    [<span class="hljs-string">'January'</span>   , (n: number) =&gt; [ <span class="hljs-number">2</span>,  <span class="hljs-number">9</span>, <span class="hljs-number">16</span>, <span class="hljs-number">23</span>,  <span class="hljs-number">30</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">'February'</span>  , (n: number) =&gt; [ <span class="hljs-number">6.</span> <span class="hljs-number">13.</span> <span class="hljs-number">20</span>, <span class="hljs-number">27</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">'March'</span>     , (n: number) =&gt; [ <span class="hljs-number">6</span>, <span class="hljs-number">13</span>, <span class="hljs-number">20</span>, <span class="hljs-number">27</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">'April'</span>     , (n: number) =&gt; [ <span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">17</span>, <span class="hljs-number">24</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">'May'</span>       , (n: number) =&gt; [ <span class="hljs-number">1</span>,  <span class="hljs-number">8</span>, <span class="hljs-number">15</span>, <span class="hljs-number">22</span>,  <span class="hljs-number">29</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">'June'</span>      , (n: number) =&gt; [ <span class="hljs-number">5</span>, <span class="hljs-number">12</span>, <span class="hljs-number">19</span>, <span class="hljs-number">26</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">'July'</span>      , (n: number) =&gt; [ <span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">17</span>, <span class="hljs-number">24</span>,  <span class="hljs-number">31</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">'August'</span>    , (n: number) =&gt; [ <span class="hljs-number">7</span>, <span class="hljs-number">14</span>, <span class="hljs-number">21</span>, <span class="hljs-number">28</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">'September'</span> , (n: number) =&gt; [ <span class="hljs-number">4</span>, <span class="hljs-number">11</span>, <span class="hljs-number">18</span>, <span class="hljs-number">25</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">'October'</span>   , (n: number) =&gt; [ <span class="hljs-number">2</span>,  <span class="hljs-number">9</span>, <span class="hljs-number">16</span>, <span class="hljs-number">23</span>,  <span class="hljs-number">30</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">'November'</span>  , (n: number) =&gt; [ <span class="hljs-number">6</span>, <span class="hljs-number">13</span>, <span class="hljs-number">20</span>, <span class="hljs-number">27</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">'December'</span>  , (n: number) =&gt; [ <span class="hljs-number">4</span>, <span class="hljs-number">11</span>, <span class="hljs-number">18</span>, <span class="hljs-number">25</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
+]).get(<span class="hljs-string">'November'</span>) <span class="hljs-comment">// returns a function taking `n` and returning one of `[6,13,20,27,NaN]`</span>
+call_me(<span class="hljs-number">1</span>) <span class="hljs-comment">// returns the number `6`</span></code></pre>
+									</dd>
 									<dt>throws</dt>
 									<dd><p>{ReferenceError} when failing to find a lookup value</p>
 									</dd>
@@ -532,16 +550,16 @@ call_me(<span class="hljs-number">1</span>) <span class="hljs-comment">// return
 									</div>
 								</li>
 								<li>
-									<h5>dictionary: <span class="tsd-signature-type">object</span></h5>
+									<h5>dictionary: <span class="tsd-signature-symbol">{}</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>an object with function values</p>
 									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-index-signature">
-											<h5><span class="tsd-signature-symbol">[</span>index: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">function</span></h5>
+											<h5><span class="tsd-signature-symbol">[</span>index: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">T</span></h5>
 											<ul class="tsd-parameters">
 												<li class="tsd-parameter-siganture">
-													<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+													<ul class="tsd-signatures tsd-kind-type-literal">
 														<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 													</ul>
 													<ul class="tsd-descriptions">
@@ -564,11 +582,11 @@ call_me(<span class="hljs-number">1</span>) <span class="hljs-comment">// return
 									</ul>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">T</span></h4>
 							<p>the looked-up function, returning <T></p>
 							<ul class="tsd-parameters">
 								<li class="tsd-parameter-siganture">
-									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+									<ul class="tsd-signatures tsd-kind-type-literal">
 										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
@@ -600,7 +618,7 @@ call_me(<span class="hljs-number">1</span>) <span class="hljs-comment">// return
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/997cd73/src/class/Object.class.ts#L179">Object.class.ts:179</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/e5b5fa0/src/class/Object.class.ts#L200">src/class/Object.class.ts:200</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -720,12 +738,6 @@ xjs.typeOf(y);  <span class="hljs-comment">// Uncaught ReferenceError: y is not 
 					<li class=" tsd-kind-class">
 						<a href="xjs_string.html" class="tsd-kind-icon">xjs_<wbr><wbr>String</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#newarr" class="tsd-kind-icon">newarr</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#returned" class="tsd-kind-icon">returned</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
@@ -743,6 +755,7 @@ xjs.typeOf(y);  <span class="hljs-comment">// Uncaught ReferenceError: y is not 
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -791,7 +804,7 @@ xjs.typeOf(y);  <span class="hljs-comment">// Uncaught ReferenceError: y is not 
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>

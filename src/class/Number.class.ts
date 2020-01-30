@@ -47,19 +47,19 @@ export default class xjs_Number {
 	static assertType(num: number, type?: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'|'non-positive'|'non-negative'|'non-zero'|'finite'|'infinite'): void {
 		if (Number.isNaN(num)) throw new NaNError()
 		if (!type) return;
-		return xjs_Object.switch<void>(type, {
-			'integer'     : (n: number) => assert( Number.isInteger(n)          , `${n} must be an integer.`            ),
-			'natural'     : (n: number) => assert( Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`),
-			'whole'       : (n: number) => assert( Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    ),
-			'float'       : (n: number) => assert(!Number.isInteger(n)          , `${n} must not be an integer.`        ),
-			'positive'    : (n: number) => assert(0 < n                         , `${n} must be a positive number.`     ),
-			'negative'    : (n: number) => assert(n < 0                         , `${n} must be a negative number.`     ),
-			'non-positive': (n: number) => assert(n <= 0                        , `${n} must not be a positive number.` ),
-			'non-negative': (n: number) => assert(0 <= n                        , `${n} must not be a negative number.` ),
-			'non-zero'    : (n: number) => assert(n !== 0                       , `${n} must not be zero.`              ),
-			'finite'      : (n: number) => assert( Number.isFinite(n)           , `${n} must be a finite number.`       ),
-			'infinite'    : (n: number) => assert(!Number.isFinite(n)           , `${n} must be an infinite number.`    ),
-		})(num)
+		return new Map<string, (n: number) => void>([
+			['integer'      , (n: number) => assert( Number.isInteger(n)          , `${n} must be an integer.`            )],
+			['natural'      , (n: number) => assert( Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`)],
+			['whole'        , (n: number) => assert( Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    )],
+			['float'        , (n: number) => assert(!Number.isInteger(n)          , `${n} must not be an integer.`        )],
+			['positive'     , (n: number) => assert(0 < n                         , `${n} must be a positive number.`     )],
+			['negative'     , (n: number) => assert(n < 0                         , `${n} must be a negative number.`     )],
+			['non-positive' , (n: number) => assert(n <= 0                        , `${n} must not be a positive number.` )],
+			['non-negative' , (n: number) => assert(0 <= n                        , `${n} must not be a negative number.` )],
+			['non-zero'     , (n: number) => assert(n !== 0                       , `${n} must not be zero.`              )],
+			['finite'       , (n: number) => assert( Number.isFinite(n)           , `${n} must be a finite number.`       )],
+			['infinite'     , (n: number) => assert(!Number.isFinite(n)           , `${n} must be an infinite number.`    )],
+		]).get(type) !(num)
 	}
 
 	/**
