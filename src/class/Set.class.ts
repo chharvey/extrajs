@@ -21,8 +21,8 @@ export default class xjs_Set {
 	static is<T>(a: ReadonlySet<T>, b: ReadonlySet<T>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
 		if (a === b) return true
 		return a.size === b.size &&
-			[...a].every((a_el) => [...b].some((b_el) => predicate(a_el, b_el))) &&
-			[...b].every((b_el) => [...a].some((a_el) => predicate(b_el, a_el)))
+			[...a].every((a_el) => [...b].some((b_el) => xjs_Object.sameValueZero(a_el, b_el) || predicate(a_el, b_el))) &&
+			[...b].every((b_el) => [...a].some((a_el) => xjs_Object.sameValueZero(b_el, a_el) || predicate(b_el, a_el)))
 	}
 
 	/**
