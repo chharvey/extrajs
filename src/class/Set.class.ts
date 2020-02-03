@@ -12,7 +12,7 @@ export default class xjs_Set {
 	 * Test whether two sets have “the same” elements.
 	 *
 	 * Similar to {@link xjs_Array.is}, but for sets, the order of elements is not important.
-	 * @param   <T> the type of elements in the sets
+	 * @typeparam T - the type of elements in the sets
 	 * @param   a the first set
 	 * @param   b the second set
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
@@ -28,7 +28,7 @@ export default class xjs_Set {
 	/**
 	 * Return a new set with elements that pass the provided predicate function.
 	 * @see https://github.com/tc39/proposal-collection-methods
-	 * @param   <T> the type of elements in the set
+	 * @typeparam T - the type of elements in the set
 	 * @param   set the set to filter
 	 * @param   predicate function to test each element of the set
 	 * @param   this_arg object to use as `this` when executing `predicate`
@@ -41,7 +41,7 @@ export default class xjs_Set {
 	/**
 	 * Return a value found in the set that satisfies the predicate, or `null` if none is found.
 	 * @see https://github.com/tc39/proposal-collection-methods
-	 * @param   <T> the type of elements in the set
+	 * @typeparam T - the type of elements in the set
 	 * @param   set the set to search
 	 * @param   predicate function to test each element of the set
 	 * @param   this_arg object to use as `this` when executing `predicate`
@@ -54,8 +54,8 @@ export default class xjs_Set {
 	/**
 	 * Return a new Set with the results of calling a provided function on every element in the given Set.
 	 * @see https://github.com/tc39/proposal-collection-methods
-	 * @param   <T> the type of elements in the set
-	 * @param   <U> the type of new elements returned by the callback
+	 * @typeparam T - the type of elements in the set
+	 * @typeparam U - the type of new elements returned by the callback
 	 * @param   set the set to map
 	 * @param   callback the function to call on each element of the set
 	 * @param   this_arg object to use as `this` when executing `callback`
@@ -71,8 +71,8 @@ export default class xjs_Set {
 	 * Note that if `a` is an empty set, or if `a` and `b` are “the same” (as determined by `predicate`),
 	 * this method returns `true`.
 	 * @see https://github.com/tc39/proposal-set-methods
-	 * @param   <T> the type of elements in `a`
-	 * @param   <U> the type of elements in `b`
+	 * @typeparam T - the type of elements in `a`
+	 * @typeparam U - the type of elements in `b`
 	 * @param   a the smaller set
 	 * @param   b the larger set
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
@@ -85,8 +85,8 @@ export default class xjs_Set {
 	/**
 	 * {@link xjs_Set.isSubsetOf}, but with the parameters switched.
 	 * @see https://github.com/tc39/proposal-set-methods
-	 * @param   <T> the type of elements in `a`
-	 * @param   <U> the type of elements in `b`
+	 * @typeparam T - the type of elements in `a`
+	 * @typeparam U - the type of elements in `b`
 	 * @param   a the larger set
 	 * @param   b the smaller set
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
@@ -99,8 +99,8 @@ export default class xjs_Set {
 	/**
 	 * Return the union (disjunction) of two sets: the set of elements that are in either set (or both sets).
 	 * @see https://github.com/tc39/proposal-set-methods
-	 * @param   <T> the type of elements in the `a`
-	 * @param   <U> the type of elements in the `b`
+	 * @typeparam T - the type of elements in the `a`
+	 * @typeparam U - the type of elements in the `b`
 	 * @param   a the first set
 	 * @param   b the second set
 	 * @returns a new Set containing the elements present in either `a` or `b` (or both)
@@ -114,8 +114,8 @@ export default class xjs_Set {
 	/**
 	 * Return the intersection (conjunction) of two sets: the set of elements that are in both sets.
 	 * @see https://github.com/tc39/proposal-set-methods
-	 * @param   <T> the type of elements in `a`
-	 * @param   <U> the type of elements in `b`
+	 * @typeparam T - the type of elements in `a`
+	 * @typeparam U - the type of elements in `b`
 	 * @param   a the first set
 	 * @param   b the second set
 	 * @returns a new Set containing the elements present only in both `a` and `b`
@@ -130,8 +130,8 @@ export default class xjs_Set {
 	/**
 	 * Return the difference (nonimplication) of two sets: the set of elements in `a`, but not in `b`.
 	 * @see https://github.com/tc39/proposal-set-methods
-	 * @param   <T> the type of elements in `a`
-	 * @param   <U> the type of elements in `b`
+	 * @typeparam T - the type of elements in `a`
+	 * @typeparam U - the type of elements in `b`
 	 * @param   a the first set
 	 * @param   b the second set
 	 * @returns a new Set containing the elements present only in `a`
@@ -150,8 +150,8 @@ export default class xjs_Set {
 	 * - `difference( union(a,b) , intersection(a,b) )`
 	 * - `union( difference(a,b) , difference(b,a) )`
 	 * @see https://github.com/tc39/proposal-set-methods
-	 * @param   <T> the type of elements in `a`
-	 * @param   <U> the type of elements in `b`
+	 * @typeparam T - the type of elements in `a`
+	 * @typeparam U - the type of elements in `b`
 	 * @param   a the first set
 	 * @param   b the second set
 	 * @returns a new Set containing the elements present only in `a` or only in `b`, but not both

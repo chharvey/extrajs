@@ -41,7 +41,7 @@ export default class xjs_Object {
 	 * Then this replaceability relation `R` is **symmetric**, because `x R y` implies `y R x`.
 	 * We want `xjs.Object.is(x, y)` to emulate this relation.
 	 *
-	 * @param   <T> the least common supertype of `a` and `b`
+	 * @typeparam T - the least common supertype of `a` and `b`
 	 * @param   a the first  thing
 	 * @param   b the second thing
 	 * @param   predicate check the “sameness” of corresponding properties of `a` and `b`
@@ -151,7 +151,7 @@ export default class xjs_Object {
 	 * call_me(1) // returns the number `6`
 	 * ```
 	 *
-	 * @param   <T> the type of value returned by the looked-up function
+	 * @typeparam T - the type of value returned by the looked-up function
 	 * @param   key the key to provide the lookup, which will give a function
 	 * @param   dictionary an object with function values
 	 * @returns the looked-up function, returning <T>
@@ -242,6 +242,7 @@ export default class xjs_Object {
    * on every property and sub-property of the given parameter.
    * Else, return the given argument.
    * If the argument is an array, it is faster to use {@link xjs_Array.freezeDeep}.
+	 * @typeparam T - the type of `thing`
    * @param   thing any value to freeze
    * @returns the given value, with everything frozen
    */
@@ -308,7 +309,7 @@ export default class xjs_Object {
    * console.log(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
    * ```
    *
-	 * @param   <T> the type of `thing`
+	 * @typeparam T - the type of `thing`
    * @param   thing any value to clone
    * @returns an exact copy of the given value, but with nothing equal via `===` (unless the value given is primitive)
    */

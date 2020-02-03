@@ -12,8 +12,8 @@ export default class xjs_Map {
 	 *
 	 * Similar to {@link xjs_Set.is}, where the order is not important,
 	 * but also has the option to check equality of keys.
-	 * @param   <K> the type of keys in the maps
-	 * @param   <V> the type of values in the maps
+	 * @typeparam K - the type of keys in the maps
+	 * @typeparam V - the type of values in the maps
 	 * @param   a the first map
 	 * @param   b the second map
 	 * @returns Are corresponding pairs the same, i.e. replaceable?
@@ -39,8 +39,8 @@ export default class xjs_Map {
 	/**
 	 * Return a new map with entries that pass the provided predicate function.
 	 * @see https://github.com/tc39/proposal-collection-methods
-	 * @param   <K> the type of keys in the map
-	 * @param   <V> the type of values in the map
+	 * @typeparam - K the type of keys in the map
+	 * @typeparam - V the type of values in the map
 	 * @param   map the map to filter
 	 * @param   predicate function to test each entry of the map
 	 * @param   this_arg object to use as `this` when executing `predicate`
@@ -53,8 +53,8 @@ export default class xjs_Map {
 	/**
 	 * Return a value found in the map that satisfies the predicate, or `null` if none is found.
 	 * @see https://github.com/tc39/proposal-collection-methods
-	 * @param   <K> the type of keys in the map
-	 * @param   <V> the type of values in the map
+	 * @typeparam - K the type of keys in the map
+	 * @typeparam - V the type of values in the map
 	 * @param   map the map to search
 	 * @param   predicate function to test each entry of the map
 	 * @param   this_arg object to use as `this` when executing `predicate`
@@ -67,8 +67,8 @@ export default class xjs_Map {
 	/**
 	 * Return a key found in the map that satisfies the predicate, or `null` if none is found.
 	 * @see https://github.com/tc39/proposal-collection-methods
-	 * @param   <K> the type of keys in the map
-	 * @param   <V> the type of values in the map
+	 * @typeparam - K the type of keys in the map
+	 * @typeparam - V the type of values in the map
 	 * @param   map the map to search
 	 * @param   predicate function to test each key of the map
 	 * @param   this_arg object to use as `this` when executing `predicate`
@@ -81,9 +81,9 @@ export default class xjs_Map {
 	/**
 	 * Return a new Map with the results of calling a provided function on every value in the given Map.
 	 * @see https://github.com/tc39/proposal-collection-methods
-	 * @param   <K> the type of keys in the map
-	 * @param   <V> the type of values in the map
-	 * @param   <T> the type of new values returned by the callback
+	 * @typeparam - K the type of keys in the map
+	 * @typeparam - V the type of values in the map
+	 * @typeparam - T the type of new values returned by the callback
 	 * @param   map the map to map
 	 * @param   callback the function to call on each value of the map
 	 * @param   this_arg object to use as `this` when executing `callback`
@@ -96,9 +96,9 @@ export default class xjs_Map {
 	/**
 	 * Return a new Map with the results of calling a provided function on every key in the given Map.
 	 * @see https://github.com/tc39/proposal-collection-methods
-	 * @param   <K> the type of keys in the map
-	 * @param   <V> the type of values in the map
-	 * @param   <T> the type of new keys returned by the callback
+	 * @typeparam - K the type of keys in the map
+	 * @typeparam - V the type of values in the map
+	 * @typeparam - T the type of new keys returned by the callback
 	 * @param   map the map to map
 	 * @param   callback the function to call on each key of the map
 	 * @param   this_arg object to use as `this` when executing `callback`
