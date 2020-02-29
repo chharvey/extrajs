@@ -1,11 +1,5 @@
-/**
- * A helper interface for {@link xjs_Object.switch}.
- * @param args a list of arguments to be passed to the function
- */
-interface SwitchFn<T> extends Function {
-	(this: any, ...args: any[]): T;
-	call(this_arg: any, ...args: any[]): T;
-}
+import xjs_Array_module from './Array.class'
+
 
 /**
  * Additional static members for the native Object class.
@@ -16,21 +10,25 @@ export default class xjs_Object {
 	/**
 	 * Test whether two things have “the same” properties.
 	 *
-	 * This function tests the properties of two arguemnts, using the provided comparator predicate.
+	 * Note: Use this method only if providing a predicate.
+	 * If testing for “same-value-zero” equality (the default predicate), use
+	 * Node.js’s built-in `assert.deepStrictEqual()` instead.
+	 *
+	 * This function tests the properties of two arguemnts, using the provided predicate.
 	 * Arguments must be of the same type.
 	 * If both are primitives, this method checks
 	 * {@link xjs_Object._sameValueZero|Same-Value-Zero Equality}.
-	 * If both are functions, this method throws an TypeError — functions are not supported at this time.
+	 * If either are functions, this method throws an TypeError — functions are not supported at this time.
 	 * If both arguments are arrays, it is faster and more robust to use {@link xjs_Array.is}.
 	 * If both are objects or arrays, this method checks the properties (or elements) of each,
-	 * comparing them with the provided comparator predicate.
+	 * comparing them with the provided predicate.
 	 *
 	 * If no predicate is provided, this method uses the default predicate {@link xjs_Object._sameValueZero}.
 	 *
 	 * Note: This method does not deep-check equality within the objects’ properties (or arrays’ elements).
 	 * To check deeper, I suggest using Node.js’s native
 	 * {@link https://nodejs.org/dist/latest/docs/api/assert.html#assert_assert_deepstrictequal_actual_expected_message|assert.deepStrictEqual}.
-	 * You may also specify this behavior in your custom comparator.
+	 * You may also specify this behavior in your custom predicate.
 	 *
 	 * This method is based on the
 	 * {@link https://en.wikipedia.org/wiki/Liskov_substitution_principle|Liskov Substitution Principle}.
@@ -43,20 +41,26 @@ export default class xjs_Object {
 	 * Then this replaceability relation `R` is **symmetric**, because `x R y` implies `y R x`.
 	 * We want `xjs.Object.is(x, y)` to emulate this relation.
 	 *
+	 * @typeparam T - the least common supertype of `a` and `b`
 	 * @param   a the first  thing
 	 * @param   b the second thing
-	 * @param   comparator a predicate checking the “sameness” of corresponding properties of `a` and `b`
+	 * @param   predicate check the “sameness” of corresponding properties of `a` and `b`
 	 * @returns Are corresponding properties the same, i.e. replaceable?
 	 * @throws  {TypeError} if either `a` or `b` is a function (not supported)
 	 */
-	static is<T>(a: T, b: T, comparator: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+	static is<T>(a: T, b: T, predicate: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+		const xjs_Array: typeof xjs_Array_module = require('./Array.class.js').default // NB relative to dist
+		if (a === b) return true
 		if (['string', 'number', 'boolean', 'null', 'undefined'].includes(xjs_Object.typeOf(a))) {
 			return xjs_Object.sameValueZero(a, b)
 		}
-		if (xjs_Object.typeOf(a) === 'function') throw new TypeError('Function arguments to xjs.Object.is are not yet supported.')
-		// else, it will be 'object' or 'array'
-		return a === b || Object.entries(a).every((a_entry) =>
-			Object.entries(b).some((b_entry) => a_entry[0] === b_entry[0] && comparator(a_entry[1], b_entry[1]))
+		if (xjs_Object.typeOf(a) === 'function' || xjs_Object.typeOf(b) === 'function') throw new TypeError('Function arguments to xjs.Object.is are not yet supported.')
+		if (a instanceof Array && b instanceof Array) return xjs_Array.is(a, b)
+		// else, it will be 'object'
+		return Object.entries(a).every(([a_key, a_value]) =>
+			Object.entries(b).some(([b_key, b_value]) => a_key === b_key && predicate(a_value, b_value))
+		) && Object.entries(b).every(([b_key, b_value]) =>
+			Object.entries(a).some(([a_key, a_value]) => a_key === b_key && predicate(a_value, b_value))
 		)
 	}
 
@@ -76,6 +80,7 @@ export default class xjs_Object {
 	}
 
 	/**
+	 * @deprecated WARNING:DEPRECATED use a built-in {@link Map} object instead.
 	 * A structured `switch` statement.
 	 *
 	 * This method offers a more structured alternative to a standard `switch` statement,
@@ -83,7 +88,7 @@ export default class xjs_Object {
 	 * It takes two arguments: a key and a dictionary.
 	 *
 	 * The first argument is the key in the dictionary whose value to look up.
-	 * The dictionary argument must be an object with string keys and {@link SwitchFn} values.
+	 * The dictionary argument must be an object with string keys and function values.
 	 * Each of these functions, when called, should return a value corresponding to its key string.
 	 * All functions in the dictionary must return the same type of value.
 	 *
@@ -96,8 +101,8 @@ export default class xjs_Object {
 	 * Note that this method looks for `'default'` when it cannot find any other key,
 	 * and in doing so it logs a warning.
 	 * To suppress this warning, it is best to provide keys for all known possible inputs,
-	 * even if that means duplicating `SwitchFn` values.
-	 * (Though it’s easy to define a `SwitchFn` before calling this method.)
+	 * even if that means duplicating some values.
+	 * (Though it’s easy to define and reuse a function value before calling this method.)
 	 * Best practice is to write a `'default'` case only for unknown key inputs.
 	 *
 	 * The following example calls this method to look up
@@ -126,16 +131,37 @@ export default class xjs_Object {
 	 * call_me(1) // returns the number `6`
 	 * ```
 	 *
+	 * DEPRECATION WARNING: This method is deprecated. Instead, use a built-in Map:
+	 * ```js
+	 * // What is the date of the 1st Tuesday of November, 2018?
+	 * let call_me: (n: number) => number = new Map<string, (n: number) => number>([
+	 * 	['January'   , (n: number) => [ 2,  9, 16, 23,  30][n - 1]],
+	 * 	['February'  , (n: number) => [ 6. 13. 20, 27, NaN][n - 1]],
+	 * 	['March'     , (n: number) => [ 6, 13, 20, 27, NaN][n - 1]],
+	 * 	['April'     , (n: number) => [ 3, 10, 17, 24, NaN][n - 1]],
+	 * 	['May'       , (n: number) => [ 1,  8, 15, 22,  29][n - 1]],
+	 * 	['June'      , (n: number) => [ 5, 12, 19, 26, NaN][n - 1]],
+	 * 	['July'      , (n: number) => [ 3, 10, 17, 24,  31][n - 1]],
+	 * 	['August'    , (n: number) => [ 7, 14, 21, 28, NaN][n - 1]],
+	 * 	['September' , (n: number) => [ 4, 11, 18, 25, NaN][n - 1]],
+	 * 	['October'   , (n: number) => [ 2,  9, 16, 23,  30][n - 1]],
+	 * 	['November'  , (n: number) => [ 6, 13, 20, 27, NaN][n - 1]],
+	 * 	['December'  , (n: number) => [ 4, 11, 18, 25, NaN][n - 1]],
+	 * ]).get('November') // returns a function taking `n` and returning one of `[6,13,20,27,NaN]`
+	 * call_me(1) // returns the number `6`
+	 * ```
+	 *
+	 * @typeparam T - the type of value returned by the looked-up function
 	 * @param   key the key to provide the lookup, which will give a function
-	 * @param   dictionary an object with {@link SwitchFn} values
-	 * @returns the looked-up function
+	 * @param   dictionary an object with function values
+	 * @returns the looked-up function, returning <T>
 	 * @throws  {ReferenceError} when failing to find a lookup value
 	 */
-	static switch<T>(key: string, dictionary: { [index: string]: SwitchFn<T> }): SwitchFn<T> {
-		let returned = dictionary[key]
+	static switch<T>(key: string, dictionary: { [index: string]: (this: any, ...args: any[]) => T }): (this: any, ...args: any[]) => T {
+		let returned: (this: any, ...args: any[]) => T = dictionary[key]
 		if (!returned) {
 			console.warn(`Key '${key}' cannot be found. Using key 'default'…`)
-			returned = dictionary['default']
+			returned = dictionary['default'] || null
 			if (!returned) throw new ReferenceError(`No default key found.`)
 		}
 		return returned
@@ -172,24 +198,21 @@ export default class xjs_Object {
    * @returns the type of the thing
    */
 	static typeOf(thing: unknown): string {
-		return xjs_Object.switch<string>(typeof thing, {
-			'object': (arg: unknown) => {
-				if (arg === null)       return 'null'
-				if (Array.isArray(arg)) return 'array'
-				return 'object'
-			},
-			'number': (arg: number) => {
-				if (Number.isNaN(arg))     return 'NaN'
-				if (!Number.isFinite(arg)) return 'infinite'
-				return 'number'
-			},
-			'bigint'   : () => 'bigint',
-			'function' : () => 'function',
-			'string'   : () => 'string',
-			'boolean'  : () => 'boolean',
-			'undefined': () => 'undefined',
-			'default'  : (arg: unknown) => typeof arg,
-		})(thing)
+		return (new Map<string, (arg: any) => string>([
+			['object', (arg: unknown) => (arg === null) ? 'null'
+				: (Array.isArray(arg)) ? 'array'
+				: 'object'
+			],
+			['number', (arg: number) => (Number.isNaN(arg)) ? 'NaN'
+				: (!Number.isFinite(arg)) ? 'infinite'
+				: 'number'
+			],
+			['bigint'    , () => 'bigint'],
+			['function'  , () => 'function'],
+			['string'    , () => 'string'],
+			['boolean'   , () => 'boolean'],
+			['undefined' , () => 'undefined'],
+		]).get(typeof thing) || ((arg: unknown) => typeof arg))(thing)
 	}
 
   /**
@@ -210,7 +233,7 @@ export default class xjs_Object {
   }
 
   /**
-   * WARNING{EXPERIMENTAL}
+   * @deprecated WARNING{DEPRECATED} - use interface `Readonly<T>` instead
    * Deep freeze an object, and return the result.
    *
    * *Note: This function is impure, modifying the given argument.*
@@ -220,12 +243,13 @@ export default class xjs_Object {
    * on every property and sub-property of the given parameter.
    * Else, return the given argument.
    * If the argument is an array, it is faster to use {@link xjs_Array.freezeDeep}.
+	 * @typeparam T - the type of `thing`
    * @param   thing any value to freeze
    * @returns the given value, with everything frozen
    */
-  static freezeDeep<T>(thing: T): T {
-    const xjs_Array = require('./Array.class.js').default // NB relative to dist
-    if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.freezeDeep(thing as unknown as unknown[]) as unknown as T // HACK https://stackoverflow.com/a/18736071/
+  static freezeDeep<T>(thing: Readonly<T>): Readonly<T> {
+		const xjs_Array: typeof xjs_Array_module = require('./Array.class.js').default // NB relative to dist
+		if (thing instanceof Array) return xjs_Array.freezeDeep(thing) as unknown as T // HACK https://stackoverflow.com/a/18736071/
     Object.freeze(thing)
     if (xjs_Object.typeOf(thing) === 'object') {
         for (let key in thing) {
@@ -286,18 +310,19 @@ export default class xjs_Object {
    * console.log(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
    * ```
    *
+	 * @typeparam T - the type of `thing`
    * @param   thing any value to clone
    * @returns an exact copy of the given value, but with nothing equal via `===` (unless the value given is primitive)
    */
   static cloneDeep<T>(thing: T): T {
-    const xjs_Array = require('./Array.class.js').default // NB relative to dist
-    if (xjs_Object.typeOf(thing) === 'array') return xjs_Array.cloneDeep(thing as unknown as unknown[]) as unknown as T // HACK https://stackoverflow.com/a/18736071/
+		const xjs_Array: typeof xjs_Array_module = require('./Array.class.js').default // NB relative to dist
+		if (thing instanceof Array) return xjs_Array.cloneDeep(thing) as unknown as T // HACK https://stackoverflow.com/a/18736071/
     if (xjs_Object.typeOf(thing) === 'object') {
         const returned: { [index: string]: unknown } = {}
         for (let key in thing) {
           returned[key] = xjs_Object.cloneDeep(thing[key])
         }
-      return returned as T
+			return returned as unknown as T
     } else {
         return thing
     }
