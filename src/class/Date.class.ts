@@ -1,6 +1,3 @@
-import xjs_Object from './Object.class'
-
-
 /**
  * Additional static members for the native Date class.
  *

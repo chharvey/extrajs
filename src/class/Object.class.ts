@@ -1,4 +1,4 @@
-import xjs_Array_module from './Array.class'
+import type xjs_Array_module from './Array.class'
 
 
 /**
