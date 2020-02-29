@@ -1,4 +1,5 @@
 import xjs_Number from './Number.class'
+import xjs_BigInt from './BigInt.class'
 
 
 /**
@@ -210,7 +211,11 @@ export default class xjs_Math {
 	 */
 	static mod(x: number, n: number|bigint): number {
 		xjs_Number.assertType(x, 'finite')
-		xjs_Number.assertType(n, 'whole')
+		if (typeof n === 'number') {
+			xjs_Number.assertType(n, 'whole')
+		} else {
+			xjs_BigInt.assertType(n, 'whole')
+		}
 		n = Number(n)
 		return ((x % n) + n) % n
 	}
