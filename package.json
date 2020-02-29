@@ -30,7 +30,7 @@
     "gulp-typedoc": "^2.2.0",
     "gulp-typescript": "^5.0.0-alpha.3",
     "typedoc": "^0.16.9",
-    "typescript": "~3.7.5"
+    "typescript": "~3.8.3"
   },
   "dependencies": {
     "@types/node": "^13.5.3"
