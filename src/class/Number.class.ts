@@ -18,7 +18,7 @@ export default class xjs_Number {
   /**
    * Verify the type of number given, throwing if it does not match.
    *
-   * Given a number and a "type", test to see if the number is of that type.
+   * Given a number and a "type", test to see if the argument is of that type.
    * Mainly used for parameter validation, when the type `number` is not specific enough.
    * The acceptable "types", which are not mutually exclusive, follow:
    *
@@ -35,30 +35,30 @@ export default class xjs_Number {
    * - `'infinite'`     : the number is     equal to `Infinity` or `-Infinity`
    * - no type (`undefiend`): the number is not `NaN`
    *
-   * If the number matches the described type, this method returns `void` instead of `true`.
-   * If the number does not match, this method throws an error instead of returning `false`.
+   * If the argument matches the described type, this method returns `void` instead of `true`.
+   * If the argument does not match, this method throws an error instead of returning `false`.
    * This pattern is helpful where an error message is more descriptive than a boolean.
    *
-   * @param   num the number to test
+   * @param   num the argument to test
    * @param   type one of the string literals listed above
-   * @throws  {AssertionError} if the number does not match the described type
+   * @throws  {AssertionError} if the argument does not match the described type
    * @throws  {NaNError} if the argument is `NaN`
    */
 	static assertType(num: number, type?: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'|'non-positive'|'non-negative'|'non-zero'|'finite'|'infinite'): void {
-		if (Number.isNaN(num)) throw new NaNError()
+		if (typeof num === 'number' && Number.isNaN(num)) throw new NaNError()
 		if (!type) return;
 		return new Map<string, (n: number) => void>([
-			['integer'      , (n: number) => assert( Number.isInteger(n)          , `${n} must be an integer.`            )],
-			['natural'      , (n: number) => assert( Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`)],
-			['whole'        , (n: number) => assert( Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    )],
-			['float'        , (n: number) => assert(!Number.isInteger(n)          , `${n} must not be an integer.`        )],
-			['positive'     , (n: number) => assert(0 < n                         , `${n} must be a positive number.`     )],
-			['negative'     , (n: number) => assert(n < 0                         , `${n} must be a negative number.`     )],
-			['non-positive' , (n: number) => assert(n <= 0                        , `${n} must not be a positive number.` )],
-			['non-negative' , (n: number) => assert(0 <= n                        , `${n} must not be a negative number.` )],
-			['non-zero'     , (n: number) => assert(n !== 0                       , `${n} must not be zero.`              )],
-			['finite'       , (n: number) => assert( Number.isFinite(n)           , `${n} must be a finite number.`       )],
-			['infinite'     , (n: number) => assert(!Number.isFinite(n)           , `${n} must be an infinite number.`    )],
+			['integer'     , (n: number) => assert( Number.isInteger(n)          , `${n} must be an integer.`            )],
+			['natural'     , (n: number) => assert( Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`)],
+			['whole'       , (n: number) => assert( Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    )],
+			['float'       , (n: number) => assert(!Number.isInteger(n)          , `${n} must not be an integer.`        )],
+			['positive'    , (n: number) => assert(0 < n                         , `${n} must be a positive number.`     )],
+			['negative'    , (n: number) => assert(n < 0                         , `${n} must be a negative number.`     )],
+			['non-positive', (n: number) => assert(n <= 0                        , `${n} must not be a positive number.` )],
+			['non-negative', (n: number) => assert(0 <= n                        , `${n} must not be a negative number.` )],
+			['non-zero'    , (n: number) => assert(n !== 0                       , `${n} must not be zero.`              )],
+			['finite'      , (n: number) => assert( Number.isFinite(n)           , `${n} must be a finite number.`       )],
+			['infinite'    , (n: number) => assert(!Number.isFinite(n)           , `${n} must be an infinite number.`    )],
 		]).get(type) !(num)
 	}
 

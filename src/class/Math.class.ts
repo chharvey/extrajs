@@ -1,4 +1,5 @@
 import xjs_Number from './Number.class'
+import xjs_BigInt from './BigInt.class'
 
 
 /**
@@ -37,6 +38,28 @@ export default class xjs_Math {
 	}
 
 	/**
+	 * {@link Math.min}, but for `bigint` types.
+	 * Currently only supports 2 arguments.
+	 * @param   a a bigint
+	 * @param   b a bigint
+	 * @returns   the minimum
+	 */
+	static minBigInt(a: bigint, b: bigint): bigint {
+		return a < b ? a : b
+	}
+
+	/**
+	 * {@link Math.max}, but for `bigint` types.
+	 * Currently only supports 2 arguments.
+	 * @param   a a bigint
+	 * @param   b a bigint
+	 * @returns   the maximum
+	 */
+	static maxBigInt(a: bigint, b: bigint): bigint {
+		return a < b ? b : a
+	}
+
+	/**
 	 * Return the argument, clamped between two bounds.
 	 *
 	 * This method returns the argument unchanged iff it is loosely between `min` and `max`;
@@ -54,6 +77,16 @@ export default class xjs_Math {
 		xjs_Number.assertType(x  )
 		xjs_Number.assertType(max)
 		return (min <= max) ? Math.min(Math.max(min, x), max) : xjs_Math.clamp(max, x, min)
+	}
+
+	/**
+	 * {@link xjx_Math.clamp}, but for `bigint` types.
+	 * @param   a a bigint
+	 * @param   b a bigint
+	 * @returns   the clamped value
+	 */
+	static clampBigInt(min: bigint, val: bigint, max: bigint): bigint {
+		return min <= max ? xjs_Math.minBigInt(xjs_Math.maxBigInt(min, val), max) : xjs_Math.clampBigInt(max, val, min)
 	}
 
 	/**
@@ -208,9 +241,14 @@ export default class xjs_Math {
 	 * @returns exactly `((x % n) + n) % n`
 	 * @throws  {Error} if `n` is not a positive integer
 	 */
-	static mod(x: number, n: number): number {
+	static mod(x: number, n: number|bigint): number {
 		xjs_Number.assertType(x, 'finite')
-		xjs_Number.assertType(n, 'whole')
+		if (typeof n === 'number') {
+			xjs_Number.assertType(n, 'whole')
+		} else {
+			xjs_BigInt.assertType(n, 'whole')
+		}
+		n = Number(n)
 		return ((x % n) + n) % n
 	}
 
