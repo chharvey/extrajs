@@ -32,7 +32,10 @@ export default class xjs_Map {
 	}): boolean {
 		if (a === b) return true
 		return a.size === b.size && [...a].every(([a_key, a_value]) =>
-			[...b].some(([b_key, b_value]) => keys(a_key, b_key) && values(a_value, b_value))
+			[...b].some(([b_key, b_value]) =>
+				xjs_Object.sameValueZero(a_key  , b_key  ) && keys  (a_key  , b_key  ) &&
+				xjs_Object.sameValueZero(a_value, b_value) && values(a_value, b_value)
+			)
 		)
 	}
 
