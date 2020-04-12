@@ -39,24 +39,24 @@ export default class xjs_Math {
 
 	/**
 	 * {@link Math.min}, but for `bigint` types.
-	 * Currently only supports 2 arguments.
-	 * @param   a a bigint
-	 * @param   b a bigint
-	 * @returns   the minimum
+	 * @param   ints the bigint arguments
+	 * @returns   the minimum argument
+	 * @throws    if no arguments are supplied
 	 */
-	static minBigInt(a: bigint, b: bigint): bigint {
-		return a < b ? a : b
+	static minBigInt(...ints: bigint[]): bigint {
+		if (!ints.length) throw new Error('No arguments supplied.')
+		return ints.reduce((a, b) => a < b ? a : b)
 	}
 
 	/**
 	 * {@link Math.max}, but for `bigint` types.
-	 * Currently only supports 2 arguments.
-	 * @param   a a bigint
-	 * @param   b a bigint
-	 * @returns   the maximum
+	 * @param   ints the bigint arguments
+	 * @returns   the maximum argument
+	 * @throws    if no arguments are supplied
 	 */
-	static maxBigInt(a: bigint, b: bigint): bigint {
-		return a < b ? b : a
+	static maxBigInt(...ints: bigint[]): bigint {
+		if (!ints.length) throw new Error('No arguments supplied.')
+		return ints.reduce((a, b) => a < b ? b : a)
 	}
 
 	/**
