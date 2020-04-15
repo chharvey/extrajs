@@ -29,7 +29,7 @@
     "gulp": "^4.0.0",
     "gulp-typedoc": "^2.2.0",
     "gulp-typescript": "^5.0.0-alpha.3",
-    "typedoc": "^0.16.9",
+    "typedoc": "^0.17.4",
     "typescript": "~3.8.3"
   },
   "dependencies": {
