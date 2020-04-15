@@ -1,5 +1,7 @@
 import * as assert from 'assert'
 
+import {NumericType} from './Number.class'
+
 
 /**
  * Additional static members for the native BigInt class.
@@ -8,47 +10,66 @@ import * as assert from 'assert'
  */
 export default class xjs_BigInt {
 	/**
-	* Verify the type of bigint given, throwing if it does not match.
-	*
-	* Given a bigint and a "type", test to see if the argument is of that type.
-	* Mainly used for parameter validation, when the type `bigint` is not specific enough.
-	* The acceptable "types", which are not mutually exclusive, follow:
-	*
-	* - `'integer'`      : always matches
-	* - `'natural'`      : synonym of `'non-negative'`
-	* - `'whole'`        : synonym of `'positive'`
-	* - `'float'`        : never matches
-	* - `'positive'`     : the bigint is strictly greater than 0n
-	* - `'negative'`     : the bigint is strictly less    than 0n
-	* - `'non-positive'` : the bigint is less    than or equal to 0n
-	* - `'non-negative'` : the bigint is greater than or equal to 0n
-	* - `'non-zero'`     : the bigint is not equal to 0n
-	* - `'finite'`       : always matches
-	* - `'infinite'`     : never matches
-	* - no type (`undefiend`): always matches
-	*
-	* If the argument matches the described type, this method returns `void` instead of `true`.
-	* If the argument does not match, this method throws an error instead of returning `false`.
-	* This pattern is helpful where an error message is more descriptive than a boolean.
-	*
-	* @param   int the argument to test
-	* @param   type one of the string literals listed above
-	* @throws  {AssertionError} if the argument does not match the described type
-	*/
-	static assertType(int: bigint, type?: 'float'|'integer'|'natural'|'whole'|'positive'|'negative'|'non-positive'|'non-negative'|'non-zero'|'finite'|'infinite'): void {
-		if (!type) return;
-		return new Map<string, (n: bigint) => void>([
-			['integer'     , (_n: bigint) => {}],
-			['natural'     , ( n: bigint) => xjs_BigInt.assertType(n, 'non-negative')],
-			['whole'       , ( n: bigint) => xjs_BigInt.assertType(n, 'positive'    )],
-			['float'       , ( n: bigint) => assert(false   , `${n} must not be an integer.`    )],
-			['positive'    , ( n: bigint) => assert(0n <  n , `${n} must be positive.`          )],
-			['negative'    , ( n: bigint) => assert(n  <  0n, `${n} must be negative.`          )],
-			['non-positive', ( n: bigint) => assert(n  <= 0n, `${n} must not be positive.`      )],
-			['non-negative', ( n: bigint) => assert(0n <= n , `${n} must not be negative.`      )],
-			['non-zero'    , ( n: bigint) => assert(n !== 0n, `${n} must not be zero.`          )],
-			['finite'      , ( n: bigint) => assert(true    , `${n} must be a finite number.`   )],
-			['infinite'    , ( n: bigint) => assert(false   , `${n} must be an infinite number.`)],
+	 * Verify the type of bigint given, throwing if it does not match.
+	 *
+	 * Given a bigint and a "type", test to see if the argument is of that type.
+	 * Mainly used for parameter validation, when the type `bigint` is not specific enough.
+	 * The acceptable "types", which are not mutually exclusive, are members of {@link NumericType}:
+	 *
+	 * - `NumericType.INTEGER`     : always matches: BigInts are always integers
+	 * - `NumericType.NATURAL`     : synonym of `NumericType.NONNEGATIVE`
+	 * - `NumericType.WHOLE`       : synonym of `NumericType.POSITIVE`
+	 * - `NumericType.FLOAT`       : never matches: BigInts are never non-integers
+	 * - `NumericType.POSITIVE`    : the bigint is strictly greater than 0n
+	 * - `NumericType.NEGATIVE`    : the bigint is strictly less    than 0n
+	 * - `NumericType.NONPOSITIVE` : the bigint is less    than or equal to 0n
+	 * - `NumericType.NONNEGATIVE` : the bigint is greater than or equal to 0n
+	 * - `NumericType.NONZERO`     : the bigint is not equal to 0n
+	 * - `NumericType.FINITE`      : always matches: BigInts are always finite
+	 * - `NumericType.INFINITE`    : never matches: BigInts are never finite
+	 * - no type (`undefiend`): always matches
+	 *
+	 * If the argument matches the described type, this method returns `void` instead of `true`.
+	 * If the argument does not match, this method throws an error instead of returning `false`.
+	 * This pattern is helpful where an error message is more descriptive than a boolean.
+	 *
+	 * @param   int the argument to test
+	 * @param   type one of the string literals listed above
+	 * @throws  {AssertionError} if the argument does not match the described type
+	 */
+	static assertType(int: bigint, type?: NumericType|'integer'|'natural'|'whole'|'float'|'positive'|'negative'|'non-positive'|'non-negative'|'non-zero'|'finite'|'infinite'): void {
+		if (type === void 0) return;
+		if (typeof type === 'string') {
+			console.warn(new Error(`
+				WARNING: Argument \`'${type}'\` was sent into \`xjs.Number.assertType\`.
+				Sending a string argument is deprecated; use a member of enum \`NumericType\` instead.
+			`.trim()))
+			return xjs_BigInt.assertType(int, new Map<string, NumericType>([
+				['integer'      , NumericType.INTEGER    ],
+				['natural'      , NumericType.NATURAL    ],
+				['whole'        , NumericType.WHOLE      ],
+				['float'        , NumericType.FLOAT      ],
+				['positive'     , NumericType.POSITIVE   ],
+				['negative'     , NumericType.NEGATIVE   ],
+				['non-positive' , NumericType.NONPOSITIVE],
+				['non-negative' , NumericType.NONNEGATIVE],
+				['non-zero'     , NumericType.NONZERO    ],
+				['finite'       , NumericType.FINITE     ],
+				['infinite'     , NumericType.INFINITE   ],
+			]).get(type))
+		}
+		return new Map<NumericType, (n: bigint) => void>([
+			[NumericType.INTEGER     , (_n: bigint) => {}                                                 ],
+			[NumericType.NATURAL     , ( n: bigint) => xjs_BigInt.assertType(n, NumericType.NONNEGATIVE)  ],
+			[NumericType.WHOLE       , ( n: bigint) => xjs_BigInt.assertType(n, NumericType.POSITIVE   )  ],
+			[NumericType.FLOAT       , (_n: bigint) => assert(false   , 'BigInts cannot be non-integers.')],
+			[NumericType.POSITIVE    , ( n: bigint) => assert(0n <  n , `${n} must be positive.`         )],
+			[NumericType.NEGATIVE    , ( n: bigint) => assert(n  <  0n, `${n} must be negative.`         )],
+			[NumericType.NONPOSITIVE , ( n: bigint) => assert(n  <= 0n, `${n} must not be positive.`     )],
+			[NumericType.NONNEGATIVE , ( n: bigint) => assert(0n <= n , `${n} must not be negative.`     )],
+			[NumericType.NONZERO     , ( n: bigint) => assert(n !== 0n, `${n} must not be zero.`         )],
+			[NumericType.FINITE      , (_n: bigint) => {}                                                 ],
+			[NumericType.INFINITE    , (_n: bigint) => assert(false   , 'BigInts cannot be infinite.'    )],
 		]).get(type) !(int)
 	}
 
