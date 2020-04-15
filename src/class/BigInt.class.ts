@@ -60,7 +60,7 @@ export default class xjs_BigInt {
 		}
 		return new Map<NumericType, (n: bigint) => void>([
 			[NumericType.INTEGER     , (_n: bigint) => {}                                                 ],
-			[NumericType.NATURAL     , ( n: bigint) => xjs_BigInt.assertType(n, NumericType.NONPOSITIVE)  ],
+			[NumericType.NATURAL     , ( n: bigint) => xjs_BigInt.assertType(n, NumericType.NONNEGATIVE)  ],
 			[NumericType.WHOLE       , ( n: bigint) => xjs_BigInt.assertType(n, NumericType.POSITIVE   )  ],
 			[NumericType.FLOAT       , (_n: bigint) => assert(false   , 'BigInts cannot be non-integers.')],
 			[NumericType.POSITIVE    , ( n: bigint) => assert(0n <  n , `${n} must be positive.`         )],
