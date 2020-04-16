@@ -1,4 +1,5 @@
 const gulp  = require('gulp')
+const mocha      = require('gulp-mocha')
 const typedoc    = require('gulp-typedoc')
 const typescript = require('gulp-typescript')
 // require('typedoc')    // DO NOT REMOVE … peerDependency of `gulp-typedoc`
@@ -10,6 +11,13 @@ function dist() {
   return gulp.src('./src/class/*.class.ts')
     .pipe(typescript(tsconfig.compilerOptions))
     .pipe(gulp.dest('./dist/class/'))
+}
+
+function testmocha() {
+	return gulp.src('./test/*.ts')
+		.pipe(mocha({
+			require: 'ts-node/register',
+		}))
 }
 
 function test_out() {
@@ -123,11 +131,13 @@ const build = gulp.parallel(
 		),
 		test_run
 	),
+	testmocha,
 	docs
 )
 
 module.exports = {
 	dist,
+	testmocha,
 	test_out,
 	test_run_Array,
 	test_run_Date,

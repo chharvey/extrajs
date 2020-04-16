@@ -4,9 +4,9 @@
   "description": "Javascript helpers for lazy people.",
   "main": "index.js",
   "scripts": {
-    "build": "gulp build",
-    "prepublishOnly": "npm run build",
-    "test": "node test/index.js"
+    "test": "gulp testmocha",
+    "build": "rm -rf ./dist/ ./test/out/ && gulp build",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -26,9 +26,12 @@
   },
   "homepage": "https://github.com/chharvey/extrajs#readme",
   "devDependencies": {
+    "@types/mocha": "^7.0.2",
     "gulp": "^4.0.0",
+    "gulp-mocha": "^7.0.2",
     "gulp-typedoc": "^2.2.0",
     "gulp-typescript": "^5.0.0-alpha.3",
+    "ts-node": "^8.8.2",
     "typedoc": "^0.17.4",
     "typescript": "~3.8.3"
   },
