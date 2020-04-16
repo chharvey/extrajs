@@ -4,8 +4,8 @@
   "description": "Javascript helpers for lazy people.",
   "main": "index.js",
   "scripts": {
-    "test": "gulp testmocha",
-    "build": "rm -rf ./dist/ ./test/out/ && gulp build",
+    "test": "gulp test",
+    "build": "rm -rf ./dist/ && gulp build",
     "prepublishOnly": "npm run build"
   },
   "repository": {
