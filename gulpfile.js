@@ -40,13 +40,6 @@ async function test_run_Number() {
 	console.info('All _Number_ tests ran successfully!')
 }
 
-async function test_run_BigInt() {
-	await Promise.all([
-		require('./test/out/BigInt-assertType.test.js').default,
-	])
-	console.info('All _BigInt_ tests ran successfully!')
-}
-
 async function test_run_Object() {
 	await Promise.all([
 		require('./test/out/Object-typeOf.test.js').default,
@@ -73,7 +66,6 @@ const test_run = gulp.series(
 	gulp.parallel(
 		test_run_Date,
 		test_run_Number,
-		test_run_BigInt,
 		test_run_Object,
 		test_run_Promise,
 		test_run_String,
