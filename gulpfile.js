@@ -26,17 +26,8 @@ function test_out() {
 		.pipe(gulp.dest('./test/out/'))
 }
 
-async function test_run_Number() {
-	await Promise.all([
-		require('./test/out/Number-typeOf.test.js'    ).default,
-	])
-	console.info('All _Number_ tests ran successfully!')
-}
-
 const test_run = gulp.series(
-	gulp.parallel(
-		test_run_Number,
-	), async function test_run0() {
+	async function test_run0() {
 		console.info('All tests ran successfully!')
 	}
 )
@@ -64,7 +55,6 @@ module.exports = {
 	dist,
 	testmocha,
 	test_out,
-	test_run_Number,
 	test_run,
 	test,
 	docs,
