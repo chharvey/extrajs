@@ -91,6 +91,7 @@ export default class xjs_Date {
   static format(date: Date, format: string): string {
     const MONTHS = xjs_Date.MONTH_NAMES
 		const leadingZero = (n: number, r: number = 10) => `0${n.toString(r)}`.slice(-2)
+		const defaultFormatter = (date: Date) => date.toISOString()
 		return (new Map<string, (date: Date) => string>([
 			['Y-m-d'     , (date: Date) => `${date.getUTCFullYear()}-${leadingZero(date.getUTCMonth()+1)}-${leadingZero(date.getUTCDate())}`],
 			['j M Y'     , (date: Date) => `${date.getUTCDate()} ${MONTHS[date.getUTCMonth()].slice(0,3)} ${date.getUTCFullYear()}`],
@@ -104,8 +105,8 @@ export default class xjs_Date {
 			['M'         , (date: Date) => `${MONTHS[date.getUTCMonth()].slice(0,3)}`],
 			['H:i'       , (date: Date) => `${(date.getUTCHours() < 10) ? '0' : ''}${date.getUTCHours()}:${(date.getUTCMinutes() < 10) ? '0' : ''}${date.getUTCMinutes()}`],
 			['g:ia'      , (date: Date) => `${(date.getUTCHours() - 1)%12 + 1}:${(date.getUTCMinutes() < 10) ? '0' : ''}${date.getUTCMinutes()}${(date.getUTCHours() < 12) ? 'am' : 'pm'}`],
-			['default'   , (date: Date) => date.toISOString()],
-		]).get(format) || ((date: Date) => date.toISOString()))(date)
+			['default'   , defaultFormatter],
+		]).get(format || 'default') || defaultFormatter)(date)
   }
 
 
