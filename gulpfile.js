@@ -33,16 +33,6 @@ async function test_run_Date() {
 	console.info('All _Date_ tests ran successfully!')
 }
 
-async function test_run_Math() {
-	await Promise.all([
-		require('./test/out/Math-mod.test.js')        .default,
-		require('./test/out/Math-clamp.test.js')      .default,
-		require('./test/out/Math-mean.test.js')       .default,
-		require('./test/out/Math-interpolate.test.js').default,
-	])
-	console.info('All _Math_ tests ran successfully!')
-}
-
 async function test_run_Number() {
 	await Promise.all([
 		require('./test/out/Number-typeOf.test.js'    ).default,
@@ -93,7 +83,6 @@ const test_run = gulp.series(
 		test_run_Date,
 		test_run_Number,
 		test_run_BigInt,
-		test_run_Math,
 		test_run_Object,
 		test_run_Promise,
 		test_run_Set,
@@ -127,7 +116,6 @@ module.exports = {
 	testmocha,
 	test_out,
 	test_run_Date,
-	test_run_Math,
 	test_run_Number,
 	test_run_Object,
 	test_run_Promise,
