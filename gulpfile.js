@@ -36,7 +36,6 @@ async function test_run_Date() {
 async function test_run_Number() {
 	await Promise.all([
 		require('./test/out/Number-typeOf.test.js'    ).default,
-		require('./test/out/Number-assertType.test.js').default,
 	])
 	console.info('All _Number_ tests ran successfully!')
 }
