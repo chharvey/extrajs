@@ -26,18 +26,6 @@ function test_out() {
 		.pipe(gulp.dest('./test/out/'))
 }
 
-async function test_run_Array() {
-	await Promise.all([
-		require('./test/out/Array-isSubarrayOf.test.js'             ).default,
-		require('./test/out/Array-isSuperarrayOf.test.js'           ).default,
-		require('./test/out/Array-isConsecutiveSubarrayOf.test.js'  ).default,
-		require('./test/out/Array-isConsecutiveSuperarrayOf.test.js').default,
-		require('./test/out/Array-densify.test.js'                  ).default,
-		require('./test/out/Array-fillHoles.test.js'                ).default,
-	])
-	console.info('All _Array_ tests ran successfully!')
-}
-
 async function test_run_Date() {
 	await Promise.all([
 		require('./test/out/Date-format.test.js').default,
@@ -102,7 +90,6 @@ async function test_run_String() {
 
 const test_run = gulp.series(
 	gulp.parallel(
-		test_run_Array,
 		test_run_Date,
 		test_run_Number,
 		test_run_BigInt,
@@ -139,7 +126,6 @@ module.exports = {
 	dist,
 	testmocha,
 	test_out,
-	test_run_Array,
 	test_run_Date,
 	test_run_Math,
 	test_run_Number,
