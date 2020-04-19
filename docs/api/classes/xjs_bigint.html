@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>xjs_Number | extrajs</title>
+	<title>xjs_BigInt | extrajs</title>
 	<meta name="description" content="Documentation for extrajs">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="xjs_number.html">xjs_Number</a>
+					<a href="xjs_bigint.html">xjs_BigInt</a>
 				</li>
 			</ul>
-			<h1>Class xjs_Number</h1>
+			<h1>Class xjs_BigInt</h1>
 		</div>
 	</div>
 </header>
@@ -67,16 +67,16 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Additional static members for the native Number class.</p>
+						<p>Additional static members for the native BigInt class.</p>
 					</div>
-					<p>Does not extend the native Number class.</p>
+					<p>Does not extend the native BigInt class.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">xjs_Number</span>
+						<span class="target">xjs_BigInt</span>
 					</li>
 				</ul>
 			</section>
@@ -87,20 +87,13 @@
 						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-private"><a href="xjs_number.html#constructor" class="tsd-kind-icon">constructor</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Properties</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="xjs_number.html#regexp" class="tsd-kind-icon">REGEXP</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-private"><a href="xjs_bigint.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_number.html#asserttype" class="tsd-kind-icon">assert<wbr>Type</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_number.html#typeof" class="tsd-kind-icon">type<wbr>Of</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="xjs_bigint.html#asserttype" class="tsd-kind-icon">assert<wbr>Type</a></li>
 							</ul>
 						</section>
 					</div>
@@ -112,36 +105,18 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">new xjs_<wbr><wbr>Number<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="xjs_number.html" class="tsd-signature-type">xjs_Number</a></li>
+						<li class="tsd-signature tsd-kind-icon">new xjs_<wbr><wbr>Big<wbr>Int<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="xjs_bigint.html" class="tsd-signature-type">xjs_BigInt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c884901/src/class/Number.class.ts#L118">src/class/Number.class.ts:118</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c884901/src/class/BigInt.class.ts#L74">src/class/BigInt.class.ts:74</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="xjs_number.html" class="tsd-signature-type">xjs_Number</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="xjs_bigint.html" class="tsd-signature-type">xjs_BigInt</a></h4>
 						</li>
 					</ul>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
-					<a name="regexp" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> REGEXP</h3>
-					<div class="tsd-signature tsd-kind-icon">REGEXP<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = /^-?(?:\d+(?:\.\d+)?|\.\d+)$/</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c884901/src/class/Number.class.ts#L30">src/class/Number.class.ts:30</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>An immutable RegExp instance, representing a string in Number format.</p>
-						</div>
-					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -150,35 +125,35 @@
 					<a name="asserttype" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> assert<wbr>Type</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">assert<wbr>Type<span class="tsd-signature-symbol">(</span>num<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, type<span class="tsd-signature-symbol">?: </span><a href="../enums/numerictype.html" class="tsd-signature-type">NumericType</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"integer"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"natural"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"whole"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"float"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-zero"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"finite"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"infinite"</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">assert<wbr>Type<span class="tsd-signature-symbol">(</span>int<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">bigint</span>, type<span class="tsd-signature-symbol">?: </span><a href="../enums/numerictype.html" class="tsd-signature-type">NumericType</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"integer"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"natural"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"whole"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"float"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-zero"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"finite"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"infinite"</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c884901/src/class/Number.class.ts#L61">src/class/Number.class.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c884901/src/class/BigInt.class.ts#L40">src/class/BigInt.class.ts:40</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Verify the type of number given, throwing if it does not match.</p>
+									<p>Verify the type of bigint given, throwing if it does not match.</p>
 								</div>
-								<p>Given a number and a &quot;type&quot;, test to see if the argument is of that type.
-									Mainly used for parameter validation, when the type <code>number</code> is not specific enough.
+								<p>Given a bigint and a &quot;type&quot;, test to see if the argument is of that type.
+									Mainly used for parameter validation, when the type <code>bigint</code> is not specific enough.
 								The acceptable &quot;types&quot;, which are not mutually exclusive, are members of <a href="../enums/numerictype.html">NumericType</a>:</p>
 								<ul>
-									<li><code>NumericType.INTEGER</code>     : the number is divisible by 1 (<code>num % 1 === 0</code>)</li>
-									<li><code>NumericType.NATURAL</code>     : the number is a non-negative integer (either positive or 0)</li>
-									<li><code>NumericType.WHOLE</code>       : the number is a positive integer</li>
-									<li><code>NumericType.FLOAT</code>       : the number is not an integer</li>
-									<li><code>NumericType.POSITIVE</code>    : the number is strictly greater than 0</li>
-									<li><code>NumericType.NEGATIVE</code>    : the number is strictly less    than 0</li>
-									<li><code>NumericType.NONPOSITIVE</code> : the number is less    than or equal to 0</li>
-									<li><code>NumericType.NONNEGATIVE</code> : the number is greater than or equal to 0</li>
-									<li><code>NumericType.NONZERO</code>     : the number is not equal to 0</li>
-									<li><code>NumericType.FINITE</code>      : the number is not equal to <code>Infinity</code> or <code>-Infinity</code></li>
-									<li><code>NumericType.INFINITE</code>    : the number is     equal to <code>Infinity</code> or <code>-Infinity</code></li>
-									<li>no type (<code>undefiend</code>): the number is not <code>NaN</code></li>
+									<li><code>NumericType.INTEGER</code>     : always matches: BigInts are always integers</li>
+									<li><code>NumericType.NATURAL</code>     : synonym of <code>NumericType.NONNEGATIVE</code></li>
+									<li><code>NumericType.WHOLE</code>       : synonym of <code>NumericType.POSITIVE</code></li>
+									<li><code>NumericType.FLOAT</code>       : never matches: BigInts are never non-integers</li>
+									<li><code>NumericType.POSITIVE</code>    : the bigint is strictly greater than 0n</li>
+									<li><code>NumericType.NEGATIVE</code>    : the bigint is strictly less    than 0n</li>
+									<li><code>NumericType.NONPOSITIVE</code> : the bigint is less    than or equal to 0n</li>
+									<li><code>NumericType.NONNEGATIVE</code> : the bigint is greater than or equal to 0n</li>
+									<li><code>NumericType.NONZERO</code>     : the bigint is not equal to 0n</li>
+									<li><code>NumericType.FINITE</code>      : always matches: BigInts are always finite</li>
+									<li><code>NumericType.INFINITE</code>    : never matches: BigInts are never finite</li>
+									<li>no type (<code>undefiend</code>): always matches</li>
 								</ul>
 								<p>If the argument matches the described type, this method returns <code>void</code> instead of <code>true</code>.
 									If the argument does not match, this method throws an error instead of returning <code>false</code>.
@@ -187,15 +162,12 @@
 									<dt>throws</dt>
 									<dd><p>{AssertionError} if the argument does not match the described type</p>
 									</dd>
-									<dt>throws</dt>
-									<dd><p>{NaNError} if the argument is <code>NaN</code></p>
-									</dd>
 								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>num: <span class="tsd-signature-type">number</span></h5>
+									<h5>int: <span class="tsd-signature-type">bigint</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>the argument to test</p>
 									</div>
@@ -203,55 +175,11 @@
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> type: <a href="../enums/numerictype.html" class="tsd-signature-type">NumericType</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"integer"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"natural"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"whole"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"float"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-positive"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-negative"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"non-zero"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"finite"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"infinite"</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>one of the enum members listed above</p>
+										<p>one of the string literals listed above</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="typeof" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> type<wbr>Of</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">type<wbr>Of<span class="tsd-signature-symbol">(</span>num<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"integer"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"float"</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c884901/src/class/Number.class.ts#L112">src/class/Number.class.ts:112</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>deprecated</dt>
-									<dd><p>use <a href="xjs_number.html#asserttype">xjs_Number.assertType</a>
-										Specify the type of number given.</p>
-										<p>If the number is finite, return one of the following strings:</p>
-										<ul>
-											<li><code>&#39;integer&#39;</code> : the number is an integer, that is, <code>num % 1 === 0</code></li>
-											<li><code>&#39;float&#39;</code>   : the number is not an integer</li>
-										</ul>
-										<p>Else, throw a <code>RangeError</code> (the argument is of the correct type but does not qualify).</p>
-									</dd>
-									<dt>throws</dt>
-									<dd><p>{RangeError} if the given arguemnt was not a finite number</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>num: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>the given number</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">"integer"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"float"</span></h4>
-							<p>one of the strings described above</p>
 						</li>
 					</ul>
 				</section>
@@ -279,9 +207,21 @@
 					<li class=" tsd-kind-class">
 						<a href="xjs_array.html" class="tsd-kind-icon">xjs_<wbr><wbr>Array</a>
 					</li>
-					<li class=" tsd-kind-class">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class">
 						<a href="xjs_bigint.html" class="tsd-kind-icon">xjs_<wbr><wbr>Big<wbr>Int</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-private">
+								<a href="xjs_bigint.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="xjs_bigint.html#asserttype" class="tsd-kind-icon">assert<wbr>Type</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="xjs_date.html" class="tsd-kind-icon">xjs_<wbr><wbr>Date</a>
 					</li>
@@ -291,27 +231,9 @@
 					<li class=" tsd-kind-class">
 						<a href="xjs_math.html" class="tsd-kind-icon">xjs_<wbr><wbr>Math</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-class">
+					<li class=" tsd-kind-class">
 						<a href="xjs_number.html" class="tsd-kind-icon">xjs_<wbr><wbr>Number</a>
-						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-private">
-								<a href="xjs_number.html#constructor" class="tsd-kind-icon">constructor</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
-								<a href="xjs_number.html#regexp" class="tsd-kind-icon">REGEXP</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="xjs_number.html#asserttype" class="tsd-kind-icon">assert<wbr>Type</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="xjs_number.html#typeof" class="tsd-kind-icon">type<wbr>Of</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="xjs_object.html" class="tsd-kind-icon">xjs_<wbr><wbr>Object</a>
 					</li>
