@@ -1,4 +1,4 @@
-import xjs_Array_module from './Array.class'
+import type xjs_Array_module from './Array.class'
 
 
 /**
@@ -41,7 +41,7 @@ export default class xjs_Object {
 	 * Then this replaceability relation `R` is **symmetric**, because `x R y` implies `y R x`.
 	 * We want `xjs.Object.is(x, y)` to emulate this relation.
 	 *
-	 * @param   <T> the least common supertype of `a` and `b`
+	 * @typeparam T - the least common supertype of `a` and `b`
 	 * @param   a the first  thing
 	 * @param   b the second thing
 	 * @param   predicate check the “sameness” of corresponding properties of `a` and `b`
@@ -49,7 +49,7 @@ export default class xjs_Object {
 	 * @throws  {TypeError} if either `a` or `b` is a function (not supported)
 	 */
 	static is<T>(a: T, b: T, predicate: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
-		const xjs_Array: typeof xjs_Array_module = require('./Array.class.js').default // NB relative to dist
+		const xjs_Array: typeof xjs_Array_module = require('./Array.class').default
 		if (a === b) return true
 		if (['string', 'number', 'boolean', 'null', 'undefined'].includes(xjs_Object.typeOf(a))) {
 			return xjs_Object.sameValueZero(a, b)
@@ -151,7 +151,7 @@ export default class xjs_Object {
 	 * call_me(1) // returns the number `6`
 	 * ```
 	 *
-	 * @param   <T> the type of value returned by the looked-up function
+	 * @typeparam T - the type of value returned by the looked-up function
 	 * @param   key the key to provide the lookup, which will give a function
 	 * @param   dictionary an object with function values
 	 * @returns the looked-up function, returning <T>
@@ -207,6 +207,7 @@ export default class xjs_Object {
 				: (!Number.isFinite(arg)) ? 'infinite'
 				: 'number'
 			],
+			['bigint'    , () => 'bigint'],
 			['function'  , () => 'function'],
 			['string'    , () => 'string'],
 			['boolean'   , () => 'boolean'],
@@ -242,11 +243,12 @@ export default class xjs_Object {
    * on every property and sub-property of the given parameter.
    * Else, return the given argument.
    * If the argument is an array, it is faster to use {@link xjs_Array.freezeDeep}.
+	 * @typeparam T - the type of `thing`
    * @param   thing any value to freeze
    * @returns the given value, with everything frozen
    */
   static freezeDeep<T>(thing: Readonly<T>): Readonly<T> {
-		const xjs_Array: typeof xjs_Array_module = require('./Array.class.js').default // NB relative to dist
+		const xjs_Array: typeof xjs_Array_module = require('./Array.class').default
 		if (thing instanceof Array) return xjs_Array.freezeDeep(thing) as unknown as T // HACK https://stackoverflow.com/a/18736071/
     Object.freeze(thing)
     if (xjs_Object.typeOf(thing) === 'object') {
@@ -308,12 +310,12 @@ export default class xjs_Object {
    * console.log(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
    * ```
    *
-	 * @param   <T> the type of `thing`
+	 * @typeparam T - the type of `thing`
    * @param   thing any value to clone
    * @returns an exact copy of the given value, but with nothing equal via `===` (unless the value given is primitive)
    */
   static cloneDeep<T>(thing: T): T {
-		const xjs_Array: typeof xjs_Array_module = require('./Array.class.js').default // NB relative to dist
+		const xjs_Array: typeof xjs_Array_module = require('./Array.class').default
 		if (thing instanceof Array) return xjs_Array.cloneDeep(thing) as unknown as T // HACK https://stackoverflow.com/a/18736071/
     if (xjs_Object.typeOf(thing) === 'object') {
         const returned: { [index: string]: unknown } = {}
