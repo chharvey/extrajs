@@ -179,6 +179,29 @@ export default class xjs_Array {
 	}
 
 	/**
+	 * Shuffles the elements of an array, in place.
+	 * This method is destructive: it mutates the given array.
+	 * @param   array the array to shuffle
+	 * @returns the array, with its elements shuffled in place
+	 */
+	static shuffle<T>(array: T[]): T[] {
+		let counter: number = array.length
+		let rand: number;
+		let temp: T;
+		// While there remain elements to shuffle…
+		while (counter) {
+			// Pick a remaining element…
+			rand = Math.floor(Math.random() * counter)
+			counter--
+			// And swap it with the current element.
+			temp = array[counter]
+			array[counter] = array[rand]
+			array[rand] = temp
+		}
+		return array
+	}
+
+	/**
 	 * Asynchronous {@link Array#filter}.
 	 * @typeparam T - the type of elements in the array
 	 * @param   arr the array to filter

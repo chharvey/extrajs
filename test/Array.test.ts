@@ -11,6 +11,17 @@ describe('xjs.Array', () => {
 		})
 	})
 
+	describe('.shuffle<T>(T[]): T[]', () => {
+		it('shuffles the array in place.', () => {
+			const arr: string[] = [...new Array(100)].map(() => `${Math.random() * 1000}`)
+			const arr_orig: string[] = arr.slice()
+			xjs_Array.shuffle(arr)
+			assert.notStrictEqual    (        arr_orig ,         arr , 'they should not be references to the same object')
+			assert.notDeepStrictEqual(        arr_orig ,         arr , 'their elements (in order) should not be the same')
+			assert.deepStrictEqual   (new Set(arr_orig), new Set(arr), 'they should contain the same elements but in any order')
+		})
+	})
+
 	describe('.is<T>(readonly T[], readonly T[], ((T, T) -> boolean)?): boolean', () => {
 		it('only checks one level of depth.', () => {
 			assert.ok(!xjs_Array.is(
