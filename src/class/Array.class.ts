@@ -26,6 +26,17 @@ export default class xjs_Array {
 	}
 
 	/**
+	 * Pick and return a random element of an array.
+	 * Does not mutate the array.
+	 * The probabibility distribution is uniform (the chances are even for all elements).
+	 * @param   array an array to pick from
+	 * @returns a uniformly-distributed, randomly selected element in the array
+	 */
+	static random<T>(array: readonly T[]): T {
+		return array[Math.floor(Math.random() * array.length)]
+	}
+
+	/**
 	 * @deprecated - WARNING{DEPRECATED} - use {@link xjs_Array.isConsecutiveSuperarrayOf} instead.
 	 * Test whether an array is a subarray of another array.
 	 *

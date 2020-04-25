@@ -2,6 +2,15 @@ import * as assert from 'assert'
 import xjs_Array from '../src/class/Array.class'
 
 describe('xjs.Array', () => {
+	describe('.random<T>(readonly T[]): T', () => {
+		it('returns a random element from the arary.', () => {
+			const arr: string[] = [...new Array(100)].map(() => `${Math.random() * 1000}`)
+			arr.forEach(() => {
+				assert.ok(arr.includes(xjs_Array.random(arr)))
+			})
+		})
+	})
+
 	describe('.is<T>(readonly T[], readonly T[], ((T, T) -> boolean)?): boolean', () => {
 		it('only checks one level of depth.', () => {
 			assert.ok(!xjs_Array.is(
