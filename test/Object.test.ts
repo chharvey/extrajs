@@ -2,6 +2,31 @@ import * as assert from 'assert'
 import xjs_Object from '../src/class/Object.class'
 
 describe('xjs.Object', () => {
+	describe('.sameValueZero(unknown, unknown): boolean', () => {
+		it('checks same-value-zeroness on arguments.', () => {
+			assert.ok(xjs_Object.sameValueZero( void 0  , void 1  ), 'undefined should be SVZ to undefined')
+			assert.ok(xjs_Object.sameValueZero( null    , null    ), 'null should be SVZ to null')
+			assert.ok(xjs_Object.sameValueZero( false   , false   ), 'false should be SVZ to false')
+			assert.ok(xjs_Object.sameValueZero( true    , true    ), 'true should be SVZ to true')
+			assert.ok(xjs_Object.sameValueZero( NaN     , NaN     ), 'NaN should be SVZ to NaN')
+			assert.ok(xjs_Object.sameValueZero( 0       , -0      ), '0 should be SVZ to -0')
+			assert.ok(xjs_Object.sameValueZero( 0.123   , 0.123   ), 'equal numbers should be SVZ')
+			assert.ok(xjs_Object.sameValueZero( 123n    , 123n    ), 'equal bigints should be SVZ')
+			assert.ok(xjs_Object.sameValueZero( 'z.abc' , 'z.abc' ), 'equal strings should be SVZ')
+			;[void 0, null, false, true, NaN, 0, 0.123, 123n, 'z.abc'].forEach((vi, i, arr) => {
+				;[...arr.slice(0, i), ...arr.slice(i + 1)].forEach((vj) => {
+					assert.ok(!xjs_Object.sameValueZero(vi, vj), `primitive values should only be SVZ if they are equal: ${vi}, ${vj}`)
+				})
+			})
+			const a: object = {}
+			const b: [] = []
+			assert.ok(xjs_Object.sameValueZero(a, a), 'a reference to an object should be SVZ to itself')
+			assert.ok(xjs_Object.sameValueZero(b, b), 'a reference to an array should be SVZ to itself')
+			assert.ok(!xjs_Object.sameValueZero({}, {}), 'different references to objects should not be SVZ even when containing same properties')
+			assert.ok(!xjs_Object.sameValueZero([], []), 'different references to arrays should not be SVZ even when containing same properties')
+		})
+	})
+
 	describe('.is<T>(T, T, ((any, any) => boolean)?): boolean', () => {
 		it('only checks one level of depth.', () => {
 			type T = {val: string[]}|string[]|number
