@@ -27,6 +27,41 @@ describe('xjs.Object', () => {
 		})
 	})
 
+	describe('.sameValueZeroDeep(unknown, unknown): boolean', () => {
+		it('checks deep same-value-zeroness on arguments.', () => {
+			assert.ok(xjs_Object.sameValueZeroDeep( void 0  , void 1  ), 'undefined should be DSVZ to undefined')
+			assert.ok(xjs_Object.sameValueZeroDeep( null    , null    ), 'null should be DSVZ to null')
+			assert.ok(xjs_Object.sameValueZeroDeep(false    , false   ), 'false should be DSVZ to false')
+			assert.ok(xjs_Object.sameValueZeroDeep(true     , true    ), 'true should be DSVZ to true')
+			assert.ok(xjs_Object.sameValueZeroDeep( NaN     , NaN     ), 'NaN should be DSVZ to NaN')
+			assert.ok(xjs_Object.sameValueZeroDeep( 0       , -0      ), '0 should be DSVZ to -0')
+			assert.ok(xjs_Object.sameValueZeroDeep( 0.123   , 0.123   ), 'equal numbers should be DSVZ')
+			assert.ok(xjs_Object.sameValueZeroDeep( 123n    , 123n    ), 'equal bigints should be DSVZ')
+			assert.ok(xjs_Object.sameValueZeroDeep( 'z.abc' , 'z.abc' ), 'equal strings should be DSVZ')
+			;[void 0, null, false, true, NaN, 0, 0.123, 123n, 'z.abc'].forEach((vi, i, arr) => {
+				;[...arr.slice(0, i), ...arr.slice(i + 1)].forEach((vj) => {
+					assert.ok(!xjs_Object.sameValueZeroDeep(vi, vj), `primitive values should only be DSVZ if they are equal: ${vi}, ${vj}`)
+				})
+			})
+			const a: object = {}
+			const b: [] = []
+			assert.ok(xjs_Object.sameValueZeroDeep(a, a), 'a reference to an object should be DSVZ to itself')
+			assert.ok(xjs_Object.sameValueZeroDeep(b, b), 'a reference to an array should be DSVZ to itself')
+			;[{}, {v: 1}, {val: {v: 1}}].forEach((vi, i, arr) => {
+				assert.ok(xjs_Object.sameValueZeroDeep(vi, Object.assign({}, vi)), 'different objects should be DSVZ if containing same properties')
+				;[...arr.slice(0, i), ...arr.slice(i + 1)].forEach((vj) => {
+					assert.ok(!xjs_Object.sameValueZeroDeep(vi, vj), 'different objects should not be DSVZ if not containing same properties')
+				})
+			})
+			;[[], [1], [[1]]].forEach((vi, i, arr) => {
+				assert.ok(xjs_Object.sameValueZeroDeep(vi, [...vi]), 'different arrays should b DSVZ if containing same elements')
+				;[...arr.slice(0, i), ...arr.slice(i + 1)].forEach((vj) => {
+					assert.ok(!xjs_Object.sameValueZeroDeep(vi, vj), 'different arrays should not be DSVZ if not containing same elements')
+				})
+			})
+		})
+	})
+
 	describe('.is<T>(T, T, ((any, any) => boolean)?): boolean', () => {
 		it('only checks one level of depth.', () => {
 			type T = {val: string[]}|string[]|number

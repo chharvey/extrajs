@@ -1,3 +1,5 @@
+import * as assert from 'assert'
+
 import type xjs_Array_module from './Array.class'
 
 
@@ -77,6 +79,40 @@ export default class xjs_Object {
 	 */
 	static sameValueZero(a: unknown, b: unknown): boolean {
 		return a === b || Object.is(a, b)
+	}
+
+	/**
+	 * Test whether two things are deeply equal vis-à-vis the {@link xjs_Object.sameValueZero|Same-Value-Zero algorithm}.
+	 *
+	 * 1. If the arguments are equal via Same-Value-Zero, return true.
+	 * 2. If any argument is a primitive, return false.
+	 * 3. If the object prototypes are not strictly equal (`===`), return false.
+	 * 4. If both objects are arrays, maps, sets, or other kind of iterable object,
+	 * 	return the deep same-value-zeroness for each entry, not in any order.
+	 * 5. Return the deep same-value-zeroness for each enumerable own property, not in any order.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#Same-value-zero_equality
+	 * @param   a the first  thing
+	 * @param   b the second thing
+	 * @returns whether the properties of `a` and `b` are equal via same-value-zero
+	 */
+	static sameValueZeroDeep(a: unknown, b: unknown): boolean {
+		if (xjs_Object.sameValueZero(a, b)) return true
+		if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false
+		try {
+			assert.deepStrictEqual(a, b)
+			return true
+		} catch {
+			if (Object.getPrototypeOf(a) !== Object.getPrototypeOf(b)) return false
+			return Object.entries(a).every(([a_key, a_value]) =>
+				Object.entries(b).some(([b_key, b_value]) =>
+					a_key === b_key && xjs_Object.sameValueZeroDeep(a_value, b_value)
+				)
+			) && Object.entries(b).every(([b_key, b_value]) =>
+				Object.entries(a).some(([a_key, a_value]) =>
+					a_key === b_key && xjs_Object.sameValueZeroDeep(a_value, b_value)
+				)
+			)
+		}
 	}
 
 	/**
