@@ -117,7 +117,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c884901/src/class/Object.class.ts#L329">src/class/Object.class.ts:329</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/a91c054/src/class/Object.class.ts#L329">src/class/Object.class.ts:329</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="xjs_object.html" class="tsd-signature-type">xjs_Object</a></h4>
@@ -137,7 +137,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c884901/src/class/Object.class.ts#L317">src/class/Object.class.ts:317</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/a91c054/src/class/Object.class.ts#L317">src/class/Object.class.ts:317</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -154,39 +154,39 @@
 								If the argument is an array, it is faster to use <a href="xjs_array.html#clonedeep">xjs_Array.cloneDeep</a>.</p>
 								<p>This method provides a deeper clone than <code>Object.assign()</code>: whereas <code>Object.assign()</code> only
 								copies the top-level properties, this method recursively clones into all sub-levels.</p>
-								<pre><code class="language-js"><span class="hljs-keyword">var</span> x = { <span class="hljs-attr">first</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">second</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">2</span> }, <span class="hljs-attr">third</span>: [<span class="hljs-number">1</span>, <span class="hljs-string">'2'</span>, { <span class="hljs-attr">v</span>:<span class="hljs-number">3</span> }] }
+								<pre><code class="language-js"><span class="hljs-keyword">var</span> x = { <span class="hljs-attr">first</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">second</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">2</span> }, <span class="hljs-attr">third</span>: [<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;2&#x27;</span>, { <span class="hljs-attr">v</span>:<span class="hljs-number">3</span> }] }
 
 <span class="hljs-comment">// Object.assign x into y:</span>
 <span class="hljs-keyword">var</span> y = <span class="hljs-built_in">Object</span>.assign({}, x) <span class="hljs-comment">// returns { first: x.first, second: x.second, third: x.third }</span>
 
 <span class="hljs-comment">// you can reassign properties of `y` without affecting `x`:</span>
-y.first  = <span class="hljs-string">'one'</span>
+y.first  = <span class="hljs-string">&#x27;one&#x27;</span>
 y.second = <span class="hljs-number">2</span>
-<span class="hljs-built_in">console</span>.log(y) <span class="hljs-comment">// returns { first: 'one', second: 2, third: x.third }</span>
-<span class="hljs-built_in">console</span>.log(x) <span class="hljs-comment">// returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }</span>
+<span class="hljs-built_in">console</span>.log(y) <span class="hljs-comment">// returns { first: &#x27;one&#x27;, second: 2, third: x.third }</span>
+<span class="hljs-built_in">console</span>.log(x) <span class="hljs-comment">// returns { first: 1, second: { value: 2 }, third: [1, &#x27;2&#x27;, { v:3 }] }</span>
 
 <span class="hljs-comment">// however you cannot mutate properties of `y` without affecting `x`:</span>
-y.third[<span class="hljs-number">0</span>]    = <span class="hljs-string">'one'</span>
+y.third[<span class="hljs-number">0</span>]    = <span class="hljs-string">&#x27;one&#x27;</span>
 y.third[<span class="hljs-number">1</span>]    = <span class="hljs-number">2</span>
 y.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</span>]
-<span class="hljs-built_in">console</span>.log(y) <span class="hljs-comment">// returns { first: 'one', second: 2, third: ['one', 2, { v:[3] }] }</span>
-<span class="hljs-built_in">console</span>.log(x) <span class="hljs-comment">// returns { first: 1, second: { value: 2 }, third: ['one', 2, { v:[3] }] }</span>
+<span class="hljs-built_in">console</span>.log(y) <span class="hljs-comment">// returns { first: &#x27;one&#x27;, second: 2, third: [&#x27;one&#x27;, 2, { v:[3] }] }</span>
+<span class="hljs-built_in">console</span>.log(x) <span class="hljs-comment">// returns { first: 1, second: { value: 2 }, third: [&#x27;one&#x27;, 2, { v:[3] }] }</span>
 
 <span class="hljs-comment">// xjs.Object.cloneDeep x into y:</span>
-<span class="hljs-keyword">var</span> z = xjs.Object.cloneDeep(x) <span class="hljs-comment">// returns { first: 1, second: { value: 2 }, third: [1, '2', {v:3}] }</span>
+<span class="hljs-keyword">var</span> z = xjs.Object.cloneDeep(x) <span class="hljs-comment">// returns { first: 1, second: { value: 2 }, third: [1, &#x27;2&#x27;, {v:3}] }</span>
 
 <span class="hljs-comment">// as with Object.assign, you can reassign properties of `z` without affecting `x`:</span>
-z.first  = <span class="hljs-string">'one'</span>
+z.first  = <span class="hljs-string">&#x27;one&#x27;</span>
 z.second = <span class="hljs-number">2</span>
-<span class="hljs-built_in">console</span>.log(z) <span class="hljs-comment">// returns { first: 'one', second: 2, third: [1, '2', {v:3}] }</span>
-<span class="hljs-built_in">console</span>.log(x) <span class="hljs-comment">// returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }</span>
+<span class="hljs-built_in">console</span>.log(z) <span class="hljs-comment">// returns { first: &#x27;one&#x27;, second: 2, third: [1, &#x27;2&#x27;, {v:3}] }</span>
+<span class="hljs-built_in">console</span>.log(x) <span class="hljs-comment">// returns { first: 1, second: { value: 2 }, third: [1, &#x27;2&#x27;, { v:3 }] }</span>
 
 <span class="hljs-comment">// but unlike Object.assign, you can mutate properties of `z` without affecting `x`:</span>
-z.third[<span class="hljs-number">0</span>]    = <span class="hljs-string">'one'</span>
+z.third[<span class="hljs-number">0</span>]    = <span class="hljs-string">&#x27;one&#x27;</span>
 z.third[<span class="hljs-number">1</span>]    = <span class="hljs-number">2</span>
 z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</span>]
-<span class="hljs-built_in">console</span>.log(z) <span class="hljs-comment">// returns { first: 'one', second: 2, third: ['one', 2, { v:[3] }] }</span>
-<span class="hljs-built_in">console</span>.log(x) <span class="hljs-comment">// returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }</span></code></pre>
+<span class="hljs-built_in">console</span>.log(z) <span class="hljs-comment">// returns { first: &#x27;one&#x27;, second: 2, third: [&#x27;one&#x27;, 2, { v:[3] }] }</span>
+<span class="hljs-built_in">console</span>.log(x) <span class="hljs-comment">// returns { first: 1, second: { value: 2 }, third: [1, &#x27;2&#x27;, { v:3 }] }</span></code></pre>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
@@ -221,7 +221,7 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c884901/src/class/Object.class.ts#L250">src/class/Object.class.ts:250</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/a91c054/src/class/Object.class.ts#L250">src/class/Object.class.ts:250</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -272,7 +272,7 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c884901/src/class/Object.class.ts#L230">src/class/Object.class.ts:230</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/a91c054/src/class/Object.class.ts#L230">src/class/Object.class.ts:230</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -314,7 +314,7 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c884901/src/class/Object.class.ts#L51">src/class/Object.class.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/a91c054/src/class/Object.class.ts#L51">src/class/Object.class.ts:51</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -418,7 +418,7 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c884901/src/class/Object.class.ts#L78">src/class/Object.class.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/a91c054/src/class/Object.class.ts#L78">src/class/Object.class.ts:78</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -464,7 +464,7 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c884901/src/class/Object.class.ts#L160">src/class/Object.class.ts:160</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/a91c054/src/class/Object.class.ts#L160">src/class/Object.class.ts:160</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -496,38 +496,38 @@ z.third[<span class="hljs-number">2</span>].v  = [<span class="hljs-number">3</s
 											(Note that this example is actually pretty inefficient,
 										but it only serves as a demonstration.)</p>
 										<pre><code class="language-js"><span class="hljs-comment">// What is the date of the 1st Tuesday of November, 2018?</span>
-<span class="hljs-keyword">let</span> call_me = xjs.Object.switch&lt;number&gt;(<span class="hljs-string">'November'</span>, {
-  <span class="hljs-string">'January'</span>  : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">2</span>,  <span class="hljs-number">9</span>, <span class="hljs-number">16</span>, <span class="hljs-number">23</span>,  <span class="hljs-number">30</span>][n - <span class="hljs-number">1</span>],
-  <span class="hljs-string">'February'</span> : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">6.</span> <span class="hljs-number">13.</span> <span class="hljs-number">20</span>, <span class="hljs-number">27</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
-  <span class="hljs-string">'March'</span>    : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">6</span>, <span class="hljs-number">13</span>, <span class="hljs-number">20</span>, <span class="hljs-number">27</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
-  <span class="hljs-string">'April'</span>    : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">17</span>, <span class="hljs-number">24</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
-  <span class="hljs-string">'May'</span>      : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">1</span>,  <span class="hljs-number">8</span>, <span class="hljs-number">15</span>, <span class="hljs-number">22</span>,  <span class="hljs-number">29</span>][n - <span class="hljs-number">1</span>],
-  <span class="hljs-string">'June'</span>     : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">5</span>, <span class="hljs-number">12</span>, <span class="hljs-number">19</span>, <span class="hljs-number">26</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
-  <span class="hljs-string">'July'</span>     : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">17</span>, <span class="hljs-number">24</span>,  <span class="hljs-number">31</span>][n - <span class="hljs-number">1</span>],
-  <span class="hljs-string">'August'</span>   : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">7</span>, <span class="hljs-number">14</span>, <span class="hljs-number">21</span>, <span class="hljs-number">28</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
-  <span class="hljs-string">'September'</span>: <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">4</span>, <span class="hljs-number">11</span>, <span class="hljs-number">18</span>, <span class="hljs-number">25</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
-  <span class="hljs-string">'October'</span>  : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">2</span>,  <span class="hljs-number">9</span>, <span class="hljs-number">16</span>, <span class="hljs-number">23</span>,  <span class="hljs-number">30</span>][n - <span class="hljs-number">1</span>],
-  <span class="hljs-string">'November'</span> : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">6</span>, <span class="hljs-number">13</span>, <span class="hljs-number">20</span>, <span class="hljs-number">27</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
-  <span class="hljs-string">'December'</span> : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">4</span>, <span class="hljs-number">11</span>, <span class="hljs-number">18</span>, <span class="hljs-number">25</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
-  <span class="hljs-string">'default'</span>  : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> <span class="hljs-literal">NaN</span>,
+<span class="hljs-keyword">let</span> call_me = xjs.Object.switch&lt;number&gt;(<span class="hljs-string">&#x27;November&#x27;</span>, {
+  <span class="hljs-string">&#x27;January&#x27;</span>  : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">2</span>,  <span class="hljs-number">9</span>, <span class="hljs-number">16</span>, <span class="hljs-number">23</span>,  <span class="hljs-number">30</span>][n - <span class="hljs-number">1</span>],
+  <span class="hljs-string">&#x27;February&#x27;</span> : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">6.</span> <span class="hljs-number">13.</span> <span class="hljs-number">20</span>, <span class="hljs-number">27</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
+  <span class="hljs-string">&#x27;March&#x27;</span>    : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">6</span>, <span class="hljs-number">13</span>, <span class="hljs-number">20</span>, <span class="hljs-number">27</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
+  <span class="hljs-string">&#x27;April&#x27;</span>    : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">17</span>, <span class="hljs-number">24</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
+  <span class="hljs-string">&#x27;May&#x27;</span>      : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">1</span>,  <span class="hljs-number">8</span>, <span class="hljs-number">15</span>, <span class="hljs-number">22</span>,  <span class="hljs-number">29</span>][n - <span class="hljs-number">1</span>],
+  <span class="hljs-string">&#x27;June&#x27;</span>     : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">5</span>, <span class="hljs-number">12</span>, <span class="hljs-number">19</span>, <span class="hljs-number">26</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
+  <span class="hljs-string">&#x27;July&#x27;</span>     : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">17</span>, <span class="hljs-number">24</span>,  <span class="hljs-number">31</span>][n - <span class="hljs-number">1</span>],
+  <span class="hljs-string">&#x27;August&#x27;</span>   : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">7</span>, <span class="hljs-number">14</span>, <span class="hljs-number">21</span>, <span class="hljs-number">28</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
+  <span class="hljs-string">&#x27;September&#x27;</span>: <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">4</span>, <span class="hljs-number">11</span>, <span class="hljs-number">18</span>, <span class="hljs-number">25</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
+  <span class="hljs-string">&#x27;October&#x27;</span>  : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">2</span>,  <span class="hljs-number">9</span>, <span class="hljs-number">16</span>, <span class="hljs-number">23</span>,  <span class="hljs-number">30</span>][n - <span class="hljs-number">1</span>],
+  <span class="hljs-string">&#x27;November&#x27;</span> : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">6</span>, <span class="hljs-number">13</span>, <span class="hljs-number">20</span>, <span class="hljs-number">27</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
+  <span class="hljs-string">&#x27;December&#x27;</span> : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">4</span>, <span class="hljs-number">11</span>, <span class="hljs-number">18</span>, <span class="hljs-number">25</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>],
+  <span class="hljs-string">&#x27;default&#x27;</span>  : <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> <span class="hljs-literal">NaN</span>,
 }) <span class="hljs-comment">// returns a function taking `n` and returning one of `[6,13,20,27,NaN]`</span>
 call_me(<span class="hljs-number">1</span>) <span class="hljs-comment">// returns the number `6`</span></code></pre>
 										<p>DEPRECATION WARNING: This method is deprecated. Instead, use a built-in Map:</p>
 										<pre><code class="language-js"><span class="hljs-comment">// What is the date of the 1st Tuesday of November, 2018?</span>
-<span class="hljs-keyword">let</span> call_me: <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> number = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>&lt;string, (n: number) =&gt; number&gt;([
-    [<span class="hljs-string">'January'</span>   , (n: number) =&gt; [ <span class="hljs-number">2</span>,  <span class="hljs-number">9</span>, <span class="hljs-number">16</span>, <span class="hljs-number">23</span>,  <span class="hljs-number">30</span>][n - <span class="hljs-number">1</span>]],
-    [<span class="hljs-string">'February'</span>  , (n: number) =&gt; [ <span class="hljs-number">6.</span> <span class="hljs-number">13.</span> <span class="hljs-number">20</span>, <span class="hljs-number">27</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
-    [<span class="hljs-string">'March'</span>     , (n: number) =&gt; [ <span class="hljs-number">6</span>, <span class="hljs-number">13</span>, <span class="hljs-number">20</span>, <span class="hljs-number">27</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
-    [<span class="hljs-string">'April'</span>     , (n: number) =&gt; [ <span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">17</span>, <span class="hljs-number">24</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
-    [<span class="hljs-string">'May'</span>       , (n: number) =&gt; [ <span class="hljs-number">1</span>,  <span class="hljs-number">8</span>, <span class="hljs-number">15</span>, <span class="hljs-number">22</span>,  <span class="hljs-number">29</span>][n - <span class="hljs-number">1</span>]],
-    [<span class="hljs-string">'June'</span>      , (n: number) =&gt; [ <span class="hljs-number">5</span>, <span class="hljs-number">12</span>, <span class="hljs-number">19</span>, <span class="hljs-number">26</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
-    [<span class="hljs-string">'July'</span>      , (n: number) =&gt; [ <span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">17</span>, <span class="hljs-number">24</span>,  <span class="hljs-number">31</span>][n - <span class="hljs-number">1</span>]],
-    [<span class="hljs-string">'August'</span>    , (n: number) =&gt; [ <span class="hljs-number">7</span>, <span class="hljs-number">14</span>, <span class="hljs-number">21</span>, <span class="hljs-number">28</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
-    [<span class="hljs-string">'September'</span> , (n: number) =&gt; [ <span class="hljs-number">4</span>, <span class="hljs-number">11</span>, <span class="hljs-number">18</span>, <span class="hljs-number">25</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
-    [<span class="hljs-string">'October'</span>   , (n: number) =&gt; [ <span class="hljs-number">2</span>,  <span class="hljs-number">9</span>, <span class="hljs-number">16</span>, <span class="hljs-number">23</span>,  <span class="hljs-number">30</span>][n - <span class="hljs-number">1</span>]],
-    [<span class="hljs-string">'November'</span>  , (n: number) =&gt; [ <span class="hljs-number">6</span>, <span class="hljs-number">13</span>, <span class="hljs-number">20</span>, <span class="hljs-number">27</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
-    [<span class="hljs-string">'December'</span>  , (n: number) =&gt; [ <span class="hljs-number">4</span>, <span class="hljs-number">11</span>, <span class="hljs-number">18</span>, <span class="hljs-number">25</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
-]).get(<span class="hljs-string">'November'</span>) <span class="hljs-comment">// returns a function taking `n` and returning one of `[6,13,20,27,NaN]`</span>
+<span class="hljs-keyword">let</span> call_me: <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> number = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>&lt;string, <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> number&gt;([
+    [<span class="hljs-string">&#x27;January&#x27;</span>   , <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">2</span>,  <span class="hljs-number">9</span>, <span class="hljs-number">16</span>, <span class="hljs-number">23</span>,  <span class="hljs-number">30</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">&#x27;February&#x27;</span>  , <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">6.</span> <span class="hljs-number">13.</span> <span class="hljs-number">20</span>, <span class="hljs-number">27</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">&#x27;March&#x27;</span>     , <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">6</span>, <span class="hljs-number">13</span>, <span class="hljs-number">20</span>, <span class="hljs-number">27</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">&#x27;April&#x27;</span>     , <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">17</span>, <span class="hljs-number">24</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">&#x27;May&#x27;</span>       , <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">1</span>,  <span class="hljs-number">8</span>, <span class="hljs-number">15</span>, <span class="hljs-number">22</span>,  <span class="hljs-number">29</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">&#x27;June&#x27;</span>      , <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">5</span>, <span class="hljs-number">12</span>, <span class="hljs-number">19</span>, <span class="hljs-number">26</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">&#x27;July&#x27;</span>      , <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">17</span>, <span class="hljs-number">24</span>,  <span class="hljs-number">31</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">&#x27;August&#x27;</span>    , <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">7</span>, <span class="hljs-number">14</span>, <span class="hljs-number">21</span>, <span class="hljs-number">28</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">&#x27;September&#x27;</span> , <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">4</span>, <span class="hljs-number">11</span>, <span class="hljs-number">18</span>, <span class="hljs-number">25</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">&#x27;October&#x27;</span>   , <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">2</span>,  <span class="hljs-number">9</span>, <span class="hljs-number">16</span>, <span class="hljs-number">23</span>,  <span class="hljs-number">30</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">&#x27;November&#x27;</span>  , <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">6</span>, <span class="hljs-number">13</span>, <span class="hljs-number">20</span>, <span class="hljs-number">27</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
+    [<span class="hljs-string">&#x27;December&#x27;</span>  , <span class="hljs-function">(<span class="hljs-params">n: number</span>) =&gt;</span> [ <span class="hljs-number">4</span>, <span class="hljs-number">11</span>, <span class="hljs-number">18</span>, <span class="hljs-number">25</span>, <span class="hljs-literal">NaN</span>][n - <span class="hljs-number">1</span>]],
+]).get(<span class="hljs-string">&#x27;November&#x27;</span>) <span class="hljs-comment">// returns a function taking `n` and returning one of `[6,13,20,27,NaN]`</span>
 call_me(<span class="hljs-number">1</span>) <span class="hljs-comment">// returns the number `6`</span></code></pre>
 									</dd>
 									<dt>throws</dt>
@@ -621,7 +621,7 @@ call_me(<span class="hljs-number">1</span>) <span class="hljs-comment">// return
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/c884901/src/class/Object.class.ts#L200">src/class/Object.class.ts:200</a></li>
+									<li>Defined in <a href="https://github.com/chharvey/extrajs/blob/a91c054/src/class/Object.class.ts#L200">src/class/Object.class.ts:200</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -632,19 +632,19 @@ call_me(<span class="hljs-number">1</span>) <span class="hljs-comment">// return
 									Note: this method should only be used at runtime —
 								TypeScript is much better at checking types, and can do so at compile time.</p>
 								<p>Warning! passing undeclared variables will throw a <code>ReferenceError</code>!</p>
-								<pre><code class="language-js"><span class="hljs-keyword">typeof</span> <span class="hljs-literal">null</span>     <span class="hljs-comment">// 'object' :(</span>
-<span class="hljs-keyword">typeof</span> []       <span class="hljs-comment">// 'object'</span>
-<span class="hljs-keyword">typeof</span> <span class="hljs-literal">NaN</span>      <span class="hljs-comment">// 'number'</span>
-<span class="hljs-keyword">typeof</span> <span class="hljs-literal">Infinity</span> <span class="hljs-comment">// 'number'</span>
-xjs.typeOf(<span class="hljs-literal">null</span>)     <span class="hljs-comment">// 'null'</span>
-xjs.typeOf([])       <span class="hljs-comment">// 'array'</span>
-xjs.typeOf(<span class="hljs-literal">NaN</span>)      <span class="hljs-comment">// 'NaN'</span>
-xjs.typeOf(<span class="hljs-literal">Infinity</span>) <span class="hljs-comment">// 'infinite'</span>
+								<pre><code class="language-js"><span class="hljs-keyword">typeof</span> <span class="hljs-literal">null</span>     <span class="hljs-comment">// &#x27;object&#x27; :(</span>
+<span class="hljs-keyword">typeof</span> []       <span class="hljs-comment">// &#x27;object&#x27;</span>
+<span class="hljs-keyword">typeof</span> <span class="hljs-literal">NaN</span>      <span class="hljs-comment">// &#x27;number&#x27;</span>
+<span class="hljs-keyword">typeof</span> <span class="hljs-literal">Infinity</span> <span class="hljs-comment">// &#x27;number&#x27;</span>
+xjs.typeOf(<span class="hljs-literal">null</span>)     <span class="hljs-comment">// &#x27;null&#x27;</span>
+xjs.typeOf([])       <span class="hljs-comment">// &#x27;array&#x27;</span>
+xjs.typeOf(<span class="hljs-literal">NaN</span>)      <span class="hljs-comment">// &#x27;NaN&#x27;</span>
+xjs.typeOf(<span class="hljs-literal">Infinity</span>) <span class="hljs-comment">// &#x27;infinite&#x27;</span>
 
 <span class="hljs-keyword">var</span> x;
-<span class="hljs-keyword">typeof</span> x;       <span class="hljs-comment">// 'undefined'</span>
-<span class="hljs-keyword">typeof</span> y;       <span class="hljs-comment">// 'undefined'</span>
-xjs.typeOf(x);  <span class="hljs-comment">// 'undefined'</span>
+<span class="hljs-keyword">typeof</span> x;       <span class="hljs-comment">// &#x27;undefined&#x27;</span>
+<span class="hljs-keyword">typeof</span> y;       <span class="hljs-comment">// &#x27;undefined&#x27;</span>
+xjs.typeOf(x);  <span class="hljs-comment">// &#x27;undefined&#x27;</span>
 xjs.typeOf(y);  <span class="hljs-comment">// Uncaught ReferenceError: y is not defined</span></code></pre>
 								<dl class="tsd-comment-tags">
 									<dt>see</dt>
@@ -774,6 +774,5 @@ xjs.typeOf(y);  <span class="hljs-comment">// Uncaught ReferenceError: y is not 
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>
