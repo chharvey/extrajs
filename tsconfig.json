@@ -9,12 +9,8 @@
 		"noEmitOnError"     : true
 	},
 	"typedocOptions": {
-		"tsconfig": "./",
-		"mode"   : "file",
-		"name"   : "extrajs",
-		"out"    : "./docs/api/",
-		"includeDeclarations" : true,
-		"excludeExternals"    : true,
-		"ignoreCompilerErrors": true
+		"name":        "extrajs",
+		"entryPoints": "./index.ts",
+		"out":         "./docs/api/"
 	}
 }
