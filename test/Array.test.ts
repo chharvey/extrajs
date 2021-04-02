@@ -105,4 +105,71 @@ describe('xjs.Array', () => {
 			assert.ok(!xjs_Array.isConsecutiveSuperarrayOf(x, [0,1,2,0,3,4,5]))
 		})
 	})
+
+	describe('.forEachAggregated', () => {
+		it('acts like Array#forEach if no errors.', () => {
+			let times: number = 0;
+			xjs_Array.forEachAggregated<number>([1, 2, 3, 4], (_n) => {
+				times++;
+			});
+			assert.strictEqual(times, 4);
+		});
+		it('rethrows first error if only 1 error.', () => {
+			let times: number = 0;
+			assert.throws(() => xjs_Array.forEachAggregated<number>([1, 2, 3, 4], (n) => {
+				times++;
+				if (n === 2) {
+					throw new RangeError(`${ n } is even.`);
+				};
+			}), (err) => {
+				assert.ok(err instanceof RangeError);
+				assert.strictEqual(err.message, '2 is even.');
+				assert.strictEqual(times, 4);
+				return true;
+			});
+		});
+		it('aggregates all caught errors if more than 1.', () => {
+			assert.throws(() => xjs_Array.forEachAggregated<number>([1, 2, 3, 4], (n) => {
+				if (n % 2 === 0) {
+					throw new RangeError(`${ n } is even.`);
+				};
+			}), (err) => {
+				assert.ok(err instanceof AggregateError);
+				assert.strictEqual(err.errors.length, 2);
+				assert.deepStrictEqual(err.errors.map((er) => {
+					assert.ok(er instanceof RangeError);
+					return er.message;
+				}), ['2 is even.', '4 is even.']);
+				return true;
+			});
+		});
+		it('spreads any AggregateError errors.', () => {
+			assert.throws(() => xjs_Array.forEachAggregated<number>([1, 2, 3, 4, 5, 6, 7, 8], (n) => {
+				if (n % 2 === 0) {
+					throw (n % 4 === 0)
+						? new AggregateError([
+							new RangeError(`${ n } is even.`),
+							new RangeError(`${ n } is a multiple of 4.`),
+						])
+						: new RangeError(`${ n } is even.`)
+					;
+				};
+			}), (err) => {
+				assert.ok(err instanceof AggregateError);
+				assert.strictEqual(err.errors.length, 6);
+				assert.deepStrictEqual(err.errors.map((er) => {
+					assert.ok(er instanceof RangeError);
+					return er.message;
+				}), [
+					'2 is even.',
+					'4 is even.',
+					'4 is a multiple of 4.',
+					'6 is even.',
+					'8 is even.',
+					'8 is a multiple of 4.',
+				]);
+				return true;
+			});
+		});
+	});
 })

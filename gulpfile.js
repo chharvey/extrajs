@@ -17,6 +17,7 @@ function test() {
 	return gulp.src('./test/*.ts')
 		.pipe(mocha({
 			require: 'ts-node/register',
+			harmony: true,
 		}))
 }
 

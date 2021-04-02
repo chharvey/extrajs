@@ -192,6 +192,56 @@ export default class xjs_Array {
 		return (await xjs_Array.filterAsync(arr, predicate, this_arg))[0] || null
 	}
 
+	/**
+	 * Perform a callback function on an array, aggregating any errors caught.
+	 *
+	 * Instead of throwing on the first error and stopping iteration, as {@link Array#forEach} would do,
+	 * this method continues performing the callback on the rest of the array until all items are done.
+	 * If only one error was caught, then that error is simply rethrown.
+	 * However, if more errors were caught, they are collected into a single AggregateError, which is then thrown.
+	 *
+	 * If any individual item *itself* throws an AggregateError, then its several errors are aggregated into the final thrown value.
+	 * In other words, the resulting AggregateError’s errors will not include any AggregateError objects.
+	 *
+	 * @example
+	 * xjs.Array.forEachAggregated<number>([1, 2, 3, 4], (n) => {
+	 * 	if (n % 2 === 0) {
+	 * 		throw new Error(`${ n } is even.`);
+	 * 	};
+	 * });
+	 * // Expected thrown error:
+	 * AggregateError {
+	 * 	errors: [
+	 * 		Error { message: "2 is even." },
+	 * 		Error { message: "4 is even." },
+	 * 	]
+	 * }
+	 * @typeparam T the type of items in the array
+	 * @param array the array of items
+	 * @param callback the function to call on each item
+	 * @throws {AggregateError} if one or more iterations throws an error
+	 */
+	static forEachAggregated<T>(array: readonly T[], callback: (item: T) => void): void {
+		const errors: Error[] = array.flatMap((it) => {
+			try {
+				callback(it);
+				return [];
+			} catch (err) {
+				return (
+					(err instanceof AggregateError) ? err.errors :
+					(err instanceof Error) ? [err] :
+					[new Error(`${ err }`)]
+				);
+			};
+		});
+		if (errors.length) {
+			throw (errors.length === 1)
+				? errors[0]
+				: new AggregateError(errors, errors.map((err) => err.message).join('\n'))
+			;
+		};
+	}
+
   /**
    * @deprecated WARNING{DEPRECATED} - use interface `readonly T[]` instead
    * Deep freeze an array, and return the result.
