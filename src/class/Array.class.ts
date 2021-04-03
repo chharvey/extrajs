@@ -199,6 +199,7 @@ export default class xjs_Array {
 	 * this method continues performing the callback on the rest of the array until all items are done.
 	 * If only one error was caught, then that error is simply rethrown.
 	 * However, if more errors were caught, they are collected into a single AggregateError, which is then thrown.
+	 * If no errors are caught, this method returns void.
 	 *
 	 * If any individual item *itself* throws an AggregateError, then its several errors are aggregated into the final thrown value.
 	 * In other words, the resulting AggregateError’s errors will not include any AggregateError objects.
@@ -222,7 +223,7 @@ export default class xjs_Array {
 	 * @throws {AggregateError} if one or more iterations throws an error
 	 */
 	static forEachAggregated<T>(array: readonly T[], callback: (item: T) => void): void {
-		const errors: Error[] = array.flatMap((it) => {
+		const errors: readonly Error[] = array.flatMap((it) => {
 			try {
 				callback(it);
 				return [];
@@ -239,6 +240,76 @@ export default class xjs_Array {
 				? errors[0]
 				: new AggregateError(errors, errors.map((err) => err.message).join('\n'))
 			;
+		};
+	}
+
+	/**
+	 * Map an array using a callback, aggregating any errors caught.
+	 *
+	 * Instead of throwing on the first error and stopping iteration, as {@link Array#map} would do,
+	 * this method continues performing the callback on the rest of the array until all items are done.
+	 * If only one error was caught, then that error is simply rethrown.
+	 * However, if more errors were caught, they are collected into a single AggregateError, which is then thrown.
+	 * If no errors are caught, this method returns the usual map.
+	 *
+	 * If any individual item *itself* throws an AggregateError, then its several errors are aggregated into the final thrown value.
+	 * In other words, the resulting AggregateError’s errors will not include any AggregateError objects.
+	 *
+	 * @example
+	 * xjs.Array.mapAggregated<number>([1, 2, 3, 4], (n) => {
+	 * 	if (n % 2 === 1) {
+	 * 		throw new Error(`${ n } is odd.`);
+	 * 	} else {
+	 * 		return n / 2;
+	 * 	};
+	 * });
+	 * // Expected thrown error:
+	 * AggregateError {
+	 * 	errors: [
+	 * 		Error { message: "1 is odd." },
+	 * 		Error { message: "3 is odd." },
+	 * 	]
+	 * }
+	 *
+	 * xjs.Array.mapAggregated<number>([2, 4, 6], (n) => {
+	 * 	if (n % 2 === 1) {
+	 * 		throw new Error(`${ n } is odd.`);
+	 * 	} else {
+	 * 		return n / 2;
+	 * 	};
+	 * });
+	 * // Expected return value:
+	 * [1, 2, 3]
+	 * @typeparam T the type of items in the array
+	 * @typeparam U the type of items returned by the mapping callback
+	 * @param array the array of items
+	 * @param callback the function to call on each item
+	 * @throws {AggregateError} if one or more iterations throws an error
+	 */
+	static mapAggregated<T, U>(array: readonly T[], callback: (item: T) => U): U[] {
+		const successes: U[]     = [];
+		const errors:    Error[] = [];
+		array.forEach((it) => {
+			let success: U;
+			try {
+				success = callback(it);
+			} catch (err) {
+				errors.push(...(
+					(err instanceof AggregateError) ? err.errors :
+					(err instanceof Error) ? [err] :
+					[new Error(`${ err }`)]
+				));
+				return;
+			};
+			successes.push(success);
+		});
+		if (errors.length) {
+			throw (errors.length === 1)
+				? errors[0]
+				: new AggregateError(errors, errors.map((err) => err.message).join('\n'))
+			;
+		} else {
+			return successes;
 		};
 	}
 
