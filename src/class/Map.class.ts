@@ -111,6 +111,18 @@ export default class xjs_Map {
 		return new Map([...map].map(([key, value]) => [callback.call(this_arg, value, key, map), value] as [T, V]))
 	}
 
+	/**
+	 * Set, then return, a new value.
+	 * @param   map   the map to set
+	 * @param   key   the key
+	 * @param   value the value
+	 * @returns       the value
+	 */
+	static tee<K, V>(map: Map<K, V>, key: K, value: V): V {
+		map.set(key, value);
+		return value;
+	}
+
 
 
 	private constructor() {}
