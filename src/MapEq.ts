@@ -29,7 +29,7 @@ export class MapEq<K, V> extends Map<K, V> {
 	 * @overrides Map
 	 */
 	has(key: K): boolean {
-		return super.has(key) || [...this].some(([k, _]) => this.comparator.call(null, k, key));
+		return super.has(key) || [...this.keys()].some((k) => this.comparator.call(null, k, key));
 	}
 
 	/**
@@ -45,6 +45,11 @@ export class MapEq<K, V> extends Map<K, V> {
 	 * @overrides Map
 	 */
 	set(key: K, value: V): this {
-		return (!this.has(key)) ? super.set(key, value) : this;
+		if (!this.has(key)) {
+			return super.set(key, value);
+		} else {
+			const foundkey: K | undefined = [...this.keys()].find((k) => this.comparator.call(null, k, key));
+			return super.set((foundkey === void 0) ? key : foundkey, value);
+		}
 	}
 }
