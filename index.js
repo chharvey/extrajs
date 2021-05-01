@@ -12,6 +12,8 @@ module.exports = {
 	Set     : require('./dist/class/Set.class.js'    ).default,
 	String  : require('./dist/class/String.class.js' ).default,
 
+	MapEq: require('./dist/MapEq.js').MapEq,
+
 	NumericType: Number_module.NumericType,
 	IndexOutOfBoundsError: require('./dist/class/IndexOutOfBoundsError.class.js').default,
 	NaNError: require('./dist/class/NaNError.class.js').default,
