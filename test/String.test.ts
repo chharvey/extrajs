@@ -1,5 +1,8 @@
 import * as assert from 'assert'
 import xjs_String from '../src/class/String.class'
+import type {
+	TemplateTag,
+} from '../src/class/String.class';
 
 describe('xjs.String', () => {
 	describe('.stringify(unknown): string', () => {
@@ -14,4 +17,18 @@ describe('xjs.String', () => {
 			assert.strictEqual(xjs_String.stringify(undefined)         , 'undefined')
 		})
 	})
+
+	describe('.dedent', () => {
+		it('type-checks.', () => {
+			xjs_String.dedent as TemplateTag<string>;
+		});
+		it('detects the first number of tabs.', () => {
+			assert.strictEqual(xjs_String.dedent`
+			this will be
+	dedented by
+		up to
+				3 tabs
+			`, '\nthis will be\ndedented by\nup to\n\t3 tabs\n');
+		});
+	});
 })
