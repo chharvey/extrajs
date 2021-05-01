@@ -13,6 +13,8 @@ export { default as Promise } from './src/class/Promise.class'
 export { default as Set    } from './src/class/Set.class'
 export { default as String } from './src/class/String.class'
 
+export {MapEq} from './src/MapEq';
+
 export {NumericType} from './src/class/Number.class'
 export {TemplateTag} from './src/class/String.class'
 
