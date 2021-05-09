@@ -8,9 +8,10 @@ const typescript = require('gulp-typescript')
 const tsconfig      = require('./tsconfig.json')
 
 function dist() {
-  return gulp.src('./src/class/*.class.ts')
-    .pipe(typescript(tsconfig.compilerOptions))
-    .pipe(gulp.dest('./dist/class/'))
+	return gulp.src('./src/**/*.ts')
+		.pipe(typescript(tsconfig.compilerOptions))
+		.pipe(gulp.dest('./dist/'))
+	;
 }
 
 function test() {

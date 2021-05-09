@@ -1,17 +1,7 @@
 {
   "name": "extrajs",
-  "version": "0.21.1",
+  "version": "0.22.0",
   "description": "Javascript helpers for lazy people.",
-  "main": "index.js",
-  "scripts": {
-    "test": "gulp test",
-    "build": "rm -rf ./dist/ ./docs/api/ && gulp build",
-    "prepublishOnly": "npm run build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/chharvey/extrajs.git"
-  },
   "keywords": [
     "javascript",
     "javascript-library",
@@ -19,14 +9,31 @@
     "utility",
     "native"
   ],
-  "author": "Chris Harvey <chrisharvey2pi@gmail.com> (https://chharvey.github.io/)",
-  "license": "MIT",
+  "homepage": "https://github.com/chharvey/extrajs#readme",
   "bugs": {
     "url": "https://github.com/chharvey/extrajs/issues"
   },
-  "homepage": "https://github.com/chharvey/extrajs#readme",
-  "engines": {
-    "node": ">=14.6"
+  "license": "MIT",
+  "author": "Chris Harvey <chrisharvey2pi@gmail.com> (https://chharvey.github.io/)",
+  "files": [
+    "dist/",
+    "src/",
+    "index.js",
+    "index.ts",
+    "tsconfig.json"
+  ],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chharvey/extrajs.git"
+  },
+  "scripts": {
+    "test": "gulp test",
+    "build": "rm -rf ./dist/ ./docs/api/ && gulp build",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@types/node": "^14.0.23"
   },
   "devDependencies": {
     "@types/mocha": "^8.0.0",
@@ -41,7 +48,7 @@
   "peerDependencies": {
     "typescript": ">=3.8.0"
   },
-  "dependencies": {
-    "@types/node": "^14.0.23"
+  "engines": {
+    "node": ">=14.6"
   }
 }
