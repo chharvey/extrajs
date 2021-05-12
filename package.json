@@ -30,7 +30,8 @@
   "scripts": {
     "dist": "tsc",
     "test": "mocha -r ts-node/register ./test/*.ts",
-    "build": "rm -rf ./dist/ ./docs/api/ && npm run dist && npm run test && gulp build",
+    "docs": "typedoc",
+    "build": "rm -rf ./dist/ ./docs/api/ && npm run dist && npm run test && npm run docs",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
