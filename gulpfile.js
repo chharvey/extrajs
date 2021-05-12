@@ -1,9 +1,7 @@
 const gulp  = require('gulp')
 const mocha      = require('gulp-mocha')
 const typedoc    = require('gulp-typedoc')
-const typescript = require('gulp-typescript')
 // require('typedoc')    // DO NOT REMOVE … peerDependency of `gulp-typedoc`
-// require('typescript') // DO NOT REMOVE … peerDependency of `gulp-typescript`
 
 const tsconfig      = require('./tsconfig.json')
 
