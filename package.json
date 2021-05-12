@@ -29,8 +29,8 @@
   },
   "scripts": {
     "dist": "tsc",
-    "test": "gulp test",
-    "build": "rm -rf ./dist/ ./docs/api/ && npm run dist && gulp build",
+    "test": "mocha -r ts-node/register ./test/*.ts",
+    "build": "rm -rf ./dist/ ./docs/api/ && npm run dist && npm run test && gulp build",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
@@ -41,6 +41,7 @@
     "gulp": "^4.0.0",
     "gulp-mocha": "^8.0.0",
     "gulp-typedoc": "^3.0.0",
+    "mocha": "^8.4.0",
     "ts-node": "^9.0.0",
     "typedoc": "^0.20.34",
     "typescript": "~4.2.0"
