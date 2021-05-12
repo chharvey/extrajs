@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"outDir": "./dist/",
 		"target"            : "ES2020",
 		"module"            : "commonjs",
 		"strict"            : true,
@@ -8,6 +9,7 @@
 		"removeComments"    : true,
 		"noEmitOnError"     : true
 	},
+	"include": ["./src/**/*.ts"],
 	"typedocOptions": {
 		"name":        "extrajs",
 		"entryPoints": "./index.ts",

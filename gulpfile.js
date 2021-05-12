@@ -7,13 +7,6 @@ const typescript = require('gulp-typescript')
 
 const tsconfig      = require('./tsconfig.json')
 
-function dist() {
-	return gulp.src('./src/**/*.ts')
-		.pipe(typescript(tsconfig.compilerOptions))
-		.pipe(gulp.dest('./dist/'))
-	;
-}
-
 function test() {
 	return gulp.src('./test/*.ts')
 		.pipe(mocha({
@@ -27,13 +20,11 @@ function docs() {
 }
 
 const build = gulp.parallel(
-	dist,
 	test,
 	docs,
 )
 
 module.exports = {
-	dist,
 	test,
 	docs,
 	build,
