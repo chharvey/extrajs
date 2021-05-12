@@ -39,7 +39,6 @@
   "devDependencies": {
     "@types/mocha": "^8.0.0",
     "gulp": "^4.0.0",
-    "gulp-mocha": "^8.0.0",
     "gulp-typedoc": "^3.0.0",
     "mocha": "^8.4.0",
     "ts-node": "^9.0.0",

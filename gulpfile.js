@@ -1,5 +1,4 @@
 const gulp  = require('gulp')
-const mocha      = require('gulp-mocha')
 const typedoc    = require('gulp-typedoc')
 // require('typedoc')    // DO NOT REMOVE … peerDependency of `gulp-typedoc`
 
