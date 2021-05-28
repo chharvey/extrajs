@@ -17,9 +17,8 @@
   "author": "Chris Harvey <chrisharvey2pi@gmail.com> (https://chharvey.github.io/)",
   "files": [
     "dist/",
-    "src/",
     "index.js",
-    "index.ts",
+    "index.d.ts",
     "tsconfig.json"
   ],
   "main": "index.js",
