@@ -31,11 +31,9 @@
     "build": "rm -rf ./dist/ ./docs/api/ && npm run dist && npm run test && npm run docs",
     "prepublishOnly": "npm run build"
   },
-  "dependencies": {
-    "@types/node": "^15.0.0"
-  },
   "devDependencies": {
     "@types/mocha": "^8.0.0",
+    "@types/node": "^15.0.0",
     "mocha": "^8.4.0",
     "ts-node": "^9.0.0",
     "typedoc": "^0.20.34",
