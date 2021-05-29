@@ -16,8 +16,8 @@
   "license": "MIT",
   "author": "Chris Harvey <chrisharvey2pi@gmail.com> (https://chharvey.github.io/)",
   "files": [
-    "dist/",
-    "tsconfig.json"
+    "./dist/",
+    "./tsconfig.json"
   ],
   "main": "./dist/index.js",
   "repository": {
