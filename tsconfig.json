@@ -1,16 +1,22 @@
 {
 	"compilerOptions": {
-		"target"            : "ESnext",
-		"module"            : "commonjs",
-		"strict"            : true,
+		// Project Options
+		"declaration":    true,
+		"module":         "commonjs",
+		"outDir":         "./dist/",
+		"target":         "ESnext",
+		// Strict Checks
+		"strict": true,
+		// Linter Checks
+		"noImplicitReturns": true,
+		// Advanced
 		"importsNotUsedAsValues": "error",
-		"noImplicitReturns" : true,
-		"removeComments"    : true,
-		"noEmitOnError"     : true
+		"noEmitOnError":          true,
 	},
+	"include": ["./src/"],
 	"typedocOptions": {
 		"name":        "extrajs",
-		"entryPoints": "./index.ts",
-		"out":         "./docs/api/"
-	}
+		"entryPoints": ["./src/index.ts"],
+		"out":         "./docs/api/",
+	},
 }

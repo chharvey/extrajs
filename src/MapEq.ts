@@ -1,11 +1,13 @@
 /**
  * A Map that compares keys via the provided comparator function.
  * Keys that are “equal” (as defined by the comparator) are considered the same key.
+ * @typeParam K the type of the keys in this Map
+ * @typeParam V the type of the values in this Map
  * @example
  * const my_map: MapEq<{id: number}, boolean> = new MapEq((a, b) => a.id === b.id);
  * const key: {id: number} = {id: 42};
- * my_map.set(key,      true);  assert(my_map.get({id: 42}) === true);
- * my_map.set({id: 42}, false); assert(my_map.get(key)      === false);
+ * my_map.set(key,      true);  assert.strictEqual(my_map.get({id: 42}), true);
+ * my_map.set({id: 42}, false); assert.strictEqual(my_map.get(key),      false);
  * assert(my_map.size === 1);
  */
 export class MapEq<K, V> extends Map<K, V> {
