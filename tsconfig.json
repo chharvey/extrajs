@@ -8,10 +8,14 @@
 		// Strict Checks
 		"strict": true,
 		// Linter Checks
-		"noImplicitReturns": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns":  true,
+		"noUnusedLocals":     true,
+		"noUnusedParameters": true,
 		// Advanced
 		"importsNotUsedAsValues": "error",
 		"noEmitOnError":          true,
+		"skipLibCheck":           true,
 	},
 	"include": ["./src/"],
 	"typedocOptions": {
