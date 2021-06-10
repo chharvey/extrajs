@@ -1,6 +1,6 @@
 {
   "name": "extrajs",
-  "version": "0.23.0",
+  "version": "0.23.1",
   "description": "Javascript helpers for lazy people.",
   "keywords": [
     "javascript",
@@ -16,10 +16,10 @@
   "license": "MIT",
   "author": "Chris Harvey <chrisharvey2pi@gmail.com> (https://chharvey.github.io/)",
   "files": [
-    "./dist/",
-    "./tsconfig.json"
+    "dist/",
+    "tsconfig.json"
   ],
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chharvey/extrajs.git"
