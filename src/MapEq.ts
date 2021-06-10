@@ -28,25 +28,22 @@ export class MapEq<K, V> extends Map<K, V> {
 
 	/**
 	 * @inheritdoc
-	 * @overrides Map
 	 */
-	has(key: K): boolean {
+	override has(key: K): boolean {
 		return super.has(key) || [...this.keys()].some((k) => this.comparator.call(null, k, key));
 	}
 
 	/**
 	 * @inheritdoc
-	 * @overrides Map
 	 */
-	get(key: K): V | undefined {
+	override get(key: K): V | undefined {
 		return super.get(key) || [...this].find(([k, _]) => this.comparator.call(null, k, key))?.[1];
 	}
 
 	/**
 	 * @inheritdoc
-	 * @overrides Map
 	 */
-	set(key: K, value: V): this {
+	override set(key: K, value: V): this {
 		if (!this.has(key)) {
 			return super.set(key, value);
 		} else {
