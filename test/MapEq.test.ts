@@ -26,4 +26,11 @@ describe('MapEq', () => {
 			assert.strictEqual(my_map.size, 1);
 		});
 	});
+	describe('#delete', () => {
+		it('checks uniqueness via comparator.', () => {
+			my_map.delete({id: 42});
+			assert.ok(!my_map.has(key));
+			assert.strictEqual(my_map.size, 0);
+		});
+	});
 });

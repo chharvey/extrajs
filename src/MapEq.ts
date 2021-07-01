@@ -44,11 +44,15 @@ export class MapEq<K, V> extends Map<K, V> {
 	 * @inheritdoc
 	 */
 	override set(key: K, value: V): this {
-		if (!this.has(key)) {
-			return super.set(key, value);
-		} else {
-			const foundkey: K | undefined = [...this.keys()].find((k) => this.comparator.call(null, k, key));
-			return super.set((foundkey === void 0) ? key : foundkey, value);
-		}
+		const foundkey: K | undefined = [...this.keys()].find((k) => this.comparator.call(null, k, key));
+		return super.set((foundkey === void 0) ? key : foundkey, value);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	override delete(key: K): boolean {
+		const foundkey: K | undefined = [...this.keys()].find((k) => this.comparator.call(null, k, key));
+		return super.delete((foundkey === void 0) ? key : foundkey);
 	}
 }
