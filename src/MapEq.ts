@@ -23,7 +23,10 @@ export class MapEq<K, V> extends Map<K, V> {
 		private readonly comparator: (a: K, b: K) => boolean = (a, b) => a === b || Object.is(a, b),
 		items: readonly (readonly [K, V])[] = [],
 	) {
-		super(items);
+		super(); // cannot call `super(items)` because it internally calls `this.has`
+		items.forEach(([key, value]) => {
+			this.set(key, value);
+		});
 	}
 
 	/**
@@ -44,11 +47,15 @@ export class MapEq<K, V> extends Map<K, V> {
 	 * @inheritdoc
 	 */
 	override set(key: K, value: V): this {
-		if (!this.has(key)) {
-			return super.set(key, value);
-		} else {
-			const foundkey: K | undefined = [...this.keys()].find((k) => this.comparator.call(null, k, key));
-			return super.set((foundkey === void 0) ? key : foundkey, value);
-		}
+		const foundkey: K | undefined = [...this.keys()].find((k) => this.comparator.call(null, k, key));
+		return super.set((foundkey === void 0) ? key : foundkey, value);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	override delete(key: K): boolean {
+		const foundkey: K | undefined = [...this.keys()].find((k) => this.comparator.call(null, k, key));
+		return super.delete((foundkey === void 0) ? key : foundkey);
 	}
 }
