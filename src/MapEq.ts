@@ -23,7 +23,10 @@ export class MapEq<K, V> extends Map<K, V> {
 		private readonly comparator: (a: K, b: K) => boolean = (a, b) => a === b || Object.is(a, b),
 		items: readonly (readonly [K, V])[] = [],
 	) {
-		super(items);
+		super(); // cannot call `super(items)` because it internally calls `this.has`
+		items.forEach(([key, value]) => {
+			this.set(key, value);
+		});
 	}
 
 	/**

@@ -9,6 +9,15 @@ describe('MapEq', () => {
 			[key, true],
 		]);
 	});
+	describe('.constructor', () => {
+		it('does not throw when given multiple pairs.', () => {
+			const newmap: MapEq<{id: number}, boolean> = new MapEq((a, b) => a.id === b.id, [
+				[{id: 42}, true],
+				[{id: 42}, false],
+			]); // assert does not throw
+			assert.strictEqual(newmap.size, 1);
+		});
+	});
 	describe('#has', () => {
 		it('checks uniqueness via comparator.', () => {
 			assert.ok(my_map.has({id: 42}));
