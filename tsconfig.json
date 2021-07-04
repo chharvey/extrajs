@@ -1,16 +1,26 @@
 {
 	"compilerOptions": {
-		"target"            : "ES2020",
-		"module"            : "commonjs",
-		"strict"            : true,
+		// Project Options
+		"declaration":    true,
+		"module":         "commonjs",
+		"outDir":         "./dist/",
+		"target":         "ES2020",
+		// Strict Checks
+		"strict": true,
+		// Linter Checks
+		"noImplicitOverride": true,
+		"noImplicitReturns":  true,
+		"noUnusedLocals":     true,
+		"noUnusedParameters": true,
+		// Advanced
 		"importsNotUsedAsValues": "error",
-		"noImplicitReturns" : true,
-		"removeComments"    : true,
-		"noEmitOnError"     : true
+		"noEmitOnError":          true,
+		"skipLibCheck":           true,
 	},
+	"include": ["./src/"],
 	"typedocOptions": {
 		"name":        "extrajs",
-		"entryPoints": "./index.ts",
-		"out":         "./docs/api/"
-	}
+		"entryPoints": ["./src/index.ts"],
+		"out":         "./docs/api/",
+	},
 }
