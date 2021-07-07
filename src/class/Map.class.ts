@@ -49,7 +49,7 @@ export default class xjs_Map {
 	 * @param   this_arg object to use as `this` when executing `predicate`
 	 * @returns a new map with the entries that pass the test; if no entries pass, an empty map is returned
 	 */
-	static filter<K, V>(map: Map<K, V>, predicate: (value: V, key: K, map: Map<K, V>) => boolean, this_arg: unknown = null): Map<K, V> {
+	static filter<K, V>(map: ReadonlyMap<K, V>, predicate: (value: V, key: K, map: ReadonlyMap<K, V>) => boolean, this_arg: unknown = null): Map<K, V> {
 		return new Map([...map].filter((entry) => predicate.call(this_arg, entry[1], entry[0], map)))
 	}
 
@@ -63,7 +63,7 @@ export default class xjs_Map {
 	 * @param   this_arg object to use as `this` when executing `predicate`
 	 * @returns the value found, or `null` if none is found
 	 */
-	static find<K, V>(map: Map<K, V>, predicate: (value: V, key: K, map: Map<K, V>) => boolean, this_arg: unknown = null): V|null {
+	static find<K, V>(map: ReadonlyMap<K, V>, predicate: (value: V, key: K, map: ReadonlyMap<K, V>) => boolean, this_arg: unknown = null): V | null {
 		return [...xjs_Map.filter(map, predicate, this_arg)].map((entry) => entry[1])[0] || null
 	}
 
@@ -77,7 +77,7 @@ export default class xjs_Map {
 	 * @param   this_arg object to use as `this` when executing `predicate`
 	 * @returns the key found, or `null` if none is found
 	 */
-	static findKey<K, V>(map: Map<K, V>, predicate: (key: K, index: number, map: Map<K, V>) => boolean, this_arg: unknown = null): K|null {
+	static findKey<K, V>(map: ReadonlyMap<K, V>, predicate: (key: K, index: number, map: ReadonlyMap<K, V>) => boolean, this_arg: unknown = null): K | null {
 		return [...map.keys()].find((key, i) => predicate.call(this_arg, key, i, map)) || null
 	}
 
@@ -92,7 +92,7 @@ export default class xjs_Map {
 	 * @param   this_arg object to use as `this` when executing `callback`
 	 * @returns a new Map with the same keys and transformed values obtained from `callback`
 	 */
-	static mapValues<K, V, T>(map: Map<K, V>, callback: (value: V, key: K, map: Map<K, V>) => T, this_arg: unknown = null): Map<K, T> {
+	static mapValues<K, V, T>(map: ReadonlyMap<K, V>, callback: (value: V, key: K, map: ReadonlyMap<K, V>) => T, this_arg: unknown = null): Map<K, T> {
 		return new Map([...map].map(([key, value]) => [key, callback.call(this_arg, value, key, map)] as [K, T]))
 	}
 
@@ -107,7 +107,7 @@ export default class xjs_Map {
 	 * @param   this_arg object to use as `this` when executing `callback`
 	 * @returns a new Map with transformed keys obtained from `callback` and the same values
 	 */
-	static mapKeys<K, V, T>(map: Map<K, V>, callback: (value: V, key: K, map: Map<K, V>) => T, this_arg: unknown = null): Map<T, V> {
+	static mapKeys<K, V, T>(map: ReadonlyMap<K, V>, callback: (value: V, key: K, map: ReadonlyMap<K, V>) => T, this_arg: unknown = null): Map<T, V> {
 		return new Map([...map].map(([key, value]) => [callback.call(this_arg, value, key, map), value] as [T, V]))
 	}
 
