@@ -51,4 +51,34 @@ export class SetEq<T> extends Set<T> {
 		const foundel: T | undefined = [...this].find((e) => this.comparator.call(null, e, el));
 		return super.delete((foundel === void 0) ? el : foundel);
 	}
+
+	/**
+	 * Return the intersection (conjunction) of this set with the argument.
+	 * @see xjs.Set.intersection
+	 * @param   that the other set
+	 * @returns a new SetEq containing the elements present only in both `a` and `b`
+	 */
+	intersection(that: ReadonlySet<T>): SetEq<T> {
+		const returned: SetEq<T> = new SetEq<T>(this.comparator);
+		that.forEach((el) => {
+			if (this.has(el)) {
+				returned.add(el);
+			}
+		});
+		return returned;
+	}
+
+	/**
+	 * Return the union (disjunction) of this set with the argument.
+	 * @see xjs.Set.union
+	 * @param   that the other set
+	 * @returns a new SetEq containing the elements present in either `this` or `that` (or both)
+	 */
+	union(that: ReadonlySet<T>): SetEq<T> {
+		const returned: SetEq<T> = new SetEq<T>(this.comparator, [...this]);
+		that.forEach((el) => {
+			returned.add(el);
+		});
+		return returned
+	}
 }
