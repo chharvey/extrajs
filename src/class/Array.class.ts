@@ -225,7 +225,7 @@ export default class xjs_Array {
 	static forEachAggregated<T>(array: readonly T[], callback: (item: T) => void): void {
 		const errors: readonly Error[] = array.flatMap((it) => {
 			try {
-				callback(it);
+				callback.call(null, it);
 				return [];
 			} catch (err) {
 				return (
@@ -292,7 +292,7 @@ export default class xjs_Array {
 		array.forEach((it) => {
 			let success: U;
 			try {
-				success = callback(it);
+				success = callback.call(null, it);
 			} catch (err) {
 				errors.push(...(
 					(err instanceof AggregateError) ? err.errors :
