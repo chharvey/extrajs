@@ -143,7 +143,7 @@ describe('xjs.Array', () => {
 				return true;
 			});
 		});
-		it('spreads any AggregateError errors.', () => {
+		it('preserves any nested AggregateError errors.', () => {
 			assert.throws(() => xjs_Array.forEachAggregated([1, 2, 3, 4, 5, 6, 7, 8], (n) => {
 				if (n % 2 === 0) {
 					throw (n % 4 === 0)
@@ -156,17 +156,20 @@ describe('xjs.Array', () => {
 				};
 			}), (err) => {
 				assert.ok(err instanceof AggregateError);
-				assert.strictEqual(err.errors.length, 6);
-				assert.deepStrictEqual(err.errors.map((er) => {
-					assert.ok(er instanceof RangeError);
-					return er.message;
+				assert.strictEqual(err.errors.length, 4);
+				assert.deepStrictEqual(err.errors.map((er, i) => {
+					if ([0, 2].includes(i)) {
+						assert.ok(er instanceof RangeError);
+						return er.message;
+					} else {
+						assert.ok(er instanceof AggregateError);
+						return er.errors.map((e) => e.message);
+					}
 				}), [
 					'2 is even.',
-					'4 is even.',
-					'4 is a multiple of 4.',
+					['4 is even.', '4 is a multiple of 4.'],
 					'6 is even.',
-					'8 is even.',
-					'8 is a multiple of 4.',
+					['8 is even.', '8 is a multiple of 4.'],
 				]);
 				return true;
 			});
@@ -211,7 +214,7 @@ describe('xjs.Array', () => {
 				return true;
 			});
 		});
-		it('spreads any AggregateError errors.', () => {
+		it('preserves any nested AggregateError errors.', () => {
 			assert.throws(() => xjs_Array.mapAggregated([1, 2, 3, 4, 5, 6, 7, 8], (n) => {
 				if (n % 2 === 0) {
 					throw (n % 4 === 0)
@@ -225,17 +228,20 @@ describe('xjs.Array', () => {
 				return n * 2;
 			}), (err) => {
 				assert.ok(err instanceof AggregateError);
-				assert.strictEqual(err.errors.length, 6);
-				assert.deepStrictEqual(err.errors.map((er) => {
-					assert.ok(er instanceof RangeError);
-					return er.message;
+				assert.strictEqual(err.errors.length, 4);
+				assert.deepStrictEqual(err.errors.map((er, i) => {
+					if ([0, 2].includes(i)) {
+						assert.ok(er instanceof RangeError);
+						return er.message;
+					} else {
+						assert.ok(er instanceof AggregateError);
+						return er.errors.map((e) => e.message);
+					}
 				}), [
 					'2 is even.',
-					'4 is even.',
-					'4 is a multiple of 4.',
+					['4 is even.', '4 is a multiple of 4.'],
 					'6 is even.',
-					'8 is even.',
-					'8 is a multiple of 4.',
+					['8 is even.', '8 is a multiple of 4.'],
 				]);
 				return true;
 			});

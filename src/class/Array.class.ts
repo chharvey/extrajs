@@ -201,9 +201,6 @@ export default class xjs_Array {
 	 * However, if more errors were caught, they are collected into a single AggregateError, which is then thrown.
 	 * If no errors are caught, this method returns void.
 	 *
-	 * If any individual item *itself* throws an AggregateError, then its several errors are aggregated into the final thrown value.
-	 * In other words, the resulting AggregateError’s errors will not include any AggregateError objects.
-	 *
 	 * @example
 	 * xjs.Array.forEachAggregated<number>([1, 2, 3, 4], (n) => {
 	 * 	if (n % 2 === 0) {
@@ -217,30 +214,26 @@ export default class xjs_Array {
 	 * 		Error { message: "4 is even." },
 	 * 	]
 	 * }
-	 * @typeparam T the type of items in the array
-	 * @param array the array of items
-	 * @param callback the function to call on each item
-	 * @throws {AggregateError} if one or more iterations throws an error
+	 * @typeparam T                the type of items in the array
+	 * @param     array            the array of items
+	 * @param     callback         the function to call on each item
+	 * @throws    {AggregateError} if two or more iterations throws an error
+	 * @throws    {Error}          if one iteration throws an error
 	 */
 	static forEachAggregated<T>(array: readonly T[], callback: (item: T) => void): void {
-		const errors: readonly Error[] = array.flatMap((it) => {
+		const errors: readonly Error[] = array.map((it) => {
 			try {
 				callback.call(null, it);
-				return [];
+				return null;
 			} catch (err) {
-				return (
-					(err instanceof AggregateError) ? err.errors :
-					(err instanceof Error) ? [err] :
-					[new Error(`${ err }`)]
-				);
-			};
-		});
+				return (err instanceof Error) ? err : new Error(`${ err }`);
+			}
+		}).filter((e): e is Error => e instanceof Error);
 		if (errors.length) {
 			throw (errors.length === 1)
 				? errors[0]
-				: new AggregateError(errors, errors.map((err) => err.message).join('\n'))
-			;
-		};
+				: new AggregateError(errors, errors.map((err) => err.message).join('\n'));
+		}
 	}
 
 	/**
@@ -251,9 +244,6 @@ export default class xjs_Array {
 	 * If only one error was caught, then that error is simply rethrown.
 	 * However, if more errors were caught, they are collected into a single AggregateError, which is then thrown.
 	 * If no errors are caught, this method returns the usual map.
-	 *
-	 * If any individual item *itself* throws an AggregateError, then its several errors are aggregated into the final thrown value.
-	 * In other words, the resulting AggregateError’s errors will not include any AggregateError objects.
 	 *
 	 * @example
 	 * xjs.Array.mapAggregated<number>([1, 2, 3, 4], (n) => {
@@ -280,37 +270,35 @@ export default class xjs_Array {
 	 * });
 	 * // Expected return value:
 	 * [1, 2, 3]
-	 * @typeparam T the type of items in the array
-	 * @typeparam U the type of items returned by the mapping callback
-	 * @param array the array of items
-	 * @param callback the function to call on each item
-	 * @throws {AggregateError} if one or more iterations throws an error
+	 * @typeparam T                the type of items in the array
+	 * @typeparam U                the type of items returned by the mapping callback
+	 * @param     array            the array of items
+	 * @param     callback         the function to call on each item
+	 * @returns                    the array of mapped items
+	 * @throws    {AggregateError} if two or more iterations throws an error
+	 * @throws    {Error}          if one iteration throws an error
 	 */
 	static mapAggregated<T, U>(array: readonly T[], callback: (item: T) => U): U[] {
 		const successes: U[]     = [];
 		const errors:    Error[] = [];
+		// NOTE: We don’t want to map and filter, because some successes might be instances of Error.
 		array.forEach((it) => {
 			let success: U;
 			try {
 				success = callback.call(null, it);
 			} catch (err) {
-				errors.push(...(
-					(err instanceof AggregateError) ? err.errors :
-					(err instanceof Error) ? [err] :
-					[new Error(`${ err }`)]
-				));
+				errors.push((err instanceof Error) ? err : new Error(`${ err }`));
 				return;
-			};
-			successes.push(success);
+			}
+			successes.push(success); // leave out of the `try` block in case *this* call throws
 		});
 		if (errors.length) {
 			throw (errors.length === 1)
 				? errors[0]
-				: new AggregateError(errors, errors.map((err) => err.message).join('\n'))
-			;
+				: new AggregateError(errors, errors.map((err) => err.message).join('\n'));
 		} else {
 			return successes;
-		};
+		}
 	}
 
   /**
