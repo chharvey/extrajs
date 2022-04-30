@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import xjs_String from '../src/class/String.class.js';
+import {xjs_String} from '../src/class/String.class.js';
 import type {
 	TemplateTag,
 } from '../src/class/String.class.js';

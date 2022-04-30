@@ -1,5 +1,5 @@
-import xjs_Object from './Object.class.js';
-import xjs_Array from './Array.class.js';
+import {xjs_Object} from './Object.class.js';
+import {xjs_Array} from './Array.class.js';
 
 
 /**
@@ -7,7 +7,7 @@ import xjs_Array from './Array.class.js';
  *
  * Does not extend the native Set class.
  */
-export default class xjs_Set {
+export class xjs_Set {
 	/**
 	 * Test whether two sets have “the same” elements.
 	 *

@@ -1,7 +1,7 @@
 import * as assert from 'assert'
 
-import NaNError from './NaNError.class.js';
-import xjs_Object from './Object.class.js';
+import {NaNError} from './NaNError.class.js';
+import {xjs_Object} from './Object.class.js';
 
 
 export enum NumericType {
@@ -23,7 +23,7 @@ export enum NumericType {
  *
  * Does not extend the native Number class.
  */
-export default class xjs_Number {
+export class xjs_Number {
 	/**
 	 * An immutable RegExp instance, representing a string in Number format.
 	 */

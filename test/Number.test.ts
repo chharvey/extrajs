@@ -1,6 +1,6 @@
 import * as assert from 'assert'
-import xjs_Number, {NumericType} from '../src/class/Number.class.js';
-import NaNError from '../src/class/NaNError.class.js';
+import {xjs_Number, NumericType} from '../src/class/Number.class.js';
+import {NaNError} from '../src/class/NaNError.class.js';
 
 describe('xjs.Number', () => {
 	describe('.assertType(number, NumericType?): void', () => {

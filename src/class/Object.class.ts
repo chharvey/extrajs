@@ -1,4 +1,4 @@
-import xjs_Array from './Array.class.js';
+import {xjs_Array} from './Array.class.js';
 
 
 /**
@@ -6,7 +6,7 @@ import xjs_Array from './Array.class.js';
  *
  * Does not extend the native Object class.
  */
-export default class xjs_Object {
+export class xjs_Object {
 	/**
 	 * Test whether two things have “the same” properties.
 	 *

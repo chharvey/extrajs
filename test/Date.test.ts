@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import xjs_Date from '../src/class/Date.class.js';
+import {xjs_Date} from '../src/class/Date.class.js';
 
 describe('xjs.Date', () => {
 	describe('.format(Date, string): string', () => {

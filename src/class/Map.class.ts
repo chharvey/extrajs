@@ -1,4 +1,4 @@
-import xjs_Object from './Object.class.js';
+import {xjs_Object} from './Object.class.js';
 
 
 /**
@@ -6,7 +6,7 @@ import xjs_Object from './Object.class.js';
  *
  * Does not extend the native Map class.
  */
-export default class xjs_Map {
+export class xjs_Map {
 	/**
 	 * Test whether two maps have “the same” key–value pairs.
 	 *
