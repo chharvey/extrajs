@@ -1,5 +1,5 @@
-import xjs_Number, {NumericType} from './Number.class'
-import xjs_BigInt from './BigInt.class'
+import xjs_Number, {NumericType} from './Number.class.js';
+import xjs_BigInt from './BigInt.class.js';
 
 
 /**

@@ -1,6 +1,6 @@
 import * as assert from 'assert'
 
-import {NumericType} from './Number.class'
+import {NumericType} from './Number.class.js';
 
 
 /**

@@ -1,5 +1,5 @@
-import xjs_Object from './Object.class'
-import xjs_Array from './Array.class'
+import xjs_Object from './Object.class.js';
+import xjs_Array from './Array.class.js';
 
 
 /**

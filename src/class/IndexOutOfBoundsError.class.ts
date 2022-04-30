@@ -1,4 +1,4 @@
-import xjs_Number from './Number.class'
+import xjs_Number from './Number.class.js';
 
 /**
  * An error that is thrown when trying to access an object’s member

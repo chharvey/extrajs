@@ -1,7 +1,7 @@
 import * as assert from 'assert'
 
-import NaNError from './NaNError.class'
-import xjs_Object from './Object.class'
+import NaNError from './NaNError.class.js';
+import xjs_Object from './Object.class.js';
 
 
 export enum NumericType {

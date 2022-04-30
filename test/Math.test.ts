@@ -1,6 +1,6 @@
 import * as assert from 'assert'
-import xjs_Math from '../src/class/Math.class'
-import NaNError from '../src/class/NaNError.class'
+import xjs_Math from '../src/class/Math.class.js';
+import NaNError from '../src/class/NaNError.class.js';
 
 describe('xjs.Math', () => {
 	describe('.mod(number, number|bigint): number', () => {

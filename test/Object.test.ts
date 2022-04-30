@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import xjs_Object from '../src/class/Object.class'
+import xjs_Object from '../src/class/Object.class.js';
 
 describe('xjs.Object', () => {
 	describe('.is<T>(T, T, ((any, any) => boolean)?): boolean', () => {

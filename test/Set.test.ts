@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import xjs_Set from '../src/class/Set.class'
+import xjs_Set from '../src/class/Set.class.js';
 
 describe('xjs.Set', () => {
 	describe('.isSubsetOf<U, T extends U>(ReadonlySet<T>, ReadonlySet<U>, ((U, U) -> boolean)?): boolean', () => {

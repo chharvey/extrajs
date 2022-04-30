@@ -1,6 +1,6 @@
 import * as assert from 'assert'
-import xjs_BigInt from '../src/class/BigInt.class'
-import {NumericType} from '../src/class/Number.class'
+import xjs_BigInt from '../src/class/BigInt.class.js';
+import {NumericType} from '../src/class/Number.class.js';
 
 describe('xjs.BigInt', () => {
 	describe('.assertType(bigint, NumericType?): void', () => {

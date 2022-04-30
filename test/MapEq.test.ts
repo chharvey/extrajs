@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import {MapEq} from '../src/MapEq';
+import {MapEq} from '../src/MapEq.js';
 
 describe('MapEq', () => {
 	const key: {id: number} = {id: 42};
