@@ -1,12 +1,12 @@
-import xjs_Number, {NumericType} from './Number.class'
-import xjs_BigInt from './BigInt.class'
+import {xjs_Number, NumericType} from './Number.class.js';
+import {xjs_BigInt} from './BigInt.class.js';
 
 
 /**
  * @summary Additional static members for the native Math class.
  * @description Does not extend the native Math class.
  */
-export default class xjs_Math {
+export class xjs_Math {
 	/**
 	 * Test whether two numbers are approximately equal: closer together than some given interval of refinement.
 	 *

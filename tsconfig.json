@@ -1,21 +1,29 @@
 {
 	"compilerOptions": {
-		// Project Options
-		"declaration":    true,
-		"module":         "commonjs",
-		"outDir":         "./dist/",
-		"target":         "ES2020",
-		// Strict Checks
-		"strict": true,
-		// Linter Checks
-		"noImplicitOverride": true,
-		"noImplicitReturns":  true,
-		"noUnusedLocals":     true,
-		"noUnusedParameters": true,
-		// Advanced
+		// Type Checking
+		"exactOptionalPropertyTypes": true,
+		"noImplicitOverride":         true,
+		"noImplicitReturns":          true,
+		"noUnusedLocals":             true,
+		"noUnusedParameters":         true,
+		"strict":                     true,
+
+		// Modules
+		"module":           "ES2020",
+		"moduleResolution": "Node",
+
+		// Emit
+		"declaration":            true,
 		"importsNotUsedAsValues": "error",
 		"noEmitOnError":          true,
-		"skipLibCheck":           true,
+		"outDir":                 "./dist/",
+
+		// Language and Environment
+		"target":                  "ES2022",
+		"useDefineForClassFields": false,
+
+		// Completeness
+		"skipLibCheck": true,
 	},
 	"include": ["./src/"],
 	"typedocOptions": {

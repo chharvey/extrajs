@@ -3,7 +3,7 @@
  *
  * Does not extend the native Date class.
  */
-export default class xjs_Date {
+export class xjs_Date {
   /**
    * The list of full month names in English.
    */

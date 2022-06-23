@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import xjs_Array from '../src/class/Array.class'
+import {xjs_Array} from '../src/class/Array.class.js';
 
 describe('xjs.Array', () => {
 	describe('.is<T>(readonly T[], readonly T[], ((T, T) -> boolean)?): boolean', () => {

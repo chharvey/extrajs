@@ -1,8 +1,8 @@
 import * as assert from 'assert'
-import xjs_String from '../src/class/String.class'
+import {xjs_String} from '../src/class/String.class.js';
 import type {
 	TemplateTag,
-} from '../src/class/String.class';
+} from '../src/class/String.class.js';
 
 describe('xjs.String', () => {
 	describe('.stringify(unknown): string', () => {

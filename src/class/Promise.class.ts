@@ -3,7 +3,7 @@
  *
  * Does not extend the native Promise class.
  */
-export default class xjs_Promise {
+export class xjs_Promise {
 	/**
 	 * Creates a Promise that is resolved when any of the provided Promises are resolved,
 	 * or rejected with an array of reasons when all Promises are rejected.
