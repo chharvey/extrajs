@@ -123,6 +123,51 @@ export class xjs_Map {
 		return value;
 	}
 
+	/**
+	 * Return whether the provided key exists in the map.
+	 * @param  map        the map to check
+	 * @param  key        the key to check
+	 * @param  comparator a comparator function of keys
+	 * @return            Does the set have the given key?
+	 */
+	static has<K, V = K>(map: ReadonlyMap<K, V>, key: K, comparator: (a: K, b: K) => boolean): boolean {
+		return [...map.keys()].some((k) => comparator.call(null, k, key));
+	}
+
+	/**
+	 * Get the value of the provided key from the map.
+	 * @param  map        the map to check
+	 * @param  key        the key to check
+	 * @param  comparator a comparator function of keys
+	 * @return            the value corresponding to the key
+	 */
+	static get<K, V = K>(map: ReadonlyMap<K, V>, key: K, comparator: (a: K, b: K) => boolean): V | undefined {
+		return [...map].find(([k, _]) => comparator.call(null, k, key))?.[1];
+	}
+
+	/**
+	 * Set a value to the provided key in the map.
+	 * @param  map        the map to mutate
+	 * @param  key        the key to set
+	 * @param  comparator a comparator function of keys
+	 * @return            the mutated map
+	 */
+	static set<K, V = K>(map: Map<K, V>, key: K, value: V, comparator: (a: K, b: K) => boolean): Map<K, V> {
+		const foundkey: K | undefined = [...map.keys()].find((k) => comparator.call(null, k, key));
+		return map.set((foundkey === undefined) ? key : foundkey, value);
+	}
+
+	/**
+	 * Delete the provided key from the map.
+	 * @param  map        the map to mutate
+	 * @param  key        the key to delete
+	 * @param  comparator a comparator function of keys
+	 * @return            Was the map mutated?
+	 */
+	static delete<K, V = K>(map: Map<K, V>, key: K, comparator: (a: K, b: K) => boolean): boolean {
+		const foundkey: K | undefined = [...map.keys()].find((k) => comparator.call(null, k, key));
+		return map.delete((foundkey === undefined) ? key : foundkey);
+	}
 
 
 	private constructor() {}
