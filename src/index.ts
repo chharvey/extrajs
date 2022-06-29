@@ -15,8 +15,6 @@ export {xjs_Promise as Promise} from './class/Promise.class.js';
 export {xjs_Set     as Set}     from './class/Set.class.js';
 export {xjs_String  as String}  from './class/String.class.js';
 
-export {MapEq} from './MapEq.js';
-
 export {NumericType} from './class/Number.class.js';
 export {TemplateTag} from './class/String.class.js';
 

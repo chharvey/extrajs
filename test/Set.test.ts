@@ -35,4 +35,51 @@ describe('xjs.Set', () => {
 			assert.ok(!xjs_Set.isSupersetOf(x, new Set([0,1,2,0,3,4,5])))
 		})
 	})
+
+
+	context('Equality Methods', () => {
+		type El = {id: number};
+		const comparator = (a: El, b: El) => a.id === b.id;
+
+		describe('.has', () => {
+			it('tests elements by equality.', () => {
+				const el: El = {id: 42};
+				const my_set: Set<El> = new Set([el]);
+				assert.ok(!my_set.has({id: 42}), 'does not contain an equal (but non-identical) element.');
+				assert.ok(xjs_Set.has(my_set, {id: 42}, comparator), 'contains an equal element.');
+				assert.ok(xjs_Set.has(my_set, el, comparator), 'contains an identical element.');
+				assert.ok(!xjs_Set.has(my_set, {id: 43}, comparator), 'does not contain a non-equal and non-identical element.');
+			});
+		});
+
+		describe('.add', () => {
+			it('adds equivalent elements.', () => {
+				const el: El = {id: 42};
+				const my_set: Set<El> = new Set([el]);
+				my_set.add({id: 42});
+				assert.strictEqual(my_set.size, 2, 'adds an equal (but non-identical) element.');
+				xjs_Set.add(my_set, {id: 42}, comparator);
+				assert.strictEqual(my_set.size, 2, 'does not add an equal element.');
+				xjs_Set.add(my_set, el, comparator);
+				assert.strictEqual(my_set.size, 2, 'does not add an identical element.');
+				xjs_Set.add(my_set, {id: 43}, comparator);
+				assert.strictEqual(my_set.size, 3, 'adds a non-equal and non-identical element.');
+			});
+		});
+
+		describe('.delete', () => {
+			it('deletes equivalent elements.', () => {
+				const el: El = {id: 42};
+				const my_set: Set<El> = new Set([el, {id: 43}, {id: 44}]);
+				my_set.delete({id: 42});
+				assert.strictEqual(my_set.size, 3, 'does not delete an equal (but non-identical) element.');
+				xjs_Set.delete(my_set, {id: 43}, comparator);
+				assert.strictEqual(my_set.size, 2, 'deletes an equal element.');
+				xjs_Set.delete(my_set, el, comparator);
+				assert.strictEqual(my_set.size, 1, 'deletes an identical element.');
+				xjs_Set.delete(my_set, {id: 45}, comparator);
+				assert.strictEqual(my_set.size, 1, 'does not delete a non-equal and non-identical element.');
+			});
+		});
+	});
 })
