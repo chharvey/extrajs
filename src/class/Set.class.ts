@@ -103,11 +103,18 @@ export class xjs_Set {
 	 * @typeparam U - the type of elements in the `b`
 	 * @param   a the first set
 	 * @param   b the second set
+	 * @param   comparator a comparator function
 	 * @returns a new Set containing the elements present in either `a` or `b` (or both)
 	 */
-	static union<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>): Set<T|U> {
+	static union<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator?: (a: T | U, b: T | U) => boolean): Set<T|U> {
 		const returned: Set<T|U> = new Set(a)
-		b.forEach((el) => { returned.add(el) })
+		b.forEach((el) => {
+			if (!comparator) {
+				returned.add(el);
+			} else {
+				xjs_Set.add(returned, el, comparator);
+			}
+		});
 		return returned
 	}
 
@@ -118,12 +125,23 @@ export class xjs_Set {
 	 * @typeparam U - the type of elements in `b`
 	 * @param   a the first set
 	 * @param   b the second set
+	 * @param   comparator a comparator function
 	 * @returns a new Set containing the elements present only in both `a` and `b`
 	 */
-	static intersection<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>): Set<T&U>;
-	static intersection<T>(a: ReadonlySet<T>, b: ReadonlySet<T>): Set<T> {
-		const returned: Set<T> = new Set(a)
-		a.forEach((el) => { if (!b.has(el)) returned.delete(el) })
+	static intersection<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator?: (a: T & U, b: T & U) => boolean): Set<T&U>;
+	static intersection<T>(a: ReadonlySet<T>, b: ReadonlySet<T>, comparator?: (a: T, b: T) => boolean): Set<T> {
+		const returned: Set<T> = new Set();
+		b.forEach((el) => {
+			if (!comparator) {
+				if (a.has(el)) {
+					returned.add(el);
+				}
+			} else {
+				if (xjs_Set.has(a, el, comparator)) {
+					xjs_Set.add(returned, el, comparator);
+				}
+			}
+		});
 		return returned
 	}
 
@@ -134,12 +152,23 @@ export class xjs_Set {
 	 * @typeparam U - the type of elements in `b`
 	 * @param   a the first set
 	 * @param   b the second set
+	 * @param   comparator a comparator function
 	 * @returns a new Set containing the elements present only in `a`
 	 */
-	static difference<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>): Set<T>;
-	static difference<T>(a: ReadonlySet<T>, b: ReadonlySet<T>): Set<T> {
-		const returned: Set<T> = new Set(a)
-		a.forEach((el) => { if (b.has(el)) returned.delete(el) })
+	static difference<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator?: (a: T | U, b: T | U) => boolean): Set<T>;
+	static difference<T>(a: ReadonlySet<T>, b: ReadonlySet<T>, comparator?: (a: T, b: T) => boolean): Set<T> {
+		const returned: Set<T> = new Set();
+		a.forEach((el) => {
+			if (!comparator) {
+				if (!b.has(el)) {
+					returned.add(el);
+				}
+			} else {
+				if (!xjs_Set.has(b, el, comparator)) {
+					xjs_Set.add(returned, el, comparator);
+				}
+			}
+		});
 		return returned
 	}
 
@@ -154,10 +183,50 @@ export class xjs_Set {
 	 * @typeparam U - the type of elements in `b`
 	 * @param   a the first set
 	 * @param   b the second set
+	 * @param   comparator a comparator function
 	 * @returns a new Set containing the elements present only in `a` or only in `b`, but not both
 	 */
-	static symmetricDifference<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>): Set<T|U> {
-		return xjs_Set.difference(xjs_Set.union(a,b), xjs_Set.intersection(a,b))
+	static symmetricDifference<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator?: (a: T | U, b: T | U) => boolean): Set<T|U> {
+		return xjs_Set.difference(
+			xjs_Set.union(a, b, comparator),
+			xjs_Set.intersection(a, b, comparator),
+			comparator,
+		);
+	}
+
+	/**
+	 * Return whether the provided element exists in the set.
+	 * @param  set        the set to check
+	 * @param  element    the element to check
+	 * @param  comparator a comparator function
+	 * @return            Does the set have the given element?
+	 */
+	static has<T>(set: ReadonlySet<T>, element: T, comparator: (a: T, b: T) => boolean): boolean {
+		return [...set].some((e) => comparator.call(null, e, element));
+	}
+
+	/**
+	 * Add the provided element to the set.
+	 * @param  set        the set to mutate
+	 * @param  element    the element to add
+	 * @param  comparator a comparator function
+	 * @return            the mutated set
+	 */
+	static add<T>(set: Set<T>, element: T, comparator: (a: T, b: T) => boolean): Set<T> {
+		const foundel: boolean = [...set].some((e) => comparator.call(null, e, element));
+		return (!foundel) ? set.add(element) : set;
+	}
+
+	/**
+	 * Delete the provided element from the set.
+	 * @param  set        the set to mutate
+	 * @param  element    the element to delete
+	 * @param  comparator a comparator function
+	 * @return            Was the set mutated?
+	 */
+	static delete<T>(set: Set<T>, element: T, comparator: (a: T, b: T) => boolean): boolean {
+		const foundel: T | undefined = [...set].find((e) => comparator.call(null, e, element));
+		return set.delete((foundel === undefined) ? element : foundel);
 	}
 
 
