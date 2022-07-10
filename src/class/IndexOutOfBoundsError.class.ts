@@ -1,10 +1,10 @@
-import xjs_Number from './Number.class'
+import {xjs_Number} from './Number.class.js';
 
 /**
  * An error that is thrown when trying to access an object’s member
  * with an index that has not been set or is outside the domain of the object.
  */
-export default class IndexOutOfBoundsError extends RangeError {
+export class IndexOutOfBoundsError extends RangeError {
 	/**
 	 * Construct a new IndexOutOfBoundsError object.
 	 * @param message Optional. A human-readable description of the error.
