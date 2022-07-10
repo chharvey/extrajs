@@ -26,11 +26,10 @@ export class xjs_Array {
 	}
 
 	/**
-	 * @deprecated - WARNING{DEPRECATED} - use {@link xjs_Array.isConsecutiveSuperarrayOf} instead.
 	 * Test whether an array is a subarray of another array.
 	 *
 	 * This method acts like
-	 * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes|String#includes},
+	 * {@link String#includes},
 	 * testing whether
 	 * the elements in the smaller array appear consecutively and in the same order as in the larger array.
 	 * In other words, if `{@link xjs_Array.is}(larger.slice(a,b), smaller)` (for some integers a and b),
@@ -55,6 +54,7 @@ export class xjs_Array {
 	 * @param   predicate check the “sameness” of corresponding elements of `larger` and `smaller`
 	 * @returns is `smaller` a subarray of `larger`?
 	 * @throws  {RangeError} if the second array is larger than the first
+	 * @deprecated use {@link xjs_Array.isConsecutiveSuperarrayOf} instead.
 	 */
 	static contains<T>(larger: readonly T[], smaller: readonly T[], predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
 		if (smaller.length > larger.length) {
@@ -297,7 +297,6 @@ export class xjs_Array {
 	}
 
   /**
-   * @deprecated WARNING{DEPRECATED} - use interface `readonly T[]` instead
    * Deep freeze an array, and return the result.
    *
    * Shortcut of {@link xjs_Object.freezeDeep}, but for arrays.
@@ -305,6 +304,7 @@ export class xjs_Array {
    * *Note: This function is impure, modifying the given argument.*
    * @param   arr the array to freeze
    * @returns the given array, with everything frozen
+   * @deprecated use interface `readonly T[]` instead
    */
   static freezeDeep<T>(arr: readonly T[]): readonly T[] {
     Object.freeze(arr)
@@ -313,7 +313,7 @@ export class xjs_Array {
   }
 
   /**
-   * WARNING{EXPERIMENTAL}
+   * WARNING:EXPERIMENTAL
    * Deep clone an array, and return the result.
    *
    * Shortcut of {@link xjs_Object.cloneDeep}, but for arrays.
@@ -327,7 +327,6 @@ export class xjs_Array {
   }
 
   /**
-   * @deprecated WARNING{DEPRECATED} - use `[...new Set(arr)]` instead
    * Make a copy of an array, and then remove duplicate entries.
    *
    * "Duplicate entries" are entries that considered "the same" by
@@ -338,6 +337,7 @@ export class xjs_Array {
    * @param   arr an array to use
    * @param   predicate check the “sameness” of elements in the array
    * @returns a new array, with duplicates removed
+   * @deprecated use `[...new Set(arr)]` instead
    */
   static removeDuplicates<T>(arr: readonly T[], predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): T[] {
     const returned: T[] = arr.slice()

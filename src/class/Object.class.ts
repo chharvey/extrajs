@@ -215,7 +215,7 @@ export class xjs_Object {
 	}
 
   /**
-   * WARNING{EXPERIMENTAL}
+   * WARNING:EXPERIMENTAL
    * Return the name of an object’s constructing class or function.
    *
    * This method reveals the most specific class that the native `instanceof` operator would reveal.
@@ -232,7 +232,6 @@ export class xjs_Object {
   }
 
   /**
-   * @deprecated WARNING{DEPRECATED} - use interface `Readonly<T>` instead
    * Deep freeze an object, and return the result.
    *
    * *Note: This function is impure, modifying the given argument.*
@@ -245,6 +244,7 @@ export class xjs_Object {
 	 * @typeparam T - the type of `thing`
    * @param   thing any value to freeze
    * @returns the given value, with everything frozen
+   * @deprecated use interface `Readonly<T>` instead
    */
   static freezeDeep<T>(thing: Readonly<T>): Readonly<T> {
 		if (thing instanceof Array) return xjs_Array.freezeDeep(thing) as unknown as T // HACK https://stackoverflow.com/a/18736071/
@@ -258,7 +258,7 @@ export class xjs_Object {
   }
 
   /**
-   * WARNING{EXPERIMENTAL}
+   * WARNING:EXPERIMENTAL
    * Deep clone an object, and return the result.
    *
    * If an array or object is passed,
