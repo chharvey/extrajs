@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import xjs_Promise from '../src/class/Promise.class'
+import {xjs_Promise} from '../src/class/Promise.class.js';
 
 describe('xjs.Promise', () => {
 	describe('.any<T>((T | Promise<T>)[]): Promise<T>', () => {

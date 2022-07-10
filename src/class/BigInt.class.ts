@@ -1,6 +1,6 @@
 import * as assert from 'assert'
 
-import {NumericType} from './Number.class'
+import {NumericType} from './Number.class.js';
 
 
 /**
@@ -8,7 +8,7 @@ import {NumericType} from './Number.class'
  *
  * Does not extend the native BigInt class.
  */
-export default class xjs_BigInt {
+export class xjs_BigInt {
 	/**
 	 * Verify the type of bigint given, throwing if it does not match.
 	 *

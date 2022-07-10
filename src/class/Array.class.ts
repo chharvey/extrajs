@@ -1,6 +1,6 @@
-import xjs_Object from './Object.class'
-import xjs_Number from './Number.class'
-import IndexOutOfBoundsError from './IndexOutOfBoundsError.class'
+import {xjs_Object} from './Object.class.js';
+import {xjs_Number} from './Number.class.js';
+import {IndexOutOfBoundsError} from './IndexOutOfBoundsError.class.js';
 
 
 /**
@@ -8,7 +8,7 @@ import IndexOutOfBoundsError from './IndexOutOfBoundsError.class'
  *
  * Does not extend the native Array class.
  */
-export default class xjs_Array {
+export class xjs_Array {
 	/**
 	 * Get a value of an array, given an index.
 	 *
