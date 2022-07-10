@@ -1,4 +1,4 @@
-import xjs_Object from './Object.class'
+import {xjs_Object} from './Object.class.js';
 
 
 
@@ -26,7 +26,7 @@ export type TemplateTag<Return, Interps extends unknown[] = unknown[]> =
  *
  * Does not extend the native String class.
  */
-export default class xjs_String {
+export class xjs_String {
   /**
    * Convert a thing into a string.
    *
