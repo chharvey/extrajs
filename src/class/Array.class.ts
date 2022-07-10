@@ -279,25 +279,20 @@ export class xjs_Array {
 	 * @throws    {Error}          if one iteration throws an error
 	 */
 	static mapAggregated<T, U>(array: readonly T[], callback: (item: T, i: number, src: readonly T[]) => U): U[] {
-		const successes: U[]     = [];
-		const errors:    Error[] = [];
-		// NOTE: We don’t want to map and filter, because some successes might be instances of Error.
-		array.forEach((it, i, src) => {
-			let success: U;
+		const results: ([U, true] | [Error, false])[] = array.map((it, i, src) => {
 			try {
-				success = callback.call(null, it, i, src);
+				return [callback(it, i, src), true];
 			} catch (err) {
-				errors.push((err instanceof Error) ? err : new Error(`${ err }`));
-				return;
+				return [(err instanceof Error) ? err : new Error(`${ err }`), false];
 			}
-			successes.push(success); // leave out of the `try` block in case *this* call throws
 		});
+		const errors: Error[] = results.filter((pair): pair is [Error, false] => !pair[1]).map(([err]) => err);
 		if (errors.length) {
 			throw (errors.length === 1)
 				? errors[0]
 				: new AggregateError(errors, errors.map((err) => err.message).join('\n'));
 		} else {
-			return successes;
+			return results.filter((pair): pair is [U, true] => pair[1]).map(([val]) => val);
 		}
 	}
 
