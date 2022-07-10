@@ -114,6 +114,23 @@ describe('xjs.Array', () => {
 			});
 			assert.strictEqual(times, 4);
 		});
+		it('callback params.', () => {
+			const results: Record<string, string[]> = {
+				n: [],
+				i: [],
+				s: [],
+			};
+			xjs_Array.forEachAggregated([10, 20, 30, 40], (n, i, src) => {
+				results.n.push(n.toString());
+				results.i.push(i.toString());
+				results.s.push(src.toString());
+			});
+			assert.deepStrictEqual(results, {
+				n: ['10', '20', '30', '40'],
+				i: ['0', '1', '2', '3'],
+				s: ['10,20,30,40', '10,20,30,40', '10,20,30,40', '10,20,30,40'],
+			});
+		});
 		it('rethrows first error if only 1 error.', () => {
 			let times: number = 0;
 			assert.throws(() => xjs_Array.forEachAggregated([1, 2, 3, 4], (n) => {
@@ -181,6 +198,18 @@ describe('xjs.Array', () => {
 			assert.deepStrictEqual(
 				xjs_Array.mapAggregated([1, 2, 3, 4], (n) => n * 2),
 				[1, 2, 3, 4].map((n) => n * 2),
+			);
+		});
+		it('callback params.', () => {
+			const array = [10, 20, 30, 40];
+			const mapper = (n: number, i: number, src: readonly number[]) => [
+				n.toString(),
+				i.toString(),
+				src.toString(),
+			];
+			assert.deepStrictEqual(
+				xjs_Array.mapAggregated(array, mapper),
+				array.map(mapper),
 			);
 		});
 		it('rethrows first error if only 1 error.', () => {

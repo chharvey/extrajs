@@ -220,10 +220,10 @@ export class xjs_Array {
 	 * @throws    {AggregateError} if two or more iterations throws an error
 	 * @throws    {Error}          if one iteration throws an error
 	 */
-	static forEachAggregated<T>(array: readonly T[], callback: (item: T) => void): void {
-		const errors: readonly Error[] = array.map((it) => {
+	static forEachAggregated<T>(array: readonly T[], callback: (item: T, i: number, src: readonly T[]) => void): void {
+		const errors: readonly Error[] = array.map((it, i, src) => {
 			try {
-				callback.call(null, it);
+				callback.call(null, it, i, src);
 				return null;
 			} catch (err) {
 				return (err instanceof Error) ? err : new Error(`${ err }`);
@@ -278,14 +278,14 @@ export class xjs_Array {
 	 * @throws    {AggregateError} if two or more iterations throws an error
 	 * @throws    {Error}          if one iteration throws an error
 	 */
-	static mapAggregated<T, U>(array: readonly T[], callback: (item: T) => U): U[] {
+	static mapAggregated<T, U>(array: readonly T[], callback: (item: T, i: number, src: readonly T[]) => U): U[] {
 		const successes: U[]     = [];
 		const errors:    Error[] = [];
 		// NOTE: We don’t want to map and filter, because some successes might be instances of Error.
-		array.forEach((it) => {
+		array.forEach((it, i, src) => {
 			let success: U;
 			try {
-				success = callback.call(null, it);
+				success = callback.call(null, it, i, src);
 			} catch (err) {
 				errors.push((err instanceof Error) ? err : new Error(`${ err }`));
 				return;
