@@ -82,4 +82,40 @@ describe('xjs.Set', () => {
 			});
 		});
 	});
+
+
+	context('Operation Methods', () => {
+		type Item = {id: number};
+		const comparator = (a: Item, b: Item) => a.id === b.id;
+		const a: ReadonlySet<Item> = new Set([{id: 1}, {id: 2}, {id: 3}]);
+		const b: ReadonlySet<Item> = new Set([{id: 2}, {id: 3}, {id: 4}]);
+		specify('.intersection', () => {
+			assert.deepStrictEqual(
+				xjs_Set.intersection(a, b, comparator),
+				new Set([{id: 2}, {id: 3}]),
+			);
+		});
+		specify('.union', () => {
+			assert.deepStrictEqual(
+				xjs_Set.union(a, b, comparator),
+				new Set([{id: 1}, {id: 2}, {id: 3}, {id: 4}]),
+			);
+		});
+		specify('.difference', () => {
+			assert.deepStrictEqual(
+				xjs_Set.difference(a, b, comparator),
+				new Set([{id: 1}]),
+			);
+			assert.deepStrictEqual(
+				xjs_Set.difference(b, a, comparator),
+				new Set([{id: 4}]),
+			);
+		});
+		specify('.symmetricDifference', () => {
+			assert.deepStrictEqual(
+				xjs_Set.symmetricDifference(a, b, comparator),
+				new Set([{id: 1}, {id: 4}]),
+			);
+		});
+	});
 })
