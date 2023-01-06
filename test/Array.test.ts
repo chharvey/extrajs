@@ -1,6 +1,14 @@
 import * as assert from 'assert'
 import {xjs_Array} from '../src/class/Array.class.js';
 
+function newArrayRange(high: number): number[];
+function newArrayRange(low: number, high: number): number[];
+function newArrayRange(arg1: number, arg2?: number): number[] {
+	return (arg2 === undefined)
+		? [...new Array(arg1).keys()]
+		: [...new Array(arg2 - arg1).keys()].map((i) => i + arg1);
+}
+
 describe('xjs.Array', () => {
 	describe('.is<T>(readonly T[], readonly T[], ((T, T) -> boolean)?): boolean', () => {
 		it('only checks one level of depth.', () => {
@@ -280,6 +288,47 @@ describe('xjs.Array', () => {
 				xjs_Array.mapAggregated(['hello', 'world'], (str) => new TypeError(str)),
 				['hello', 'world'].map((str) => new TypeError(str)),
 			)
+		});
+	});
+
+	describe('.shuffle', () => {
+		it('returns a new array of the same length.', () => {
+			const len = 10;
+			const orig = newArrayRange(len);
+			const shuffled = xjs_Array.shuffle(orig);
+			return assert.strictEqual(shuffled.length, len);
+		});
+		it('does not mutate the given array.', () => {
+			const len = 10;
+			const orig = newArrayRange(len);
+			xjs_Array.shuffle(orig);
+			return assert.deepStrictEqual(orig, newArrayRange(len));
+		});
+	});
+
+	describe('.shuffleInPlace', () => {
+		it('does not change the length of the array.', () => {
+			const len = 10;
+			const orig = newArrayRange(len);
+			xjs_Array.shuffleInPlace(orig);
+			return assert.strictEqual(orig.length, len);
+		});
+		it('could mutate the given array.', () => {
+			let success: boolean = false;
+			for (let i = 0; i < 10; i++) {
+				const len = 10;
+				const orig = newArrayRange(len);
+				xjs_Array.shuffleInPlace(orig);
+				try {
+					assert.deepStrictEqual(orig, newArrayRange(len));
+					/* If they’re deep-strict-equal, that’s okay (albeit unlikely), just proceed to the next iteration.
+					If not, indicate a success. */
+				} catch {
+					success = true;
+					break;
+				}
+			}
+			return assert.ok(success);
 		});
 	});
 })

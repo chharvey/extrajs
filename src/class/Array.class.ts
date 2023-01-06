@@ -405,6 +405,45 @@ export class xjs_Array {
 		return newarr
 	}
 
+	/**
+	 * Return a copy of the given array in randomized order.
+	 * Randomness is implemented by {@link Math.random}.
+	 *
+	 * Items are *not* chosen in a uniform manner.
+	 * Items are picked from the given array and copied into a new array, which is returned.
+	 * Once an item is picked, it is never chosen again.
+	 * The likelihood of any item being picked grows as the number of remaining items declines.
+	 *
+	 * For example, given an array `[1, 2, 3, 4, 5]`, the likelihood of `3` being chosen first is 1/5.
+	 * But suppose `4` is chosen first instead. Then the given array is essentially treated as `[1, 2, 3, 5]`
+	 * (even though it is not mutated). After `4` is selected first, the likelihood of `3` being chosen next
+	 * is now 1/4, not 1/5. Thus the given array can be thought of as a deck of cards, from which cards are
+	 * selected to form a new deck.
+	 *
+	 * @param  arr an array to randomize
+	 * @return a new array with the parameter array’s items shuffled
+	 */
+	static shuffle<T>(arr: readonly T[]): T[] {
+		const deck:   T[] = [...arr];
+		const picked: T[] = [];
+		for (let i = 0; i < arr.length; i++) {
+			picked.push(deck.splice(Math.floor(Math.random() * deck.length), 1)[0]);
+		}
+		return picked;
+	}
+
+	/**
+	 * Like {@link xjs_Array.shuffle}, but shuffles (mutates) the given array in place.
+	 * @param  arr an array to shuffle
+	 * @return the given parameter but with its items shuffled
+	 */
+	static shuffleInPlace<T>(arr: T[]): void {
+		for (let i = 0; i < arr.length; i++) {
+			const random_index: number = Math.floor(Math.random() * arr.length);
+			[arr[i], arr[random_index]] = [arr[random_index], arr[i]];
+		}
+	}
+
 
   private constructor() {}
 }
