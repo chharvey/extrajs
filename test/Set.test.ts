@@ -117,5 +117,11 @@ describe('xjs.Set', () => {
 				new Set([{id: 1}, {id: 4}]),
 			);
 		});
+		specify('.disjunctiveUnion', () => {
+			assert.deepStrictEqual(
+				xjs_Set.disjunctiveUnion(a, b, comparator),
+				new Set([{id: 1}, {id: 4}]),
+			);
+		});
 	});
 })

@@ -173,11 +173,10 @@ export class xjs_Set {
 	}
 
 	/**
-	 * Return the symmetric difference (exclusive disjunction) of two sets: the set of elements either in one set, or in the other, but not both.
-	 *
-	 * Equivalent to:
-	 * - `difference( union(a,b) , intersection(a,b) )`
-	 * - `union( difference(a,b) , difference(b,a) )`
+	 * Return the symmetric difference of two sets: the set of elements either in one set, or in the other, but not both.
+	 * ```
+	 * symmetric_difference(a,b) == union( difference(a,b) , difference(b,a) )
+	 * ```
 	 * @see https://github.com/tc39/proposal-set-methods
 	 * @typeparam T - the type of elements in `a`
 	 * @typeparam U - the type of elements in `b`
@@ -187,6 +186,27 @@ export class xjs_Set {
 	 * @returns a new Set containing the elements present only in `a` or only in `b`, but not both
 	 */
 	static symmetricDifference<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator?: (a: T | U, b: T | U) => boolean): Set<T|U> {
+		return xjs_Set.union(
+			xjs_Set.difference(a, b, comparator),
+			xjs_Set.difference(b, a, comparator),
+			comparator,
+		);
+	}
+
+	/**
+	 * The disjunctive union (exclusive disjunction) of two sets is equivalent to their symmetric difference,
+	 * though it uses a different calculation.
+	 * ```
+	 * disjunctive_union(a,b) == difference( union(a,b) , intersection(a,b) )
+	 * ```
+	 * @typeparam T - the type of elements in `a`
+	 * @typeparam U - the type of elements in `b`
+	 * @param   a the first set
+	 * @param   b the second set
+	 * @param   comparator a comparator function
+	 * @returns a new Set containing the elements present only in `a` or only in `b`, but not both
+	 */
+	static disjunctiveUnion<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator?: (a: T | U, b: T | U) => boolean): Set<T | U> {
 		return xjs_Set.difference(
 			xjs_Set.union(a, b, comparator),
 			xjs_Set.intersection(a, b, comparator),
