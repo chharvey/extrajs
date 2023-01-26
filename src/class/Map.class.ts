@@ -169,6 +169,58 @@ export class xjs_Map {
 		return map.delete((foundkey === undefined) ? key : foundkey);
 	}
 
+	/**
+	 * Perform a callback function on a map, aggregating any errors caught.
+	 *
+	 * Instead of throwing on the first error and stopping iteration, as {@link Map#forEach} would do,
+	 * this method continues performing the callback on the rest of the map until all items are done.
+	 * If only one error was caught, then that error is simply rethrown.
+	 * However, if more errors were caught, they are collected into a single AggregateError, which is then thrown.
+	 * If no errors are caught, this method returns void.
+	 *
+	 * @example
+	 * xjs.Map.forEachAggregated<number>(new Map<string, number>([
+	 * 	['one',   1],
+	 * 	['two',   2],
+	 * 	['three', 3],
+	 * 	['four',  4],
+	 * ]), (num, name) => {
+	 * 	if (num % 2 === 0) {
+	 * 		throw new Error(`${ name } is even.`);
+	 * 	};
+	 * });
+	 * // Expected thrown error:
+	 * AggregateError {
+	 * 	errors: [
+	 * 		Error { message: "two is even." },
+	 * 		Error { message: "four is even." },
+	 * 	]
+	 * }
+	 * @typeparam K                the type of keys in the map
+	 * @typeparam V                the type of values in the map
+	 * @param     map              the map of keys and values
+	 * @param     callback         the function to call on each key–value pair
+	 * @throws    {AggregateError} if two or more iterations throws an error
+	 * @throws    {Error}          if one iteration throws an error
+	 */
+	static forEachAggregated<K, V>(map: ReadonlyMap<K, V>, callback: (value: V, key: K, src: typeof map) => void): void {
+		const accumulator: Array<Error | null> = [];
+		map.forEach((value, key, src) => {
+			try {
+				callback.call(null, value, key, src);
+				accumulator.push(null);
+			} catch (err) {
+				accumulator.push((err instanceof Error) ? err : new Error(`${ err }`));
+			}
+		});
+		const errors: readonly Error[] = accumulator.filter((e): e is Error => e instanceof Error);
+		if (errors.length) {
+			throw (errors.length === 1)
+				? errors[0]
+				: new AggregateError(errors, errors.map((err) => err.message).join('\n'));
+		}
+	}
+
 
 	private constructor() {}
 }

@@ -168,8 +168,7 @@ describe('xjs.Array', () => {
 							new RangeError(`${ n } is even.`),
 							new RangeError(`${ n } is a multiple of 4.`),
 						])
-						: new RangeError(`${ n } is even.`)
-					;
+						: new RangeError(`${ n } is even.`);
 				};
 			}), (err) => {
 				assert.ok(err instanceof AggregateError);
