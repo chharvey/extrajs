@@ -202,18 +202,20 @@ export class xjs_Array {
 	 * If no errors are caught, this method returns void.
 	 *
 	 * @example
+	 * ```ts
 	 * xjs.Array.forEachAggregated<number>([1, 2, 3, 4], (n) => {
 	 * 	if (n % 2 === 0) {
 	 * 		throw new Error(`${ n } is even.`);
 	 * 	};
 	 * });
 	 * // Expected thrown error:
-	 * AggregateError {
-	 * 	errors: [
-	 * 		Error { message: "2 is even." },
-	 * 		Error { message: "4 is even." },
-	 * 	]
-	 * }
+	 * // AggregateError {
+	 * // 	errors: [
+	 * // 		Error { message: "2 is even." },
+	 * // 		Error { message: "4 is even." },
+	 * // 	]
+	 * // }
+	 * ```
 	 * @typeparam T                the type of items in the array
 	 * @param     array            the array of items
 	 * @param     callback         the function to call on each item
@@ -246,6 +248,7 @@ export class xjs_Array {
 	 * If no errors are caught, this method returns the usual map.
 	 *
 	 * @example
+	 * ```ts
 	 * xjs.Array.mapAggregated<number>([1, 2, 3, 4], (n) => {
 	 * 	if (n % 2 === 1) {
 	 * 		throw new Error(`${ n } is odd.`);
@@ -254,12 +257,12 @@ export class xjs_Array {
 	 * 	};
 	 * });
 	 * // Expected thrown error:
-	 * AggregateError {
-	 * 	errors: [
-	 * 		Error { message: "1 is odd." },
-	 * 		Error { message: "3 is odd." },
-	 * 	]
-	 * }
+	 * // AggregateError {
+	 * // 	errors: [
+	 * // 		Error { message: "1 is odd." },
+	 * // 		Error { message: "3 is odd." },
+	 * // 	]
+	 * // }
 	 *
 	 * xjs.Array.mapAggregated<number>([2, 4, 6], (n) => {
 	 * 	if (n % 2 === 1) {
@@ -269,7 +272,8 @@ export class xjs_Array {
 	 * 	};
 	 * });
 	 * // Expected return value:
-	 * [1, 2, 3]
+	 * // [1, 2, 3]
+	 * ```
 	 * @typeparam T                the type of items in the array
 	 * @typeparam U                the type of items returned by the mapping callback
 	 * @param     array            the array of items

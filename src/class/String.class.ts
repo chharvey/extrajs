@@ -5,7 +5,7 @@ import {xjs_Object} from './Object.class.js';
 /**
  * A template literal ‘tag’.
  * @example
- * ```
+ * ```ts
  * declare const tag: TemplateTag;
  * declare const template: unknown;
  * tag`This is a ${ template } literal.`;
@@ -59,6 +59,7 @@ export class xjs_String {
 	 * `n` is determined by the number of tabs following the first line break in the literal.
 	 * If there are no line breaks, `0` is assumed.
 	 * @example
+	 * ```ts
 	 * assert.strictEqual(dedent`
 	 * 			this will be
 	 * 	dedented by
@@ -70,6 +71,7 @@ export class xjs_String {
 	 * up to
 	 * 	3 tabs
 	 * `);
+	 * ```
 	 * @returns a string with each line dedented by the determined number of tabs
 	 */
 	static dedent(strings: TemplateStringsArray, ...interps: unknown[]): string {
