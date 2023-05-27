@@ -9,8 +9,7 @@
 		"strict":                     true,
 
 		// Modules
-		"module":           "ES2020",
-		"moduleResolution": "Node",
+		"module": "node16",
 
 		// Emit
 		"declaration":            true,
@@ -19,7 +18,7 @@
 		"outDir":                 "./dist/",
 
 		// Language and Environment
-		"target":                  "ES2022",
+		"target":                  "es2022",
 		"useDefineForClassFields": false,
 
 		// Completeness
