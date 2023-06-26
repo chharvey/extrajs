@@ -56,10 +56,10 @@ export class xjs_Object {
 		if (xjs_Object.typeOf(a) === 'function' || xjs_Object.typeOf(b) === 'function') throw new TypeError('Function arguments to xjs.Object.is are not yet supported.')
 		if (a instanceof Array && b instanceof Array) return xjs_Array.is(a, b)
 		// else, it will be 'object'
-		return Object.entries(a).every(([a_key, a_value]) =>
-			Object.entries(b).some(([b_key, b_value]) => a_key === b_key && predicate(a_value, b_value))
-		) && Object.entries(b).every(([b_key, b_value]) =>
-			Object.entries(a).some(([a_key, a_value]) => a_key === b_key && predicate(a_value, b_value))
+		return Object.entries(a as Record<string, unknown>).every(([a_key, a_value]) =>
+			Object.entries(b as Record<string, unknown>).some(([b_key, b_value]) => a_key === b_key && predicate(a_value, b_value))
+		) && Object.entries(b as Record<string, unknown>).every(([b_key, b_value]) =>
+			Object.entries(a as Record<string, unknown>).some(([a_key, a_value]) => a_key === b_key && predicate(a_value, b_value))
 		)
 	}
 
@@ -251,7 +251,7 @@ export class xjs_Object {
     Object.freeze(thing)
     if (xjs_Object.typeOf(thing) === 'object') {
         for (let key in thing) {
-          if (!Object.isFrozen(thing[key])) xjs_Object.freezeDeep(thing[key])
+          if (!Object.isFrozen(thing[key])) xjs_Object.freezeDeep<T[keyof T]>(thing[key])
         }
     }
     return thing

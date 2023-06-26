@@ -9,18 +9,16 @@
 		"strict":                     true,
 
 		// Modules
-		"module":           "ES2020",
-		"moduleResolution": "Node",
+		"module": "node16",
 
 		// Emit
-		"declaration":            true,
-		"importsNotUsedAsValues": "error",
-		"noEmitOnError":          true,
-		"outDir":                 "./dist/",
+		"declaration":   true,
+		"noEmitOnError": true,
+		"outDir":        "./dist/",
 
 		// Language and Environment
-		"target":                  "ES2022",
-		"useDefineForClassFields": false,
+		"target":                  "es2022",
+		"useDefineForClassFields": false, // instance fields using `[[define]]` semantics don’t play nicely with constructor parameter fields
 
 		// Completeness
 		"skipLibCheck": true,

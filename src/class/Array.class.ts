@@ -308,7 +308,7 @@ export class xjs_Array {
    */
   static freezeDeep<T>(arr: readonly T[]): readonly T[] {
     Object.freeze(arr)
-    arr.forEach((el) => { if (!Object.isFrozen(el)) xjs_Object.freezeDeep(el) })
+    arr.forEach((el) => { if (!Object.isFrozen(el)) xjs_Object.freezeDeep<T>(el) })
     return arr
   }
 
