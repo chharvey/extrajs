@@ -2,7 +2,7 @@ import * as assert from 'assert';
 import {xjs_Object} from '../src/class/Object.class.js';
 
 describe('xjs.Object', () => {
-	describe('.is<T>(T, T, ((any, any) => boolean)?): boolean', () => {
+	describe('.is<T>(T, T, ((T[keyof T], T[keyof T]) => boolean)?): boolean', () => {
 		it('only checks one level of depth.', () => {
 			type T = {val: string[]} | string[] | number;
 			const x: Record<string, T> = {a: 1, b: ['1'], c: {val: ['one']}};
@@ -35,7 +35,12 @@ describe('xjs.Object', () => {
 
 	describe('.freezeDeep<T>(Readonly<T>): Readonly<T>', () => {
 		it('freezes an object and its properties, recursively.', () => {
-			const x: any = {first: 1, second: {value: 2}, third: [1, '2', {val: 3}]};
+			const x: {
+				first:   number,
+				second:  Record<string, number>,
+				third:   [a: number, b: string, c: {val: unknown}, d?: [string]],
+				fourth?: unknown,
+			} = {first: 1, second: {value: 2}, third: [1, '2', {val: 3}]};
 			xjs_Object.freezeDeep(x);
 			assert.throws(() => {
 				x.fourth = {v: ['4']};

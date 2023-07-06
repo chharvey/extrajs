@@ -48,7 +48,7 @@ export class xjs_Object {
 	 * @returns Are corresponding properties the same, i.e. replaceable?
 	 * @throws  {TypeError} if either `a` or `b` is a function (not supported)
 	 */
-	public static is<T>(a: T, b: T, predicate: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+	public static is<T>(a: T, b: T, predicate: (x: T[keyof T], y: T[keyof T]) => boolean = xjs_Object.sameValueZero): boolean {
 		if (a === b) {
 			return true;
 		}
@@ -63,8 +63,8 @@ export class xjs_Object {
 		}
 		// else, it will be 'object'
 		return (
-			   Object.entries(a as Record<string, unknown>).every(([a_key, a_value]) => Object.entries(b as Record<string, unknown>).some(([b_key, b_value]) => a_key === b_key && predicate(a_value, b_value)))
-			&& Object.entries(b as Record<string, unknown>).every(([b_key, b_value]) => Object.entries(a as Record<string, unknown>).some(([a_key, a_value]) => a_key === b_key && predicate(a_value, b_value)))
+			   Object.entries(a as Record<string, T[keyof T]>).every(([a_key, a_value]) => Object.entries(b as Record<string, T[keyof T]>).some(([b_key, b_value]) => a_key === b_key && predicate(a_value, b_value)))
+			&& Object.entries(b as Record<string, T[keyof T]>).every(([b_key, b_value]) => Object.entries(a as Record<string, T[keyof T]>).some(([a_key, a_value]) => a_key === b_key && predicate(a_value, b_value)))
 		);
 	}
 
@@ -161,6 +161,7 @@ export class xjs_Object {
 	 * @returns the looked-up function, returning <T>
 	 * @throws  {ReferenceError} when failing to find a lookup value
 	 */
+	/* eslint-disable @typescript-eslint/no-explicit-any */
 	public static switch<T>(key: string, dictionary: Record<string, (this: any, ...args: any[]) => T>): (this: any, ...args: any[]) => T {
 		let returned: (this: any, ...args: any[]) => T = dictionary[key];
 		if (!returned) {
@@ -172,6 +173,7 @@ export class xjs_Object {
 		}
 		return returned;
 	}
+	/* eslint-enable @typescript-eslint/no-explicit-any */
 
 	/**
 	 * Return the type of a thing.
@@ -204,14 +206,14 @@ export class xjs_Object {
 	 * @returns the type of the thing
 	 */
 	public static typeOf(thing: unknown): string {
-		return (new Map<string, (arg: any) => string>([
-			['object',    (arg: unknown) => (arg === null) ? 'null' : (Array.isArray(arg)) ? 'array' : 'object'],
-			['number',    (arg: number)  => (Number.isNaN(arg)) ? 'NaN' : (!Number.isFinite(arg)) ? 'infinite' : 'number'],
-			['bigint',    ()             => 'bigint'],
-			['function',  ()             => 'function'],
-			['string',    ()             => 'string'],
-			['boolean',   ()             => 'boolean'],
-			['undefined', ()             => 'undefined'],
+		return (new Map<string, (arg: unknown) => string>([
+			['object',    (arg) => (arg === null) ? 'null' : (Array.isArray(arg)) ? 'array' : 'object'],
+			['number',    (arg) => (Number.isNaN(arg)) ? 'NaN' : (!Number.isFinite(arg)) ? 'infinite' : 'number'],
+			['bigint',    ()    => 'bigint'],
+			['function',  ()    => 'function'],
+			['string',    ()    => 'string'],
+			['boolean',   ()    => 'boolean'],
+			['undefined', ()    => 'undefined'],
 		]).get(typeof thing) || ((arg: unknown) => typeof arg))(thing);
 	}
 
@@ -231,7 +233,8 @@ export class xjs_Object {
 		if (thing === null || thing === undefined) {
 			throw new TypeError(`\`${ thing }\` does not have a construtor.`);
 		}
-		return (thing as any).__proto__.constructor.name;
+		// @ts-expect-error --- if not null/undefined, it should have a `__proto__`
+		return thing.__proto__.constructor.name;
 	}
 
 	/**

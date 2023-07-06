@@ -39,16 +39,16 @@ export class xjs_String {
 	 * @returns a string version of the argument
 	 */
 	public static stringify(thing: unknown): string {
-		return new Map<string, (arg: any) => string>([
-			['object',    (arg: object)    => JSON.stringify(arg)],
-			['array',     (arg: unknown[]) => arg.join('')],
-			['function',  (arg: Function)  => arg.toString()],
-			['string',    (arg: string)    => arg],
-			['number',    (arg: number)    => arg.toString()],
-			['boolean',   (arg: boolean)   => arg.toString()],
-			['null',      (arg: null)      => `${ arg }`],
-			['undefined', (arg: void)      => `${ arg }`],
-			['default',   (arg: unknown)   => `${ arg }`],
+		return new Map<string, (arg: unknown) => string>([
+			['object',    (arg) => JSON.stringify(arg as object)],
+			['array',     (arg) => (arg as unknown[]).join('')],
+			['function',  (arg) => (arg as Function).toString()], // eslint-disable-line @typescript-eslint/ban-types
+			['string',    (arg) => arg as string],
+			['number',    (arg) => (arg as number).toString()],
+			['boolean',   (arg) => (arg as boolean).toString()],
+			['null',      (arg) => `${ arg as null }`],
+			['undefined', (arg) => `${ arg as void }`],
+			['default',   (arg) => `${ arg }`],
 		]).get(xjs_Object.typeOf(thing))!(thing);
 	}
 
