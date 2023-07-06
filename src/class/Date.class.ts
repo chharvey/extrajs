@@ -7,7 +7,7 @@ export class xjs_Date {
 	/**
 	 * The list of full month names in English.
 	 */
-	static readonly MONTH_NAMES = [
+	public static readonly MONTH_NAMES = [
 		'January',
 		'February',
 		'March',
@@ -25,7 +25,7 @@ export class xjs_Date {
 	/**
 	 * The list of full day names in English.
 	 */
-	static readonly DAY_NAMES = [
+	public static readonly DAY_NAMES = [
 		'Sundary',
 		'Monday',
 		'Tuesday',
@@ -43,7 +43,7 @@ export class xjs_Date {
 	 * @param   date2 the second date
 	 * @returns does 'YYYY-MM-DD' of `date1` equal 'YYYY-MM-DD' of `date2`?
 	 */
-	static sameDate(date1: Date, date2: Date): boolean {
+	public static sameDate(date1: Date, date2: Date): boolean {
 		return date1.toISOString().slice(0, 10) === date2.toISOString().slice(0, 10);
 	}
 
@@ -58,7 +58,7 @@ export class xjs_Date {
 	 * @param   date a Date object
 	 * @returns the proportion
 	 */
-	static timeProportion(date: Date): number {
+	public static timeProportion(date: Date): number {
 		let millis  =  date.getUTCMilliseconds()       / 1000;
 		let seconds = (date.getUTCSeconds() + millis)  / 60;
 		let minutes = (date.getUTCMinutes() + seconds) / 60;
@@ -88,7 +88,7 @@ export class xjs_Date {
 	 * @param   format one of the enumerated options listed in the description
 	 * @returns a string representing the given date in the given format
 	 */
-	static format(date: Date, format: string): string {
+	public static format(date: Date, format: string): string {
 		const MONTHS           = xjs_Date.MONTH_NAMES;
 		const leadingZero      = (n: number, r: number = 10) => `0${ n.toString(r) }`.slice(-2);
 		const defaultFormatter = (date: Date) => date.toISOString();

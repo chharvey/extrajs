@@ -25,7 +25,7 @@ describe('xjs.Object', () => {
 			assert.strictEqual(xjs_Object.typeOf(21 + 21),                                                   'number');
 			assert.strictEqual(xjs_Object.typeOf(true),                                                      'boolean');
 			assert.strictEqual(xjs_Object.typeOf('true'),                                                    'string');
-			assert.strictEqual(xjs_Object.typeOf(class { constructor() {} }),                                'function'); // eslint-disable-line @typescript-eslint/brace-style
+			assert.strictEqual(xjs_Object.typeOf(class { public constructor() {} }),                         'function'); // eslint-disable-line @typescript-eslint/brace-style
 			assert.strictEqual(xjs_Object.typeOf(function () { return 'true'; }),                            'function'); // eslint-disable-line prefer-arrow-callback, @typescript-eslint/brace-style
 			assert.strictEqual(xjs_Object.typeOf(() => 'true'),                                              'function');
 			assert.strictEqual(xjs_Object.typeOf(undefined),                                                 'undefined');

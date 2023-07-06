@@ -27,7 +27,7 @@ export class xjs_Number {
 	/**
 	 * An immutable RegExp instance, representing a string in Number format.
 	 */
-	static readonly REGEXP: Readonly<RegExp> = /^-?(?:\d+(?:\.\d+)?|\.\d+)$/;
+	public static readonly REGEXP: Readonly<RegExp> = /^-?(?:\d+(?:\.\d+)?|\.\d+)$/;
 
 	/**
 	 * Verify the type of number given, throwing if it does not match.
@@ -58,7 +58,7 @@ export class xjs_Number {
 	 * @throws  {AssertionError} if the argument does not match the described type
 	 * @throws  {NaNError} if the argument is `NaN`
 	 */
-	static assertType(num: number, type?: NumericType | 'integer' | 'natural' | 'whole' | 'float' | 'positive' | 'negative' | 'non-positive' | 'non-negative' | 'non-zero' | 'finite' | 'infinite'): void {
+	public static assertType(num: number, type?: NumericType | 'integer' | 'natural' | 'whole' | 'float' | 'positive' | 'negative' | 'non-positive' | 'non-negative' | 'non-zero' | 'finite' | 'infinite'): void {
 		if (Number.isNaN(num)) {
 			throw new NaNError();
 		}
@@ -113,7 +113,7 @@ export class xjs_Number {
 	 * @returns one of the strings described above
 	 * @throws  {RangeError} if the given arguemnt was not a finite number
 	 */
-	static typeOf(num: number): 'integer' | 'float' {
+	public static typeOf(num: number): 'integer' | 'float' {
 		console.warn('`xjs.Number.typeOf` is DEPRECATED: use `xjs.Number.assertType` instead.');
 		if (['NaN', 'infinite'].includes(xjs_Object.typeOf(num))) {
 			throw new RangeError('Argument must be a finite number.');

@@ -9,13 +9,13 @@ export class IndexOutOfBoundsError extends RangeError {
 	 * Construct a new IndexOutOfBoundsError object.
 	 * @param message Optional. A human-readable description of the error.
 	 */
-	constructor(message?: string);
+	public constructor(message?: string);
 	/**
 	 * Construct a new IndexOutOfBoundsError object.
 	 * @param index the index that is out of bounds
 	 */
-	constructor(index: number);
-	constructor(i: string | number = 'Index out of bounds.') {
+	public constructor(index: number);
+	public constructor(i: string | number = 'Index out of bounds.') {
 		super((typeof i === 'string') ? i : `Index \`${ (xjs_Number.assertType(i), i) }\` out of bounds.`);
 		this.name = 'IndexOutOfBoundsError';
 	}

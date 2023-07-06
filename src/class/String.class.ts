@@ -38,7 +38,7 @@ export class xjs_String {
 	 * @param   thing anything to convert
 	 * @returns a string version of the argument
 	 */
-	static stringify(thing: unknown): string {
+	public static stringify(thing: unknown): string {
 		return new Map<string, (arg: any) => string>([
 			['object',    (arg: object)    => JSON.stringify(arg)],
 			['array',     (arg: unknown[]) => arg.join('')],
@@ -72,7 +72,7 @@ export class xjs_String {
 	 * `);
 	 * @returns a string with each line dedented by the determined number of tabs
 	 */
-	static dedent(strings: TemplateStringsArray, ...interps: unknown[]): string {
+	public static dedent(strings: TemplateStringsArray, ...interps: unknown[]): string {
 		const matched: RegExpMatchArray | null = strings[0].match(/\n\t*/);
 		const n: number = matched && matched[0] ? matched[0].slice(1).length : 0;
 		function replace(s: string, n: number): string {

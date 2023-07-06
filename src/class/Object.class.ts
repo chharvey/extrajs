@@ -48,7 +48,7 @@ export class xjs_Object {
 	 * @returns Are corresponding properties the same, i.e. replaceable?
 	 * @throws  {TypeError} if either `a` or `b` is a function (not supported)
 	 */
-	static is<T>(a: T, b: T, predicate: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
+	public static is<T>(a: T, b: T, predicate: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
 		if (a === b) {
 			return true;
 		}
@@ -79,7 +79,7 @@ export class xjs_Object {
 	 * @param   b the second thing
 	 * @returns exactly `a === b || Object.is(a, b)`
 	 */
-	static sameValueZero(a: unknown, b: unknown): boolean {
+	public static sameValueZero(a: unknown, b: unknown): boolean {
 		return a === b || Object.is(a, b);
 	}
 
@@ -161,7 +161,7 @@ export class xjs_Object {
 	 * @returns the looked-up function, returning <T>
 	 * @throws  {ReferenceError} when failing to find a lookup value
 	 */
-	static switch<T>(key: string, dictionary: { [index: string]: (this: any, ...args: any[]) => T }): (this: any, ...args: any[]) => T {
+	public static switch<T>(key: string, dictionary: { [index: string]: (this: any, ...args: any[]) => T }): (this: any, ...args: any[]) => T {
 		let returned: (this: any, ...args: any[]) => T = dictionary[key];
 		if (!returned) {
 			console.warn(`Key '${ key }' cannot be found. Using key 'default'…`);
@@ -203,7 +203,7 @@ export class xjs_Object {
 	 * @param   thing anything
 	 * @returns the type of the thing
 	 */
-	static typeOf(thing: unknown): string {
+	public static typeOf(thing: unknown): string {
 		return (new Map<string, (arg: any) => string>([
 			['object',    (arg: unknown) => (arg === null) ? 'null' : (Array.isArray(arg)) ? 'array' : 'object'],
 			['number',    (arg: number)  => (Number.isNaN(arg)) ? 'NaN' : (!Number.isFinite(arg)) ? 'infinite' : 'number'],
@@ -227,7 +227,7 @@ export class xjs_Object {
 	 * @returns the name of the constructing function
 	 * @throws  {TypeError} if `null` or `undefined` is passed
 	 */
-	static instanceOf(thing: unknown): string {
+	public static instanceOf(thing: unknown): string {
 		if (thing === null || thing === undefined) {
 			throw new TypeError(`\`${ thing }\` does not have a construtor.`);
 		}
@@ -249,7 +249,7 @@ export class xjs_Object {
 	 * @returns the given value, with everything frozen
 	 * @deprecated use interface `Readonly<T>` instead
 	 */
-	static freezeDeep<T>(thing: Readonly<T>): Readonly<T> {
+	public static freezeDeep<T>(thing: Readonly<T>): Readonly<T> {
 		if (thing instanceof Array) {
 			return xjs_Array.freezeDeep(thing) as unknown as T; // HACK https://stackoverflow.com/a/18736071/
 		}
@@ -319,7 +319,7 @@ export class xjs_Object {
 	 * @param   thing any value to clone
 	 * @returns an exact copy of the given value, but with nothing equal via `===` (unless the value given is primitive)
 	 */
-	static cloneDeep<T>(thing: T): T {
+	public static cloneDeep<T>(thing: T): T {
 		if (thing instanceof Array) {
 			return xjs_Array.cloneDeep(thing) as unknown as T; // HACK https://stackoverflow.com/a/18736071/
 		}

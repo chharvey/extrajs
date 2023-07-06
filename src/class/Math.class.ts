@@ -21,7 +21,7 @@ export class xjs_Math {
 	 * @param   epsilon the interval of refinement
 	 * @returns are `x` and `y` within `epsilon` distance apart?
 	 */
-	static approx(x: number, y: number, epsilon: number = Number.EPSILON): boolean {
+	public static approx(x: number, y: number, epsilon: number = Number.EPSILON): boolean {
 		xjs_Number.assertType(x);
 		xjs_Number.assertType(y);
 		xjs_Number.assertType(epsilon);
@@ -36,7 +36,7 @@ export class xjs_Math {
 	 * @param   w weight of 2nd number; between 0–1
 	 * @returns exactly `interpolateArithmetic(x, y, w)`
 	 */
-	static average(x: number, y: number, w = 0.5): number {
+	public static average(x: number, y: number, w = 0.5): number {
 		return xjs_Math.interpolateArithmetic(x, y, w);
 	}
 
@@ -46,7 +46,7 @@ export class xjs_Math {
 	 * @returns   the minimum argument
 	 * @throws    if no arguments are supplied
 	 */
-	static minBigInt(...ints: bigint[]): bigint {
+	public static minBigInt(...ints: bigint[]): bigint {
 		if (!ints.length) {
 			throw new Error('No arguments supplied.');
 		}
@@ -59,7 +59,7 @@ export class xjs_Math {
 	 * @returns   the maximum argument
 	 * @throws    if no arguments are supplied
 	 */
-	static maxBigInt(...ints: bigint[]): bigint {
+	public static maxBigInt(...ints: bigint[]): bigint {
 		if (!ints.length) {
 			throw new Error('No arguments supplied.');
 		}
@@ -79,7 +79,7 @@ export class xjs_Math {
 	 * @param   max - the upper bound
 	 * @returns       `Math.min(Math.max(min, x), max)`
 	 */
-	static clamp(min: number, val: number, max: number): number {
+	public static clamp(min: number, val: number, max: number): number {
 		xjs_Number.assertType(min);
 		xjs_Number.assertType(val);
 		xjs_Number.assertType(max);
@@ -93,7 +93,7 @@ export class xjs_Math {
 	 * @param   max - the upper bound
 	 * @returns       the clamped value
 	 */
-	static clampBigInt(min: bigint, val: bigint, max: bigint): bigint {
+	public static clampBigInt(min: bigint, val: bigint, max: bigint): bigint {
 		return (min <= max) ? xjs_Math.minBigInt(xjs_Math.maxBigInt(min, val), max) : xjs_Math.clampBigInt(max, val, min);
 	}
 
@@ -109,7 +109,7 @@ export class xjs_Math {
 	 * @throws  {Error} if one of the numbers is not finite
 	 * @throws  {NaNError} if one of the numbers is `NaN`
 	 */
-	static meanArithmetic(...nums: number[]): number {
+	public static meanArithmetic(...nums: number[]): number {
 		nums.forEach((n) => xjs_Number.assertType(n, NumericType.FINITE)); // NB re-throw
 		return nums.reduce((x, y) => x + y) * (1 / nums.length);
 	}
@@ -126,7 +126,7 @@ export class xjs_Math {
 	 * @throws  {Error} if one of the numbers is not finite
 	 * @throws  {NaNError} if one of the numbers is `NaN`
 	 */
-	static meanGeometric(...nums: number[]): number {
+	public static meanGeometric(...nums: number[]): number {
 		nums.forEach((n) => xjs_Number.assertType(n, NumericType.FINITE)); // NB re-throw
 		return Math.abs(nums.reduce((x, y) => x * y)) ** (1 / nums.length);
 	}
@@ -143,7 +143,7 @@ export class xjs_Math {
 	 * @throws  {Error} if one of the numbers is not finite
 	 * @throws  {NaNError} if one of the numbers is `NaN`
 	 */
-	static meanHarmonic(...nums: number[]): number {
+	public static meanHarmonic(...nums: number[]): number {
 		nums.forEach((n) => xjs_Number.assertType(n, NumericType.FINITE)); // NB re-throw
 		return 1 / xjs_Math.meanArithmetic(...nums.map((x) => 1 / x));
 	}
@@ -171,7 +171,7 @@ export class xjs_Math {
 	 * @throws  {Error} if `a`, `b`, or `p` is not a finite number
 	 * @throws  {NaNError} if an argument is `NaN`
 	 */
-	static interpolateArithmetic(a: number, b: number, p: number = 0.5): number {
+	public static interpolateArithmetic(a: number, b: number, p: number = 0.5): number {
 		xjs_Number.assertType(a, NumericType.FINITE);
 		xjs_Number.assertType(b, NumericType.FINITE);
 		xjs_Number.assertType(p, NumericType.FINITE);
@@ -201,7 +201,7 @@ export class xjs_Math {
 	 * @throws  {Error} if `a`, `b`, or `p` is not a finite number
 	 * @throws  {NaNError} if an argument is `NaN`
 	 */
-	static interpolateGeometric(a: number, b: number, p: number = 0.5): number {
+	public static interpolateGeometric(a: number, b: number, p: number = 0.5): number {
 		xjs_Number.assertType(a, NumericType.FINITE);
 		xjs_Number.assertType(b, NumericType.FINITE);
 		xjs_Number.assertType(p, NumericType.FINITE);
@@ -231,7 +231,7 @@ export class xjs_Math {
 	 * @throws  {Error} if `a`, `b`, or `p` is not a finite number
 	 * @throws  {NaNError} if an argument is `NaN`
 	 */
-	static interpolateHarmonic(a: number, b: number, p: number = 0.5): number {
+	public static interpolateHarmonic(a: number, b: number, p: number = 0.5): number {
 		xjs_Number.assertType(a, NumericType.FINITE);
 		xjs_Number.assertType(b, NumericType.FINITE);
 		xjs_Number.assertType(p, NumericType.FINITE);
@@ -249,7 +249,7 @@ export class xjs_Math {
 	 * @returns exactly `((x % n) + n) % n`
 	 * @throws  {Error} if `n` is not a positive integer
 	 */
-	static mod(x: number, n: number | bigint): number {
+	public static mod(x: number, n: number | bigint): number {
 		xjs_Number.assertType(x, NumericType.FINITE);
 		if (typeof n === 'number') {
 			xjs_Number.assertType(n, NumericType.WHOLE);
@@ -284,7 +284,7 @@ export class xjs_Math {
 	 * @returns informally, `x *** n`
 	 * @throws  {Error} if `n` is not a non-negative integer
 	 */
-	static tetrate(x: number, n: number): number {
+	public static tetrate(x: number, n: number): number {
 		xjs_Number.assertType(x, NumericType.FINITE);
 		xjs_Number.assertType(n, NumericType.NATURAL);
 		return (n === 0) ? 1 : x ** xjs_Math.tetrate(x, n - 1);

@@ -37,7 +37,7 @@ export class xjs_BigInt {
 	 * @param   type one of the string literals listed above
 	 * @throws  {AssertionError} if the argument does not match the described type
 	 */
-	static assertType(int: bigint, type?: NumericType | 'integer' | 'natural' | 'whole' | 'float' | 'positive' | 'negative' | 'non-positive' | 'non-negative' | 'non-zero' | 'finite' | 'infinite'): void {
+	public static assertType(int: bigint, type?: NumericType | 'integer' | 'natural' | 'whole' | 'float' | 'positive' | 'negative' | 'non-positive' | 'non-negative' | 'non-zero' | 'finite' | 'infinite'): void {
 		if (type === void 0) {
 			return;
 		}
