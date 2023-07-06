@@ -39,7 +39,7 @@ describe('xjs.Set', () => {
 
 	context('Equality Methods', () => {
 		type El = {id: number};
-		const comparator = (a: El, b: El) => a.id === b.id;
+		const comparator = (a: El, b: El): boolean => a.id === b.id;
 
 		describe('.has', () => {
 			it('tests elements by equality.', () => {

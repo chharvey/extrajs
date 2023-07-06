@@ -4,7 +4,7 @@ import {xjs_Map} from '../src/class/Map.class.js';
 describe('xjs.Map', () => {
 	context('Equality Methods', () => {
 		type Key = {id: number};
-		const comparator = (a: Key, b: Key) => a.id === b.id;
+		const comparator = (a: Key, b: Key): boolean => a.id === b.id;
 
 		describe('.has', () => {
 			it('tests keys by equality.', () => {

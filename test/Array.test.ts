@@ -201,7 +201,7 @@ describe('xjs.Array', () => {
 		});
 		it('callback params.', () => {
 			const array = [10, 20, 30, 40];
-			const mapper = (n: number, i: number, src: readonly number[]) => [
+			const mapper = (n: number, i: number, src: readonly number[]): [string, string, string] => [
 				n.toString(),
 				i.toString(),
 				src.toString(),

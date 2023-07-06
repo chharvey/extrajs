@@ -90,8 +90,8 @@ export class xjs_Date {
 	 */
 	public static format(date: Date, format: string): string {
 		const MONTHS           = xjs_Date.MONTH_NAMES;
-		const leadingZero      = (n: number, r: number = 10) => `0${ n.toString(r) }`.slice(-2);
-		const defaultFormatter = (d: Date) => d.toISOString();
+		const leadingZero      = (n: number, r: number = 10): string => `0${ n.toString(r) }`.slice(-2);
+		const defaultFormatter = (d: Date): string => d.toISOString();
 		return (new Map<string, (date: Date) => string>([
 			['Y-m-d',     (d: Date) => `${ d.getUTCFullYear() }-${ leadingZero(d.getUTCMonth() + 1) }-${ leadingZero(d.getUTCDate()) }`],
 			['j M Y',     (d: Date) => `${ d.getUTCDate() } ${ MONTHS[d.getUTCMonth()].slice(0, 3) } ${ d.getUTCFullYear() }`],
