@@ -37,5 +37,6 @@ export class xjs_Promise {
 	}
 
 
+	// eslint-disable-next-line @typescript-eslint/no-empty-function --- we want the constructor to be private
 	private constructor() {}
 }

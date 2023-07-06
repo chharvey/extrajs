@@ -61,7 +61,7 @@ export class xjs_BigInt {
 			]).get(type));
 		}
 		return new Map<NumericType, (n: bigint) => void>([
-			[NumericType.INTEGER,     (_n: bigint) => {}],
+			[NumericType.INTEGER,     (_n: bigint) => assert.ok(true, 'BigInts are always integers.')],
 			[NumericType.NATURAL,     ( n: bigint) => xjs_BigInt.assertType(n, NumericType.NONNEGATIVE)],
 			[NumericType.WHOLE,       ( n: bigint) => xjs_BigInt.assertType(n, NumericType.POSITIVE)],
 			[NumericType.FLOAT,       (_n: bigint) => assert.ok(false,    'BigInts cannot be non-integers.')],
@@ -70,11 +70,12 @@ export class xjs_BigInt {
 			[NumericType.NONPOSITIVE, ( n: bigint) => assert.ok(n  <= 0n, `${ n } must not be positive.`)],
 			[NumericType.NONNEGATIVE, ( n: bigint) => assert.ok(0n <= n,  `${ n } must not be negative.`)],
 			[NumericType.NONZERO,     ( n: bigint) => assert.ok(n !== 0n, `${ n } must not be zero.`)],
-			[NumericType.FINITE,      (_n: bigint) => {}],
+			[NumericType.FINITE,      (_n: bigint) => assert.ok(true,  'BigInts are always finite.')],
 			[NumericType.INFINITE,    (_n: bigint) => assert.ok(false, 'BigInts cannot be infinite.')],
 		]).get(type)!(int);
 	}
 
 
+	// eslint-disable-next-line @typescript-eslint/no-empty-function --- we want the constructor to be private
 	private constructor() {}
 }
