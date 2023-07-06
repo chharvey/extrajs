@@ -26,6 +26,7 @@
     "url": "git+https://github.com/chharvey/extrajs.git"
   },
   "scripts": {
+    "predist": "eslint . --ext .cjs,.cts,.js,.mjs,.mts,.ts",
     "dist": "tsc",
     "test": "mocha -r ts-node/esm --loader='ts-node/esm' './test/*.ts'",
     "docs": "typedoc",
