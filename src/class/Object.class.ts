@@ -161,19 +161,17 @@ export class xjs_Object {
 	 * @returns the looked-up function, returning <T>
 	 * @throws  {ReferenceError} when failing to find a lookup value
 	 */
-	/* eslint-disable @typescript-eslint/no-explicit-any */
-	public static switch<T>(key: string, dictionary: Record<string, (this: any, ...args: any[]) => T>): (this: any, ...args: any[]) => T {
-		let returned: (this: any, ...args: any[]) => T = dictionary[key];
+	public static switch<T>(key: string, dictionary: Record<string, ((this: any, ...args: any[]) => T) | undefined>): (this: any, ...args: any[]) => T { // eslint-disable-line @typescript-eslint/no-explicit-any
+		let returned = dictionary[key];
 		if (!returned) {
 			console.warn(`Key '${ key }' cannot be found. Using key 'default'…`);
-			returned = dictionary['default'] || null;
+			returned = dictionary['default'];
 			if (!returned) {
 				throw new ReferenceError('No default key found.');
 			}
 		}
 		return returned;
 	}
-	/* eslint-enable @typescript-eslint/no-explicit-any */
 
 	/**
 	 * Return the type of a thing.
