@@ -20,6 +20,7 @@ describe('xjs.Array', () => {
 	});
 
 	describe('.densify<T>(readonly T[]): T[]', () => {
+		/* eslint-disable no-sparse-arrays, @typescript-eslint/comma-dangle */
 		it('removes empty element slots.', () => {
 			const x: readonly (number | void)[] = [, 42, , 48, ,];
 			assert.deepStrictEqual(xjs_Array.densify(x), [42, 48]);
@@ -29,13 +30,16 @@ describe('xjs.Array', () => {
 			assert.notDeepStrictEqual(x,          [      , 42,       , 48,       ,]);
 			assert.deepStrictEqual(xjs_Array.densify(x), x);
 		});
+		/* eslint-enable no-sparse-arrays, @typescript-eslint/comma-dangle */
 	});
 
 	describe('.fillHoles<T>(readonly T[], T): T[]', () => {
+		/* eslint-disable no-sparse-arrays */
 		it('fills empty slots with given value.', () => {
 			const x: readonly (number | void)[] = [, 42, , 48, ,];
 			assert.deepStrictEqual(xjs_Array.fillHoles(x, 0), [0, 42, 0, 48, 0]);
 		});
+		/* eslint-enable no-sparse-arrays */
 	});
 
 	describe('.isSubarrayOf<U, T extends U>(readonly T[], readonly U[], ((U, U) -> boolean)?): boolean', () => {
