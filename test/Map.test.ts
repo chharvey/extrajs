@@ -9,7 +9,7 @@ describe('xjs.Map', () => {
 		describe('.has', () => {
 			it('tests keys by equality.', () => {
 				const key: Key = {id: 42};
-				const my_map: Map<Key, boolean> = new Map([
+				const my_map = new Map<Key, boolean>([
 					[key, true],
 				]);
 				assert.ok(!my_map.has({id: 42}), 'does not contain an equal (but non-identical) key.');
@@ -22,7 +22,7 @@ describe('xjs.Map', () => {
 		describe('.get', () => {
 			it('gets equivalent keys.', () => {
 				const key: Key = {id: 42};
-				const my_map: Map<Key, boolean> = new Map([
+				const my_map = new Map<Key, boolean>([
 					[key, true],
 				]);
 				assert.strictEqual(my_map.get({id: 42}), undefined, 'does not get equal (but non-identical) keys.');
@@ -35,7 +35,7 @@ describe('xjs.Map', () => {
 		describe('.set', () => {
 			it('sets equivalent keys.', () => {
 				const key: Key = {id: 42};
-				const my_map: Map<Key, boolean> = new Map([
+				const my_map = new Map<Key, boolean>([
 					[key, true],
 				]);
 				my_map.set({id: 42}, false);
@@ -52,7 +52,7 @@ describe('xjs.Map', () => {
 		describe('.delete', () => {
 			it('deletes equivalent keys.', () => {
 				const key: Key = {id: 42};
-				const my_map: Map<Key, boolean> = new Map([
+				const my_map = new Map<Key, boolean>([
 					[key, true],
 					[{id: 43}, true],
 					[{id: 44}, true],

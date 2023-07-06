@@ -7,7 +7,7 @@ export class NaNError extends RangeError {
 	 * @param message Optional. A human-readable description of the error.
 	 */
 	constructor(message: string = 'Unacceptable argument `NaN`.') {
-		super(message)
-		this.name = 'NaNError'
+		super(message);
+		this.name = 'NaNError';
 	}
 }

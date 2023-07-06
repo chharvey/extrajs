@@ -25,17 +25,15 @@ export class xjs_Promise {
 	static async any<T0, T1, T2                            >(values: [T0 | Promise<T0>, T1 | Promise<T1>, T2 | Promise<T2>                                                                                                                               ]): Promise<T0 | T1 | T2                                   >;
 	static async any<T0, T1                                >(values: [T0 | Promise<T0>, T1 | Promise<T1>                                                                                                                                                 ]): Promise<T0 | T1                                        >;
 	static async any<T0                                    >(values: [T0 | Promise<T0>                                                                                                                                                                   ]): Promise<T0                                             >;
-	static async any<T>(values: (T | Promise<T>)[]): Promise<T>;
+	static async any<T>(values: Array<T | Promise<T>>): Promise<T>;
 	static async any(values: unknown[]): Promise<unknown> {
-		return Promise.all(values.map((p) => (!(p instanceof Promise)) ? Promise.reject(p) :
-			p.then(
-				(val) => Promise.reject (val),
-				(err) => Promise.resolve(err),
-			)
-		)).then(
+		return Promise.all(values.map((p) => (!(p instanceof Promise)) ? Promise.reject(p) : p.then(
+			(val) => Promise.reject (val),
+			(err) => Promise.resolve(err),
+		))).then(
 			(errors) => Promise.reject (errors),
-			(value ) => Promise.resolve(value ),
-		)
+			(value)  => Promise.resolve(value),
+		);
 	}
 
 

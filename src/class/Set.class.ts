@@ -19,10 +19,12 @@ export class xjs_Set {
 	 * @returns Are corresponding elements the same, i.e. replaceable?
 	 */
 	static is<T>(a: ReadonlySet<T>, b: ReadonlySet<T>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
-		if (a === b) return true
-		return a.size === b.size &&
-			[...a].every((a_el) => [...b].some((b_el) => xjs_Object.sameValueZero(a_el, b_el) || predicate(a_el, b_el))) &&
-			[...b].every((b_el) => [...a].some((a_el) => xjs_Object.sameValueZero(b_el, a_el) || predicate(b_el, a_el)))
+		if (a === b) {
+			return true;
+		}
+		return a.size === b.size
+			&& [...a].every((a_el) => [...b].some((b_el) => xjs_Object.sameValueZero(a_el, b_el) || predicate(a_el, b_el)))
+			&& [...b].every((b_el) => [...a].some((a_el) => xjs_Object.sameValueZero(b_el, a_el) || predicate(b_el, a_el)));
 	}
 
 	/**
@@ -35,7 +37,7 @@ export class xjs_Set {
 	 * @returns a new set with the elements that pass the test; if no elements pass, an empty set is returned
 	 */
 	static filter<T>(set: Set<T>, predicate: (element: T, index: T, set: Set<T>) => boolean, this_arg: unknown = null): Set<T> {
-		return new Set([...set].filter((el) => predicate.call(this_arg, el, el, set)))
+		return new Set([...set].filter((el) => predicate.call(this_arg, el, el, set)));
 	}
 
 	/**
@@ -47,8 +49,8 @@ export class xjs_Set {
 	 * @param   this_arg object to use as `this` when executing `predicate`
 	 * @returns the item found, or `null` if none is found
 	 */
-	static find<T>(set: Set<T>, predicate: (element: T, index: T, set: Set<T>) => boolean, this_arg: unknown = null): T|null {
-		return [...xjs_Set.filter(set, predicate, this_arg)][0] || null
+	static find<T>(set: Set<T>, predicate: (element: T, index: T, set: Set<T>) => boolean, this_arg: unknown = null): T | null {
+		return [...xjs_Set.filter(set, predicate, this_arg)][0] || null;
 	}
 
 	/**
@@ -62,7 +64,7 @@ export class xjs_Set {
 	 * @returns a new Set with transformed elements obtained from `callback`
 	 */
 	static map<T, U>(set: Set<T>, callback: (element: T, index: T, set: Set<T>) => U, this_arg: unknown = null): Set<U> {
-		return new Set([...set].map((el) => callback.call(this_arg, el, el, set)))
+		return new Set([...set].map((el) => callback.call(this_arg, el, el, set)));
 	}
 
 	/**
@@ -79,7 +81,7 @@ export class xjs_Set {
 	 * @returns Is `a` a subset of `b`?
 	 */
 	static isSubsetOf<U, T extends U>(a: ReadonlySet<T>, b: ReadonlySet<U>, predicate: (x: U, y: U) => boolean = xjs_Object.sameValueZero): boolean {
-		return xjs_Array.isSubarrayOf([...a].sort(), [...b].sort(), predicate)
+		return xjs_Array.isSubarrayOf([...a].sort(), [...b].sort(), predicate);
 	}
 
 	/**
@@ -93,7 +95,7 @@ export class xjs_Set {
 	 * @returns exactly `xjs.Set.isSubsetOf(b, a, predicate)`
 	 */
 	static isSupersetOf<T, U extends T>(a: ReadonlySet<T>, b: ReadonlySet<U>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
-		return xjs_Set.isSubsetOf(b, a, predicate)
+		return xjs_Set.isSubsetOf(b, a, predicate);
 	}
 
 	/**
@@ -106,8 +108,8 @@ export class xjs_Set {
 	 * @param   comparator a comparator function
 	 * @returns a new Set containing the elements present in either `a` or `b` (or both)
 	 */
-	static union<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator?: (a: T | U, b: T | U) => boolean): Set<T|U> {
-		const returned: Set<T|U> = new Set(a)
+	static union<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator?: (a: T | U, b: T | U) => boolean): Set<T | U> {
+		const returned = new Set<T | U>(a);
 		b.forEach((el) => {
 			if (!comparator) {
 				returned.add(el);
@@ -115,7 +117,7 @@ export class xjs_Set {
 				xjs_Set.add(returned, el, comparator);
 			}
 		});
-		return returned
+		return returned;
 	}
 
 	/**
@@ -128,9 +130,9 @@ export class xjs_Set {
 	 * @param   comparator a comparator function
 	 * @returns a new Set containing the elements present only in both `a` and `b`
 	 */
-	static intersection<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator?: (a: T & U, b: T & U) => boolean): Set<T&U>;
+	static intersection<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator?: (a: T & U, b: T & U) => boolean): Set<T & U>;
 	static intersection<T>(a: ReadonlySet<T>, b: ReadonlySet<T>, comparator?: (a: T, b: T) => boolean): Set<T> {
-		const returned: Set<T> = new Set();
+		const returned = new Set<T>();
 		b.forEach((el) => {
 			if (!comparator) {
 				if (a.has(el)) {
@@ -142,7 +144,7 @@ export class xjs_Set {
 				}
 			}
 		});
-		return returned
+		return returned;
 	}
 
 	/**
@@ -157,7 +159,7 @@ export class xjs_Set {
 	 */
 	static difference<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator?: (a: T | U, b: T | U) => boolean): Set<T>;
 	static difference<T>(a: ReadonlySet<T>, b: ReadonlySet<T>, comparator?: (a: T, b: T) => boolean): Set<T> {
-		const returned: Set<T> = new Set();
+		const returned = new Set<T>();
 		a.forEach((el) => {
 			if (!comparator) {
 				if (!b.has(el)) {
@@ -169,7 +171,7 @@ export class xjs_Set {
 				}
 			}
 		});
-		return returned
+		return returned;
 	}
 
 	/**
@@ -186,7 +188,7 @@ export class xjs_Set {
 	 * @param   comparator a comparator function
 	 * @returns a new Set containing the elements present only in `a` or only in `b`, but not both
 	 */
-	static symmetricDifference<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator?: (a: T | U, b: T | U) => boolean): Set<T|U> {
+	static symmetricDifference<T, U>(a: ReadonlySet<T>, b: ReadonlySet<U>, comparator?: (a: T | U, b: T | U) => boolean): Set<T | U> {
 		return xjs_Set.difference(
 			xjs_Set.union(a, b, comparator),
 			xjs_Set.intersection(a, b, comparator),

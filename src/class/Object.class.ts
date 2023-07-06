@@ -49,18 +49,23 @@ export class xjs_Object {
 	 * @throws  {TypeError} if either `a` or `b` is a function (not supported)
 	 */
 	static is<T>(a: T, b: T, predicate: (x: any, y: any) => boolean = xjs_Object.sameValueZero): boolean {
-		if (a === b) return true
-		if (['string', 'number', 'boolean', 'null', 'undefined'].includes(xjs_Object.typeOf(a))) {
-			return xjs_Object.sameValueZero(a, b)
+		if (a === b) {
+			return true;
 		}
-		if (xjs_Object.typeOf(a) === 'function' || xjs_Object.typeOf(b) === 'function') throw new TypeError('Function arguments to xjs.Object.is are not yet supported.')
-		if (a instanceof Array && b instanceof Array) return xjs_Array.is(a, b)
+		if (['string', 'number', 'boolean', 'null', 'undefined'].includes(xjs_Object.typeOf(a))) {
+			return xjs_Object.sameValueZero(a, b);
+		}
+		if (xjs_Object.typeOf(a) === 'function' || xjs_Object.typeOf(b) === 'function') {
+			throw new TypeError('Function arguments to xjs.Object.is are not yet supported.');
+		}
+		if (a instanceof Array && b instanceof Array) {
+			return xjs_Array.is(a, b);
+		}
 		// else, it will be 'object'
-		return Object.entries(a as Record<string, unknown>).every(([a_key, a_value]) =>
-			Object.entries(b as Record<string, unknown>).some(([b_key, b_value]) => a_key === b_key && predicate(a_value, b_value))
-		) && Object.entries(b as Record<string, unknown>).every(([b_key, b_value]) =>
-			Object.entries(a as Record<string, unknown>).some(([a_key, a_value]) => a_key === b_key && predicate(a_value, b_value))
-		)
+		return (
+			   Object.entries(a as Record<string, unknown>).every(([a_key, a_value]) => Object.entries(b as Record<string, unknown>).some(([b_key, b_value]) => a_key === b_key && predicate(a_value, b_value)))
+			&& Object.entries(b as Record<string, unknown>).every(([b_key, b_value]) => Object.entries(a as Record<string, unknown>).some(([a_key, a_value]) => a_key === b_key && predicate(a_value, b_value)))
+		);
 	}
 
 	/**
@@ -75,7 +80,7 @@ export class xjs_Object {
 	 * @returns exactly `a === b || Object.is(a, b)`
 	 */
 	static sameValueZero(a: unknown, b: unknown): boolean {
-		return a === b || Object.is(a, b)
+		return a === b || Object.is(a, b);
 	}
 
 	/**
@@ -113,41 +118,41 @@ export class xjs_Object {
 	 * ```js
 	 * // What is the date of the 1st Tuesday of November, 2018?
 	 * let call_me = xjs.Object.switch<number>('November', {
-	 *   'January'  : (n: number) => [ 2,  9, 16, 23,  30][n - 1],
-	 *   'February' : (n: number) => [ 6. 13. 20, 27, NaN][n - 1],
-	 *   'March'    : (n: number) => [ 6, 13, 20, 27, NaN][n - 1],
-	 *   'April'    : (n: number) => [ 3, 10, 17, 24, NaN][n - 1],
-	 *   'May'      : (n: number) => [ 1,  8, 15, 22,  29][n - 1],
-	 *   'June'     : (n: number) => [ 5, 12, 19, 26, NaN][n - 1],
-	 *   'July'     : (n: number) => [ 3, 10, 17, 24,  31][n - 1],
-	 *   'August'   : (n: number) => [ 7, 14, 21, 28, NaN][n - 1],
-	 *   'September': (n: number) => [ 4, 11, 18, 25, NaN][n - 1],
-	 *   'October'  : (n: number) => [ 2,  9, 16, 23,  30][n - 1],
-	 *   'November' : (n: number) => [ 6, 13, 20, 27, NaN][n - 1],
-	 *   'December' : (n: number) => [ 4, 11, 18, 25, NaN][n - 1],
-	 *   'default'  : (n: number) => NaN,
-	 * }) // returns a function taking `n` and returning one of `[6,13,20,27,NaN]`
-	 * call_me(1) // returns the number `6`
+	 * 	'January':   (n: number) => [ 2,  9, 16, 23,  30][n - 1],
+	 * 	'February':  (n: number) => [ 6. 13. 20, 27, NaN][n - 1],
+	 * 	'March':     (n: number) => [ 6, 13, 20, 27, NaN][n - 1],
+	 * 	'April':     (n: number) => [ 3, 10, 17, 24, NaN][n - 1],
+	 * 	'May':       (n: number) => [ 1,  8, 15, 22,  29][n - 1],
+	 * 	'June':      (n: number) => [ 5, 12, 19, 26, NaN][n - 1],
+	 * 	'July':      (n: number) => [ 3, 10, 17, 24,  31][n - 1],
+	 * 	'August':    (n: number) => [ 7, 14, 21, 28, NaN][n - 1],
+	 * 	'September': (n: number) => [ 4, 11, 18, 25, NaN][n - 1],
+	 * 	'October':   (n: number) => [ 2,  9, 16, 23,  30][n - 1],
+	 * 	'November':  (n: number) => [ 6, 13, 20, 27, NaN][n - 1],
+	 * 	'December':  (n: number) => [ 4, 11, 18, 25, NaN][n - 1],
+	 * 	'default':   (n: number) => NaN,
+	 * }); // returns a function taking `n` and returning one of `[6,13,20,27,NaN]`
+	 * call_me(1); // returns the number `6`
 	 * ```
 	 *
 	 * DEPRECATION WARNING: This method is deprecated. Instead, use a built-in Map:
 	 * ```js
 	 * // What is the date of the 1st Tuesday of November, 2018?
 	 * let call_me: (n: number) => number = new Map<string, (n: number) => number>([
-	 * 	['January'   , (n: number) => [ 2,  9, 16, 23,  30][n - 1]],
-	 * 	['February'  , (n: number) => [ 6. 13. 20, 27, NaN][n - 1]],
-	 * 	['March'     , (n: number) => [ 6, 13, 20, 27, NaN][n - 1]],
-	 * 	['April'     , (n: number) => [ 3, 10, 17, 24, NaN][n - 1]],
-	 * 	['May'       , (n: number) => [ 1,  8, 15, 22,  29][n - 1]],
-	 * 	['June'      , (n: number) => [ 5, 12, 19, 26, NaN][n - 1]],
-	 * 	['July'      , (n: number) => [ 3, 10, 17, 24,  31][n - 1]],
-	 * 	['August'    , (n: number) => [ 7, 14, 21, 28, NaN][n - 1]],
-	 * 	['September' , (n: number) => [ 4, 11, 18, 25, NaN][n - 1]],
-	 * 	['October'   , (n: number) => [ 2,  9, 16, 23,  30][n - 1]],
-	 * 	['November'  , (n: number) => [ 6, 13, 20, 27, NaN][n - 1]],
-	 * 	['December'  , (n: number) => [ 4, 11, 18, 25, NaN][n - 1]],
-	 * ]).get('November') // returns a function taking `n` and returning one of `[6,13,20,27,NaN]`
-	 * call_me(1) // returns the number `6`
+	 * 	['January',   (n: number) => [ 2,  9, 16, 23,  30][n - 1]],
+	 * 	['February',  (n: number) => [ 6. 13. 20, 27, NaN][n - 1]],
+	 * 	['March',     (n: number) => [ 6, 13, 20, 27, NaN][n - 1]],
+	 * 	['April',     (n: number) => [ 3, 10, 17, 24, NaN][n - 1]],
+	 * 	['May',       (n: number) => [ 1,  8, 15, 22,  29][n - 1]],
+	 * 	['June',      (n: number) => [ 5, 12, 19, 26, NaN][n - 1]],
+	 * 	['July',      (n: number) => [ 3, 10, 17, 24,  31][n - 1]],
+	 * 	['August',    (n: number) => [ 7, 14, 21, 28, NaN][n - 1]],
+	 * 	['September', (n: number) => [ 4, 11, 18, 25, NaN][n - 1]],
+	 * 	['October',   (n: number) => [ 2,  9, 16, 23,  30][n - 1]],
+	 * 	['November',  (n: number) => [ 6, 13, 20, 27, NaN][n - 1]],
+	 * 	['December',  (n: number) => [ 4, 11, 18, 25, NaN][n - 1]],
+	 * ]).get('November'); // returns a function taking `n` and returning one of `[6,13,20,27,NaN]`
+	 * call_me(1); // returns the number `6`
 	 * ```
 	 *
 	 * @typeparam T - the type of value returned by the looked-up function
@@ -157,174 +162,178 @@ export class xjs_Object {
 	 * @throws  {ReferenceError} when failing to find a lookup value
 	 */
 	static switch<T>(key: string, dictionary: { [index: string]: (this: any, ...args: any[]) => T }): (this: any, ...args: any[]) => T {
-		let returned: (this: any, ...args: any[]) => T = dictionary[key]
+		let returned: (this: any, ...args: any[]) => T = dictionary[key];
 		if (!returned) {
-			console.warn(`Key '${key}' cannot be found. Using key 'default'…`)
-			returned = dictionary['default'] || null
-			if (!returned) throw new ReferenceError(`No default key found.`)
+			console.warn(`Key '${ key }' cannot be found. Using key 'default'…`);
+			returned = dictionary['default'] || null;
+			if (!returned) {
+				throw new ReferenceError('No default key found.');
+			}
 		}
-		return returned
+		return returned;
 	}
 
-  /**
-   * Return the type of a thing.
-   *
-   * Similar to the `typeof` primitive operator, but more refined.
-   * Note: this method should only be used at runtime —
-   * TypeScript is much better at checking types, and can do so at compile time.
-   *
-   * Warning! passing undeclared variables will throw a `ReferenceError`!
-   *
-   * ```js
-   * typeof null     // 'object' :(
-   * typeof []       // 'object'
-   * typeof NaN      // 'number'
-   * typeof Infinity // 'number'
-   * xjs.typeOf(null)     // 'null'
-   * xjs.typeOf([])       // 'array'
-   * xjs.typeOf(NaN)      // 'NaN'
-   * xjs.typeOf(Infinity) // 'infinite'
-   *
-   * var x;
-   * typeof x;       // 'undefined'
-   * typeof y;       // 'undefined'
-   * xjs.typeOf(x);  // 'undefined'
-   * xjs.typeOf(y);  // Uncaught ReferenceError: y is not defined
-   * ```
-   *
-   * @see {@link https://github.com/zaggino/z-schema/blob/bddb0b25daa0c96119e84b121d7306b1a7871594/src/Utils.js#L12|Credit to @zaggino}
-   * @param   thing anything
-   * @returns the type of the thing
-   */
+	/**
+	 * Return the type of a thing.
+	 *
+	 * Similar to the `typeof` primitive operator, but more refined.
+	 * Note: this method should only be used at runtime —
+	 * TypeScript is much better at checking types, and can do so at compile time.
+	 *
+	 * Warning! passing undeclared variables will throw a `ReferenceError`!
+	 *
+	 * ```js
+	 * typeof null     // 'object' :(
+	 * typeof []       // 'object'
+	 * typeof NaN      // 'number'
+	 * typeof Infinity // 'number'
+	 * xjs.typeOf(null)     // 'null'
+	 * xjs.typeOf([])       // 'array'
+	 * xjs.typeOf(NaN)      // 'NaN'
+	 * xjs.typeOf(Infinity) // 'infinite'
+	 *
+	 * var x;
+	 * typeof x;       // 'undefined'
+	 * typeof y;       // 'undefined'
+	 * xjs.typeOf(x);  // 'undefined'
+	 * xjs.typeOf(y);  // Uncaught ReferenceError: y is not defined
+	 * ```
+	 *
+	 * @see {@link https://github.com/zaggino/z-schema/blob/bddb0b25daa0c96119e84b121d7306b1a7871594/src/Utils.js#L12|Credit to @zaggino}
+	 * @param   thing anything
+	 * @returns the type of the thing
+	 */
 	static typeOf(thing: unknown): string {
 		return (new Map<string, (arg: any) => string>([
-			['object', (arg: unknown) => (arg === null) ? 'null'
-				: (Array.isArray(arg)) ? 'array'
-				: 'object'
-			],
-			['number', (arg: number) => (Number.isNaN(arg)) ? 'NaN'
-				: (!Number.isFinite(arg)) ? 'infinite'
-				: 'number'
-			],
-			['bigint'    , () => 'bigint'],
-			['function'  , () => 'function'],
-			['string'    , () => 'string'],
-			['boolean'   , () => 'boolean'],
-			['undefined' , () => 'undefined'],
-		]).get(typeof thing) || ((arg: unknown) => typeof arg))(thing)
+			['object',    (arg: unknown) => (arg === null) ? 'null' : (Array.isArray(arg)) ? 'array' : 'object'],
+			['number',    (arg: number)  => (Number.isNaN(arg)) ? 'NaN' : (!Number.isFinite(arg)) ? 'infinite' : 'number'],
+			['bigint',    ()             => 'bigint'],
+			['function',  ()             => 'function'],
+			['string',    ()             => 'string'],
+			['boolean',   ()             => 'boolean'],
+			['undefined', ()             => 'undefined'],
+		]).get(typeof thing) || ((arg: unknown) => typeof arg))(thing);
 	}
 
-  /**
-   * WARNING:EXPERIMENTAL
-   * Return the name of an object’s constructing class or function.
-   *
-   * This method reveals the most specific class that the native `instanceof` operator would reveal.
-   * This method can be passed either complex values (objects, arrays, functions) or primitive values.
-   * Technically, primitives do not have constructing functions, but they can be wrapped with object constructors.
-   * For example, calling `instanceOf(3)` will return `Number`, even though `3` was not constructed via the `Number` class.
-   * @param   thing anything except `null` or `undefined`
-   * @returns the name of the constructing function
-   * @throws  {TypeError} if `null` or `undefined` is passed
-   */
-  static instanceOf(thing: unknown): string {
-    if (thing === null || thing === undefined) throw new TypeError(`\`${thing}\` does not have a construtor.`)
-    return (thing as any).__proto__.constructor.name
-  }
+	/**
+	 * WARNING:EXPERIMENTAL
+	 * Return the name of an object’s constructing class or function.
+	 *
+	 * This method reveals the most specific class that the native `instanceof` operator would reveal.
+	 * This method can be passed either complex values (objects, arrays, functions) or primitive values.
+	 * Technically, primitives do not have constructing functions, but they can be wrapped with object constructors.
+	 * For example, calling `instanceOf(3)` will return `Number`, even though `3` was not constructed via the `Number` class.
+	 * @param   thing anything except `null` or `undefined`
+	 * @returns the name of the constructing function
+	 * @throws  {TypeError} if `null` or `undefined` is passed
+	 */
+	static instanceOf(thing: unknown): string {
+		if (thing === null || thing === undefined) {
+			throw new TypeError(`\`${ thing }\` does not have a construtor.`);
+		}
+		return (thing as any).__proto__.constructor.name;
+	}
 
-  /**
-   * Deep freeze an object, and return the result.
-   *
-   * *Note: This function is impure, modifying the given argument.*
-   * If an array or object is passed,
-   * **Recursively** call
-   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze|Object.freeze}
-   * on every property and sub-property of the given parameter.
-   * Else, return the given argument.
-   * If the argument is an array, it is faster to use {@link xjs_Array.freezeDeep}.
+	/**
+	 * Deep freeze an object, and return the result.
+	 *
+	 * *Note: This function is impure, modifying the given argument.*
+	 * If an array or object is passed,
+	 * **Recursively** call
+	 * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze|Object.freeze}
+	 * on every property and sub-property of the given parameter.
+	 * Else, return the given argument.
+	 * If the argument is an array, it is faster to use {@link xjs_Array.freezeDeep}.
 	 * @typeparam T - the type of `thing`
-   * @param   thing any value to freeze
-   * @returns the given value, with everything frozen
-   * @deprecated use interface `Readonly<T>` instead
-   */
-  static freezeDeep<T>(thing: Readonly<T>): Readonly<T> {
-		if (thing instanceof Array) return xjs_Array.freezeDeep(thing) as unknown as T // HACK https://stackoverflow.com/a/18736071/
-    Object.freeze(thing)
-    if (xjs_Object.typeOf(thing) === 'object') {
-        for (let key in thing) {
-          if (!Object.isFrozen(thing[key])) xjs_Object.freezeDeep<T[keyof T]>(thing[key])
-        }
-    }
-    return thing
-  }
+	 * @param   thing any value to freeze
+	 * @returns the given value, with everything frozen
+	 * @deprecated use interface `Readonly<T>` instead
+	 */
+	static freezeDeep<T>(thing: Readonly<T>): Readonly<T> {
+		if (thing instanceof Array) {
+			return xjs_Array.freezeDeep(thing) as unknown as T; // HACK https://stackoverflow.com/a/18736071/
+		}
+		Object.freeze(thing);
+		if (xjs_Object.typeOf(thing) === 'object') {
+			for (let key in thing) {
+				if (!Object.isFrozen(thing[key])) {
+					xjs_Object.freezeDeep<T[keyof T]>(thing[key]);
+				}
+			}
+		}
+		return thing;
+	}
 
-  /**
-   * WARNING:EXPERIMENTAL
-   * Deep clone an object, and return the result.
-   *
-   * If an array or object is passed,
-   * This method is **recursively** called, cloning properties and sub-properties of the given parameter.
-   * The returned result is an object, that when passed with the original as arguments of
-   * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is},
-   * `true` would be returned. The new object would be “replaceable” with its cloner.
-   * If a primitive value is passed, the original argument is returned.
-   * If the argument is an array, it is faster to use {@link xjs_Array.cloneDeep}.
-   *
-   * This method provides a deeper clone than `Object.assign()`: whereas `Object.assign()` only
-   * copies the top-level properties, this method recursively clones into all sub-levels.
-   *
-   * ```js
-   * var x = { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
-   *
-   * // Object.assign x into y:
-   * var y = Object.assign({}, x) // returns { first: x.first, second: x.second, third: x.third }
-   *
-   * // you can reassign properties of `y` without affecting `x`:
-   * y.first  = 'one'
-   * y.second = 2
-   * console.log(y) // returns { first: 'one', second: 2, third: x.third }
-   * console.log(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
-   *
-   * // however you cannot mutate properties of `y` without affecting `x`:
-   * y.third[0]    = 'one'
-   * y.third[1]    = 2
-   * y.third[2].v  = [3]
-   * console.log(y) // returns { first: 'one', second: 2, third: ['one', 2, { v:[3] }] }
-   * console.log(x) // returns { first: 1, second: { value: 2 }, third: ['one', 2, { v:[3] }] }
-   *
-   * // xjs.Object.cloneDeep x into y:
-   * var z = xjs.Object.cloneDeep(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', {v:3}] }
-   *
-   * // as with Object.assign, you can reassign properties of `z` without affecting `x`:
-   * z.first  = 'one'
-   * z.second = 2
-   * console.log(z) // returns { first: 'one', second: 2, third: [1, '2', {v:3}] }
-   * console.log(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
-   *
-   * // but unlike Object.assign, you can mutate properties of `z` without affecting `x`:
-   * z.third[0]    = 'one'
-   * z.third[1]    = 2
-   * z.third[2].v  = [3]
-   * console.log(z) // returns { first: 'one', second: 2, third: ['one', 2, { v:[3] }] }
-   * console.log(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
-   * ```
-   *
+	/**
+	 * WARNING:EXPERIMENTAL
+	 * Deep clone an object, and return the result.
+	 *
+	 * If an array or object is passed,
+	 * This method is **recursively** called, cloning properties and sub-properties of the given parameter.
+	 * The returned result is an object, that when passed with the original as arguments of
+	 * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is|Object.is},
+	 * `true` would be returned. The new object would be “replaceable” with its cloner.
+	 * If a primitive value is passed, the original argument is returned.
+	 * If the argument is an array, it is faster to use {@link xjs_Array.cloneDeep}.
+	 *
+	 * This method provides a deeper clone than `Object.assign()`: whereas `Object.assign()` only
+	 * copies the top-level properties, this method recursively clones into all sub-levels.
+	 *
+	 * ```js
+	 * var x = { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
+	 *
+	 * // Object.assign x into y:
+	 * var y = Object.assign({}, x) // returns { first: x.first, second: x.second, third: x.third }
+	 *
+	 * // you can reassign properties of `y` without affecting `x`:
+	 * y.first  = 'one'
+	 * y.second = 2
+	 * console.log(y) // returns { first: 'one', second: 2, third: x.third }
+	 * console.log(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
+	 *
+	 * // however you cannot mutate properties of `y` without affecting `x`:
+	 * y.third[0]    = 'one'
+	 * y.third[1]    = 2
+	 * y.third[2].v  = [3]
+	 * console.log(y) // returns { first: 'one', second: 2, third: ['one', 2, { v:[3] }] }
+	 * console.log(x) // returns { first: 1, second: { value: 2 }, third: ['one', 2, { v:[3] }] }
+	 *
+	 * // xjs.Object.cloneDeep x into y:
+	 * var z = xjs.Object.cloneDeep(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', {v:3}] }
+	 *
+	 * // as with Object.assign, you can reassign properties of `z` without affecting `x`:
+	 * z.first  = 'one'
+	 * z.second = 2
+	 * console.log(z) // returns { first: 'one', second: 2, third: [1, '2', {v:3}] }
+	 * console.log(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
+	 *
+	 * // but unlike Object.assign, you can mutate properties of `z` without affecting `x`:
+	 * z.third[0]    = 'one'
+	 * z.third[1]    = 2
+	 * z.third[2].v  = [3]
+	 * console.log(z) // returns { first: 'one', second: 2, third: ['one', 2, { v:[3] }] }
+	 * console.log(x) // returns { first: 1, second: { value: 2 }, third: [1, '2', { v:3 }] }
+	 * ```
+	 *
 	 * @typeparam T - the type of `thing`
-   * @param   thing any value to clone
-   * @returns an exact copy of the given value, but with nothing equal via `===` (unless the value given is primitive)
-   */
-  static cloneDeep<T>(thing: T): T {
-		if (thing instanceof Array) return xjs_Array.cloneDeep(thing) as unknown as T // HACK https://stackoverflow.com/a/18736071/
-    if (xjs_Object.typeOf(thing) === 'object') {
-        const returned: { [index: string]: unknown } = {}
-        for (let key in thing) {
-          returned[key] = xjs_Object.cloneDeep(thing[key])
-        }
-			return returned as unknown as T
-    } else {
-        return thing
-    }
-  }
+	 * @param   thing any value to clone
+	 * @returns an exact copy of the given value, but with nothing equal via `===` (unless the value given is primitive)
+	 */
+	static cloneDeep<T>(thing: T): T {
+		if (thing instanceof Array) {
+			return xjs_Array.cloneDeep(thing) as unknown as T; // HACK https://stackoverflow.com/a/18736071/
+		}
+		if (xjs_Object.typeOf(thing) === 'object') {
+			const returned: { [index: string]: unknown } = {};
+			for (let key in thing) {
+				returned[key] = xjs_Object.cloneDeep(thing[key]);
+			}
+			return returned as unknown as T;
+		} else {
+			return thing;
+		}
+	}
 
 
-  private constructor() {}
+	private constructor() {}
 }

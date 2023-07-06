@@ -1,4 +1,7 @@
-import {xjs_Number, NumericType} from './Number.class.js';
+import {
+	xjs_Number,
+	NumericType,
+} from './Number.class.js';
 import {xjs_BigInt} from './BigInt.class.js';
 
 
@@ -19,10 +22,10 @@ export class xjs_Math {
 	 * @returns are `x` and `y` within `epsilon` distance apart?
 	 */
 	static approx(x: number, y: number, epsilon: number = Number.EPSILON): boolean {
-		xjs_Number.assertType(x)
-		xjs_Number.assertType(y)
-		xjs_Number.assertType(epsilon)
-		return Math.abs(x - y) < epsilon
+		xjs_Number.assertType(x);
+		xjs_Number.assertType(y);
+		xjs_Number.assertType(epsilon);
+		return Math.abs(x - y) < epsilon;
 	}
 
 	/**
@@ -34,7 +37,7 @@ export class xjs_Math {
 	 * @returns exactly `interpolateArithmetic(x, y, w)`
 	 */
 	static average(x: number, y: number, w = 0.5): number {
-		return xjs_Math.interpolateArithmetic(x, y, w)
+		return xjs_Math.interpolateArithmetic(x, y, w);
 	}
 
 	/**
@@ -44,8 +47,10 @@ export class xjs_Math {
 	 * @throws    if no arguments are supplied
 	 */
 	static minBigInt(...ints: bigint[]): bigint {
-		if (!ints.length) throw new Error('No arguments supplied.')
-		return ints.reduce((a, b) => a < b ? a : b)
+		if (!ints.length) {
+			throw new Error('No arguments supplied.');
+		}
+		return ints.reduce((a, b) => a < b ? a : b);
 	}
 
 	/**
@@ -55,8 +60,10 @@ export class xjs_Math {
 	 * @throws    if no arguments are supplied
 	 */
 	static maxBigInt(...ints: bigint[]): bigint {
-		if (!ints.length) throw new Error('No arguments supplied.')
-		return ints.reduce((a, b) => a < b ? b : a)
+		if (!ints.length) {
+			throw new Error('No arguments supplied.');
+		}
+		return ints.reduce((a, b) => a < b ? b : a);
 	}
 
 	/**
@@ -73,10 +80,10 @@ export class xjs_Math {
 	 * @returns       `Math.min(Math.max(min, x), max)`
 	 */
 	static clamp(min: number, val: number, max: number): number {
-		xjs_Number.assertType(min)
-		xjs_Number.assertType(val)
-		xjs_Number.assertType(max)
-		return (min <= max) ? Math.min(Math.max(min, val), max) : xjs_Math.clamp(max, val, min)
+		xjs_Number.assertType(min);
+		xjs_Number.assertType(val);
+		xjs_Number.assertType(max);
+		return (min <= max) ? Math.min(Math.max(min, val), max) : xjs_Math.clamp(max, val, min);
 	}
 
 	/**
@@ -87,7 +94,7 @@ export class xjs_Math {
 	 * @returns       the clamped value
 	 */
 	static clampBigInt(min: bigint, val: bigint, max: bigint): bigint {
-		return (min <= max) ? xjs_Math.minBigInt(xjs_Math.maxBigInt(min, val), max) : xjs_Math.clampBigInt(max, val, min)
+		return (min <= max) ? xjs_Math.minBigInt(xjs_Math.maxBigInt(min, val), max) : xjs_Math.clampBigInt(max, val, min);
 	}
 
 	/**
@@ -103,8 +110,8 @@ export class xjs_Math {
 	 * @throws  {NaNError} if one of the numbers is `NaN`
 	 */
 	static meanArithmetic(...nums: number[]): number {
-		nums.forEach((n) => xjs_Number.assertType(n, NumericType.FINITE)) // NB re-throw
-		return nums.reduce((x, y) => x + y) * (1 / nums.length)
+		nums.forEach((n) => xjs_Number.assertType(n, NumericType.FINITE)); // NB re-throw
+		return nums.reduce((x, y) => x + y) * (1 / nums.length);
 	}
 
 	/**
@@ -120,8 +127,8 @@ export class xjs_Math {
 	 * @throws  {NaNError} if one of the numbers is `NaN`
 	 */
 	static meanGeometric(...nums: number[]): number {
-		nums.forEach((n) => xjs_Number.assertType(n, NumericType.FINITE)) // NB re-throw
-		return Math.abs(nums.reduce((x, y) => x * y)) ** (1 / nums.length)
+		nums.forEach((n) => xjs_Number.assertType(n, NumericType.FINITE)); // NB re-throw
+		return Math.abs(nums.reduce((x, y) => x * y)) ** (1 / nums.length);
 	}
 
 	/**
@@ -137,8 +144,8 @@ export class xjs_Math {
 	 * @throws  {NaNError} if one of the numbers is `NaN`
 	 */
 	static meanHarmonic(...nums: number[]): number {
-		nums.forEach((n) => xjs_Number.assertType(n, NumericType.FINITE)) // NB re-throw
-		return 1 / xjs_Math.meanArithmetic(...nums.map((x) => 1 / x))
+		nums.forEach((n) => xjs_Number.assertType(n, NumericType.FINITE)); // NB re-throw
+		return 1 / xjs_Math.meanArithmetic(...nums.map((x) => 1 / x));
 	}
 
 	/**
@@ -165,10 +172,10 @@ export class xjs_Math {
 	 * @throws  {NaNError} if an argument is `NaN`
 	 */
 	static interpolateArithmetic(a: number, b: number, p: number = 0.5): number {
-		xjs_Number.assertType(a, NumericType.FINITE)
-		xjs_Number.assertType(b, NumericType.FINITE)
-		xjs_Number.assertType(p, NumericType.FINITE)
-		return a * (1 - p) + (b * p) // equally, `(b - a) * p + a`
+		xjs_Number.assertType(a, NumericType.FINITE);
+		xjs_Number.assertType(b, NumericType.FINITE);
+		xjs_Number.assertType(p, NumericType.FINITE);
+		return a * (1 - p) + (b * p); // equally, `(b - a) * p + a`
 	}
 
 	/**
@@ -195,10 +202,10 @@ export class xjs_Math {
 	 * @throws  {NaNError} if an argument is `NaN`
 	 */
 	static interpolateGeometric(a: number, b: number, p: number = 0.5): number {
-		xjs_Number.assertType(a, NumericType.FINITE)
-		xjs_Number.assertType(b, NumericType.FINITE)
-		xjs_Number.assertType(p, NumericType.FINITE)
-		return a ** (1 - p) * b ** p // equally, `a * (b / a) ** p`
+		xjs_Number.assertType(a, NumericType.FINITE);
+		xjs_Number.assertType(b, NumericType.FINITE);
+		xjs_Number.assertType(p, NumericType.FINITE);
+		return a ** (1 - p) * b ** p; // equally, `a * (b / a) ** p`
 	}
 
 	/**
@@ -225,10 +232,10 @@ export class xjs_Math {
 	 * @throws  {NaNError} if an argument is `NaN`
 	 */
 	static interpolateHarmonic(a: number, b: number, p: number = 0.5): number {
-		xjs_Number.assertType(a, NumericType.FINITE)
-		xjs_Number.assertType(b, NumericType.FINITE)
-		xjs_Number.assertType(p, NumericType.FINITE)
-		return 1 / xjs_Math.interpolateArithmetic(1/a, 1/b, p) // equally, `(a * b) / ((a - b) * p + b)`
+		xjs_Number.assertType(a, NumericType.FINITE);
+		xjs_Number.assertType(b, NumericType.FINITE);
+		xjs_Number.assertType(p, NumericType.FINITE);
+		return 1 / xjs_Math.interpolateArithmetic(1 / a, 1 / b, p); // equally, `(a * b) / ((a - b) * p + b)`
 	}
 
 	/**
@@ -242,47 +249,47 @@ export class xjs_Math {
 	 * @returns exactly `((x % n) + n) % n`
 	 * @throws  {Error} if `n` is not a positive integer
 	 */
-	static mod(x: number, n: number|bigint): number {
-		xjs_Number.assertType(x, NumericType.FINITE)
+	static mod(x: number, n: number | bigint): number {
+		xjs_Number.assertType(x, NumericType.FINITE);
 		if (typeof n === 'number') {
-			xjs_Number.assertType(n, NumericType.WHOLE)
+			xjs_Number.assertType(n, NumericType.WHOLE);
 		} else {
-			xjs_BigInt.assertType(n, NumericType.WHOLE)
+			xjs_BigInt.assertType(n, NumericType.WHOLE);
 		}
-		n = Number(n)
-		return ((x % n) + n) % n
+		n = Number(n);
+		return ((x % n) + n) % n;
 	}
 
-  /**
-   * Return the `n`th tetration of `x`.
-   *
-   * Tetration is considered the next hyperoperation after exponentiation
-   * (which follows multiplication, following addition).
-   * For example, `tetrate(5, 3)` returns the result of `5 ** 5 ** 5`: repeated exponentiation.
-   * (Note that with ambiguous grouping, `a ** b ** c` is equal to `a ** (b ** c)`.)
-   * If there were a native JavaScript operator for tetration,
-   * it might be a triple-asterisk: `5 *** 3`.
-   *
-   * Currently, there is only support for non-negative integer hyperexponents.
-   * Negative numbers and non-integers are not yet allowed.
-   *
-   * ```js
-   * tetrate(5, 3) // returns 5 ** 5 ** 5 // equal to 5 ** (5 ** 5)
-   * tetrate(5, 1) // returns 5
-   * tetrate(5, 0) // returns 1
-   * ```
-   *
-   * @param   x the root, any number
-   * @param   n the hyper-exponent to which the root is raised, a non-negative integer
-   * @returns informally, `x *** n`
-   * @throws  {Error} if `n` is not a non-negative integer
-   */
-  static tetrate(x: number, n: number): number {
-		xjs_Number.assertType(x, NumericType.FINITE)
-		xjs_Number.assertType(n, NumericType.NATURAL)
-    return (n === 0) ? 1 : x ** xjs_Math.tetrate(x, n - 1)
-  }
+	/**
+	 * Return the `n`th tetration of `x`.
+	 *
+	 * Tetration is considered the next hyperoperation after exponentiation
+	 * (which follows multiplication, following addition).
+	 * For example, `tetrate(5, 3)` returns the result of `5 ** 5 ** 5`: repeated exponentiation.
+	 * (Note that with ambiguous grouping, `a ** b ** c` is equal to `a ** (b ** c)`.)
+	 * If there were a native JavaScript operator for tetration,
+	 * it might be a triple-asterisk: `5 *** 3`.
+	 *
+	 * Currently, there is only support for non-negative integer hyperexponents.
+	 * Negative numbers and non-integers are not yet allowed.
+	 *
+	 * ```js
+	 * tetrate(5, 3) // returns 5 ** 5 ** 5 // equal to 5 ** (5 ** 5)
+	 * tetrate(5, 1) // returns 5
+	 * tetrate(5, 0) // returns 1
+	 * ```
+	 *
+	 * @param   x the root, any number
+	 * @param   n the hyper-exponent to which the root is raised, a non-negative integer
+	 * @returns informally, `x *** n`
+	 * @throws  {Error} if `n` is not a non-negative integer
+	 */
+	static tetrate(x: number, n: number): number {
+		xjs_Number.assertType(x, NumericType.FINITE);
+		xjs_Number.assertType(n, NumericType.NATURAL);
+		return (n === 0) ? 1 : x ** xjs_Math.tetrate(x, n - 1);
+	}
 
 
-  private constructor() {}
+	private constructor() {}
 }
