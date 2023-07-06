@@ -117,7 +117,7 @@ export class xjs_Object {
 	 *
 	 * ```js
 	 * // What is the date of the 1st Tuesday of November, 2018?
-	 * let call_me = xjs.Object.switch<number>('November', {
+	 * const call_me = xjs.Object.switch<number>('November', {
 	 * 	'January':   (n: number) => [ 2,  9, 16, 23,  30][n - 1],
 	 * 	'February':  (n: number) => [ 6. 13. 20, 27, NaN][n - 1],
 	 * 	'March':     (n: number) => [ 6, 13, 20, 27, NaN][n - 1],
@@ -138,7 +138,7 @@ export class xjs_Object {
 	 * DEPRECATION WARNING: This method is deprecated. Instead, use a built-in Map:
 	 * ```js
 	 * // What is the date of the 1st Tuesday of November, 2018?
-	 * let call_me: (n: number) => number = new Map<string, (n: number) => number>([
+	 * const call_me: (n: number) => number = new Map<string, (n: number) => number>([
 	 * 	['January',   (n: number) => [ 2,  9, 16, 23,  30][n - 1]],
 	 * 	['February',  (n: number) => [ 6. 13. 20, 27, NaN][n - 1]],
 	 * 	['March',     (n: number) => [ 6, 13, 20, 27, NaN][n - 1]],
@@ -255,7 +255,7 @@ export class xjs_Object {
 		}
 		Object.freeze(thing);
 		if (xjs_Object.typeOf(thing) === 'object') {
-			for (let key in thing) {
+			for (const key in thing) {
 				if (!Object.isFrozen(thing[key])) {
 					xjs_Object.freezeDeep<T[keyof T]>(thing[key]);
 				}
@@ -325,7 +325,7 @@ export class xjs_Object {
 		}
 		if (xjs_Object.typeOf(thing) === 'object') {
 			const returned: { [index: string]: unknown } = {};
-			for (let key in thing) {
+			for (const key in thing) {
 				returned[key] = xjs_Object.cloneDeep(thing[key]);
 			}
 			return returned as unknown as T;

@@ -29,7 +29,7 @@ describe('xjs.Object', () => {
 			assert.strictEqual(xjs_Object.typeOf(function () { return 'true'; }),                            'function'); // eslint-disable-line prefer-arrow-callback, @typescript-eslint/brace-style
 			assert.strictEqual(xjs_Object.typeOf(() => 'true'),                                              'function');
 			assert.strictEqual(xjs_Object.typeOf(undefined),                                                 'undefined');
-			assert.strictEqual(xjs_Object.typeOf((() => { let x; return x; })()),                            'undefined'); // eslint-disable-line @typescript-eslint/brace-style
+			assert.strictEqual(xjs_Object.typeOf((() => { let x; return x; })()),                            'undefined'); // eslint-disable-line @typescript-eslint/brace-style, @typescript-eslint/init-declarations
 		});
 	});
 

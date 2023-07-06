@@ -59,10 +59,10 @@ export class xjs_Date {
 	 * @returns the proportion
 	 */
 	public static timeProportion(date: Date): number {
-		let millis  =  date.getUTCMilliseconds()       / 1000;
-		let seconds = (date.getUTCSeconds() + millis)  / 60;
-		let minutes = (date.getUTCMinutes() + seconds) / 60;
-		let hours   = (date.getUTCHours  () + minutes) / 24;
+		const millis  =  date.getUTCMilliseconds()       / 1000;
+		const seconds = (date.getUTCSeconds() + millis)  / 60;
+		const minutes = (date.getUTCMinutes() + seconds) / 60;
+		const hours   = (date.getUTCHours  () + minutes) / 24;
 		return hours;
 	}
 
@@ -91,20 +91,20 @@ export class xjs_Date {
 	public static format(date: Date, format: string): string {
 		const MONTHS           = xjs_Date.MONTH_NAMES;
 		const leadingZero      = (n: number, r: number = 10) => `0${ n.toString(r) }`.slice(-2);
-		const defaultFormatter = (date: Date) => date.toISOString();
+		const defaultFormatter = (d: Date) => d.toISOString();
 		return (new Map<string, (date: Date) => string>([
-			['Y-m-d',     (date: Date) => `${ date.getUTCFullYear() }-${ leadingZero(date.getUTCMonth() + 1) }-${ leadingZero(date.getUTCDate()) }`],
-			['j M Y',     (date: Date) => `${ date.getUTCDate() } ${ MONTHS[date.getUTCMonth()].slice(0, 3) } ${ date.getUTCFullYear() }`],
-			['d F Y',     (date: Date) => `${ leadingZero(date.getUTCDate()) } ${ MONTHS[date.getUTCMonth()] } ${ date.getUTCFullYear() }`],
-			['l, j F, Y', (date: Date) => `${ xjs_Date.DAY_NAMES[date.getUTCDay()] }, ${ date.getUTCDate() } ${ MONTHS[date.getUTCMonth()] }, ${ date.getUTCFullYear() }`],
-			['j M',       (date: Date) => `${ date.getUTCDate() } ${ MONTHS[date.getUTCMonth()].slice(0, 3) }`],
-			['M Y',       (date: Date) => `${ MONTHS[date.getUTCMonth()].slice(0, 3) } ${ date.getUTCFullYear() }`],
-			['M j',       (date: Date) => `${ MONTHS[date.getUTCMonth()].slice(0, 3) } ${ date.getUTCDate() }`],
-			['M j, Y',    (date: Date) => `${ MONTHS[date.getUTCMonth()].slice(0, 3) } ${ date.getUTCDate() }, ${ date.getUTCFullYear() }`],
-			['F j, Y',    (date: Date) => `${ MONTHS[date.getUTCMonth()] } ${ date.getUTCDate() }, ${ date.getUTCFullYear() }`],
-			['M',         (date: Date) => `${ MONTHS[date.getUTCMonth()].slice(0, 3) }`],
-			['H:i',       (date: Date) => `${ (date.getUTCHours() < 10) ? '0' : '' }${ date.getUTCHours() }:${ (date.getUTCMinutes() < 10) ? '0' : '' }${ date.getUTCMinutes() }`],
-			['g:ia',      (date: Date) => `${ (date.getUTCHours() - 1) % 12 + 1 }:${ (date.getUTCMinutes() < 10) ? '0' : '' }${ date.getUTCMinutes() }${ (date.getUTCHours() < 12) ? 'am' : 'pm' }`],
+			['Y-m-d',     (d: Date) => `${ d.getUTCFullYear() }-${ leadingZero(d.getUTCMonth() + 1) }-${ leadingZero(d.getUTCDate()) }`],
+			['j M Y',     (d: Date) => `${ d.getUTCDate() } ${ MONTHS[d.getUTCMonth()].slice(0, 3) } ${ d.getUTCFullYear() }`],
+			['d F Y',     (d: Date) => `${ leadingZero(d.getUTCDate()) } ${ MONTHS[d.getUTCMonth()] } ${ d.getUTCFullYear() }`],
+			['l, j F, Y', (d: Date) => `${ xjs_Date.DAY_NAMES[d.getUTCDay()] }, ${ d.getUTCDate() } ${ MONTHS[d.getUTCMonth()] }, ${ d.getUTCFullYear() }`],
+			['j M',       (d: Date) => `${ d.getUTCDate() } ${ MONTHS[d.getUTCMonth()].slice(0, 3) }`],
+			['M Y',       (d: Date) => `${ MONTHS[d.getUTCMonth()].slice(0, 3) } ${ d.getUTCFullYear() }`],
+			['M j',       (d: Date) => `${ MONTHS[d.getUTCMonth()].slice(0, 3) } ${ d.getUTCDate() }`],
+			['M j, Y',    (d: Date) => `${ MONTHS[d.getUTCMonth()].slice(0, 3) } ${ d.getUTCDate() }, ${ d.getUTCFullYear() }`],
+			['F j, Y',    (d: Date) => `${ MONTHS[d.getUTCMonth()] } ${ d.getUTCDate() }, ${ d.getUTCFullYear() }`],
+			['M',         (d: Date) => `${ MONTHS[d.getUTCMonth()].slice(0, 3) }`],
+			['H:i',       (d: Date) => `${ (d.getUTCHours() < 10) ? '0' : '' }${ d.getUTCHours() }:${ (d.getUTCMinutes() < 10) ? '0' : '' }${ d.getUTCMinutes() }`],
+			['g:ia',      (d: Date) => `${ (d.getUTCHours() - 1) % 12 + 1 }:${ (d.getUTCMinutes() < 10) ? '0' : '' }${ d.getUTCMinutes() }${ (d.getUTCHours() < 12) ? 'am' : 'pm' }`],
 			['default',   defaultFormatter],
 		]).get(format || 'default') || defaultFormatter)(date);
 	}

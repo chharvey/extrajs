@@ -74,13 +74,13 @@ export class xjs_String {
 	 */
 	public static dedent(strings: TemplateStringsArray, ...interps: unknown[]): string {
 		const matched: RegExpMatchArray | null = strings[0].match(/\n\t*/);
-		const n: number = matched && matched[0] ? matched[0].slice(1).length : 0;
+		const num: number = matched && matched[0] ? matched[0].slice(1).length : 0;
 		function replace(s: string, n: number): string {
 			return (n <= 0) ? s : s.replace(new RegExp(`\\n\\t{0,${ Math.floor(n) }}`, 'g'), '\n');
 		}
 		return [
-			...interps.flatMap((interp, i) => [replace(strings[i], n), interp]),
-			replace(strings[strings.length - 1], n), // strings.lastItem
+			...interps.flatMap((interp, i) => [replace(strings[i], num), interp]),
+			replace(strings[strings.length - 1], num), // strings.lastItem
 		].join('');
 	}
 

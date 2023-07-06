@@ -184,7 +184,7 @@ export class xjs_Array {
 	 * @returns a new array with the elements that pass the test; if no elements pass, an empty array is returned
 	 */
 	public static async filterAsync<T>(arr: T[], predicate: (ele: T, idx: number, ary: T[]) => Promise<boolean> | boolean, this_arg: unknown = null): Promise<T[]> {
-		let tests: boolean[] = await Promise.all(arr.map((el, i) => predicate.call(this_arg, el, i, arr)));
+		const tests: boolean[] = await Promise.all(arr.map((el, i) => predicate.call(this_arg, el, i, arr)));
 		return arr.filter((_, i) => tests[i]);
 	}
 
@@ -377,7 +377,7 @@ export class xjs_Array {
 	 * Note that accessor notation is not sufficient to detect sparseness: calling `new Array(4)[0]`
 	 * will return `undefined`, even though `undefined` is not an element in the array.
 	 *
-	 * For example, `let arr = ['a', 'b', , 'd']` is a sparse array because `arr[2]` has not been defined.
+	 * For example, `const arr = ['a', 'b', , 'd']` is a sparse array because `arr[2]` has not been defined.
 	 * Evaluating `arr[2]` will yield `undefined`, even though it has not been explicitly declared so.
 	 *
 	 * @typeparam T - the type of elements in `arr`
