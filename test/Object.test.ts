@@ -5,8 +5,8 @@ describe('xjs.Object', () => {
 	describe('.is<T>(T, T, ((any, any) => boolean)?): boolean', () => {
 		it('only checks one level of depth.', () => {
 			type T = {val: string[]} | string[] | number;
-			const x: {[s: string]: T} = {a: 1, b: ['1'], c: {val: ['one']}};
-			const y: {[s: string]: T} = {a: 1, b: ['1'], c: {val: ['one']}};
+			const x: Record<string, T> = {a: 1, b: ['1'], c: {val: ['one']}};
+			const y: Record<string, T> = {a: 1, b: ['1'], c: {val: ['one']}};
 			assert.strictEqual(xjs_Object.is(x, y), false);
 			assert.strictEqual(xjs_Object.is(x, y, (x_a: unknown, y_a: unknown) => (assert.deepStrictEqual(x_a, y_a), true)), true);
 			assert.strictEqual(xjs_Object.is(x, y, (x_a: T,       y_a: T)       => (assert.deepStrictEqual(x_a, y_a), true)), true);

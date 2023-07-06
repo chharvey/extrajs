@@ -161,7 +161,7 @@ export class xjs_Object {
 	 * @returns the looked-up function, returning <T>
 	 * @throws  {ReferenceError} when failing to find a lookup value
 	 */
-	public static switch<T>(key: string, dictionary: { [index: string]: (this: any, ...args: any[]) => T }): (this: any, ...args: any[]) => T {
+	public static switch<T>(key: string, dictionary: Record<string, (this: any, ...args: any[]) => T>): (this: any, ...args: any[]) => T {
 		let returned: (this: any, ...args: any[]) => T = dictionary[key];
 		if (!returned) {
 			console.warn(`Key '${ key }' cannot be found. Using key 'default'…`);
@@ -324,7 +324,7 @@ export class xjs_Object {
 			return xjs_Array.cloneDeep(thing) as unknown as T; // HACK https://stackoverflow.com/a/18736071/
 		}
 		if (xjs_Object.typeOf(thing) === 'object') {
-			const returned: { [index: string]: unknown } = {};
+			const returned: Record<string, unknown> = {};
 			for (const key in thing) {
 				returned[key] = xjs_Object.cloneDeep(thing[key]);
 			}

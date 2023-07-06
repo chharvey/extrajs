@@ -115,7 +115,7 @@ describe('xjs.Array', () => {
 			assert.strictEqual(times, 4);
 		});
 		it('callback params.', () => {
-			const results: Record<string, string[]> = {
+			const results: Record<'n' | 'i' | 's', string[]> = {
 				n: [],
 				i: [],
 				s: [],
