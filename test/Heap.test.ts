@@ -129,6 +129,28 @@ describe('Heap', () => {
 	});
 
 
+	describe('.resift()', () => {
+		it('reorders the nodes correctly.', () => {
+			type MutableNodeType = {-readonly [K in keyof NodeType]: NodeType[K]};
+			const mut_items: readonly MutableNodeType[] = items.map((item) => ({...item}));
+			const h1 = new Heap<MutableNodeType>(comparator, ...mut_items);
+			const h2 = new Heap<MutableNodeType>(comparator).push(...mut_items);
+			assert__shallowEqual(h1.inspect(), [mut_items[2], mut_items[1], mut_items[0]]);
+			assert__shallowEqual(h2.inspect(), [mut_items[2], mut_items[0], mut_items[1]]);
+			mut_items[2].priority = 0;
+			       assert__shallowEqual(h1.resift().inspect(), [mut_items[1], mut_items[2], mut_items[0]]);
+			return assert__shallowEqual(h2.resift().inspect(), [mut_items[1], mut_items[0], mut_items[2]]);
+		});
+
+		it('does not reorder if not necessary.', () => {
+			const h = new Heap<NodeType>(comparator, ...items);
+			const expected = [items[2], items[1], items[0]];
+			assert__shallowEqual(h.inspect(), expected);
+			return assert__shallowEqual(h.resift().inspect(), expected);
+		});
+	});
+
+
 	describe('.clear()', () => {
 		it('removes all nodes in the heap.', () => {
 			const h = new Heap<NodeType>(comparator, ...items);

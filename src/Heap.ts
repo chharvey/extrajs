@@ -61,6 +61,11 @@ export class Heap<T> {
 	 */
 	readonly #internal: T[] = [];
 
+	/**
+	 * Construct a new Heap object.
+	 * @param comparator    a {@link Comparator} function comparing nodes’ values
+	 * @param initial_items any optional items to start with
+	 */
 	public constructor(
 		private readonly comparator: Comparator<T>,
 		...initial_items: readonly T[]
@@ -74,9 +79,7 @@ export class Heap<T> {
 				false && initial_items.forEach((item) => this.push(item)); // eslint-disable-line @typescript-eslint/no-unnecessary-condition
 				// This takes `O(n)` time. A little faster.
 				this.#internal = [...initial_items];
-				for (let i = Math.floor(this.#internal.length / 2) - 1; i >= 0; i--) {
-					this.#siftDown(i);
-				}
+				this.resift();
 			}
 		}
 	}
@@ -174,6 +177,21 @@ export class Heap<T> {
 		} else {
 			throw new Error('Cannot remove from empty Heap.');
 		}
+	}
+
+	/**
+	 * Reorders the nodes in this Heap to a valid arrangement.
+	 * Should be called whenever one or more nodes have changed/mutated
+	 * in a way that affects this Heap’s “max heap” property
+	 * (that is, that every node should be greater than its children).
+	 * If the nodes are already in a valid order, nothing is changed.
+	 * @return `this`
+	 */
+	public resift(): this {
+		for (let i = Math.floor(this.#internal.length / 2) - 1; i >= 0; i--) {
+			this.#siftDown(i);
+		}
+		return this;
 	}
 
 	/**
