@@ -143,14 +143,22 @@ export class Heap<T> {
 	}
 
 	/**
+	 * Remove the given node.
+	 * @param   node the node to remove
+	 * @returns      `[this, node]`, where `node` is the removed node
+	 * @throws  {Error} if the node is not in this Heap
+	 */
+	public remove(node: T): [this, T];
+	/**
 	 * Remove the first node that satisfies the given predicate.
 	 * @param   predicate a function to find nodes
 	 * @returns           `[this, node]`, where `node` is the removed node
 	 * @throws  {Error}   if no node satisfies the predicate
 	 */
-	public remove(predicate: (node: T, src: this) => boolean): [this, T] {
+	public remove(predicate: (node: T, src: this) => boolean): [this, T];
+	public remove(arg: T | ((node: T, src: this) => boolean)): [this, T] {
 		if (this.#internal.length > 0) {
-			const found_node: T | undefined = this.#internal.find((item) => predicate(item, this));
+			const found_node: T | undefined = (arg instanceof Function) ? this.#internal.find((item) => arg(item, this)) : arg;
 			if (found_node !== undefined) {
 				const found_index: number = this.#internal.indexOf(found_node);
 				if (found_index >= 0) {
@@ -165,13 +173,24 @@ export class Heap<T> {
 	}
 
 	/**
+	 * Remove all of the given nodes.
+	 * @param   nodes the nodes to remove
+	 * @returns       `[this, nodes]`, where `nodes` is a list of the removed nodes
+	 */
+	public removeAll(nodes: readonly T[]): [this, T[]];
+	/**
 	 * Remove all nodes that satisfy the given predicate.
 	 * @param   predicate a function to find nodes
 	 * @returns           `[this, nodes]`, where `nodes` is a list of the removed nodes
 	 */
-	public removeAll(predicate: (node: T, src: this) => boolean): [this, T[]] {
+	public removeAll(predicate: (node: T, src: this) => boolean): [this, T[]];
+	public removeAll(arg: readonly T[] | ((node: T, src: this) => boolean)): [this, T[]] {
 		if (this.#internal.length > 0) {
-			const found_node_entries: readonly [number, T][] = [...this.#internal.entries()].filter(([_, item]) => predicate(item, this));
+			const found_node_entries: readonly [number, T][] = [...this.#internal.entries()].filter((
+				(arg instanceof Function)
+					? (entry) => arg(entry[1], this)
+					: (entry) => arg.includes(entry[1])
+			));
 			[...found_node_entries].reverse().forEach(([found_index]) => this.#internalDelete(found_index));
 			return [this, found_node_entries.map(([_, found_node]) => found_node)];
 		} else {

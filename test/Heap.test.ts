@@ -31,11 +31,13 @@ describe('Heap', () => {
 		readonly name:     string,
 	};
 	const comparator = (a: NodeType, b: NodeType): number => a.priority - b.priority;
-	const items: readonly NodeType[] = [
+	const items      = [
 		{priority: 1, name: 'a'},
 		{priority: 2, name: 'b'},
 		{priority: 3, name: 'c'},
-	];
+	] as const;
+	const comparator_simple = (a: number, b: number): number => a - b;
+	const items_simple      = [1, 2, 3] as const;
 
 
 	describe('.constructor(Comparator<T>, ...T[])', () => {
@@ -89,6 +91,26 @@ describe('Heap', () => {
 	});
 
 
+	describe('.remove(T)', () => {
+		it('removes the first node (if any) identical to the argument.', () => {
+			const h = new Heap<number>(comparator_simple, ...items_simple);
+			assert__shallowEqual(h.inspect(), [3, 2, 1]);
+
+			assert.strictEqual(h.remove(2)[1], 2);
+			assert.strictEqual(h.count, 2);
+			return assert__shallowEqual(h.inspect(), [3, 1]);
+		});
+
+		it('throws when no node matches.', () => {
+			return assert.throws(() => new Heap<number>(comparator_simple, ...items_simple).remove(4), /No nodes were found to remove\./);
+		});
+
+		it('throws when the heap is empty.', () => {
+			return assert.throws(() => new Heap<number>(comparator_simple).remove(3), /Cannot remove from empty Heap\./);
+		});
+	});
+
+
 	describe('.remove((T) => boolean)', () => {
 		it('removes the first node (if any) satisfying the predicate.', () => {
 			const h = new Heap<NodeType>(comparator, ...items);
@@ -105,6 +127,26 @@ describe('Heap', () => {
 
 		it('throws when the heap is empty.', () => {
 			return assert.throws(() => new Heap<NodeType>(comparator).remove((node) => 'priority' in node), /Cannot remove from empty Heap\./);
+		});
+	});
+
+
+	describe('.removeAll(readonly T[])', () => {
+		it('removes all nodes identical to the arguments.', () => {
+			const h = new Heap<number>(comparator_simple, ...items_simple);
+			assert__shallowEqual(h.inspect(), [3, 2, 1]);
+
+			assert.deepStrictEqual(h.removeAll([1, 2])[1], [2, 1]); // note difference in order
+			assert.strictEqual(h.count, 1);
+			return assert__shallowEqual(h.inspect(), [3]);
+		});
+
+		it('returns empty array when no node matches.', () => {
+			return assert.deepStrictEqual(new Heap<number>(comparator_simple, ...items_simple).removeAll([4])[1], []);
+		});
+
+		it('throws when the heap is empty.', () => {
+			return assert.throws(() => new Heap<number>(comparator_simple).removeAll([1, 2, 3]), /Cannot remove from empty Heap\./);
 		});
 	});
 
