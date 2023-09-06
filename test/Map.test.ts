@@ -2,6 +2,37 @@ import * as assert from 'assert';
 import {xjs_Map} from '../src/class/Map.class.js';
 
 describe('xjs.Map', () => {
+	describe('.is', () => {
+		it('tests keys and values by equality predicate.', () => {
+			type Key = {id: number};
+			type Val = {name: string};
+			const comparator_keys = (a: Key, b: Key): boolean => a.id   === b.id;
+			const comparator_vals = (a: Val, b: Val): boolean => a.name === b.name;
+			const key: Key = {id: 42};
+			const val: Val = {name: 'alice'};
+			const map1 = new Map<Key, Val>([[key, val]]);
+			const map2 = new Map<Key, Val>([[key, val]]);
+			const map3 = new Map<Key, Val>([[{id: 42}, {name: 'alice'}]]);
+			const map4 = new Map<Key, Val>([[{id: 43}, {name: 'bob'}]]);
+			assert.notStrictEqual(map1, map2, 'different maps with identical pairs are not identical.');
+			assert.ok(xjs_Map.is<Key, Val>(map1, map2), 'maps with identical pairs pass with the default predicate.');
+			assert.ok(!xjs_Map.is<Key, Val>(map2, map3), 'maps with equal (but non-identical) pairs fail with the default predicate.');
+			assert.ok(xjs_Map.is<Key, Val>(map1, map2, {
+				keys:   comparator_keys,
+				values: comparator_vals,
+			}), 'maps with identical pairs pass with both the provided predicates.');
+			assert.ok(xjs_Map.is<Key, Val>(map2, map3, {
+				keys:   comparator_keys,
+				values: comparator_vals,
+			}), 'maps with equal (but non-identical) pairs pass with both the provided predicates.');
+			assert.ok(!xjs_Map.is<Key, Val>(map3, map4, {
+				keys:   comparator_keys,
+				values: comparator_vals,
+			}), 'maps with non-equal and non-identical pairs fail.');
+		});
+	});
+
+
 	context('Equality Methods', () => {
 		type Key = {id: number};
 		const comparator = (a: Key, b: Key): boolean => a.id === b.id;
