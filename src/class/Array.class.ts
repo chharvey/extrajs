@@ -287,7 +287,7 @@ export class xjs_Array {
 	 * @throws    {Error}          if one iteration throws an error
 	 */
 	public static mapAggregated<T, U>(array: readonly T[], callback: (item: T, i: number, src: typeof array) => U): U[] {
-		const results: Array<[U, true] | [Error, false]> = array.map((it, i, src) => {
+		const results: readonly ([U, true] | [Error, false])[] = array.map((it, i, src) => {
 			try {
 				return [callback(it, i, src), true];
 			} catch (err) {
