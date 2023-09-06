@@ -228,7 +228,7 @@ export class xjs_Array {
 	 * @throws    {AggregateError} if two or more iterations throws an error
 	 * @throws    {Error}          if one iteration throws an error
 	 */
-	public static forEachAggregated<T>(array: readonly T[], callback: (item: T, i: number, src: readonly T[]) => void): void {
+	public static forEachAggregated<T>(array: readonly T[], callback: (item: T, i: number, src: typeof array) => void): void {
 		const errors: readonly Error[] = array.map((it, i, src) => {
 			try {
 				callback.call(null, it, i, src);
@@ -286,7 +286,7 @@ export class xjs_Array {
 	 * @throws    {AggregateError} if two or more iterations throws an error
 	 * @throws    {Error}          if one iteration throws an error
 	 */
-	public static mapAggregated<T, U>(array: readonly T[], callback: (item: T, i: number, src: readonly T[]) => U): U[] {
+	public static mapAggregated<T, U>(array: readonly T[], callback: (item: T, i: number, src: typeof array) => U): U[] {
 		const results: Array<[U, true] | [Error, false]> = array.map((it, i, src) => {
 			try {
 				return [callback(it, i, src), true];
