@@ -204,16 +204,14 @@ export class xjs_Map {
 	 * @throws    {Error}          if one iteration throws an error
 	 */
 	static forEachAggregated<K, V>(map: ReadonlyMap<K, V>, callback: (value: V, key: K, src: typeof map) => void): void {
-		const accumulator: Array<Error | null> = [];
-		map.forEach((value, key, src) => {
+		const errors: readonly Error[] = [...map.entries()].map(([key, value]) => {
 			try {
-				callback.call(null, value, key, src);
-				accumulator.push(null);
+				callback.call(null, value, key, map);
+				return null;
 			} catch (err) {
-				accumulator.push((err instanceof Error) ? err : new Error(`${ err }`));
+				return (err instanceof Error) ? err : new Error(`${ err }`);
 			}
-		});
-		const errors: readonly Error[] = accumulator.filter((e): e is Error => e instanceof Error);
+		}).filter((e): e is Error => e instanceof Error);
 		if (errors.length) {
 			throw (errors.length === 1)
 				? errors[0]
