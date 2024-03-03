@@ -1,6 +1,6 @@
-import xjs_Object from './Object.class'
-import xjs_Number from './Number.class'
-import IndexOutOfBoundsError from './IndexOutOfBoundsError.class'
+import {xjs_Object} from './Object.class.js';
+import {xjs_Number} from './Number.class.js';
+import {IndexOutOfBoundsError} from './IndexOutOfBoundsError.class.js';
 
 
 /**
@@ -8,7 +8,7 @@ import IndexOutOfBoundsError from './IndexOutOfBoundsError.class'
  *
  * Does not extend the native Array class.
  */
-export default class xjs_Array {
+export class xjs_Array {
 	/**
 	 * Get a value of an array, given an index.
 	 *
@@ -37,11 +37,10 @@ export default class xjs_Array {
 	}
 
 	/**
-	 * @deprecated - WARNING{DEPRECATED} - use {@link xjs_Array.isConsecutiveSuperarrayOf} instead.
 	 * Test whether an array is a subarray of another array.
 	 *
 	 * This method acts like
-	 * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes|String#includes},
+	 * {@link String#includes},
 	 * testing whether
 	 * the elements in the smaller array appear consecutively and in the same order as in the larger array.
 	 * In other words, if `{@link xjs_Array.is}(larger.slice(a,b), smaller)` (for some integers a and b),
@@ -66,6 +65,7 @@ export default class xjs_Array {
 	 * @param   predicate check the “sameness” of corresponding elements of `larger` and `smaller`
 	 * @returns is `smaller` a subarray of `larger`?
 	 * @throws  {RangeError} if the second array is larger than the first
+	 * @deprecated use {@link xjs_Array.isConsecutiveSuperarrayOf} instead.
 	 */
 	static contains<T>(larger: readonly T[], smaller: readonly T[], predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
 		if (smaller.length > larger.length) {
@@ -179,29 +179,6 @@ export default class xjs_Array {
 	}
 
 	/**
-	 * Shuffles the elements of an array, in place.
-	 * This method is destructive: it mutates the given array.
-	 * @param   array the array to shuffle
-	 * @returns the array, with its elements shuffled in place
-	 */
-	static shuffle<T>(array: T[]): T[] {
-		let counter: number = array.length
-		let rand: number;
-		let temp: T;
-		// While there remain elements to shuffle…
-		while (counter) {
-			// Pick a remaining element…
-			rand = Math.floor(Math.random() * counter)
-			counter--
-			// And swap it with the current element.
-			temp = array[counter]
-			array[counter] = array[rand]
-			array[rand] = temp
-		}
-		return array
-	}
-
-	/**
 	 * Asynchronous {@link Array#filter}.
 	 * @typeparam T - the type of elements in the array
 	 * @param   arr the array to filter
@@ -226,8 +203,111 @@ export default class xjs_Array {
 		return (await xjs_Array.filterAsync(arr, predicate, this_arg))[0] || null
 	}
 
+	/**
+	 * Perform a callback function on an array, aggregating any errors caught.
+	 *
+	 * Instead of throwing on the first error and stopping iteration, as {@link Array#forEach} would do,
+	 * this method continues performing the callback on the rest of the array until all items are done.
+	 * If only one error was caught, then that error is simply rethrown.
+	 * However, if more errors were caught, they are collected into a single AggregateError, which is then thrown.
+	 * If no errors are caught, this method returns void.
+	 *
+	 * @example
+	 * xjs.Array.forEachAggregated<number>([1, 2, 3, 4], (n) => {
+	 * 	if (n % 2 === 0) {
+	 * 		throw new Error(`${ n } is even.`);
+	 * 	};
+	 * });
+	 * // Expected thrown error:
+	 * AggregateError {
+	 * 	errors: [
+	 * 		Error { message: "2 is even." },
+	 * 		Error { message: "4 is even." },
+	 * 	]
+	 * }
+	 * @typeparam T                the type of items in the array
+	 * @param     array            the array of items
+	 * @param     callback         the function to call on each item
+	 * @throws    {AggregateError} if two or more iterations throws an error
+	 * @throws    {Error}          if one iteration throws an error
+	 */
+	static forEachAggregated<T>(array: readonly T[], callback: (item: T, i: number, src: readonly T[]) => void): void {
+		const errors: readonly Error[] = array.map((it, i, src) => {
+			try {
+				callback.call(null, it, i, src);
+				return null;
+			} catch (err) {
+				return (err instanceof Error) ? err : new Error(`${ err }`);
+			}
+		}).filter((e): e is Error => e instanceof Error);
+		if (errors.length) {
+			throw (errors.length === 1)
+				? errors[0]
+				: new AggregateError(errors, errors.map((err) => err.message).join('\n'));
+		}
+	}
+
+	/**
+	 * Map an array using a callback, aggregating any errors caught.
+	 *
+	 * Instead of throwing on the first error and stopping iteration, as {@link Array#map} would do,
+	 * this method continues performing the callback on the rest of the array until all items are done.
+	 * If only one error was caught, then that error is simply rethrown.
+	 * However, if more errors were caught, they are collected into a single AggregateError, which is then thrown.
+	 * If no errors are caught, this method returns the usual map.
+	 *
+	 * @example
+	 * xjs.Array.mapAggregated<number>([1, 2, 3, 4], (n) => {
+	 * 	if (n % 2 === 1) {
+	 * 		throw new Error(`${ n } is odd.`);
+	 * 	} else {
+	 * 		return n / 2;
+	 * 	};
+	 * });
+	 * // Expected thrown error:
+	 * AggregateError {
+	 * 	errors: [
+	 * 		Error { message: "1 is odd." },
+	 * 		Error { message: "3 is odd." },
+	 * 	]
+	 * }
+	 *
+	 * xjs.Array.mapAggregated<number>([2, 4, 6], (n) => {
+	 * 	if (n % 2 === 1) {
+	 * 		throw new Error(`${ n } is odd.`);
+	 * 	} else {
+	 * 		return n / 2;
+	 * 	};
+	 * });
+	 * // Expected return value:
+	 * [1, 2, 3]
+	 * @typeparam T                the type of items in the array
+	 * @typeparam U                the type of items returned by the mapping callback
+	 * @param     array            the array of items
+	 * @param     callback         the function to call on each item
+	 * @returns                    the array of mapped items
+	 * @throws    {AggregateError} if two or more iterations throws an error
+	 * @throws    {Error}          if one iteration throws an error
+	 */
+	static mapAggregated<T, U>(array: readonly T[], callback: (item: T, i: number, src: readonly T[]) => U): U[] {
+		const results: ([U, true] | [Error, false])[] = array.map((it, i, src) => {
+			try {
+				return [callback(it, i, src), true];
+			} catch (err) {
+				return [(err instanceof Error) ? err : new Error(`${ err }`), false];
+			}
+		});
+		const errors: Error[] = results.filter((pair): pair is [Error, false] => !pair[1]).map(([err]) => err);
+		if (errors.length) {
+			throw (errors.length === 1)
+				? errors[0]
+				: new AggregateError(errors, errors.map((err) => err.message).join('\n'));
+		} else {
+			return results.filter((pair): pair is [U, true] => pair[1]).map(([val]) => val);
+		}
+	}
+
   /**
-   * @deprecated WARNING{DEPRECATED} - use interface `readonly T[]` instead
    * Deep freeze an array, and return the result.
    *
    * Shortcut of {@link xjs_Object.freezeDeep}, but for arrays.
@@ -235,6 +315,7 @@ export default class xjs_Array {
    * *Note: This function is impure, modifying the given argument.*
    * @param   arr the array to freeze
    * @returns the given array, with everything frozen
+   * @deprecated use interface `readonly T[]` instead
    */
   static freezeDeep<T>(arr: readonly T[]): readonly T[] {
     Object.freeze(arr)
@@ -243,7 +324,7 @@ export default class xjs_Array {
   }
 
   /**
-   * WARNING{EXPERIMENTAL}
+   * WARNING:EXPERIMENTAL
    * Deep clone an array, and return the result.
    *
    * Shortcut of {@link xjs_Object.cloneDeep}, but for arrays.
@@ -257,7 +338,6 @@ export default class xjs_Array {
   }
 
   /**
-   * @deprecated WARNING{DEPRECATED} - use `[...new Set(arr)]` instead
    * Make a copy of an array, and then remove duplicate entries.
    *
    * "Duplicate entries" are entries that considered "the same" by
@@ -268,6 +348,7 @@ export default class xjs_Array {
    * @param   arr an array to use
    * @param   predicate check the “sameness” of elements in the array
    * @returns a new array, with duplicates removed
+   * @deprecated use `[...new Set(arr)]` instead
    */
   static removeDuplicates<T>(arr: readonly T[], predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): T[] {
     const returned: T[] = arr.slice()
@@ -333,6 +414,45 @@ export default class xjs_Array {
 			if (newarr[i] === void 0) newarr[i] = value
 		}
 		return newarr
+	}
+
+	/**
+	 * Return a copy of the given array in randomized order.
+	 * Randomness is implemented by {@link Math.random}.
+	 *
+	 * Items are *not* chosen in a uniform manner.
+	 * Items are picked from the given array and copied into a new array, which is returned.
+	 * Once an item is picked, it is never chosen again.
+	 * The likelihood of any item being picked grows as the number of remaining items declines.
+	 *
+	 * For example, given an array `[1, 2, 3, 4, 5]`, the likelihood of `3` being chosen first is 1/5.
+	 * But suppose `4` is chosen first instead. Then the given array is essentially treated as `[1, 2, 3, 5]`
+	 * (even though it is not mutated). After `4` is selected first, the likelihood of `3` being chosen next
+	 * is now 1/4, not 1/5. Thus the given array can be thought of as a deck of cards, from which cards are
+	 * selected to form a new deck.
+	 *
+	 * @param  arr an array to randomize
+	 * @return a new array with the parameter array’s items shuffled
+	 */
+	static shuffle<T>(arr: readonly T[]): T[] {
+		const deck:   T[] = [...arr];
+		const picked: T[] = [];
+		for (let i = 0; i < arr.length; i++) {
+			picked.push(deck.splice(Math.floor(Math.random() * deck.length), 1)[0]);
+		}
+		return picked;
+	}
+
+	/**
+	 * Like {@link xjs_Array.shuffle}, but shuffles (mutates) the given array in place.
+	 * @param  arr an array to shuffle
+	 * @return the given parameter but with its items shuffled
+	 */
+	static shuffleInPlace<T>(arr: T[]): void {
+		for (let i = 0; i < arr.length; i++) {
+			const random_index: number = Math.floor(Math.random() * arr.length);
+			[arr[i], arr[random_index]] = [arr[random_index], arr[i]];
+		}
 	}
 
 

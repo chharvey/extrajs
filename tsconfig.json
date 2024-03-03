@@ -1,20 +1,34 @@
 {
 	"compilerOptions": {
-		"target"            : "ES2020",
-		"module"            : "commonjs",
-		"strict"            : true,
+		// Type Checking
+		"exactOptionalPropertyTypes": true,
+		"noImplicitOverride":         true,
+		"noImplicitReturns":          true,
+		"noUnusedLocals":             true,
+		"noUnusedParameters":         true,
+		"strict":                     true,
+
+		// Modules
+		"module":           "ES2020",
+		"moduleResolution": "Node",
+
+		// Emit
+		"declaration":            true,
 		"importsNotUsedAsValues": "error",
-		"noImplicitReturns" : true,
-		"removeComments"    : true,
-		"noEmitOnError"     : true
+		"noEmitOnError":          true,
+		"outDir":                 "./dist/",
+
+		// Language and Environment
+		"target":                  "ES2022",
+		"useDefineForClassFields": false,
+
+		// Completeness
+		"skipLibCheck": true,
 	},
+	"include": ["./src/"],
 	"typedocOptions": {
-		"tsconfig": "./",
-		"mode"   : "file",
-		"name"   : "extrajs",
-		"out"    : "./docs/api/",
-		"includeDeclarations" : true,
-		"excludeExternals"    : true,
-		"ignoreCompilerErrors": true
-	}
+		"name":        "extrajs",
+		"entryPoints": ["./src/index.ts"],
+		"out":         "./docs/api/",
+	},
 }

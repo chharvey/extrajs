@@ -1,4 +1,4 @@
-import xjs_Object from './Object.class'
+import {xjs_Object} from './Object.class.js';
 
 
 /**
@@ -6,7 +6,7 @@ import xjs_Object from './Object.class'
  *
  * Does not extend the native Map class.
  */
-export default class xjs_Map {
+export class xjs_Map {
 	/**
 	 * Test whether two maps have “the same” key–value pairs.
 	 *
@@ -49,7 +49,7 @@ export default class xjs_Map {
 	 * @param   this_arg object to use as `this` when executing `predicate`
 	 * @returns a new map with the entries that pass the test; if no entries pass, an empty map is returned
 	 */
-	static filter<K, V>(map: Map<K, V>, predicate: (value: V, key: K, map: Map<K, V>) => boolean, this_arg: unknown = null): Map<K, V> {
+	static filter<K, V>(map: ReadonlyMap<K, V>, predicate: (value: V, key: K, map: ReadonlyMap<K, V>) => boolean, this_arg: unknown = null): Map<K, V> {
 		return new Map([...map].filter((entry) => predicate.call(this_arg, entry[1], entry[0], map)))
 	}
 
@@ -63,7 +63,7 @@ export default class xjs_Map {
 	 * @param   this_arg object to use as `this` when executing `predicate`
 	 * @returns the value found, or `null` if none is found
 	 */
-	static find<K, V>(map: Map<K, V>, predicate: (value: V, key: K, map: Map<K, V>) => boolean, this_arg: unknown = null): V|null {
+	static find<K, V>(map: ReadonlyMap<K, V>, predicate: (value: V, key: K, map: ReadonlyMap<K, V>) => boolean, this_arg: unknown = null): V | null {
 		return [...xjs_Map.filter(map, predicate, this_arg)].map((entry) => entry[1])[0] || null
 	}
 
@@ -77,7 +77,7 @@ export default class xjs_Map {
 	 * @param   this_arg object to use as `this` when executing `predicate`
 	 * @returns the key found, or `null` if none is found
 	 */
-	static findKey<K, V>(map: Map<K, V>, predicate: (key: K, index: number, map: Map<K, V>) => boolean, this_arg: unknown = null): K|null {
+	static findKey<K, V>(map: ReadonlyMap<K, V>, predicate: (key: K, index: number, map: ReadonlyMap<K, V>) => boolean, this_arg: unknown = null): K | null {
 		return [...map.keys()].find((key, i) => predicate.call(this_arg, key, i, map)) || null
 	}
 
@@ -92,7 +92,7 @@ export default class xjs_Map {
 	 * @param   this_arg object to use as `this` when executing `callback`
 	 * @returns a new Map with the same keys and transformed values obtained from `callback`
 	 */
-	static mapValues<K, V, T>(map: Map<K, V>, callback: (value: V, key: K, map: Map<K, V>) => T, this_arg: unknown = null): Map<K, T> {
+	static mapValues<K, V, T>(map: ReadonlyMap<K, V>, callback: (value: V, key: K, map: ReadonlyMap<K, V>) => T, this_arg: unknown = null): Map<K, T> {
 		return new Map([...map].map(([key, value]) => [key, callback.call(this_arg, value, key, map)] as [K, T]))
 	}
 
@@ -107,10 +107,67 @@ export default class xjs_Map {
 	 * @param   this_arg object to use as `this` when executing `callback`
 	 * @returns a new Map with transformed keys obtained from `callback` and the same values
 	 */
-	static mapKeys<K, V, T>(map: Map<K, V>, callback: (value: V, key: K, map: Map<K, V>) => T, this_arg: unknown = null): Map<T, V> {
+	static mapKeys<K, V, T>(map: ReadonlyMap<K, V>, callback: (value: V, key: K, map: ReadonlyMap<K, V>) => T, this_arg: unknown = null): Map<T, V> {
 		return new Map([...map].map(([key, value]) => [callback.call(this_arg, value, key, map), value] as [T, V]))
 	}
 
+	/**
+	 * Set, then return, a new value.
+	 * @param   map   the map to set
+	 * @param   key   the key
+	 * @param   value the value
+	 * @returns       the value
+	 */
+	static tee<K, V>(map: Map<K, V>, key: K, value: V): V {
+		map.set(key, value);
+		return value;
+	}
+
+	/**
+	 * Return whether the provided key exists in the map.
+	 * @param  map        the map to check
+	 * @param  key        the key to check
+	 * @param  comparator a comparator function of keys
+	 * @return            Does the set have the given key?
+	 */
+	static has<K, V = K>(map: ReadonlyMap<K, V>, key: K, comparator: (a: K, b: K) => boolean): boolean {
+		return [...map.keys()].some((k) => comparator.call(null, k, key));
+	}
+
+	/**
+	 * Get the value of the provided key from the map.
+	 * @param  map        the map to check
+	 * @param  key        the key to check
+	 * @param  comparator a comparator function of keys
+	 * @return            the value corresponding to the key
+	 */
+	static get<K, V = K>(map: ReadonlyMap<K, V>, key: K, comparator: (a: K, b: K) => boolean): V | undefined {
+		return [...map].find(([k, _]) => comparator.call(null, k, key))?.[1];
+	}
+
+	/**
+	 * Set a value to the provided key in the map.
+	 * @param  map        the map to mutate
+	 * @param  key        the key to set
+	 * @param  comparator a comparator function of keys
+	 * @return            the mutated map
+	 */
+	static set<K, V = K>(map: Map<K, V>, key: K, value: V, comparator: (a: K, b: K) => boolean): Map<K, V> {
+		const foundkey: K | undefined = [...map.keys()].find((k) => comparator.call(null, k, key));
+		return map.set((foundkey === undefined) ? key : foundkey, value);
+	}
+
+	/**
+	 * Delete the provided key from the map.
+	 * @param  map        the map to mutate
+	 * @param  key        the key to delete
+	 * @param  comparator a comparator function of keys
+	 * @return            Was the map mutated?
+	 */
+	static delete<K, V = K>(map: Map<K, V>, key: K, comparator: (a: K, b: K) => boolean): boolean {
+		const foundkey: K | undefined = [...map.keys()].find((k) => comparator.call(null, k, key));
+		return map.delete((foundkey === undefined) ? key : foundkey);
+	}
 
 
 	private constructor() {}

@@ -1,6 +1,6 @@
 import * as assert from 'assert'
 
-import {NumericType} from './Number.class'
+import {NumericType} from './Number.class.js';
 
 
 /**
@@ -8,7 +8,7 @@ import {NumericType} from './Number.class'
  *
  * Does not extend the native BigInt class.
  */
-export default class xjs_BigInt {
+export class xjs_BigInt {
 	/**
 	 * Verify the type of bigint given, throwing if it does not match.
 	 *
@@ -59,17 +59,17 @@ export default class xjs_BigInt {
 			]).get(type))
 		}
 		return new Map<NumericType, (n: bigint) => void>([
-			[NumericType.INTEGER     , (_n: bigint) => {}                                                 ],
-			[NumericType.NATURAL     , ( n: bigint) => xjs_BigInt.assertType(n, NumericType.NONNEGATIVE)  ],
-			[NumericType.WHOLE       , ( n: bigint) => xjs_BigInt.assertType(n, NumericType.POSITIVE   )  ],
-			[NumericType.FLOAT       , (_n: bigint) => assert(false   , 'BigInts cannot be non-integers.')],
-			[NumericType.POSITIVE    , ( n: bigint) => assert(0n <  n , `${n} must be positive.`         )],
-			[NumericType.NEGATIVE    , ( n: bigint) => assert(n  <  0n, `${n} must be negative.`         )],
-			[NumericType.NONPOSITIVE , ( n: bigint) => assert(n  <= 0n, `${n} must not be positive.`     )],
-			[NumericType.NONNEGATIVE , ( n: bigint) => assert(0n <= n , `${n} must not be negative.`     )],
-			[NumericType.NONZERO     , ( n: bigint) => assert(n !== 0n, `${n} must not be zero.`         )],
-			[NumericType.FINITE      , (_n: bigint) => {}                                                 ],
-			[NumericType.INFINITE    , (_n: bigint) => assert(false   , 'BigInts cannot be infinite.'    )],
+			[NumericType.INTEGER     , (_n: bigint) => {}                                                    ],
+			[NumericType.NATURAL     , ( n: bigint) => xjs_BigInt.assertType(n, NumericType.NONNEGATIVE)     ],
+			[NumericType.WHOLE       , ( n: bigint) => xjs_BigInt.assertType(n, NumericType.POSITIVE   )     ],
+			[NumericType.FLOAT       , (_n: bigint) => assert.ok(false   , 'BigInts cannot be non-integers.')],
+			[NumericType.POSITIVE    , ( n: bigint) => assert.ok(0n <  n , `${n} must be positive.`         )],
+			[NumericType.NEGATIVE    , ( n: bigint) => assert.ok(n  <  0n, `${n} must be negative.`         )],
+			[NumericType.NONPOSITIVE , ( n: bigint) => assert.ok(n  <= 0n, `${n} must not be positive.`     )],
+			[NumericType.NONNEGATIVE , ( n: bigint) => assert.ok(0n <= n , `${n} must not be negative.`     )],
+			[NumericType.NONZERO     , ( n: bigint) => assert.ok(n !== 0n, `${n} must not be zero.`         )],
+			[NumericType.FINITE      , (_n: bigint) => {}                                                    ],
+			[NumericType.INFINITE    , (_n: bigint) => assert.ok(false   , 'BigInts cannot be infinite.'    )],
 		]).get(type) !(int)
 	}
 

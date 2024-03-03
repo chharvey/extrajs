@@ -1,7 +1,7 @@
 import * as assert from 'assert'
 
-import NaNError from './NaNError.class'
-import xjs_Object from './Object.class'
+import {NaNError} from './NaNError.class.js';
+import {xjs_Object} from './Object.class.js';
 
 
 export enum NumericType {
@@ -23,7 +23,7 @@ export enum NumericType {
  *
  * Does not extend the native Number class.
  */
-export default class xjs_Number {
+export class xjs_Number {
 	/**
 	 * An immutable RegExp instance, representing a string in Number format.
 	 */
@@ -81,17 +81,17 @@ export default class xjs_Number {
 			]).get(type))
 		}
 		return new Map<NumericType, (n: number) => void>([
-			[NumericType.INTEGER     , (n: number) => assert( Number.isInteger(n)          , `${n} must be an integer.`            )],
-			[NumericType.NATURAL     , (n: number) => assert( Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`)],
-			[NumericType.WHOLE       , (n: number) => assert( Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    )],
-			[NumericType.FLOAT       , (n: number) => assert(!Number.isInteger(n)          , `${n} must not be an integer.`        )],
-			[NumericType.POSITIVE    , (n: number) => assert(0 < n                         , `${n} must be a positive number.`     )],
-			[NumericType.NEGATIVE    , (n: number) => assert(n < 0                         , `${n} must be a negative number.`     )],
-			[NumericType.NONPOSITIVE , (n: number) => assert(n <= 0                        , `${n} must not be a positive number.` )],
-			[NumericType.NONNEGATIVE , (n: number) => assert(0 <= n                        , `${n} must not be a negative number.` )],
-			[NumericType.NONZERO     , (n: number) => assert(n !== 0                       , `${n} must not be zero.`              )],
-			[NumericType.FINITE      , (n: number) => assert( Number.isFinite(n)           , `${n} must be a finite number.`       )],
-			[NumericType.INFINITE    , (n: number) => assert(!Number.isFinite(n)           , `${n} must be an infinite number.`    )],
+			[NumericType.INTEGER     , (n: number) => assert.ok( Number.isInteger(n)          , `${n} must be an integer.`            )],
+			[NumericType.NATURAL     , (n: number) => assert.ok( Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`)],
+			[NumericType.WHOLE       , (n: number) => assert.ok( Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    )],
+			[NumericType.FLOAT       , (n: number) => assert.ok(!Number.isInteger(n)          , `${n} must not be an integer.`        )],
+			[NumericType.POSITIVE    , (n: number) => assert.ok(0 < n                         , `${n} must be a positive number.`     )],
+			[NumericType.NEGATIVE    , (n: number) => assert.ok(n < 0                         , `${n} must be a negative number.`     )],
+			[NumericType.NONPOSITIVE , (n: number) => assert.ok(n <= 0                        , `${n} must not be a positive number.` )],
+			[NumericType.NONNEGATIVE , (n: number) => assert.ok(0 <= n                        , `${n} must not be a negative number.` )],
+			[NumericType.NONZERO     , (n: number) => assert.ok(n !== 0                       , `${n} must not be zero.`              )],
+			[NumericType.FINITE      , (n: number) => assert.ok( Number.isFinite(n)           , `${n} must be a finite number.`       )],
+			[NumericType.INFINITE    , (n: number) => assert.ok(!Number.isFinite(n)           , `${n} must be an infinite number.`    )],
 		]).get(type) !(num)
 	}
 
