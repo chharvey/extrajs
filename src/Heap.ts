@@ -2,6 +2,9 @@ import {
 	NumericType,
 	xjs_Number,
 } from './class/Number.class.js';
+import {throw_error} from './utils-private.js';
+
+
 
 /**
  * A comparator function takes two values and returns a number indicating their “order”.
@@ -36,6 +39,8 @@ function parent_index_of(index: number): number {
 	xjs_Number.assertType(index, NumericType.WHOLE);
 	return Math.floor((index - 1) / 2);
 }
+
+
 
 /**
  * A max binary heap.
@@ -106,11 +111,9 @@ export class Heap<T> {
 	 * @throws  {Error} if this Heap is empty
 	 */
 	public peek(): T {
-		if (this.#internal.length > 0) {
-			return this.#internal[0];
-		} else {
-			throw new Error('Heap is empty.');
-		}
+		return this.#internal.length > 0
+			? this.#internal[0]
+			: throw_error(new Error('Heap is empty.'));
 	}
 
 	/**

@@ -1,5 +1,6 @@
 import {xjs_Math} from './class/Math.class.js';
 import {IndexOutOfBoundsError} from './class/IndexOutOfBoundsError.class.js';
+import {throw_error} from './utils-private.js';
 
 
 
@@ -49,11 +50,9 @@ export class LinkedList<T> implements ReadonlyLinkedList<T> {
 	}
 
 	public get firstItem(): T {
-		if (this.length) {
-			return this.#first!.value;
-		} else {
-			throw new IndexOutOfBoundsError(0);
-		}
+		return this.length
+			? this.#first!.value
+			: throw_error(new IndexOutOfBoundsError(0));
 	}
 
 

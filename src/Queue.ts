@@ -1,10 +1,5 @@
 import {LinkedList} from './LinkedList.js';
-
-
-
-function throw_error(e: Error): never {
-	throw e;
-}
+import {throw_error} from './utils-private.js';
 
 
 
