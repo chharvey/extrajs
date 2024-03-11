@@ -1,3 +1,4 @@
+import {IndexOutOfBoundsError} from './class/IndexOutOfBoundsError.class.js';
 import {
 	NumericType,
 	xjs_Number,
@@ -232,7 +233,7 @@ export class Heap<T> {
 	#internalDelete(index: number): void {
 		xjs_Number.assertType(index, NumericType.NATURAL);
 		if (index >= this.#internal.length) {
-			throw new RangeError(`Index out of bounds. Got: ${ index } but expected less than ${ this.#internal.length }`);
+			throw new IndexOutOfBoundsError(index);
 		}
 		const found_node: T      = this.#internal[index];
 		const last_index: number = this.#internal.length - 1;
@@ -253,7 +254,7 @@ export class Heap<T> {
 	#siftUp(index: number): void {
 		xjs_Number.assertType(index, NumericType.NATURAL);
 		if (index >= this.#internal.length) {
-			throw new RangeError(`Index out of bounds. Got: ${ index } but expected less than ${ this.#internal.length }`);
+			throw new IndexOutOfBoundsError(index);
 		}
 		if (index === 0) {
 			// the root node cannot be sifted
@@ -271,7 +272,7 @@ export class Heap<T> {
 	#siftDown(index: number): void {
 		xjs_Number.assertType(index, NumericType.NATURAL);
 		if (index >= this.#internal.length) {
-			throw new RangeError(`Index out of bounds. Got: ${ index } but expected less than ${ this.#internal.length }`);
+			throw new IndexOutOfBoundsError(index);
 		}
 		if (index === this.#internal.length - 1) {
 			// the last node cannot be sifted
