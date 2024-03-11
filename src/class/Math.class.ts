@@ -98,6 +98,17 @@ export class xjs_Math {
 	}
 
 	/**
+	 * Tests whether a given value is within a certain range, inclusive.
+	 * @param val the value to test
+	 * @param min the minimum
+	 * @param max the maximum
+	 * @return is `val` equal to or between `min` and `max`?
+	 */
+	public static isInRange(val: number, min: number, max: number): boolean {
+		return min <= val && val <= max;
+	}
+
+	/**
 	 * Return the arithmetic mean of a set of numbers.
 	 *
 	 * ```js
