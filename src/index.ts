@@ -21,4 +21,13 @@ export {TemplateTag} from './class/String.class.js';
 export {IndexOutOfBoundsError} from './class/IndexOutOfBoundsError.class.js';
 export {NaNError} from './class/NaNError.class.js';
 
+export {
+	ReadonlyLinkedList,
+	LinkedList,
+} from './LinkedList.js';
+export {
+	Queue,
+	ReadableQueue,
+	DeletableQueue,
+} from './Queue.js';
 export {Heap} from './Heap.js';
