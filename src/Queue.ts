@@ -1,3 +1,4 @@
+import {EmptyStructureError} from './EmptyStructureError.js';
 import {LinkedList} from './LinkedList.js';
 import {throw_error} from './utils-private.js';
 
@@ -23,7 +24,7 @@ export class Queue<T> {
 
 	public peek(): T {
 		return (!this.internal.length)
-			? throw_error(new Error('Queue is empty.'))
+			? throw_error(new EmptyStructureError('Queue is empty.'))
 			: this.internal.get(0);
 	}
 
@@ -34,7 +35,7 @@ export class Queue<T> {
 
 	public pop(): [this, T] {
 		return (!this.internal.length)
-			? throw_error(new Error('Cannot pop from empty queue.'))
+			? throw_error(new EmptyStructureError('Cannot pop from empty queue.'))
 			: [this, this.internal.shift()[1].firstItem];
 	}
 }

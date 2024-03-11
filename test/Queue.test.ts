@@ -1,6 +1,7 @@
 /* eslint-disable arrow-body-style */
 import * as assert from 'assert';
 import {
+	EmptyStructureError,
 	Queue,
 	ReadableQueue,
 	DeletableQueue,
@@ -25,7 +26,7 @@ describe('Queue', () => {
 		});
 
 		it('throws when the queue is empty.', () => {
-			return assert.throws(() => new Queue<string>().peek(), /Queue is empty\./);
+			return assert.throws(() => new Queue<string>().peek(), EmptyStructureError);
 		});
 	});
 
@@ -59,7 +60,7 @@ describe('Queue', () => {
 		});
 
 		it('throws when the queue is empty.', () => {
-			return assert.throws(() => new Queue<string>().pop(), /Cannot pop from empty queue\./);
+			return assert.throws(() => new Queue<string>().pop(), EmptyStructureError);
 		});
 	});
 });

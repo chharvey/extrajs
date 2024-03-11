@@ -3,6 +3,7 @@ import {
 	NumericType,
 	xjs_Number,
 } from './class/Number.class.js';
+import {EmptyStructureError} from './EmptyStructureError.js';
 import {throw_error} from './utils-private.js';
 
 
@@ -108,13 +109,13 @@ export class Heap<T> {
 
 	/**
 	 * Return the maximal node in this Heap, without modifying the Heap.
-	 * @returns         the maximal node
-	 * @throws  {Error} if this Heap is empty
+	 * @returns                       the maximal node
+	 * @throws  {EmptyStructureError} if this Heap is empty
 	 */
 	public peek(): T {
 		return this.#internal.length > 0
 			? this.#internal[0]
-			: throw_error(new Error('Heap is empty.'));
+			: throw_error(new EmptyStructureError('Heap is empty.'));
 	}
 
 	/**
@@ -132,8 +133,8 @@ export class Heap<T> {
 
 	/**
 	 * Remove the maximal node from this Heap.
-	 * @returns         `[this, node]`, where `node` is the maximal node
-	 * @throws  {Error} if this Heap is empty
+	 * @returns                       `[this, node]`, where `node` is the maximal node
+	 * @throws  {EmptyStructureError} if this Heap is empty
 	 */
 	public pop(): [this, T] {
 		if (this.#internal.length > 0) {
@@ -142,22 +143,24 @@ export class Heap<T> {
 			this.#siftDown(0);
 			return [this, popped];
 		} else {
-			throw new Error('Cannot pop from empty Heap.');
+			throw new EmptyStructureError('Cannot pop from empty Heap.');
 		}
 	}
 
 	/**
 	 * Remove the given node.
-	 * @param   node the node to remove
-	 * @returns      `[this, node]`, where `node` is the removed node
-	 * @throws  {Error} if the node is not in this Heap
+	 * @param   node                  the node to remove
+	 * @returns                       `[this, node]`, where `node` is the removed node
+	 * @throws  {Error}               if the node is not in this Heap
+	 * @throws  {EmptyStructureError} if this Heap is empty
 	 */
 	public remove(node: T): [this, T];
 	/**
 	 * Remove the first node that satisfies the given predicate.
-	 * @param   predicate a function to find nodes
-	 * @returns           `[this, node]`, where `node` is the removed node
-	 * @throws  {Error}   if no node satisfies the predicate
+	 * @param   predicate             a function to find nodes
+	 * @returns                       `[this, node]`, where `node` is the removed node
+	 * @throws  {Error}               if no node satisfies the predicate
+	 * @throws  {EmptyStructureError} if this Heap is empty
 	 */
 	public remove(predicate: (node: T, src: this) => boolean): [this, T];
 	public remove(arg: T | ((node: T, src: this) => boolean)): [this, T] {
@@ -172,20 +175,22 @@ export class Heap<T> {
 			}
 			throw new Error('No nodes were found to remove.');
 		} else {
-			throw new Error('Cannot remove from empty Heap.');
+			throw new EmptyStructureError('Cannot remove from empty Heap.');
 		}
 	}
 
 	/**
 	 * Remove all of the given nodes.
-	 * @param   nodes the nodes to remove
-	 * @returns       `[this, nodes]`, where `nodes` is a list of the removed nodes
+	 * @param   nodes                 the nodes to remove
+	 * @returns                       `[this, nodes]`, where `nodes` is a list of the removed nodes
+	 * @throws  {EmptyStructureError} if this Heap is empty
 	 */
 	public removeAll(nodes: readonly T[]): [this, T[]];
 	/**
 	 * Remove all nodes that satisfy the given predicate.
-	 * @param   predicate a function to find nodes
-	 * @returns           `[this, nodes]`, where `nodes` is a list of the removed nodes
+	 * @param   predicate             a function to find nodes
+	 * @returns                       `[this, nodes]`, where `nodes` is a list of the removed nodes
+	 * @throws  {EmptyStructureError} if this Heap is empty
 	 */
 	public removeAll(predicate: (node: T, src: this) => boolean): [this, T[]];
 	public removeAll(arg: readonly T[] | ((node: T, src: this) => boolean)): [this, T[]] {
@@ -198,7 +203,7 @@ export class Heap<T> {
 			[...found_node_entries].reverse().forEach(([found_index]) => this.#internalDelete(found_index));
 			return [this, found_node_entries.map(([_, found_node]) => found_node)];
 		} else {
-			throw new Error('Cannot remove from empty Heap.');
+			throw new EmptyStructureError('Cannot remove from empty Heap.');
 		}
 	}
 

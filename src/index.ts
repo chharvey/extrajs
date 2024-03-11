@@ -31,3 +31,5 @@ export {
 	DeletableQueue,
 } from './Queue.js';
 export {Heap} from './Heap.js';
+
+export {EmptyStructureError} from './EmptyStructureError.js';

@@ -1,6 +1,9 @@
 /* eslint-disable arrow-body-style */
 import * as assert from 'assert';
-import {Heap} from '../src/index.js';
+import {
+	EmptyStructureError,
+	Heap,
+} from '../src/index.js';
 
 
 
@@ -55,7 +58,7 @@ describe('Heap', () => {
 		});
 
 		it('throws when the heap is empty.', () => {
-			return assert.throws(() => new Heap<NodeType>(comparator).peek(), /Heap is empty\./);
+			return assert.throws(() => new Heap<NodeType>(comparator).peek(), EmptyStructureError);
 		});
 	});
 
@@ -86,7 +89,7 @@ describe('Heap', () => {
 		});
 
 		it('throws when the heap is empty.', () => {
-			return assert.throws(() => new Heap<NodeType>(comparator).pop(), /Cannot pop from empty Heap\./);
+			return assert.throws(() => new Heap<NodeType>(comparator).pop(), EmptyStructureError);
 		});
 	});
 
@@ -106,7 +109,7 @@ describe('Heap', () => {
 		});
 
 		it('throws when the heap is empty.', () => {
-			return assert.throws(() => new Heap<number>(comparator_simple).remove(3), /Cannot remove from empty Heap\./);
+			return assert.throws(() => new Heap<number>(comparator_simple).remove(3), EmptyStructureError);
 		});
 	});
 
@@ -126,7 +129,7 @@ describe('Heap', () => {
 		});
 
 		it('throws when the heap is empty.', () => {
-			return assert.throws(() => new Heap<NodeType>(comparator).remove((node) => 'priority' in node), /Cannot remove from empty Heap\./);
+			return assert.throws(() => new Heap<NodeType>(comparator).remove((node) => 'priority' in node), EmptyStructureError);
 		});
 	});
 
@@ -146,7 +149,7 @@ describe('Heap', () => {
 		});
 
 		it('throws when the heap is empty.', () => {
-			return assert.throws(() => new Heap<number>(comparator_simple).removeAll([1, 2, 3]), /Cannot remove from empty Heap\./);
+			return assert.throws(() => new Heap<number>(comparator_simple).removeAll([1, 2, 3]), EmptyStructureError);
 		});
 	});
 
@@ -166,7 +169,7 @@ describe('Heap', () => {
 		});
 
 		it('throws when the heap is empty.', () => {
-			return assert.throws(() => new Heap<NodeType>(comparator).removeAll((node) => 'priority' in node), /Cannot remove from empty Heap\./);
+			return assert.throws(() => new Heap<NodeType>(comparator).removeAll((node) => 'priority' in node), EmptyStructureError);
 		});
 	});
 
