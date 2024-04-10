@@ -17,23 +17,21 @@ export class xjs_Map {
 	 * @typeparam V - the type of values in the maps
 	 * @param   a the first map
 	 * @param   b the second map
+	 * @param   predicates for checking equality for keys/values
 	 * @returns Are corresponding pairs the same, i.e. replaceable?
 	 */
 	public static is<K, V>(a: ReadonlyMap<K, V>, b: ReadonlyMap<K, V>, {
-		/** check the “sameness” of corresponding keys of `a` and `b` */
-		keys = xjs_Object.sameValueZero,
-		/** check the “sameness” of corresponding values of `a` and `b` */
-		values = xjs_Object.sameValueZero,
+		keys,
+		values,
 	}: {
+		/** check the “sameness” of corresponding keys of `a` and `b` */
 		keys?:   (x: K, y: K) => boolean,
+		/** check the “sameness” of corresponding values of `a` and `b` */
 		values?: (x: V, y: V) => boolean,
-	} = {
-		keys:   xjs_Object.sameValueZero,
-		values: xjs_Object.sameValueZero,
-	}): boolean {
+	} = {}): boolean {
 		return a === b || a.size === b.size && [...a].every(([a_key, a_val]) => [...b].some(([b_key, b_val]) => (
-			   (xjs_Object.sameValueZero(a_key, b_key) || keys  (a_key, b_key))
-			&& (xjs_Object.sameValueZero(a_val, b_val) || values(a_val, b_val))
+			   (xjs_Object.sameValueZero(a_key, b_key) || !!keys  ?.call(null, a_key, b_key))
+			&& (xjs_Object.sameValueZero(a_val, b_val) || !!values?.call(null, a_val, b_val))
 		)));
 	}
 

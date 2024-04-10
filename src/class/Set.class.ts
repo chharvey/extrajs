@@ -1,5 +1,5 @@
 import {xjs_Object} from './Object.class.js';
-import {xjs_Array} from './Array.class.js';
+import type {xjs_Array} from './Array.class.js';
 
 
 /**
@@ -18,13 +18,8 @@ export class xjs_Set {
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
 	 * @returns Are corresponding elements the same, i.e. replaceable?
 	 */
-	public static is<T>(a: ReadonlySet<T>, b: ReadonlySet<T>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
-		if (a === b) {
-			return true;
-		}
-		return a.size === b.size
-			&& [...a].every((a_el) => [...b].some((b_el) => xjs_Object.sameValueZero(a_el, b_el) || predicate(a_el, b_el)))
-			&& [...b].every((b_el) => [...a].some((a_el) => xjs_Object.sameValueZero(b_el, a_el) || predicate(b_el, a_el)));
+	public static is<T>(a: ReadonlySet<T>, b: ReadonlySet<T>, predicate?: (x: T, y: T) => boolean): boolean {
+		return a === b || a.size === b.size && xjs_Set.isSubsetOf(a, b, predicate) && xjs_Set.isSubsetOf(b, a, predicate);
 	}
 
 	/**
@@ -70,8 +65,7 @@ export class xjs_Set {
 	/**
 	 * Return whether `a` is a subset of `b`: whether all elements of `a` are in `b`.
 	 *
-	 * Note that if `a` is an empty set, or if `a` and `b` are “the same” (as determined by `predicate`),
-	 * this method returns `true`.
+	 * Note that if `a` is an empty set, this method returns `true`.
 	 * @see https://github.com/tc39/proposal-set-methods
 	 * @typeparam T - the type of elements in `a`
 	 * @typeparam U - the type of elements in `b`
@@ -80,8 +74,8 @@ export class xjs_Set {
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
 	 * @returns Is `a` a subset of `b`?
 	 */
-	public static isSubsetOf<U, T extends U>(a: ReadonlySet<T>, b: ReadonlySet<U>, predicate: (x: U, y: U) => boolean = xjs_Object.sameValueZero): boolean {
-		return xjs_Array.isSubarrayOf([...a].sort(), [...b].sort(), predicate);
+	public static isSubsetOf<U, T extends U>(a: ReadonlySet<T>, b: ReadonlySet<U>, predicate?: (x: U, y: U) => boolean): boolean {
+		return a === b || a.size === 0 || a.size <= b.size && [...a].every((a_el) => [...b].some((b_el) => xjs_Object.sameValueZero(a_el, b_el) || !!predicate?.call(null, a_el, b_el)));
 	}
 
 	/**
@@ -94,7 +88,7 @@ export class xjs_Set {
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
 	 * @returns exactly `xjs.Set.isSubsetOf(b, a, predicate)`
 	 */
-	public static isSupersetOf<T, U extends T>(a: ReadonlySet<T>, b: ReadonlySet<U>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
+	public static isSupersetOf<T, U extends T>(a: ReadonlySet<T>, b: ReadonlySet<U>, predicate?: (x: T, y: T) => boolean): boolean {
 		return xjs_Set.isSubsetOf(b, a, predicate);
 	}
 
@@ -215,8 +209,7 @@ export class xjs_Set {
 	 * @return            the mutated set
 	 */
 	public static add<T>(set: Set<T>, element: T, comparator: (a: T, b: T) => boolean): typeof set {
-		const foundel: boolean = [...set].some((e) => comparator.call(null, e, element));
-		return (!foundel) ? set.add(element) : set;
+		return xjs_Set.has<T>(set, element, comparator) ? set : set.add(element);
 	}
 
 	/**

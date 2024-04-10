@@ -48,7 +48,7 @@ export class xjs_Object {
 	 * @returns Are corresponding properties the same, i.e. replaceable?
 	 * @throws  {TypeError} if either `a` or `b` is a function (not supported)
 	 */
-	public static is<T>(a: T, b: T, predicate: (x: T[keyof T], y: T[keyof T]) => boolean = xjs_Object.sameValueZero): boolean {
+	public static is<T>(a: T, b: T, predicate?: (x: T[keyof T], y: T[keyof T]) => boolean): boolean {
 		if (a === b) {
 			return true;
 		}
@@ -63,8 +63,8 @@ export class xjs_Object {
 		}
 		// else, it will be 'object'
 		return (
-			   Object.entries(a as Record<string, T[keyof T]>).every(([a_key, a_value]) => Object.entries(b as Record<string, T[keyof T]>).some(([b_key, b_value]) => a_key === b_key && predicate(a_value, b_value)))
-			&& Object.entries(b as Record<string, T[keyof T]>).every(([b_key, b_value]) => Object.entries(a as Record<string, T[keyof T]>).some(([a_key, a_value]) => a_key === b_key && predicate(a_value, b_value)))
+			   Object.entries(a as Record<string, T[keyof T]>).every(([a_key, a_value]) => Object.entries(b as Record<string, T[keyof T]>).some(([b_key, b_value]) => a_key === b_key && (xjs_Object.sameValueZero(a_value, b_value) || !!predicate?.call(null, a_value, b_value))))
+			&& Object.entries(b as Record<string, T[keyof T]>).every(([b_key, b_value]) => Object.entries(a as Record<string, T[keyof T]>).some(([a_key, a_value]) => a_key === b_key && (xjs_Object.sameValueZero(a_value, b_value) || !!predicate?.call(null, a_value, b_value))))
 		);
 	}
 
