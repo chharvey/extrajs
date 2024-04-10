@@ -1,5 +1,5 @@
 import {xjs_Object} from './Object.class.js';
-import {xjs_Array} from './Array.class.js';
+import type {xjs_Array} from './Array.class.js';
 
 
 /**
@@ -23,8 +23,8 @@ export class xjs_Set {
 			return true;
 		}
 		return a.size === b.size
-			&& [...a].every((a_el) => [...b].some((b_el) => xjs_Object.sameValueZero(a_el, b_el) || predicate(a_el, b_el)))
-			&& [...b].every((b_el) => [...a].some((a_el) => xjs_Object.sameValueZero(b_el, a_el) || predicate(b_el, a_el)));
+			&& xjs_Set.isSubsetOf(a, b, predicate)
+			&& xjs_Set.isSubsetOf(b, a, predicate);
 	}
 
 	/**
@@ -70,8 +70,7 @@ export class xjs_Set {
 	/**
 	 * Return whether `a` is a subset of `b`: whether all elements of `a` are in `b`.
 	 *
-	 * Note that if `a` is an empty set, or if `a` and `b` are “the same” (as determined by `predicate`),
-	 * this method returns `true`.
+	 * Note that if `a` is an empty set, this method returns `true`.
 	 * @see https://github.com/tc39/proposal-set-methods
 	 * @typeparam T - the type of elements in `a`
 	 * @typeparam U - the type of elements in `b`
@@ -81,7 +80,10 @@ export class xjs_Set {
 	 * @returns Is `a` a subset of `b`?
 	 */
 	public static isSubsetOf<U, T extends U>(a: ReadonlySet<T>, b: ReadonlySet<U>, predicate: (x: U, y: U) => boolean = xjs_Object.sameValueZero): boolean {
-		return xjs_Array.isSubarrayOf([...a].sort(), [...b].sort(), predicate);
+		if (a === b || a.size === 0) {
+			return true;
+		}
+		return a.size <= b.size && [...a].every((a_el) => [...b].some((b_el) => xjs_Object.sameValueZero(a_el, b_el) || predicate(a_el, b_el)));
 	}
 
 	/**
