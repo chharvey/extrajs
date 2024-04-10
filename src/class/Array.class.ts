@@ -87,7 +87,7 @@ export class xjs_Array {
 	 * @returns Are corresponding elements the same, i.e. replaceable?
 	 */
 	public static is<T>(a: readonly T[], b: readonly T[], predicate?: (x: T, y: T) => boolean): boolean {
-		return a === b || a.length === b.length && a.every((el, i) => xjs_Object.sameValueZero(el, b[i]) || !!predicate?.(el, b[i]));
+		return a === b || a.length === b.length && a.every((el, i) => xjs_Object.sameValueZero(el, b[i]) || !!predicate?.call(null, el, b[i]));
 	}
 
 	/**
@@ -113,7 +113,7 @@ export class xjs_Array {
 			   a.length === 0
 			|| xjs_Array.is(a, b, predicate)
 			|| a
-				.map((t) => b.findIndex((u) => xjs_Object.sameValueZero(u, t) || !!predicate?.(u, t))) // indices of `b`’s elements in the order in which they appear in `a`
+				.map((t) => b.findIndex((u) => xjs_Object.sameValueZero(u, t) || !!predicate?.call(null, u, t))) // indices of `b`’s elements in the order in which they appear in `a`
 				.every((n, i, indices) => n >= 0 && (i === 0 || indices[i] > indices[i - 1])) // indices must all be 0+ and increasing (all of `a`’s elements are present in `b` and in the right order)
 		);
 	}
@@ -352,7 +352,7 @@ export class xjs_Array {
 		const returned: T[] = arr.slice();
 		for (let i = 0; i < returned.length; i++) {
 			for (let j = i + 1; j < returned.length; j++) {
-				if (xjs_Object.sameValueZero(returned[i], returned[j]) || !!predicate?.(returned[i], returned[j])) {
+				if (xjs_Object.sameValueZero(returned[i], returned[j]) || !!predicate?.call(null, returned[i], returned[j])) {
 					returned.splice(j, 1);
 				}
 			}

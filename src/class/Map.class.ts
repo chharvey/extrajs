@@ -29,8 +29,8 @@ export class xjs_Map {
 		values?: (x: V, y: V) => boolean,
 	} = {}): boolean {
 		return a === b || a.size === b.size && [...a].every(([a_key, a_val]) => [...b].some(([b_key, b_val]) => (
-			   (xjs_Object.sameValueZero(a_key, b_key) || !!keys?.(a_key, b_key))
-			&& (xjs_Object.sameValueZero(a_val, b_val) || !!values?.(a_val, b_val))
+			   (xjs_Object.sameValueZero(a_key, b_key) || !!keys  ?.call(null, a_key, b_key))
+			&& (xjs_Object.sameValueZero(a_val, b_val) || !!values?.call(null, a_val, b_val))
 		)));
 	}
 

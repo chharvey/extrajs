@@ -63,8 +63,8 @@ export class xjs_Object {
 		}
 		// else, it will be 'object'
 		return (
-			   Object.entries(a as Record<string, T[keyof T]>).every(([a_key, a_value]) => Object.entries(b as Record<string, T[keyof T]>).some(([b_key, b_value]) => a_key === b_key && (xjs_Object.sameValueZero(a_value, b_value) || !!predicate?.(a_value, b_value))))
-			&& Object.entries(b as Record<string, T[keyof T]>).every(([b_key, b_value]) => Object.entries(a as Record<string, T[keyof T]>).some(([a_key, a_value]) => a_key === b_key && (xjs_Object.sameValueZero(a_value, b_value) || !!predicate?.(a_value, b_value))))
+			   Object.entries(a as Record<string, T[keyof T]>).every(([a_key, a_value]) => Object.entries(b as Record<string, T[keyof T]>).some(([b_key, b_value]) => a_key === b_key && (xjs_Object.sameValueZero(a_value, b_value) || !!predicate?.call(null, a_value, b_value))))
+			&& Object.entries(b as Record<string, T[keyof T]>).every(([b_key, b_value]) => Object.entries(a as Record<string, T[keyof T]>).some(([a_key, a_value]) => a_key === b_key && (xjs_Object.sameValueZero(a_value, b_value) || !!predicate?.call(null, a_value, b_value))))
 		);
 	}
 
