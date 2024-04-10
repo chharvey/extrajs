@@ -215,8 +215,7 @@ export class xjs_Set {
 	 * @return            the mutated set
 	 */
 	public static add<T>(set: Set<T>, element: T, comparator: (a: T, b: T) => boolean): typeof set {
-		const foundel: boolean = [...set].some((e) => comparator.call(null, e, element));
-		return (!foundel) ? set.add(element) : set;
+		return xjs_Set.has<T>(set, element, comparator) ? set : set.add(element);
 	}
 
 	/**
