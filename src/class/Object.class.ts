@@ -17,13 +17,13 @@ export class xjs_Object {
 	 * This function tests the properties of two arguemnts, using the provided predicate.
 	 * Arguments must be of the same type.
 	 * If both are primitives, this method checks
-	 * {@link xjs_Object._sameValueZero|Same-Value-Zero Equality}.
+	 * {@link xjs_Object.sameValueZero|Same-Value-Zero Equality}.
 	 * If either are functions, this method throws an TypeError — functions are not supported at this time.
 	 * If both arguments are arrays, it is faster and more robust to use {@link xjs_Array.is}.
 	 * If both are objects or arrays, this method checks the properties (or elements) of each,
 	 * comparing them with the provided predicate.
 	 *
-	 * If no predicate is provided, this method uses the default predicate {@link xjs_Object._sameValueZero}.
+	 * If no predicate is provided, this method uses the default predicate {@link xjs_Object.sameValueZero}.
 	 *
 	 * Note: This method does not deep-check equality within the objects’ properties (or arrays’ elements).
 	 * To check deeper, I suggest using Node.js’s native

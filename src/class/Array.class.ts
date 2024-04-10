@@ -39,7 +39,7 @@ export class xjs_Array {
 	 * Warning: passing in sparse arrays can yield unexpected results.
 	 *
 	 * Elements are compared via the provided predicate.
-	 * If no predicate is provided, this method uses the default predicate {@link xjs_Object._sameValueZero}.
+	 * If no predicate is provided, this method uses the default predicate {@link xjs_Object.sameValueZero}.
 	 *
 	 * ```js
 	 * 'twofoursix'.includes('wofo')===true

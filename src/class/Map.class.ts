@@ -1,4 +1,5 @@
 import {xjs_Object} from './Object.class.js';
+import type {xjs_Set} from './Set.class.js';
 
 
 /**

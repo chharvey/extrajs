@@ -87,7 +87,7 @@ export class xjs_Math {
 	}
 
 	/**
-	 * {@link xjx_Math.clamp}, but for `bigint` types.
+	 * {@link xjs_Math.clamp}, but for `bigint` types.
 	 * @param   min - the lower bound
 	 * @param   val - the value to clamp between the bounds
 	 * @param   max - the upper bound
