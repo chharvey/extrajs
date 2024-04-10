@@ -19,12 +19,7 @@ export class xjs_Set {
 	 * @returns Are corresponding elements the same, i.e. replaceable?
 	 */
 	public static is<T>(a: ReadonlySet<T>, b: ReadonlySet<T>, predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
-		if (a === b) {
-			return true;
-		}
-		return a.size === b.size
-			&& xjs_Set.isSubsetOf(a, b, predicate)
-			&& xjs_Set.isSubsetOf(b, a, predicate);
+		return a === b || a.size === b.size && xjs_Set.isSubsetOf(a, b, predicate) && xjs_Set.isSubsetOf(b, a, predicate);
 	}
 
 	/**
@@ -80,10 +75,7 @@ export class xjs_Set {
 	 * @returns Is `a` a subset of `b`?
 	 */
 	public static isSubsetOf<U, T extends U>(a: ReadonlySet<T>, b: ReadonlySet<U>, predicate: (x: U, y: U) => boolean = xjs_Object.sameValueZero): boolean {
-		if (a === b || a.size === 0) {
-			return true;
-		}
-		return a.size <= b.size && [...a].every((a_el) => [...b].some((b_el) => xjs_Object.sameValueZero(a_el, b_el) || predicate(a_el, b_el)));
+		return a === b || a.size === 0 || a.size <= b.size && [...a].every((a_el) => [...b].some((b_el) => xjs_Object.sameValueZero(a_el, b_el) || predicate(a_el, b_el)));
 	}
 
 	/**
