@@ -2,14 +2,45 @@ import * as assert from 'assert';
 import {xjs_Map} from '../src/class/Map.class.js';
 
 describe('xjs.Map', () => {
+	describe('.is', () => {
+		it('tests keys and values by equality predicate.', () => {
+			type Key = {id: number};
+			type Val = {name: string};
+			const comparator_keys = (a: Key, b: Key): boolean => a.id   === b.id;
+			const comparator_vals = (a: Val, b: Val): boolean => a.name === b.name;
+			const key: Key = {id: 42};
+			const val: Val = {name: 'alice'};
+			const map1 = new Map<Key, Val>([[key, val]]);
+			const map2 = new Map<Key, Val>([[key, val]]);
+			const map3 = new Map<Key, Val>([[{id: 42}, {name: 'alice'}]]);
+			const map4 = new Map<Key, Val>([[{id: 43}, {name: 'bob'}]]);
+			assert.notStrictEqual(map1, map2, 'different maps with identical pairs are not identical.');
+			assert.ok(xjs_Map.is<Key, Val>(map1, map2), 'maps with identical pairs pass with the default predicate.');
+			assert.ok(!xjs_Map.is<Key, Val>(map2, map3), 'maps with equal (but non-identical) pairs fail with the default predicate.');
+			assert.ok(xjs_Map.is<Key, Val>(map1, map2, {
+				keys:   comparator_keys,
+				values: comparator_vals,
+			}), 'maps with identical pairs pass with both the provided predicates.');
+			assert.ok(xjs_Map.is<Key, Val>(map2, map3, {
+				keys:   comparator_keys,
+				values: comparator_vals,
+			}), 'maps with equal (but non-identical) pairs pass with both the provided predicates.');
+			assert.ok(!xjs_Map.is<Key, Val>(map3, map4, {
+				keys:   comparator_keys,
+				values: comparator_vals,
+			}), 'maps with non-equal and non-identical pairs fail.');
+		});
+	});
+
+
 	context('Equality Methods', () => {
 		type Key = {id: number};
-		const comparator = (a: Key, b: Key) => a.id === b.id;
+		const comparator = (a: Key, b: Key): boolean => a.id === b.id;
 
 		describe('.has', () => {
 			it('tests keys by equality.', () => {
 				const key: Key = {id: 42};
-				const my_map: Map<Key, boolean> = new Map([
+				const my_map = new Map<Key, boolean>([
 					[key, true],
 				]);
 				assert.ok(!my_map.has({id: 42}), 'does not contain an equal (but non-identical) key.');
@@ -22,7 +53,7 @@ describe('xjs.Map', () => {
 		describe('.get', () => {
 			it('gets equivalent keys.', () => {
 				const key: Key = {id: 42};
-				const my_map: Map<Key, boolean> = new Map([
+				const my_map = new Map<Key, boolean>([
 					[key, true],
 				]);
 				assert.strictEqual(my_map.get({id: 42}), undefined, 'does not get equal (but non-identical) keys.');
@@ -35,7 +66,7 @@ describe('xjs.Map', () => {
 		describe('.set', () => {
 			it('sets equivalent keys.', () => {
 				const key: Key = {id: 42};
-				const my_map: Map<Key, boolean> = new Map([
+				const my_map = new Map<Key, boolean>([
 					[key, true],
 				]);
 				my_map.set({id: 42}, false);
@@ -52,7 +83,7 @@ describe('xjs.Map', () => {
 		describe('.delete', () => {
 			it('deletes equivalent keys.', () => {
 				const key: Key = {id: 42};
-				const my_map: Map<Key, boolean> = new Map([
+				const my_map = new Map<Key, boolean>([
 					[key, true],
 					[{id: 43}, true],
 					[{id: 44}, true],
@@ -65,6 +96,126 @@ describe('xjs.Map', () => {
 				assert.strictEqual(my_map.size, 1, 'deletes an identical key.');
 				xjs_Map.delete(my_map, {id: 45}, comparator);
 				assert.strictEqual(my_map.size, 1, 'does not delete a non-equal and non-identical key.');
+			});
+		});
+	});
+
+	describe('.forEachAggregated', () => {
+		it('acts like Map#forEach if no errors.', () => {
+			let times: number = 0;
+			xjs_Map.forEachAggregated(new Map<string, number>([
+				['one',   1],
+				['two',   2],
+				['three', 3],
+				['four',  4],
+			]), (_n) => {
+				times++;
+			});
+			assert.strictEqual(times, 4);
+		});
+		it('callback params.', () => {
+			const results: Record<string, Set<string>> = {
+				v: new Set(),
+				k: new Set(),
+				s: new Set(),
+			};
+			xjs_Map.forEachAggregated(new Map<string, number>([
+				['ten',    10],
+				['twenty', 20],
+				['thirty', 30],
+				['forty',  40],
+			]), (value, key, src) => {
+				results['v'].add(value.toString());
+				results['k'].add(key.toString());
+				results['s'].add([...src].toString());
+			});
+			assert.deepStrictEqual(results, {
+				v: new Set(['10', '20', '30', '40']),
+				k: new Set(['ten', 'twenty', 'thirty', 'forty']),
+				s: new Set([
+					'ten,10,twenty,20,thirty,30,forty,40',
+					'ten,10,twenty,20,thirty,30,forty,40',
+					'ten,10,twenty,20,thirty,30,forty,40',
+					'ten,10,twenty,20,thirty,30,forty,40',
+				]),
+			});
+		});
+		it('rethrows first error if only 1 error.', () => {
+			let times: number = 0;
+			assert.throws(() => xjs_Map.forEachAggregated(new Map<string, number>([
+				['one',   1],
+				['two',   2],
+				['three', 3],
+				['four',  4],
+			]), (num, name) => {
+				times++;
+				if (num === 2) {
+					throw new RangeError(`${ name } is even.`);
+				}
+			}), (err) => {
+				assert.ok(err instanceof RangeError);
+				assert.strictEqual(err.message, 'two is even.');
+				assert.strictEqual(times, 4);
+				return true;
+			});
+		});
+		it('aggregates all caught errors if more than 1.', () => {
+			assert.throws(() => xjs_Map.forEachAggregated(new Map<string, number>([
+				['one',   1],
+				['two',   2],
+				['three', 3],
+				['four',  4],
+			]), (num, name) => {
+				if (num % 2 === 0) {
+					throw new RangeError(`${ name } is even.`);
+				}
+			}), (err) => {
+				assert.ok(err instanceof AggregateError);
+				assert.strictEqual(err.errors.length, 2);
+				assert.deepStrictEqual(err.errors.map((er) => {
+					assert.ok(er instanceof RangeError);
+					return er.message;
+				}), ['two is even.', 'four is even.']);
+				return true;
+			});
+		});
+		it('preserves any nested AggregateError errors.', () => {
+			assert.throws(() => xjs_Map.forEachAggregated(new Map<string, number>([
+				['one',   1],
+				['two',   2],
+				['three', 3],
+				['four',  4],
+				['five',  5],
+				['six',   6],
+				['seven', 7],
+				['eight', 8],
+			]), (num, name) => {
+				if (num % 2 === 0) {
+					throw (num % 4 === 0)
+						? new AggregateError([
+							new RangeError(`${ name } is even.`),
+							new RangeError(`${ name } is a multiple of 4.`),
+						])
+						: new RangeError(`${ name } is even.`);
+				}
+			}), (err) => {
+				assert.ok(err instanceof AggregateError);
+				assert.strictEqual(err.errors.length, 4);
+				assert.deepStrictEqual(err.errors.map((er, i) => {
+					if ([0, 2].includes(i)) {
+						assert.ok(er instanceof RangeError);
+						return er.message;
+					} else {
+						assert.ok(er instanceof AggregateError);
+						return er.errors.map((e) => e.message);
+					}
+				}), [
+					'two is even.',
+					['four is even.', 'four is a multiple of 4.'],
+					'six is even.',
+					['eight is even.', 'eight is a multiple of 4.'],
+				]);
+				return true;
 			});
 		});
 	});

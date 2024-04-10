@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import * as assert from 'assert';
 
 import {NaNError} from './NaNError.class.js';
 import {xjs_Object} from './Object.class.js';
@@ -27,7 +27,7 @@ export class xjs_Number {
 	/**
 	 * An immutable RegExp instance, representing a string in Number format.
 	 */
-	static readonly REGEXP: Readonly<RegExp> = /^-?(?:\d+(?:\.\d+)?|\.\d+)$/
+	public static readonly REGEXP: Readonly<RegExp> = /^-?(?:\d+(?:\.\d+)?|\.\d+)$/;
 
 	/**
 	 * Verify the type of number given, throwing if it does not match.
@@ -58,41 +58,26 @@ export class xjs_Number {
 	 * @throws  {AssertionError} if the argument does not match the described type
 	 * @throws  {NaNError} if the argument is `NaN`
 	 */
-	static assertType(num: number, type?: NumericType|'integer'|'natural'|'whole'|'float'|'positive'|'negative'|'non-positive'|'non-negative'|'non-zero'|'finite'|'infinite'): void {
-		if (Number.isNaN(num)) throw new NaNError()
-		if (type === void 0) return;
-		if (typeof type === 'string') {
-			console.warn(new Error(`
-				WARNING: Argument \`'${type}'\` was sent into \`xjs.Number.assertType\`.
-				Sending a string argument is deprecated; use a member of enum \`NumericType\` instead.
-			`.trim()))
-			return xjs_Number.assertType(num, new Map<string, NumericType>([
-				['integer'      , NumericType.INTEGER    ],
-				['natural'      , NumericType.NATURAL    ],
-				['whole'        , NumericType.WHOLE      ],
-				['float'        , NumericType.FLOAT      ],
-				['positive'     , NumericType.POSITIVE   ],
-				['negative'     , NumericType.NEGATIVE   ],
-				['non-positive' , NumericType.NONPOSITIVE],
-				['non-negative' , NumericType.NONNEGATIVE],
-				['non-zero'     , NumericType.NONZERO    ],
-				['finite'       , NumericType.FINITE     ],
-				['infinite'     , NumericType.INFINITE   ],
-			]).get(type))
+	public static assertType(num: number, type?: NumericType): void {
+		if (Number.isNaN(num)) {
+			throw new NaNError();
+		}
+		if (type === void 0) {
+			return;
 		}
 		return new Map<NumericType, (n: number) => void>([
-			[NumericType.INTEGER     , (n: number) => assert.ok( Number.isInteger(n)          , `${n} must be an integer.`            )],
-			[NumericType.NATURAL     , (n: number) => assert.ok( Number.isInteger(n) && 0 <= n, `${n} must be a non-negative integer.`)],
-			[NumericType.WHOLE       , (n: number) => assert.ok( Number.isInteger(n) && 0 <  n, `${n} must be a positive integer.`    )],
-			[NumericType.FLOAT       , (n: number) => assert.ok(!Number.isInteger(n)          , `${n} must not be an integer.`        )],
-			[NumericType.POSITIVE    , (n: number) => assert.ok(0 < n                         , `${n} must be a positive number.`     )],
-			[NumericType.NEGATIVE    , (n: number) => assert.ok(n < 0                         , `${n} must be a negative number.`     )],
-			[NumericType.NONPOSITIVE , (n: number) => assert.ok(n <= 0                        , `${n} must not be a positive number.` )],
-			[NumericType.NONNEGATIVE , (n: number) => assert.ok(0 <= n                        , `${n} must not be a negative number.` )],
-			[NumericType.NONZERO     , (n: number) => assert.ok(n !== 0                       , `${n} must not be zero.`              )],
-			[NumericType.FINITE      , (n: number) => assert.ok( Number.isFinite(n)           , `${n} must be a finite number.`       )],
-			[NumericType.INFINITE    , (n: number) => assert.ok(!Number.isFinite(n)           , `${n} must be an infinite number.`    )],
-		]).get(type) !(num)
+			[NumericType.INTEGER,     (n) => assert.ok(Number.isInteger(n),           `${ n } must be an integer.`)],
+			[NumericType.NATURAL,     (n) => assert.ok(Number.isInteger(n) && 0 <= n, `${ n } must be a non-negative integer.`)],
+			[NumericType.WHOLE,       (n) => assert.ok(Number.isInteger(n) && 0 <  n, `${ n } must be a positive integer.`)],
+			[NumericType.FLOAT,       (n) => assert.ok(!Number.isInteger(n),          `${ n } must not be an integer.`)],
+			[NumericType.POSITIVE,    (n) => assert.ok(0 < n,                         `${ n } must be a positive number.`)],
+			[NumericType.NEGATIVE,    (n) => assert.ok(n < 0,                         `${ n } must be a negative number.`)],
+			[NumericType.NONPOSITIVE, (n) => assert.ok(n <= 0,                        `${ n } must not be a positive number.`)],
+			[NumericType.NONNEGATIVE, (n) => assert.ok(0 <= n,                        `${ n } must not be a negative number.`)],
+			[NumericType.NONZERO,     (n) => assert.ok(n !== 0,                       `${ n } must not be zero.`)],
+			[NumericType.FINITE,      (n) => assert.ok(Number.isFinite(n),            `${ n } must be a finite number.`)],
+			[NumericType.INFINITE,    (n) => assert.ok(!Number.isFinite(n),           `${ n } must be an infinite number.`)],
+		]).get(type) !(num);
 	}
 
 	/**
@@ -109,14 +94,14 @@ export class xjs_Number {
 	 * @returns one of the strings described above
 	 * @throws  {RangeError} if the given arguemnt was not a finite number
 	 */
-	static typeOf(num: number): 'integer'|'float' {
-		console.warn('`xjs.Number.typeOf` is DEPRECATED: use `xjs.Number.assertType` instead.')
+	public static typeOf(num: number): 'integer' | 'float' {
+		console.warn('`xjs.Number.typeOf` is DEPRECATED: use `xjs.Number.assertType` instead.');
 		if (['NaN', 'infinite'].includes(xjs_Object.typeOf(num))) {
-			throw new RangeError('Argument must be a finite number.')
+			throw new RangeError('Argument must be a finite number.');
 		}
-		return (Number.isInteger(num)) ? 'integer' : 'float'
+		return (Number.isInteger(num)) ? 'integer' : 'float';
 	}
 
 
-  private constructor() {}
+	private constructor() {}
 }

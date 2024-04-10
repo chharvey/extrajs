@@ -27,29 +27,29 @@ export type TemplateTag<Return, Interps extends unknown[] = unknown[]> =
  * Does not extend the native String class.
  */
 export class xjs_String {
-  /**
-   * Convert a thing into a string.
-   *
-   * If the argument is an array, it is joined.
-   * If it is an object, `JSON.stringify` is called on it.
-   * This method calls `.toString()` on everything else, except `null` and `undefined`,
-   * which are converted to the strings `'null'` and `'undefined'` respectively.
-   * Useful for JSON objects where the value could be a single string or an array of strings.
-   * @param   thing anything to convert
-   * @returns a string version of the argument
-   */
-	static stringify(thing: unknown): string {
-		return new Map<string, (arg: any) => string>([
-			['object'    , (arg: object)    => JSON.stringify(arg)],
-			['array'     , (arg: unknown[]) => arg.join('')],
-			['function'  , (arg: Function)  => arg.toString()],
-			['string'    , (arg: string)    => arg],
-			['number'    , (arg: number)    => arg.toString()],
-			['boolean'   , (arg: boolean)   => arg.toString()],
-			['null'      , (arg: null)      => `${arg}`],
-			['undefined' , (arg: void)      => `${arg}`],
-			['default'   , (arg: unknown)   => `${arg}`],
-		]).get(xjs_Object.typeOf(thing)) !(thing)
+	/**
+	 * Convert a thing into a string.
+	 *
+	 * If the argument is an array, it is joined.
+	 * If it is an object, `JSON.stringify` is called on it.
+	 * This method calls `.toString()` on everything else, except `null` and `undefined`,
+	 * which are converted to the strings `'null'` and `'undefined'` respectively.
+	 * Useful for JSON objects where the value could be a single string or an array of strings.
+	 * @param   thing anything to convert
+	 * @returns a string version of the argument
+	 */
+	public static stringify(thing: unknown): string {
+		return new Map<string, (arg: unknown) => string>([
+			['object',    (arg) => JSON.stringify(arg as object)],
+			['array',     (arg) => (arg as unknown[]).join('')],
+			['function',  (arg) => (arg as Function).toString()], // eslint-disable-line @typescript-eslint/ban-types
+			['string',    (arg) => arg as string],
+			['number',    (arg) => (arg as number).toString()],
+			['boolean',   (arg) => (arg as boolean).toString()],
+			['null',      (arg) => `${ arg as null }`],
+			['undefined', (arg) => `${ arg as void }`],
+			['default',   (arg) => `${ arg }`],
+		]).get(xjs_Object.typeOf(thing))!(thing);
 	}
 
 	/**
@@ -72,18 +72,18 @@ export class xjs_String {
 	 * `);
 	 * @returns a string with each line dedented by the determined number of tabs
 	 */
-	static dedent(strings: TemplateStringsArray, ...interps: unknown[]): string {
+	public static dedent(strings: TemplateStringsArray, ...interps: unknown[]): string {
 		const matched: RegExpMatchArray | null = strings[0].match(/\n\t*/);
-		const n: number = matched && matched[0] ? matched[0].slice(1).length : 0;
+		const num: number = matched && matched[0] ? matched[0].slice(1).length : 0;
 		function replace(s: string, n: number): string {
 			return (n <= 0) ? s : s.replace(new RegExp(`\\n\\t{0,${ Math.floor(n) }}`, 'g'), '\n');
 		}
 		return [
-			...interps.flatMap((interp, i) => [replace(strings[i], n), interp]),
-			replace(strings[strings.length - 1], n), // strings.lastItem
+			...interps.flatMap((interp, i) => [replace(strings[i], num), interp]),
+			replace(strings[strings.length - 1], num), // strings.lastItem
 		].join('');
 	}
 
 
-  private constructor() {}
+	private constructor() {}
 }
