@@ -58,7 +58,7 @@ export class xjs_Array {
 	 * @throws  {RangeError} if the second array is larger than the first
 	 * @deprecated use {@link xjs_Array.isConsecutiveSuperarrayOf} instead.
 	 */
-	public static contains<T>(larger: readonly T[], smaller: readonly T[], predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
+	public static contains<T>(larger: readonly T[], smaller: readonly T[], predicate?: (x: T, y: T) => boolean): boolean {
 		if (smaller.length > larger.length) {
 			throw new RangeError('First argument cannot be smaller than the second. Try switching the arguments.');
 		}
@@ -86,8 +86,8 @@ export class xjs_Array {
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
 	 * @returns Are corresponding elements the same, i.e. replaceable?
 	 */
-	public static is<T>(a: readonly T[], b: readonly T[], predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
-		return a === b || a.length === b.length && a.every((el, i) => xjs_Object.sameValueZero(el, b[i]) || predicate(el, b[i]));
+	public static is<T>(a: readonly T[], b: readonly T[], predicate?: (x: T, y: T) => boolean): boolean {
+		return a === b || a.length === b.length && a.every((el, i) => xjs_Object.sameValueZero(el, b[i]) || !!predicate?.(el, b[i]));
 	}
 
 	/**
@@ -108,12 +108,12 @@ export class xjs_Array {
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
 	 * @returns Is `a` a subarray of `b`?
 	 */
-	public static isSubarrayOf<U, T extends U>(a: readonly T[], b: readonly U[], predicate: (x: U, y: U) => boolean = xjs_Object.sameValueZero): boolean {
+	public static isSubarrayOf<U, T extends U>(a: readonly T[], b: readonly U[], predicate?: (x: U, y: U) => boolean): boolean {
 		return a.length <= b.length && (
 			   a.length === 0
 			|| xjs_Array.is(a, b, predicate)
 			|| a
-				.map((t) => b.findIndex((u) => predicate(u, t))) // indices of `b`’s elements in the order in which they appear in `a`
+				.map((t) => b.findIndex((u) => xjs_Object.sameValueZero(u, t) || !!predicate?.(u, t))) // indices of `b`’s elements in the order in which they appear in `a`
 				.every((n, i, indices) => n >= 0 && (i === 0 || indices[i] > indices[i - 1])) // indices must all be 0+ and increasing (all of `a`’s elements are present in `b` and in the right order)
 		);
 	}
@@ -127,7 +127,7 @@ export class xjs_Array {
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
 	 * @returns exactly `xjs_Array.isSubarrayOf(b, a, predicate)`
 	 */
-	public static isSuperarrayOf<T, U extends T>(a: readonly T[], b: readonly U[], predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
+	public static isSuperarrayOf<T, U extends T>(a: readonly T[], b: readonly U[], predicate?: (x: T, y: T) => boolean): boolean {
 		return xjs_Array.isSubarrayOf(b, a, predicate);
 	}
 
@@ -140,7 +140,7 @@ export class xjs_Array {
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
 	 * @returns Is `a` a consecutive subarray of `b`?
 	 */
-	public static isConsecutiveSubarrayOf<U, T extends U>(a: readonly T[], b: readonly U[], predicate: (x: U, y: U) => boolean = xjs_Object.sameValueZero): boolean {
+	public static isConsecutiveSubarrayOf<U, T extends U>(a: readonly T[], b: readonly U[], predicate?: (x: U, y: U) => boolean): boolean {
 		return xjs_Array.isSubarrayOf(a, b, predicate) && b.map((_el, i) => b.slice(i, i + a.length)).some((sub) => xjs_Array.is(a, sub, predicate));
 	}
 
@@ -153,7 +153,7 @@ export class xjs_Array {
 	 * @param   predicate check the “sameness” of corresponding elements of `a` and `b`
 	 * @returns exactly `xjs_Array.isConsecutiveSubarrayOf(b, a, predicate)`
 	 */
-	public static isConsecutiveSuperarrayOf<T, U extends T>(a: readonly T[], b: readonly U[], predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): boolean {
+	public static isConsecutiveSuperarrayOf<T, U extends T>(a: readonly T[], b: readonly U[], predicate?: (x: T, y: T) => boolean): boolean {
 		return xjs_Array.isConsecutiveSubarrayOf(b, a, predicate);
 	}
 
@@ -348,11 +348,11 @@ export class xjs_Array {
 	 * @returns a new array, with duplicates removed
 	 * @deprecated use `[...new Set(arr)]` instead
 	 */
-	public static removeDuplicates<T>(arr: readonly T[], predicate: (x: T, y: T) => boolean = xjs_Object.sameValueZero): T[] {
+	public static removeDuplicates<T>(arr: readonly T[], predicate?: (x: T, y: T) => boolean): T[] {
 		const returned: T[] = arr.slice();
 		for (let i = 0; i < returned.length; i++) {
 			for (let j = i + 1; j < returned.length; j++) {
-				if (predicate(returned[i], returned[j])) {
+				if (xjs_Object.sameValueZero(returned[i], returned[j]) || !!predicate?.(returned[i], returned[j])) {
 					returned.splice(j, 1);
 				}
 			}
