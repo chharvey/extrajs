@@ -156,6 +156,38 @@ export class xjs_Map {
 	}
 
 	/**
+	 * Only set the value if the provided key is missing.
+	 *
+	 * If there exists a key in the map (equivalent by the comparator function), then don’t set the value.
+	 * @param  map        the map to set
+	 * @param  key        the key to check
+	 * @param  value      the value to set
+	 * @param  comparator a comparator function of keys
+	 * @return            the possibly mutated map
+	 */
+	public static setIfAbsent<K, V>(map: Map<K, V>, key: K, value: V, comparator: (a: K, b: K) => boolean): Map<K, V> {
+		xjs_Map.has(map, key, comparator) || xjs_Map.set(map, key, value, comparator);
+		return map;
+	}
+
+	/**
+	 * Only tee the value if the provided key is missing.
+	 *
+	 * If there exists a key in the map (equivalent by the comparator function), then don’t tee the value.
+	 * This method returns either the value in the map at the given key if it exited before the tee,
+	 * or the newly teed value if one did not previously exist.
+	 * @param  map        the map to set
+	 * @param  key        the key to check
+	 * @param  value      the value to set
+	 * @param  comparator a comparator function of keys
+	 * @return            the value at the key, if it exists, else the newly set value
+	 */
+	public static teeIfAbsent<K, V>(map: Map<K, V>, key: K, value: V, comparator: (a: K, b: K) => boolean): V {
+		xjs_Map.setIfAbsent(map, key, value, comparator);
+		return xjs_Map.get(map, key, comparator)!;
+	}
+
+	/**
 	 * Delete the provided key from the map.
 	 * @param  map        the map to mutate
 	 * @param  key        the key to delete
