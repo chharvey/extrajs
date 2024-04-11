@@ -108,18 +108,6 @@ export class xjs_Map {
 	}
 
 	/**
-	 * Set, then return, a new value.
-	 * @param   map   the map to set
-	 * @param   key   the key
-	 * @param   value the value
-	 * @returns       the value
-	 */
-	public static tee<K, V>(map: Map<K, V>, key: K, value: V): V {
-		map.set(key, value);
-		return value;
-	}
-
-	/**
 	 * Return whether the provided key exists in the map.
 	 * @param  map        the map to check
 	 * @param  key        the key to check
@@ -144,13 +132,27 @@ export class xjs_Map {
 	/**
 	 * Set a value to the provided key in the map.
 	 * @param  map        the map to mutate
-	 * @param  key        the key to set
+	 * @param  key        the key to check
+	 * @param  value      the value to set
 	 * @param  comparator a comparator function of keys
 	 * @return            the mutated map
 	 */
 	public static set<K, V = K>(map: Map<K, V>, key: K, value: V, comparator: (a: K, b: K) => boolean): Map<K, V> {
 		const foundkey: K | undefined = [...map.keys()].find((k) => comparator.call(null, k, key));
 		return map.set((foundkey === undefined) ? key : foundkey, value);
+	}
+
+	/**
+	 * Set, then return, a new value.
+	 * @param  map        the map to set
+	 * @param  key        the key to check
+	 * @param  value      the value to set
+	 * @param  comparator a comparator function of keys
+	 * @return            the value
+	 */
+	public static tee<K, V>(map: Map<K, V>, key: K, value: V, comparator: (a: K, b: K) => boolean): V {
+		xjs_Map.set(map, key, value, comparator);
+		return value;
 	}
 
 	/**
