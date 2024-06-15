@@ -5,16 +5,27 @@ import {xjs_Object} from './Object.class.js';
 
 
 export enum NumericType {
+	/** The number is divisible by 1 (`num % 1 === 0`). */
 	INTEGER,
+	/** The number is a non-negative integer (either positive or 0). */
 	NATURAL,
+	/** The number is a positive integer. */
 	WHOLE,
+	/** The number is not an integer. */
 	FLOAT,
+	/** The number is strictly greater than 0. */
 	POSITIVE,
+	/** The number is strictly less than 0. */
 	NEGATIVE,
+	/** The number is less than or equal to 0. */
 	NONPOSITIVE,
+	/** The number is greater than or equal to 0. */
 	NONNEGATIVE,
+	/** The number is not equal to 0. */
 	NONZERO,
+	/** The number is not equal to `Infinity` or `-Infinity`. */
 	FINITE,
+	/** The number is equal to `Infinity` or `-Infinity`. */
 	INFINITE,
 }
 
@@ -32,22 +43,10 @@ export class xjs_Number {
 	/**
 	 * Verify the type of number given, throwing if it does not match.
 	 *
-	 * Given a number and a "type", test to see if the argument is of that type.
+	 * Given a number and a “type”, test to see if the argument is of that type.
 	 * Mainly used for parameter validation, when the type `number` is not specific enough.
-	 * The acceptable "types", which are not mutually exclusive, are members of {@link NumericType}:
-	 *
-	 * - `NumericType.INTEGER`     : the number is divisible by 1 (`num % 1 === 0`)
-	 * - `NumericType.NATURAL`     : the number is a non-negative integer (either positive or 0)
-	 * - `NumericType.WHOLE`       : the number is a positive integer
-	 * - `NumericType.FLOAT`       : the number is not an integer
-	 * - `NumericType.POSITIVE`    : the number is strictly greater than 0
-	 * - `NumericType.NEGATIVE`    : the number is strictly less    than 0
-	 * - `NumericType.NONPOSITIVE` : the number is less    than or equal to 0
-	 * - `NumericType.NONNEGATIVE` : the number is greater than or equal to 0
-	 * - `NumericType.NONZERO`     : the number is not equal to 0
-	 * - `NumericType.FINITE`      : the number is not equal to `Infinity` or `-Infinity`
-	 * - `NumericType.INFINITE`    : the number is     equal to `Infinity` or `-Infinity`
-	 * - no type (`undefiend`): the number is not `NaN`
+	 * The acceptable “types”, which are not mutually exclusive, are members of {@link NumericType}.
+	 * If no type is given, this method just asserts the number is not `NaN`.
 	 *
 	 * If the argument matches the described type, this method returns `void` instead of `true`.
 	 * If the argument does not match, this method throws an error instead of returning `false`.
