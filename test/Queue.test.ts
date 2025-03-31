@@ -14,7 +14,7 @@ const items = ['a', 'b', 'c'] as const;
 
 
 describe('Queue', () => {
-	describe('.peek()', () => {
+	describe('#peek()', () => {
 		it('does not modify the queue.', () => {
 			const queue = new Queue<string>(...items);
 			queue.peek();
@@ -31,7 +31,7 @@ describe('Queue', () => {
 	});
 
 
-	describe('.push()', () => {
+	describe('#push()', () => {
 		it('returns the original modified queue.', () => {
 			const queue = new Queue<string>();
 			return assert.strictEqual(queue.push('d'), queue);
@@ -44,7 +44,7 @@ describe('Queue', () => {
 	});
 
 
-	describe('.pop()', () => {
+	describe('#pop()', () => {
 		it('returns the original modified queue.', () => {
 			const queue = new Queue<string>(...items);
 			return assert.strictEqual(queue.pop()[0], queue);
@@ -68,7 +68,7 @@ describe('Queue', () => {
 
 
 describe('ReadableQueue', () => {
-	describe('.get(number)', () => {
+	describe('#get(number)', () => {
 		it('returns the item at the given index.', () => {
 			return assert.strictEqual(new ReadableQueue<string>(...items).get(1), items[1]);
 		});
@@ -86,7 +86,7 @@ describe('ReadableQueue', () => {
 
 
 describe('EditableQueue', () => {
-	describe('.delete(number)', () => {
+	describe('#delete(number)', () => {
 		it('returns the original modified queue.', () => {
 			const queue = new EditableQueue<string>(...items);
 			return assert.strictEqual(queue.delete(1)[0], queue);
@@ -112,7 +112,7 @@ describe('EditableQueue', () => {
 
 
 	context('remove', () => {
-		describe('.remove(T)', () => {
+		describe('#remove(T)', () => {
 			it('returns the original modified queue.', () => {
 				const queue = new EditableQueue<string>(...items);
 				return assert.strictEqual(queue.remove(items[1])[0], queue);
@@ -132,7 +132,7 @@ describe('EditableQueue', () => {
 			});
 		});
 
-		describe('.remove((T) => boolean)', () => {
+		describe('#remove((T) => boolean)', () => {
 			it('removes the first item satisfying the predicate.', () => {
 				const [queue, removed]: [EditableQueue<string>, string] = new EditableQueue<string>(...items).remove((it) => it.codePointAt(0) === items[1].codePointAt(0));
 				assert.strictEqual(queue.length, items.length - 1);
@@ -149,7 +149,7 @@ describe('EditableQueue', () => {
 	});
 
 
-	describe('.clear()', () => {
+	describe('#clear()', () => {
 		it('returns the original modified queue.', () => {
 			const queue = new EditableQueue<string>(...items);
 			return assert.strictEqual(queue.clear(), queue);

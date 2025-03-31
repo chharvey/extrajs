@@ -21,7 +21,7 @@ describe('LinkedList', () => {
 	});
 
 
-	describe('.get(number)', () => {
+	describe('#get(number)', () => {
 		it('returns the item at the given index.', () => {
 			return assert.strictEqual(new LinkedList<string>(...items).get(2), items[2]);
 		});
@@ -39,7 +39,7 @@ describe('LinkedList', () => {
 	context('findFirstIndex', () => {
 		const list: ReadonlyLinkedList<string> = new LinkedList<string>(...items);
 
-		describe('.findFirstIndex(T)', () => {
+		describe('#findFirstIndex(T)', () => {
 			it('finds index by item.', () => {
 				return assert.strictEqual(list.findFirstIndex('b'), 1);
 			});
@@ -49,7 +49,7 @@ describe('LinkedList', () => {
 			});
 		});
 
-		describe('.findFirstIndex(ReadonlySet<T>)', () => {
+		describe('#findFirstIndex(ReadonlySet<T>)', () => {
 			it('finds first index of any given item.', () => {
 				return assert.strictEqual(list.findFirstIndex(new Set<string>(['d', 'b', 'e'])), 1);
 			});
@@ -59,7 +59,7 @@ describe('LinkedList', () => {
 			});
 		});
 
-		describe('.findFirstIndex((T, number, this) => boolean)', () => {
+		describe('#findFirstIndex((T, number, this) => boolean)', () => {
 			it('finds first index by predicate.', () => {
 				assert.strictEqual(list.findFirstIndex((it) => it.codePointAt(0) === items[1].codePointAt(0)), 1);
 				return assert.strictEqual(list.findFirstIndex((_, i) => i === 1), 1);
@@ -79,7 +79,7 @@ describe('LinkedList', () => {
 	});
 
 
-	describe('.prepend()', () => {
+	describe('#prepend()', () => {
 		it('returns the original modified list.', () => {
 			const list = new LinkedList<string>(...items);
 			return assert.strictEqual(list.prepend('d'), list);
@@ -93,7 +93,7 @@ describe('LinkedList', () => {
 	});
 
 
-	describe('.append()', () => {
+	describe('#append()', () => {
 		it('returns the original modified list.', () => {
 			const list = new LinkedList<string>(...items);
 			return assert.strictEqual(list.append('d'), list);
@@ -107,7 +107,7 @@ describe('LinkedList', () => {
 	});
 
 
-	describe('.delete()', () => {
+	describe('#delete()', () => {
 		it('returns the original modified list.', () => {
 			const list = new LinkedList<string>(...items);
 			return assert.strictEqual(list.delete(1)[0], list);
@@ -132,7 +132,7 @@ describe('LinkedList', () => {
 	});
 
 
-	describe('.shift(number)', () => {
+	describe('#shift(number)', () => {
 		it('returns the original modified list.', () => {
 			const list = new LinkedList<string>(...items);
 			return assert.strictEqual(list.shift(1)[0], list);
@@ -154,7 +154,7 @@ describe('LinkedList', () => {
 	});
 
 
-	describe('.clear()', () => {
+	describe('#clear()', () => {
 		it('returns the original modified list.', () => {
 			const list = new LinkedList<string>(...items);
 			return assert.strictEqual(list.clear(), list);
