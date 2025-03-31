@@ -4,7 +4,7 @@ import {
 	EmptyStructureError,
 	Queue,
 	ReadableQueue,
-	DeletableQueue,
+	EditableQueue,
 } from '../src/index.js';
 
 
@@ -85,15 +85,15 @@ describe('ReadableQueue', () => {
 
 
 
-describe('DeletableQueue', () => {
+describe('EditableQueue', () => {
 	describe('.delete(number)', () => {
 		it('returns the original modified queue.', () => {
-			const queue = new DeletableQueue<string>(...items);
+			const queue = new EditableQueue<string>(...items);
 			return assert.strictEqual(queue.delete(1)[0], queue);
 		});
 
 		it('removes the item at the given index.', () => {
-			const [queue, removed]: [DeletableQueue<string>, string] = new DeletableQueue<string>(...items).delete(1);
+			const [queue, removed]: [EditableQueue<string>, string] = new EditableQueue<string>(...items).delete(1);
 			assert.strictEqual(queue.length, items.length - 1);
 			return assert.deepStrictEqual(
 				[queue.items,          removed],
@@ -102,11 +102,11 @@ describe('DeletableQueue', () => {
 		});
 
 		it('throws when the index is out of bounds.', () => {
-			return assert.throws(() => new DeletableQueue<string>(...items).delete(3), /Index `3` out of bounds\./);
+			return assert.throws(() => new EditableQueue<string>(...items).delete(3), /Index `3` out of bounds\./);
 		});
 
 		it('throws when the queue is empty.', () => {
-			return assert.throws(() => new DeletableQueue<number>().delete(2), /Index `2` out of bounds\./);
+			return assert.throws(() => new EditableQueue<number>().delete(2), /Index `2` out of bounds\./);
 		});
 	});
 
@@ -114,12 +114,12 @@ describe('DeletableQueue', () => {
 	context('remove', () => {
 		describe('.remove(T)', () => {
 			it('returns the original modified queue.', () => {
-				const queue = new DeletableQueue<string>(...items);
+				const queue = new EditableQueue<string>(...items);
 				return assert.strictEqual(queue.remove(items[1])[0], queue);
 			});
 
 			it('removes the given item.', () => {
-				const [queue, removed]: [DeletableQueue<string>, string] = new DeletableQueue<string>(...items).remove(items[1]);
+				const [queue, removed]: [EditableQueue<string>, string] = new EditableQueue<string>(...items).remove(items[1]);
 				assert.strictEqual(queue.length, items.length - 1);
 				return assert.deepStrictEqual(
 					[queue.items,          removed],
@@ -130,7 +130,7 @@ describe('DeletableQueue', () => {
 
 		describe('.remove((T) => boolean)', () => {
 			it('removes the first item satisfying the predicate.', () => {
-				const [queue, removed]: [DeletableQueue<string>, string] = new DeletableQueue<string>(...items).remove((it) => it.codePointAt(0) === items[1].codePointAt(0));
+				const [queue, removed]: [EditableQueue<string>, string] = new EditableQueue<string>(...items).remove((it) => it.codePointAt(0) === items[1].codePointAt(0));
 				assert.strictEqual(queue.length, items.length - 1);
 				return assert.deepStrictEqual(
 					[queue.items,          removed],
@@ -143,12 +143,12 @@ describe('DeletableQueue', () => {
 
 	describe('.clear()', () => {
 		it('returns the original modified queue.', () => {
-			const queue = new DeletableQueue<string>(...items);
+			const queue = new EditableQueue<string>(...items);
 			return assert.strictEqual(queue.clear(), queue);
 		});
 
 		it('removes all items from the queue.', () => {
-			const queue = new DeletableQueue<string>(...items).clear();
+			const queue = new EditableQueue<string>(...items).clear();
 			assert.strictEqual(queue.length, 0);
 			return assert.deepStrictEqual(queue.items, []);
 		});

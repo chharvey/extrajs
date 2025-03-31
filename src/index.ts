@@ -28,7 +28,7 @@ export {
 export {
 	Queue,
 	ReadableQueue,
-	DeletableQueue,
+	EditableQueue,
 } from './Queue.js';
 export {Heap} from './Heap.js';
 

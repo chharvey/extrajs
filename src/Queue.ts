@@ -73,15 +73,15 @@ export class ReadableQueue<T> extends Queue<T> {
 
 
 /**
- * A DeletableQueue is a queue from which items may be removed outside of the normal `pop()` method.
+ * An EditableQueue is a queue from which items may be removed outside of the normal `pop()` method.
  * It offers the additonal operations:
  * - `delete()`: remove an arbitrary item from the queue by index
  * - `remove()`: remove an arbitrary item from the queue
- * - `clear()`: remove all items from the queue
+ * - `clear()`:  remove all items from the queue
  *
- * @typeparam T : the type of items in this DeletableQueue
+ * @typeparam T : the type of items in this EditableQueue
  */
-export class DeletableQueue<T> extends ReadableQueue<T> {
+export class EditableQueue<T> extends ReadableQueue<T> {
 	public delete(index: number): [this, T] {
 		return [this, this.internal.delete(index)[1]];
 	}
