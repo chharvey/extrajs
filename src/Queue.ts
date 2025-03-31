@@ -73,15 +73,54 @@ export class ReadableQueue<T> extends Queue<T> {
 
 
 /**
- * An EditableQueue is a queue from which items may be removed outside of the normal `pop()` method.
+ * An EditableQueue is a queue from which items may be removed and rearranged outside of the normal `push()` and `pop()` methods.
  * It offers the additonal operations:
- * - `delete()`: remove an arbitrary item from the queue by index
- * - `remove()`: remove an arbitrary item from the queue
- * - `clear()`:  remove all items from the queue
+ * - `promoteByIndex()`: move an item toward the start/front of the queue by a given number of slots (default 1)
+ * - `demoteByIndex()`:  move an item toward the end/back    of the queue by a given number of slots (default 1)
+ * - `delete()`:         remove an arbitrary item from the queue by index
+ * - `remove()`:         remove an arbitrary item from the queue
+ * - `clear()`:          remove all items from the queue
  *
  * @typeparam T : the type of items in this EditableQueue
  */
 export class EditableQueue<T> extends ReadableQueue<T> {
+	public promoteByIndex(index: number, slots: number = 1): this {
+		if (slots > index) {
+			throw new RangeError('Too many slots; cannot promote beyond the start of the queue.');
+		}
+		if (slots < 0) {
+			throw new RangeError('Negative numbers not accepted; use `demoteByIndex` instead.');
+		}
+
+		if (slots > 0) {
+			const head:     LinkedList<T> = this.internal.shift(index)[1]; // the front of the queue, before the index to be moved
+			const demoted:  LinkedList<T> = head.drop(slots)[1];           // the items ahead of the given index that must be moved back
+			const promoted: T             = this.internal.delete(0)[1];    // the given index, which is moved forward // `.delete(0)` is faster than `.shift(1)`
+
+			this.internal.prepend(...head, promoted, ...demoted);
+		}
+		return this;
+	}
+
+	public demoteByIndex(index: number, slots: number = 1): this {
+		const n_items_after_index = this.length - (index + 1);
+		if (slots > n_items_after_index) {
+			throw new RangeError('Too many slots; cannot demote beyond the end of the queue.');
+		}
+		if (slots < 0) {
+			throw new RangeError('Negative numbers not accepted; use `promoteByIndex` instead.');
+		}
+
+		if (slots > 0) {
+			const tail:     LinkedList<T> = this.internal.drop(n_items_after_index)[1]; // the back of the queue, after the index to be moved
+			const promoted: LinkedList<T> = tail.shift(slots)[1];                       // the items behind the given index that must be moved forward
+			const demoted:  T             = this.internal.delete(index)[1];             // the given index, which is moved back // `.delete(index)` is faster than `.drop(1)`
+
+			this.internal.append(...promoted, demoted, ...tail);
+		}
+		return this;
+	}
+
 	public delete(index: number): [this, T] {
 		return [this, this.internal.delete(index)[1]];
 	}

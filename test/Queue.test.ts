@@ -86,6 +86,71 @@ describe('ReadableQueue', () => {
 
 
 describe('EditableQueue', () => {
+	const CARDS = ['10', 'J', 'Q', 'K', 'A'] as const;
+
+
+	describe('#promoteByIndex(number, number)', () => {
+		it('returns the original modified queue.', () => {
+			const queue = new EditableQueue<string>(...CARDS);
+			return assert.strictEqual(queue.promoteByIndex(3, 2), queue);
+		});
+
+		it('promotes the item at the given index by the given number of slots.', () => {
+			const index = 3;
+			const slots = 2;
+			return assert.deepStrictEqual(
+				new EditableQueue<string>(...CARDS).promoteByIndex(index, slots).items,
+				[...CARDS.slice(0, index - slots), CARDS[index], ...CARDS.slice(index - slots, index), ...CARDS.slice(index + 1)],
+				[CARDS[0],                         CARDS[3],     CARDS[1], CARDS[2],                   CARDS[4]].join(', '),
+			);
+		});
+
+		it('specifying zero slots doesn’t change the queue.', () => {
+			assert.deepStrictEqual(new EditableQueue<string>(...CARDS).promoteByIndex(2, 0).items, CARDS);
+		});
+
+		it('throws when trying to promote an item beyond the front.', () => {
+			assert.throws(() => new EditableQueue<string>(...CARDS).promoteByIndex(3, 4), /Too many slots; cannot promote beyond the start of the queue\./);
+			assert.throws(() => new EditableQueue<string>(...CARDS).promoteByIndex(0),    /Too many slots; cannot promote beyond the start of the queue\./);
+		});
+
+		it('throws when given a negative slot count.', () => {
+			assert.throws(() => new EditableQueue<string>(...CARDS).promoteByIndex(3, -1), /Negative numbers not accepted; use `demoteByIndex` instead\./);
+		});
+	});
+
+
+	describe('#demoteByIndex(number, number)', () => {
+		it('returns the original modified queue.', () => {
+			const queue = new EditableQueue<string>(...CARDS);
+			return assert.strictEqual(queue.demoteByIndex(1, 2), queue);
+		});
+
+		it('demotes the item at the given index by the given number of slots.', () => {
+			const index = 1;
+			const slots = 2;
+			return assert.deepStrictEqual(
+				new EditableQueue<string>(...CARDS).demoteByIndex(index, slots).items,
+				[...CARDS.slice(0, index), ...CARDS.slice(index + 1, index + 1 + slots), CARDS[index], ...CARDS.slice(index + 1 + slots)],
+				[CARDS[0],                 CARDS[2], CARDS[3],                           CARDS[1],     CARDS[4]].join(', '),
+			);
+		});
+
+		it('specifying zero slots doesn’t change the queue.', () => {
+			assert.deepStrictEqual(new EditableQueue<string>(...CARDS).demoteByIndex(2, 0).items, CARDS);
+		});
+
+		it('throws when trying to demote an item beyond the back.', () => {
+			assert.throws(() => new EditableQueue<string>(...CARDS).demoteByIndex(1, 4), /Too many slots; cannot demote beyond the end of the queue\./);
+			assert.throws(() => new EditableQueue<string>(...CARDS).demoteByIndex(4),    /Too many slots; cannot demote beyond the end of the queue\./);
+		});
+
+		it('throws when given a negative slot count.', () => {
+			assert.throws(() => new EditableQueue<string>(...CARDS).demoteByIndex(3, -1), /Negative numbers not accepted; use `promoteByIndex` instead\./);
+		});
+	});
+
+
 	describe('#delete(number)', () => {
 		it('returns the original modified queue.', () => {
 			const queue = new EditableQueue<string>(...items);
