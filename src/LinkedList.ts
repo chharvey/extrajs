@@ -160,12 +160,13 @@ export class LinkedList<T> implements ReadonlyLinkedList<T> {
 			throw new IndexOutOfBoundsError(index);
 		}
 
-		let removed: Readonly<LLItem<T>> = this.#first!;
+		let removed: Readonly<LLItem<T>> | null = null;
 		if (index === 0) {
+			removed     = this.#first!;
 			this.#first = removed.next;
 		} else {
 			const prev: LLItem<T> = this.#getLLItem(index - 1);
-			removed = prev.next!;
+			removed   = prev.next!;
 			prev.next = removed.next;
 		}
 		this.#length -= 1;
@@ -173,24 +174,38 @@ export class LinkedList<T> implements ReadonlyLinkedList<T> {
 	}
 
 	public shift(n: number = 1): [this, LinkedList<T>] {
-		const removed = new LinkedList<T>();
 		if (!xjs_Math.isInRange(n, 0, this.length)) {
 			throw new IndexOutOfBoundsError(n);
 		}
+		const removed = new LinkedList<T>();
 		if (n > 0) {
-			let current: Readonly<LLItem<T>> = this.#first!;
-			for (let i = 0; i < n; i++) {
-				removed.append(current.value);
-				if (i < n - 1) {
-					current = current.next!;
-				}
-			}
-			if (current.next) {
-				this.#first = current.next;
-				this.#length -= n;
-			} else {
+			removed.#first = this.#first;
+			const removed_last: LLItem<T> = this.#getLLItem(n - 1);
+			this.#first        = removed_last.next;
+			removed_last.next  = null;
+			this.#length      -= n;
+			removed.#length    = n;
+		}
+		return [this, removed];
+	}
+
+	public drop(n: number = 1): [this, LinkedList<T>] {
+		if (!xjs_Math.isInRange(n, 0, this.length)) {
+			throw new IndexOutOfBoundsError(n);
+		}
+		const removed = new LinkedList<T>();
+		if (n > 0) {
+			const this_last_index: number = this.length - 1 - n;
+			if (n === this.length) {
+				removed.#first = this.#first;
 				this.clear();
+			} else {
+				const this_last: LLItem<T> = this.#getLLItem(this_last_index);
+				removed.#first   = this_last.next;
+				this_last.next   = null;
+				this.#length    -= n;
 			}
+			removed.#length = n;
 		}
 		return [this, removed];
 	}

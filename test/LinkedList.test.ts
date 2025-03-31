@@ -144,12 +144,52 @@ describe('LinkedList', () => {
 				assert.deepStrictEqual(
 					[[...remaining], [...removed]],
 					[items.slice(i), items.slice(0, i)],
+					`index ${ i }`,
 				);
 			}
 		});
 
+		it('can remove all the items.', () => {
+			const [remaining, removed]: [ReadonlyLinkedList<string>, ReadonlyLinkedList<string>] = new LinkedList<string>(...items).shift(items.length);
+			assert.deepStrictEqual(
+				[[...remaining], [...removed]],
+				[[],             items],
+			);
+		});
+
 		it('throws when count is out of range.', () => {
 			return assert.throws(() => new LinkedList<string>(...items).shift(4), /Index `4` out of bounds\./);
+		});
+	});
+
+
+	describe('#drop(number)', () => {
+		it('returns the original modified list.', () => {
+			const list = new LinkedList<string>(...items);
+			return assert.strictEqual(list.drop(1)[0], list);
+		});
+
+		it('removes items from the end of the list and leaves the remaining items where they are.', () => {
+			for (let i = 0; i < items.length + 1; i++) {
+				const [remaining, removed]: [ReadonlyLinkedList<string>, ReadonlyLinkedList<string>] = new LinkedList<string>(...items).drop(i);
+				assert.deepStrictEqual(
+					[[...remaining],                   [...removed]],
+					[items.slice(0, items.length - i), items.slice(items.length - i)],
+					`index ${ i }`,
+				);
+			}
+		});
+
+		it('can remove all the items.', () => {
+			const [remaining, removed]: [ReadonlyLinkedList<string>, ReadonlyLinkedList<string>] = new LinkedList<string>(...items).drop(items.length);
+			assert.deepStrictEqual(
+				[[...remaining], [...removed]],
+				[[],             items],
+			);
+		});
+
+		it('throws when count is out of range.', () => {
+			return assert.throws(() => new LinkedList<string>(...items).drop(4), /Index `4` out of bounds\./);
 		});
 	});
 
