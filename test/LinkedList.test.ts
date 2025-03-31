@@ -43,11 +43,19 @@ describe('LinkedList', () => {
 			it('finds index by item.', () => {
 				return assert.strictEqual(list.findFirstIndex('b'), 1);
 			});
+
+			it('throws if the given item is not in the list.', () => {
+				assert.throws(() => new LinkedList<string>(...items).findFirstIndex('d'), /Item `d` was not found\./);
+			});
 		});
 
 		describe('.findFirstIndex(ReadonlySet<T>)', () => {
 			it('finds first index of any given item.', () => {
 				return assert.strictEqual(list.findFirstIndex(new Set<string>(['d', 'b', 'e'])), 1);
+			});
+
+			it('throws if none of the given items are in the list.', () => {
+				assert.throws(() => new LinkedList<string>(...items).findFirstIndex(new Set<string>(['d', 'e'])), /No elements in Set/);
 			});
 		});
 
@@ -62,6 +70,10 @@ describe('LinkedList', () => {
 					src.append('d');
 					return it === 'd';
 				}), 3);
+			});
+
+			it('throws if none of the list’s items satisfy the predicate.', () => {
+				assert.throws(() => new LinkedList<string>(...items).findFirstIndex((it) => it.codePointAt(0) === 'd'.codePointAt(0)), /No items satisfy predicate/);
 			});
 		});
 	});

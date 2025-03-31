@@ -106,11 +106,25 @@ export class LinkedList<T> implements ReadonlyLinkedList<T> {
 					return i;
 				}
 			}
-			throw new Error(`No indices in ${ this }} satisfy predicate ${ arg }}.`);
+			throw new Error(`No items satisfy predicate \`${ arg }\`}.`);
 		} else if (arg instanceof Set) {
-			return this.findFirstIndex((it) => arg.has(it));
+			try {
+				return this.findFirstIndex((it) => arg.has(it));
+			} catch (err) {
+				return throw_error(((err as Error).message.startsWith('No items satisfy predicate')
+					? new Error(`No elements in Set \`${ arg }\` were found.`)
+					: err as Error
+				));
+			}
 		} else {
-			return this.findFirstIndex(new Set<T>([arg as T]));
+			try {
+				return this.findFirstIndex(new Set<T>([arg as T]));
+			} catch (err) {
+				return throw_error(((err as Error).message.startsWith('No elements in Set')
+					? new Error(`Item \`${ arg }\` was not found.`)
+					: err as Error
+				));
+			}
 		}
 	}
 

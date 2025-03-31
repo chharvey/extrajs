@@ -126,6 +126,10 @@ describe('EditableQueue', () => {
 					[[items[0], items[2]], items[1]],
 				);
 			});
+
+			it('throws if the given item is not in the queue.', () => {
+				return assert.throws(() => new EditableQueue<string>(...items).remove('d'), /Item `d` was not found\./);
+			});
 		});
 
 		describe('.remove((T) => boolean)', () => {
@@ -136,6 +140,10 @@ describe('EditableQueue', () => {
 					[queue.items,          removed],
 					[[items[0], items[2]], items[1]],
 				);
+			});
+
+			it('throws if none of the queue’s items satisfy the predicate.', () => {
+				return assert.throws(() => new EditableQueue<string>(...items).remove((it) => it.codePointAt(0) === 'd'.codePointAt(0)), /No items satisfy predicate/);
 			});
 		});
 	});
