@@ -151,6 +151,40 @@ describe('EditableQueue', () => {
 	});
 
 
+	describe('#promoteByIndexToStart(number)', () => {
+		it('returns the original modified queue.', () => {
+			const queue = new EditableQueue<string>(...CARDS);
+			return assert.strictEqual(queue.promoteByIndexToStart(3), queue);
+		});
+
+		it('promotes the item at the given index all the way to the front.', () => {
+			const index = 3;
+			return assert.deepStrictEqual(
+				new EditableQueue<string>(...CARDS).promoteByIndexToStart(index).items,
+				[CARDS[index], ...CARDS.slice(0, index),     ...CARDS.slice(index + 1)],
+				[CARDS[3],     CARDS[0], CARDS[1], CARDS[2], CARDS[4]].join(', '),
+			);
+		});
+	});
+
+
+	describe('#demoteByIndexToEnd(number)', () => {
+		it('returns the original modified queue.', () => {
+			const queue = new EditableQueue<string>(...CARDS);
+			return assert.strictEqual(queue.demoteByIndexToEnd(3), queue);
+		});
+
+		it('demotes the item at the given index all the way to the back.', () => {
+			const index = 1;
+			return assert.deepStrictEqual(
+				new EditableQueue<string>(...CARDS).demoteByIndexToEnd(index).items,
+				[...CARDS.slice(0, index), ...CARDS.slice(index + 1),    CARDS[index]],
+				[CARDS[0],                 CARDS[2], CARDS[3], CARDS[4], CARDS[1]].join(', '),
+			);
+		});
+	});
+
+
 	context('promote', () => {
 		describe('#promote(T, number)', () => {
 			it('returns the original modified queue.', () => {
@@ -214,6 +248,58 @@ describe('EditableQueue', () => {
 
 			it('throws if none of the queue’s items satisfy the predicate.', () => {
 				assert.throws(() => new EditableQueue<string>(...items).demote((it) => it.length === 3), /No items satisfy predicate/);
+			});
+		});
+	});
+
+
+	context('promoteToStart', () => {
+		describe('#promoteToStart(T)', () => {
+			it('returns the original modified queue.', () => {
+				const queue = new EditableQueue<string>(...CARDS);
+				return assert.strictEqual(queue.promoteToStart(CARDS[3]), queue);
+			});
+
+			it('promotes the given item all the way to the front.', () => {
+				assert.deepStrictEqual(
+					new EditableQueue<string>(...CARDS).promoteToStart(CARDS[3]).items,
+					[CARDS[3], CARDS[0], CARDS[1], CARDS[2], CARDS[4]],
+				);
+			});
+		});
+
+		describe('#promoteToStart((T) => boolean)', () => {
+			it('promotes the first item satisfying the predicate.', () => {
+				assert.deepStrictEqual(
+					new EditableQueue<string>(...CARDS).promoteToStart((it) => it.length === 1).items,
+					['J', '10', 'Q', 'K', 'A'],
+				);
+			});
+		});
+	});
+
+
+	context('demoteToEnd', () => {
+		describe('#demoteToEnd(T)', () => {
+			it('returns the original modified queue.', () => {
+				const queue = new EditableQueue<string>(...CARDS);
+				return assert.strictEqual(queue.demoteToEnd(CARDS[3]), queue);
+			});
+
+			it('demotes the given item all the way to the back.', () => {
+				assert.deepStrictEqual(
+					new EditableQueue<string>(...CARDS).demoteToEnd(CARDS[3]).items,
+					[CARDS[0], CARDS[1], CARDS[2], CARDS[4], CARDS[3]],
+				);
+			});
+		});
+
+		describe('#demoteToEnd((T) => boolean)', () => {
+			it('demotes the first item satisfying the predicate.', () => {
+				assert.deepStrictEqual(
+					new EditableQueue<string>(...CARDS).demoteToEnd((it) => it.length === 1).items,
+					['10', 'Q', 'K', 'A', 'J'],
+				);
 			});
 		});
 	});
