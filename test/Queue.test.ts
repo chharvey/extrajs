@@ -151,6 +151,74 @@ describe('EditableQueue', () => {
 	});
 
 
+	context('promote', () => {
+		describe('#promote(T, number)', () => {
+			it('returns the original modified queue.', () => {
+				const queue = new EditableQueue<string>(...CARDS);
+				return assert.strictEqual(queue.promote(CARDS[3], 2), queue);
+			});
+
+			it('promotes the given item by the given number of slots.', () => {
+				assert.deepStrictEqual(
+					new EditableQueue<string>(...CARDS).promote(CARDS[3], 2).items,
+					[CARDS[0], CARDS[3], CARDS[1], CARDS[2], CARDS[4]],
+				);
+			});
+
+			it('throws if the given item is not in the queue.', () => {
+				assert.throws(() => new EditableQueue<string>(...items).promote('9'), /Item `9` was not found\./);
+			});
+		});
+
+		describe('#promote((T) => boolean, number)', () => {
+			it('promotes the first item satisfying the predicate.', () => {
+				assert.deepStrictEqual(
+					new EditableQueue<string>(...CARDS).promote((it) => it.length === 1).items,
+					['J', '10', 'Q', 'K', 'A'],
+				);
+			});
+
+			it('throws if none of the queue’s items satisfy the predicate.', () => {
+				assert.throws(() => new EditableQueue<string>(...items).promote((it) => it.length === 3), /No items satisfy predicate/);
+			});
+		});
+	});
+
+
+	context('demote', () => {
+		describe('#demote(T, number)', () => {
+			it('returns the original modified queue.', () => {
+				const queue = new EditableQueue<string>(...CARDS);
+				return assert.strictEqual(queue.demote(CARDS[1], 2), queue);
+			});
+
+			it('demotes the given item by the given number of slots.', () => {
+				assert.deepStrictEqual(
+					new EditableQueue<string>(...CARDS).demote(CARDS[1], 2).items,
+					[CARDS[0], CARDS[2], CARDS[3], CARDS[1], CARDS[4]],
+				);
+			});
+
+			it('throws if the given item is not in the queue.', () => {
+				assert.throws(() => new EditableQueue<string>(...items).demote('9'), /Item `9` was not found\./);
+			});
+		});
+
+		describe('#demote((T) => boolean, number)', () => {
+			it('demotes the first item satisfying the predicate.', () => {
+				assert.deepStrictEqual(
+					new EditableQueue<string>(...CARDS).demote((it) => it.length === 1).items,
+					['10', 'Q', 'J', 'K', 'A'],
+				);
+			});
+
+			it('throws if none of the queue’s items satisfy the predicate.', () => {
+				assert.throws(() => new EditableQueue<string>(...items).demote((it) => it.length === 3), /No items satisfy predicate/);
+			});
+		});
+	});
+
+
 	describe('#delete(number)', () => {
 		it('returns the original modified queue.', () => {
 			const queue = new EditableQueue<string>(...items);

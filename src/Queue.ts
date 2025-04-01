@@ -75,11 +75,11 @@ export class ReadableQueue<T> extends Queue<T> {
 /**
  * An EditableQueue is a queue from which items may be removed and rearranged outside of the normal `push()` and `pop()` methods.
  * It offers the additonal operations:
- * - `promoteByIndex()`: move an item toward the start/front of the queue by a given number of slots (default 1)
- * - `demoteByIndex()`:  move an item toward the end/back    of the queue by a given number of slots (default 1)
- * - `delete()`:         remove an arbitrary item from the queue by index
- * - `remove()`:         remove an arbitrary item from the queue
- * - `clear()`:          remove all items from the queue
+ * - `promote{ByIndex}()`: move an item toward the start/front of the queue by a given number of slots (default 1)
+ * - `demote{ByIndex}()`:  move an item toward the end/back    of the queue by a given number of slots (default 1)
+ * - `delete()`:           remove an arbitrary item from the queue by index
+ * - `remove()`:           remove an arbitrary item from the queue
+ * - `clear()`:            remove all items from the queue
  *
  * @typeparam T : the type of items in this EditableQueue
  */
@@ -121,13 +121,29 @@ export class EditableQueue<T> extends ReadableQueue<T> {
 		return this;
 	}
 
+	public promote(item:      T,                        slots?: number): this;
+	public promote(predicate: (it: T) => boolean,       slots?: number): this;
+	public promote(arg:       T | ((it: T) => boolean), slots?: number): this {
+		return arg instanceof Function
+			? this.promoteByIndex(this.internal.findFirstIndex((it) => arg.call(null, it)), slots)
+			: this.promoteByIndex(this.internal.findFirstIndex(arg), slots);
+	}
+
+	public demote(item:      T,                        slots?: number): this;
+	public demote(predicate: (it: T) => boolean,       slots?: number): this;
+	public demote(arg:       T | ((it: T) => boolean), slots?: number): this {
+		return arg instanceof Function
+			? this.demoteByIndex(this.internal.findFirstIndex((it) => arg.call(null, it)), slots)
+			: this.demoteByIndex(this.internal.findFirstIndex(arg), slots);
+	}
+
 	public delete(index: number): [this, T] {
 		return [this, this.internal.delete(index)[1]];
 	}
 
-	public remove(item: T): [this, T];
-	public remove(predicate: (it: T) => boolean): [this, T];
-	public remove(arg: T | ((it: T) => boolean)): [this, T] {
+	public remove(item:      T):                        [this, T];
+	public remove(predicate: (it: T) => boolean):       [this, T];
+	public remove(arg:       T | ((it: T) => boolean)): [this, T] {
 		return arg instanceof Function
 			? this.delete(this.internal.findFirstIndex((it) => arg.call(null, it)))
 			: this.delete(this.internal.findFirstIndex(arg));
