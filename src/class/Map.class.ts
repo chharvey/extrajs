@@ -1,4 +1,5 @@
 import {xjs_Object} from './Object.class.js';
+import {xjs_Array} from './Array.class.js';
 import type {xjs_Set} from './Set.class.js';
 
 
@@ -200,19 +201,7 @@ export class xjs_Map {
 	 * @throws    {Error}          if one iteration throws an error
 	 */
 	public static forEachAggregated<K, V>(map: ReadonlyMap<K, V>, callback: (value: V, key: K, src: typeof map) => void): void {
-		const errors: readonly Error[] = [...map.entries()].map(([key, value]) => {
-			try {
-				callback.call(null, value, key, map);
-				return null;
-			} catch (err) {
-				return (err instanceof Error) ? err : new Error(`${ err }`);
-			}
-		}).filter((e): e is Error => e instanceof Error);
-		if (errors.length) {
-			throw (errors.length === 1)
-				? errors[0]
-				: new AggregateError(errors, errors.map((err) => err.message).join('\n'));
-		}
+		return xjs_Array.forEachAggregated([...map.entries()], ([key, value]) => callback.call(null, value, key, map));
 	}
 
 
