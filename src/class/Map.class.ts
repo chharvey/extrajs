@@ -1,4 +1,5 @@
 import {xjs_Object} from './Object.class.js';
+import {xjs_Array} from './Array.class.js';
 import type {xjs_Set} from './Set.class.js';
 
 
@@ -108,18 +109,6 @@ export class xjs_Map {
 	}
 
 	/**
-	 * Set, then return, a new value.
-	 * @param   map   the map to set
-	 * @param   key   the key
-	 * @param   value the value
-	 * @returns       the value
-	 */
-	public static tee<K, V>(map: Map<K, V>, key: K, value: V): V {
-		map.set(key, value);
-		return value;
-	}
-
-	/**
 	 * Return whether the provided key exists in the map.
 	 * @param  map        the map to check
 	 * @param  key        the key to check
@@ -144,13 +133,27 @@ export class xjs_Map {
 	/**
 	 * Set a value to the provided key in the map.
 	 * @param  map        the map to mutate
-	 * @param  key        the key to set
+	 * @param  key        the key to check
+	 * @param  value      the value to set
 	 * @param  comparator a comparator function of keys
 	 * @return            the mutated map
 	 */
 	public static set<K, V = K>(map: Map<K, V>, key: K, value: V, comparator: (a: K, b: K) => boolean): Map<K, V> {
 		const foundkey: K | undefined = [...map.keys()].find((k) => comparator.call(null, k, key));
 		return map.set((foundkey === undefined) ? key : foundkey, value);
+	}
+
+	/**
+	 * Set, then return, a new value.
+	 * @param  map        the map to set
+	 * @param  key        the key to check
+	 * @param  value      the value to set
+	 * @param  comparator a comparator function of keys
+	 * @return            the value
+	 */
+	public static tee<K, V>(map: Map<K, V>, key: K, value: V, comparator?: (a: K, b: K) => boolean): V {
+		comparator ? xjs_Map.set(map, key, value, comparator) : map.set(key, value);
+		return value;
 	}
 
 	/**
@@ -200,19 +203,7 @@ export class xjs_Map {
 	 * @throws    {Error}          if one iteration throws an error
 	 */
 	public static forEachAggregated<K, V>(map: ReadonlyMap<K, V>, callback: (value: V, key: K, src: typeof map) => void): void {
-		const errors: readonly Error[] = [...map.entries()].map(([key, value]) => {
-			try {
-				callback.call(null, value, key, map);
-				return null;
-			} catch (err) {
-				return (err instanceof Error) ? err : new Error(`${ err }`);
-			}
-		}).filter((e): e is Error => e instanceof Error);
-		if (errors.length) {
-			throw (errors.length === 1)
-				? errors[0]
-				: new AggregateError(errors, errors.map((err) => err.message).join('\n'));
-		}
+		return xjs_Array.forEachAggregated([...map.entries()], ([key, value]) => callback.call(null, value, key, map));
 	}
 
 
