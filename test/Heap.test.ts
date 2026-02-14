@@ -52,7 +52,7 @@ describe('Heap', () => {
 	});
 
 
-	describe('.peek()', () => {
+	describe('#peek()', () => {
 		it('returns the maximal node without removing it.', () => {
 			return assert.strictEqual(new Heap<NodeType>(comparator, ...items).peek(), items[2]);
 		});
@@ -63,7 +63,7 @@ describe('Heap', () => {
 	});
 
 
-	describe('.push(...T[])', () => {
+	describe('#push(...T[])', () => {
 		it('sifts up each node after pushing.', () => {
 			const h = new Heap<NodeType>(comparator);
 			h.push(items[0], items[1]);
@@ -74,7 +74,7 @@ describe('Heap', () => {
 	});
 
 
-	describe('.pop()', () => {
+	describe('#pop()', () => {
 		it('returns the maximal node while removing it.', () => {
 			const h = new Heap<NodeType>(comparator, ...items);
 			assert.strictEqual(h.pop()[1], items[2]);
@@ -94,7 +94,7 @@ describe('Heap', () => {
 	});
 
 
-	describe('.remove(T)', () => {
+	describe('#remove(T)', () => {
 		it('removes the first node (if any) identical to the argument.', () => {
 			const h = new Heap<number>(comparator_simple, ...items_simple);
 			assert__shallowEqual(h.inspect(), [3, 2, 1]);
@@ -114,7 +114,7 @@ describe('Heap', () => {
 	});
 
 
-	describe('.remove((T) => boolean)', () => {
+	describe('#remove((T) => boolean)', () => {
 		it('removes the first node (if any) satisfying the predicate.', () => {
 			const h = new Heap<NodeType>(comparator, ...items);
 			assert__shallowEqual(h.inspect(), [items[2], items[1], items[0]]);
@@ -134,7 +134,7 @@ describe('Heap', () => {
 	});
 
 
-	describe('.removeAll(readonly T[])', () => {
+	describe('#removeAll(readonly T[])', () => {
 		it('removes all nodes identical to the arguments.', () => {
 			const h = new Heap<number>(comparator_simple, ...items_simple);
 			assert__shallowEqual(h.inspect(), [3, 2, 1]);
@@ -154,7 +154,7 @@ describe('Heap', () => {
 	});
 
 
-	describe('.removeAll((T) => boolean)', () => {
+	describe('#removeAll((T) => boolean)', () => {
 		it('removes all nodes satisfying the predicate.', () => {
 			const h = new Heap<NodeType>(comparator, ...items);
 			assert__shallowEqual(h.inspect(), [items[2], items[1], items[0]]);
@@ -174,7 +174,7 @@ describe('Heap', () => {
 	});
 
 
-	describe('.resift()', () => {
+	describe('#resift()', () => {
 		it('reorders the nodes correctly.', () => {
 			type MutableNodeType = {-readonly [K in keyof NodeType]: NodeType[K]};
 			const mut_items: readonly MutableNodeType[] = items.map((item) => ({...item}));
@@ -196,7 +196,7 @@ describe('Heap', () => {
 	});
 
 
-	describe('.clear()', () => {
+	describe('#clear()', () => {
 		it('removes all nodes in the heap.', () => {
 			const h = new Heap<NodeType>(comparator, ...items);
 			assert__shallowEqual(h.inspect(), [items[2], items[1], items[0]]);

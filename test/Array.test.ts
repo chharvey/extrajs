@@ -196,6 +196,83 @@ describe('xjs.Array', () => {
 		});
 	});
 
+	describe('.forEither', () => {
+		it('returns on first success.', () => {
+			let times: number = 0;
+			xjs_Array.forEither([1, 2, 3, 4], (n) => {
+				times++;
+				if (n % 2 === 1) {
+					throw new RangeError(`${ n } is odd.`);
+				}
+			});
+			assert.strictEqual(times, 2);
+		});
+		it('rethrows error if only 1 error.', () => {
+			let times: number = 0;
+			assert.throws(() => xjs_Array.forEither([1], (n) => {
+				times++;
+				throw new RangeError(`${ n } is 1.`);
+			}), (err) => {
+				assert.ok(err instanceof RangeError);
+				assert.strictEqual(err.message, '1 is 1.');
+				assert.strictEqual(times, 1);
+				return true;
+			});
+		});
+		it('aggregates all caught errors if more than 1.', () => {
+			assert.throws(() => xjs_Array.forEither([1, 2, 3, 4], (n) => {
+				throw new RangeError(`${ n } is a number.`);
+			}), (err) => {
+				assert.ok(err instanceof AggregateError);
+				assert.strictEqual(err.errors.length, 4);
+				assert.deepStrictEqual(err.errors.map((er) => {
+					assert.ok(er instanceof RangeError);
+					return er.message;
+				}), [1, 2, 3, 4].map((n) => `${ n } is a number.`));
+				return true;
+			});
+		});
+		it('preserves any nested AggregateError errors.', () => {
+			assert.throws(() => xjs_Array.forEither([1, 2, 3, 4, 5, 6, 7, 8], (n) => {
+				if (n % 2 === 0) {
+					throw (n % 4 === 0)
+						? new AggregateError([
+							new RangeError(`${ n } is even.`),
+							new RangeError(`${ n } is a multiple of 4.`),
+						])
+						: new RangeError(`${ n } is even.`);
+				} else {
+					throw new TypeError(`${ n } is odd.`);
+				}
+			}), (err) => {
+				assert.ok(err instanceof AggregateError);
+				assert.strictEqual(err.errors.length, 8);
+				assert.deepStrictEqual(err.errors.map((er, i) => {
+					if ([1, 5].includes(i)) {
+						assert.ok(er instanceof RangeError);
+						return er.message;
+					} else if ([3, 7].includes(i)) {
+						assert.ok(er instanceof AggregateError);
+						return er.errors.map((e) => e.message);
+					} else {
+						assert.ok(er instanceof TypeError);
+						return er.message;
+					}
+				}), [
+					'1 is odd.',
+					'2 is even.',
+					'3 is odd.',
+					['4 is even.', '4 is a multiple of 4.'],
+					'5 is odd.',
+					'6 is even.',
+					'7 is odd.',
+					['8 is even.', '8 is a multiple of 4.'],
+				]);
+				return true;
+			});
+		});
+	});
+
 	describe('.mapAggregated', () => {
 		it('acts like Array#map if no errors.', () => {
 			assert.deepStrictEqual(

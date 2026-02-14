@@ -1,3 +1,4 @@
+import * as assert from 'assert';
 import {xjs_Object} from './Object.class.js';
 import {xjs_Number} from './Number.class.js';
 import {IndexOutOfBoundsError} from './IndexOutOfBoundsError.class.js';
@@ -238,6 +239,57 @@ export class xjs_Array {
 			throw (errors.length === 1)
 				? errors[0]
 				: new AggregateError(errors, errors.map((err) => err.message).join('\n'));
+		}
+	}
+
+	/**
+	 * Executes a callback on each item of an array until that callback returns.
+	 *
+	 * If any iteration throws, the error is stored, and execution proceeds to the next iteration.
+	 * If any iteration returns, this method returns void and the errors are discarded.
+	 * If all iterations throw, the stored errors are collected into a single AggregateError, which is then thrown.
+	 * (If there is only one error stored then it is simply rethrown.)
+	 *
+	 * The “dual” of {@link Array#forEach} — this method returns as soon as a callback call is successful; otherwise throws.
+	 *
+	 * Similar to {@link Promise.any}, but synchronous.
+	 *
+	 * @example
+	 * let update = 0;
+	 * xjs.Array.forEither<number>([1, 2, 3, 4], (n) => {
+	 * 	update = n;
+	 * 	if (n % 2 === 0) {
+	 * 		throw new Error(`${ n } is even.`);
+	 * 	}
+	 * });
+	 * // Expected result:
+	 * assert.strictEqual(update, 1);
+	 * @typeparam T                the type of items in the array
+	 * @param     array            the array of items
+	 * @param     callback         the function to call on each item
+	 * @throws    {AggregateError} if two or more iterations throws an error
+	 * @throws    {Error}          if one iteration throws an error
+	 */
+	public static forEither<T>(array: readonly T[], callback: (item: T, i: number, src: typeof array) => void): void {
+		const errors: Error[] = [];
+		try {
+			array.forEach((it, i, src) => {
+				try {
+					callback.call(null, it, i, src);
+				} catch (e) {
+					errors.push(e as Error);
+					return;
+				}
+				throw new Error('success');
+			});
+		} catch {
+			return;
+		}
+		assert.ok(errors.length, 'Expected one or more thrown errors.');
+		if (errors.length >= 2) {
+			throw new AggregateError(errors, errors.map((err) => err.message).join('\n'));
+		} else {
+			throw errors[0];
 		}
 	}
 
