@@ -21,7 +21,7 @@ describe('LinkedList', () => {
 	});
 
 
-	describe('.get(number)', () => {
+	describe('#get(number)', () => {
 		it('returns the item at the given index.', () => {
 			return assert.strictEqual(new LinkedList<string>(...items).get(2), items[2]);
 		});
@@ -39,19 +39,27 @@ describe('LinkedList', () => {
 	context('findFirstIndex', () => {
 		const list: ReadonlyLinkedList<string> = new LinkedList<string>(...items);
 
-		describe('.findFirstIndex(T)', () => {
+		describe('#findFirstIndex(T)', () => {
 			it('finds index by item.', () => {
 				return assert.strictEqual(list.findFirstIndex('b'), 1);
 			});
-		});
 
-		describe('.findFirstIndex(ReadonlySet<T>)', () => {
-			it('finds first index of any given item.', () => {
-				return assert.strictEqual(list.findFirstIndex(new Set<string>(['d', 'b', 'e'])), 1);
+			it('throws if the given item is not in the list.', () => {
+				assert.throws(() => new LinkedList<string>(...items).findFirstIndex('d'), /Item `d` was not found\./);
 			});
 		});
 
-		describe('.findFirstIndex((T, number, this) => boolean)', () => {
+		describe('#findFirstIndex(ReadonlySet<T>)', () => {
+			it('finds first index of any given item.', () => {
+				return assert.strictEqual(list.findFirstIndex(new Set<string>(['d', 'b', 'e'])), 1);
+			});
+
+			it('throws if none of the given items are in the list.', () => {
+				assert.throws(() => new LinkedList<string>(...items).findFirstIndex(new Set<string>(['d', 'e'])), /No elements in Set/);
+			});
+		});
+
+		describe('#findFirstIndex((T, number, this) => boolean)', () => {
 			it('finds first index by predicate.', () => {
 				assert.strictEqual(list.findFirstIndex((it) => it.codePointAt(0) === items[1].codePointAt(0)), 1);
 				return assert.strictEqual(list.findFirstIndex((_, i) => i === 1), 1);
@@ -63,11 +71,15 @@ describe('LinkedList', () => {
 					return it === 'd';
 				}), 3);
 			});
+
+			it('throws if none of the list’s items satisfy the predicate.', () => {
+				assert.throws(() => new LinkedList<string>(...items).findFirstIndex((it) => it.codePointAt(0) === 'd'.codePointAt(0)), /No items satisfy predicate/);
+			});
 		});
 	});
 
 
-	describe('.prepend()', () => {
+	describe('#prepend()', () => {
 		it('returns the original modified list.', () => {
 			const list = new LinkedList<string>(...items);
 			return assert.strictEqual(list.prepend('d'), list);
@@ -81,7 +93,7 @@ describe('LinkedList', () => {
 	});
 
 
-	describe('.append()', () => {
+	describe('#append()', () => {
 		it('returns the original modified list.', () => {
 			const list = new LinkedList<string>(...items);
 			return assert.strictEqual(list.append('d'), list);
@@ -95,7 +107,7 @@ describe('LinkedList', () => {
 	});
 
 
-	describe('.delete()', () => {
+	describe('#delete()', () => {
 		it('returns the original modified list.', () => {
 			const list = new LinkedList<string>(...items);
 			return assert.strictEqual(list.delete(1)[0], list);
@@ -120,7 +132,7 @@ describe('LinkedList', () => {
 	});
 
 
-	describe('.shift(number)', () => {
+	describe('#shift(number)', () => {
 		it('returns the original modified list.', () => {
 			const list = new LinkedList<string>(...items);
 			return assert.strictEqual(list.shift(1)[0], list);
@@ -132,8 +144,17 @@ describe('LinkedList', () => {
 				assert.deepStrictEqual(
 					[[...remaining], [...removed]],
 					[items.slice(i), items.slice(0, i)],
+					`index ${ i }`,
 				);
 			}
+		});
+
+		it('can remove all the items.', () => {
+			const [remaining, removed]: [ReadonlyLinkedList<string>, ReadonlyLinkedList<string>] = new LinkedList<string>(...items).shift(items.length);
+			assert.deepStrictEqual(
+				[[...remaining], [...removed]],
+				[[],             items],
+			);
 		});
 
 		it('throws when count is out of range.', () => {
@@ -142,7 +163,38 @@ describe('LinkedList', () => {
 	});
 
 
-	describe('.clear()', () => {
+	describe('#drop(number)', () => {
+		it('returns the original modified list.', () => {
+			const list = new LinkedList<string>(...items);
+			return assert.strictEqual(list.drop(1)[0], list);
+		});
+
+		it('removes items from the end of the list and leaves the remaining items where they are.', () => {
+			for (let i = 0; i < items.length + 1; i++) {
+				const [remaining, removed]: [ReadonlyLinkedList<string>, ReadonlyLinkedList<string>] = new LinkedList<string>(...items).drop(i);
+				assert.deepStrictEqual(
+					[[...remaining],                   [...removed]],
+					[items.slice(0, items.length - i), items.slice(items.length - i)],
+					`index ${ i }`,
+				);
+			}
+		});
+
+		it('can remove all the items.', () => {
+			const [remaining, removed]: [ReadonlyLinkedList<string>, ReadonlyLinkedList<string>] = new LinkedList<string>(...items).drop(items.length);
+			assert.deepStrictEqual(
+				[[...remaining], [...removed]],
+				[[],             items],
+			);
+		});
+
+		it('throws when count is out of range.', () => {
+			return assert.throws(() => new LinkedList<string>(...items).drop(4), /Index `4` out of bounds\./);
+		});
+	});
+
+
+	describe('#clear()', () => {
 		it('returns the original modified list.', () => {
 			const list = new LinkedList<string>(...items);
 			return assert.strictEqual(list.clear(), list);
